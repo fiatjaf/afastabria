@@ -1,10 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../client/nip58/badge_definition.dart';
-import '../main.dart';
-import '../provider/badge_definition_provider.dart';
 import '../util/string_util.dart';
 import 'image_component.dart';
 
@@ -13,7 +9,7 @@ class BedgeComponent extends StatelessWidget {
 
   BadgeDefinition badgeDefinition;
 
-  BedgeComponent({
+  BedgeComponent({super.key, 
     required this.badgeDefinition,
   });
 
@@ -31,7 +27,7 @@ class BedgeComponent extends StatelessWidget {
         width: IMAGE_WIDTH,
         height: IMAGE_WIDTH,
         fit: BoxFit.cover,
-        placeholder: (context, url) => CircularProgressIndicator(),
+        placeholder: (context, url) => const CircularProgressIndicator(),
       );
     }
 

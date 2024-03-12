@@ -1,12 +1,10 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:nostrmo/client/event.dart';
 
 import '../client/zap/zap_action.dart';
 import '../consts/base.dart';
 import '../generated/l10n.dart';
 import '../util/router_util.dart';
-import '../util/string_util.dart';
 
 class ZapGenDialog extends StatefulWidget {
   String pubkey;
@@ -16,13 +14,13 @@ class ZapGenDialog extends StatefulWidget {
   BuildContext parentContext;
 
   ZapGenDialog(
-      {required this.pubkey, this.eventId, required this.parentContext});
+      {super.key, required this.pubkey, this.eventId, required this.parentContext});
 
   static Future<void> show(BuildContext context, String pubkey,
       {String? eventId}) async {
     return await showDialog<void>(
       context: context,
-      builder: (_context) {
+      builder: (context) {
         return ZapGenDialog(
           pubkey: pubkey,
           eventId: eventId,
@@ -70,13 +68,13 @@ class _ZapGenDialog extends State<ZapGenDialog> {
     ));
 
     list.add(Container(
-      margin: EdgeInsets.only(bottom: Base.BASE_PADDING),
+      margin: const EdgeInsets.only(bottom: Base.BASE_PADDING),
       child: TextField(
         controller: controller,
         minLines: 1,
         maxLines: 1,
         autofocus: true,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           hintText: "Input Sats num",
           border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
         ),
@@ -89,7 +87,7 @@ class _ZapGenDialog extends State<ZapGenDialog> {
         minLines: 1,
         maxLines: 1,
         autofocus: true,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           hintText: "${"Input Comment"} (${"Optional"})",
           border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
         ),
@@ -99,7 +97,7 @@ class _ZapGenDialog extends State<ZapGenDialog> {
     // list.add(Expanded(child: Container()));
 
     list.add(Container(
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         top: Base.BASE_PADDING,
         bottom: 6,
       ),
@@ -116,7 +114,7 @@ class _ZapGenDialog extends State<ZapGenDialog> {
             alignment: Alignment.center,
             child: Text(
               S.of(context).Comfirm,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -127,7 +125,7 @@ class _ZapGenDialog extends State<ZapGenDialog> {
     ));
 
     var main = Container(
-      padding: EdgeInsets.all(Base.BASE_PADDING),
+      padding: const EdgeInsets.all(Base.BASE_PADDING),
       decoration: BoxDecoration(
         color: cardColor,
       ),

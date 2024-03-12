@@ -13,7 +13,7 @@ class TextInputDialogInnerComponent extends StatefulWidget {
   bool Function(BuildContext, String)? valueCheck;
 
   TextInputDialogInnerComponent(
-    this.title, {
+    this.title, {super.key, 
     this.hintText,
     this.value,
     this.valueCheck,
@@ -45,7 +45,7 @@ class _TextInputDialogInnerComponent
     List<Widget> list = [];
 
     list.add(Container(
-      margin: EdgeInsets.only(bottom: Base.BASE_PADDING),
+      margin: const EdgeInsets.only(bottom: Base.BASE_PADDING),
       child: Text(
         widget.title,
         style: TextStyle(

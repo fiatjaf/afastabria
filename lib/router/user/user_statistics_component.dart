@@ -25,7 +25,7 @@ import '../../util/string_util.dart';
 class UserStatisticsComponent extends StatefulWidget {
   String pubkey;
 
-  UserStatisticsComponent({required this.pubkey});
+  UserStatisticsComponent({super.key, required this.pubkey});
 
   @override
   State<StatefulWidget> createState() {
@@ -93,8 +93,8 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
           onLongPressStart: onLongPressStart,
           onLongPressEnd: onLongPressEnd,
         );
-      }, selector: (context, _provider) {
-        return _provider.total();
+      }, selector: (context, provider) {
+        return provider.total();
       }));
     } else {
       if (contactList != null) {
@@ -108,8 +108,8 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
       list.add(Selector<RelayProvider, int>(builder: (context, num, child) {
         return UserStatisticsItemComponent(
             num: num, name: "Relays", onTap: onRelaysTap);
-      }, selector: (context, _provider) {
-        return _provider.total();
+      }, selector: (context, provider) {
+        return provider.total();
       }));
     } else {
       if (relaysTags != null) {
@@ -141,8 +141,8 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
           name: "Followed Tags",
           onTap: onFollowedTagsTap,
         );
-      }, selector: (context, _provider) {
-        return _provider.totalFollowedTags();
+      }, selector: (context, provider) {
+        return provider.totalFollowedTags();
       }));
     } else {
       if (contactList != null) {
@@ -162,8 +162,8 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
           name: "Followed Communities",
           onTap: onFollowedCommunitiesTap,
         );
-      }, selector: (context, _provider) {
-        return _provider.totalfollowedCommunities();
+      }, selector: (context, provider) {
+        return provider.totalfollowedCommunities();
       }));
     } else {
       if (contactList != null) {
@@ -179,7 +179,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     return Container(
       // color: Colors.red,
       height: 18,
-      margin: EdgeInsets.only(bottom: Base.BASE_PADDING),
+      margin: const EdgeInsets.only(bottom: Base.BASE_PADDING),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: list,
@@ -417,7 +417,7 @@ class UserStatisticsItemComponent extends StatelessWidget {
 
   Function(LongPressEndDetails)? onLongPressEnd;
 
-  UserStatisticsItemComponent({
+  UserStatisticsItemComponent({super.key, 
     required this.num,
     required this.name,
     required this.onTap,
@@ -446,13 +446,13 @@ class UserStatisticsItemComponent extends StatelessWidget {
         ),
       ));
     } else {
-      list.add(Icon(
+      list.add(const Icon(
         Icons.download,
         size: 14,
       ));
     }
     list.add(Container(
-      margin: EdgeInsets.only(left: 4),
+      margin: const EdgeInsets.only(left: 4),
       child: Text(
         name,
         style: TextStyle(
@@ -470,7 +470,7 @@ class UserStatisticsItemComponent extends StatelessWidget {
       onLongPressStart: onLongPressStart,
       onLongPressEnd: onLongPressEnd,
       child: Container(
-        margin: EdgeInsets.only(left: Base.BASE_PADDING),
+        margin: const EdgeInsets.only(left: Base.BASE_PADDING),
         child: Row(children: list),
       ),
     );

@@ -1,9 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/metadata.dart';
-import '../main.dart';
 import '../provider/metadata_provider.dart';
 import '../util/string_util.dart';
 import 'image_component.dart';
@@ -13,7 +11,7 @@ class UserPicComponent extends StatefulWidget {
 
   double width;
 
-  UserPicComponent({
+  UserPicComponent({super.key, 
     required this.pubkey,
     required this.width,
   });
@@ -37,7 +35,7 @@ class _UserPicComponent extends State<UserPicComponent> {
               width: widget.width,
               height: widget.width,
               fit: BoxFit.cover,
-              placeholder: (context, url) => CircularProgressIndicator(),
+              placeholder: (context, url) => const CircularProgressIndicator(),
             );
           }
         }
@@ -53,8 +51,8 @@ class _UserPicComponent extends State<UserPicComponent> {
           child: imageWidget,
         );
       },
-      selector: (context, _provider) {
-        return _provider.getMetadata(widget.pubkey);
+      selector: (context, provider) {
+        return provider.getMetadata(widget.pubkey);
       },
     );
   }

@@ -8,7 +8,7 @@ import 'dm_session_list_item_component.dart';
 class DMUnknownListRouter extends StatefulWidget {
   ECDHBasicAgreement agreement;
 
-  DMUnknownListRouter({required this.agreement});
+  DMUnknownListRouter({super.key, required this.agreement});
 
   @override
   State<StatefulWidget> createState() {
@@ -19,8 +19,8 @@ class DMUnknownListRouter extends StatefulWidget {
 class _DMUnknownListRouter extends State<DMUnknownListRouter> {
   @override
   Widget build(BuildContext context) {
-    var _dmProvider = Provider.of<DMProvider>(context);
-    var details = _dmProvider.unknownList;
+    var dmProvider = Provider.of<DMProvider>(context);
+    var details = dmProvider.unknownList;
 
     return Container(
       child: ListView.builder(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:nostrmo/client/nip04/nip04.dart';
 import 'package:nostrmo/component/content/content_component.dart';
-import 'package:nostrmo/component/content/content_decoder.dart';
 import 'package:nostrmo/consts/router_path.dart';
 import 'package:nostrmo/util/router_util.dart';
 import 'package:pointycastle/export.dart' as pointycastle;
@@ -12,7 +11,6 @@ import '../../client/event.dart';
 import '../../component/user_pic_component.dart';
 import '../../consts/base.dart';
 import '../../consts/base_consts.dart';
-import '../../main.dart';
 import '../../provider/setting_provider.dart';
 
 class DMDetailItemComponent extends StatefulWidget {
@@ -24,7 +22,7 @@ class DMDetailItemComponent extends StatefulWidget {
 
   pointycastle.ECDHBasicAgreement agreement;
 
-  DMDetailItemComponent({
+  DMDetailItemComponent({super.key, 
     required this.sessionPubkey,
     required this.event,
     required this.isLocal,
@@ -44,7 +42,7 @@ class _DMDetailItemComponent extends State<DMDetailItemComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var _settingProvider = Provider.of<SettingProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
     var themeData = Theme.of(context);
     var mainColor = themeData.primaryColor;
     Widget userHeadWidget = Container(
@@ -107,7 +105,7 @@ class _DMDetailItemComponent extends State<DMDetailItemComponent> {
                   content: content,
                   event: widget.event,
                   showLinkPreview:
-                      _settingProvider.linkPreview == OpenStatus.OPEN,
+                      settingProvider.linkPreview == OpenStatus.OPEN,
                   smallest: true,
                 ),
               ],
@@ -145,7 +143,7 @@ class _DMDetailItemComponent extends State<DMDetailItemComponent> {
     }
 
     return Container(
-      padding: EdgeInsets.all(Base.BASE_PADDING_HALF),
+      padding: const EdgeInsets.all(Base.BASE_PADDING_HALF),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: list,

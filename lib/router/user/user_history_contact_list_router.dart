@@ -6,6 +6,8 @@ import '../../util/router_util.dart';
 import 'user_contact_list_component.dart';
 
 class UserHistoryContactListRouter extends StatefulWidget {
+  const UserHistoryContactListRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _UserHistoryContactListRouter();
@@ -54,6 +56,8 @@ class _UserHistoryContactListRouter
         actions: [
           Container(
             child: TextButton(
+              onPressed: doRecovery,
+              style: const ButtonStyle(),
               child: Text(
                 "Recovery",
                 style: TextStyle(
@@ -61,8 +65,6 @@ class _UserHistoryContactListRouter
                   fontSize: 16,
                 ),
               ),
-              onPressed: doRecovery,
-              style: ButtonStyle(),
             ),
           ),
         ],

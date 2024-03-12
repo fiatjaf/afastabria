@@ -124,7 +124,7 @@ class _EventPollComponent extends State<EventPollComponent> {
 
           var pollItemWidget = Container(
             width: double.maxFinite,
-            margin: EdgeInsets.only(
+            margin: const EdgeInsets.only(
               top: Base.BASE_PADDING_HALF,
             ),
             decoration: BoxDecoration(
@@ -135,7 +135,7 @@ class _EventPollComponent extends State<EventPollComponent> {
               alignment: Alignment.center,
               children: [
                 Container(
-                  padding: EdgeInsets.all(Base.BASE_PADDING_HALF),
+                  padding: const EdgeInsets.all(Base.BASE_PADDING_HALF),
                   width: double.maxFinite,
                   child: AbsorbPointer(
                     child: ContentComponent(
@@ -169,7 +169,7 @@ class _EventPollComponent extends State<EventPollComponent> {
                   right: Base.BASE_PADDING,
                   child: Text(
                     "${(percent * 100).toStringAsFixed(2)}% ${NumberFormatUtil.format(num)} sats",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),

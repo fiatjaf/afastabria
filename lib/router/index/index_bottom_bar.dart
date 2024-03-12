@@ -3,12 +3,11 @@ import 'package:nostrmo/provider/index_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
-import '../../provider/setting_provider.dart';
 
 class IndexBottomBar extends StatefulWidget {
   static const double HEIGHT = 50;
 
-  IndexBottomBar();
+  const IndexBottomBar({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -20,8 +19,8 @@ class _IndexBottomBar extends State<IndexBottomBar> {
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
-    var _indexProvider = Provider.of<IndexProvider>(context);
-    var currentTap = _indexProvider.currentTap;
+    var indexProvider = Provider.of<IndexProvider>(context);
+    var currentTap = indexProvider.currentTap;
 
     List<Widget> list = [];
 
@@ -75,14 +74,14 @@ class _IndexBottomBar extends State<IndexBottomBar> {
     return Container(
       decoration: BoxDecoration(boxShadow: [
         BoxShadow(
-          offset: Offset(-6, 0),
+          offset: const Offset(-6, 0),
           color: themeData.shadowColor,
           spreadRadius: 2,
           blurRadius: 8,
         )
       ]),
       child: BottomAppBar(
-        shape: CircularNotchedRectangle(),
+        shape: const CircularNotchedRectangle(),
         color: themeData.cardColor,
         surfaceTintColor: themeData.cardColor,
         shadowColor: themeData.shadowColor,
@@ -110,7 +109,7 @@ class IndexBottomBarButton extends StatelessWidget {
   final Function(int)? onTap;
   Function? onDoubleTap;
 
-  IndexBottomBarButton({
+  IndexBottomBarButton({super.key, 
     required this.iconData,
     required this.index,
     required this.selected,
@@ -141,7 +140,7 @@ class IndexBottomBarButton extends StatelessWidget {
             onDoubleTap!();
           }
         },
-        child: Container(
+        child: SizedBox(
           height: IndexBottomBar.HEIGHT,
           child: Icon(
             iconData,

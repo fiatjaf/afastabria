@@ -8,7 +8,7 @@ import 'badge_detail_component.dart';
 class BadgeDetailDialog extends StatefulWidget {
   BadgeDefinition badgeDefinition;
 
-  BadgeDetailDialog({
+  BadgeDetailDialog({super.key, 
     required this.badgeDefinition,
   });
 
@@ -16,7 +16,7 @@ class BadgeDetailDialog extends StatefulWidget {
       BuildContext context, BadgeDefinition badgeDefinition) async {
     return await showDialog<bool>(
       context: context,
-      builder: (_context) {
+      builder: (context) {
         return BadgeDetailDialog(
           badgeDefinition: badgeDefinition,
         );

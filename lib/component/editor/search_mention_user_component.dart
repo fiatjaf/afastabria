@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../client/nip19/nip19.dart';
@@ -12,6 +11,8 @@ import '../image_component.dart';
 import 'search_mention_component.dart';
 
 class SearchMentionUserComponent extends StatefulWidget {
+  const SearchMentionUserComponent({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _SearchMentionUserComponent();
@@ -48,12 +49,12 @@ class _SearchMentionUserComponent extends State<SearchMentionUserComponent>
           top: Base.BASE_PADDING_HALF,
           bottom: Base.BASE_PADDING_HALF,
         ),
-        child: Container(
+        child: SizedBox(
           width: itemWidth * 2 + 10,
           child: Wrap(
-            children: userWidgetList,
             spacing: 10,
             runSpacing: 10,
+            children: userWidgetList,
           ),
         ),
       ),
@@ -83,7 +84,7 @@ class SearchMentionUserItemComponent extends StatelessWidget {
 
   double width;
 
-  SearchMentionUserItemComponent({
+  SearchMentionUserItemComponent({super.key, 
     required this.metadata,
     required this.width,
   });
@@ -102,7 +103,7 @@ class SearchMentionUserItemComponent extends StatelessWidget {
         width: IMAGE_WIDTH,
         height: IMAGE_WIDTH,
         fit: BoxFit.cover,
-        placeholder: (context, url) => CircularProgressIndicator(),
+        placeholder: (context, url) => const CircularProgressIndicator(),
       );
     }
 
@@ -119,7 +120,7 @@ class SearchMentionUserItemComponent extends StatelessWidget {
     var main = Container(
       width: width,
       color: cardColor,
-      padding: EdgeInsets.all(Base.BASE_PADDING_HALF),
+      padding: const EdgeInsets.all(Base.BASE_PADDING_HALF),
       child: Row(
         children: [
           Container(

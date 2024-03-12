@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +38,7 @@ class EventReactionsComponent extends StatefulWidget {
 
   bool showDetailBtn;
 
-  EventReactionsComponent({
+  EventReactionsComponent({super.key, 
     required this.screenshotController,
     required this.event,
     required this.eventRelation,
@@ -85,7 +84,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
           likeColor = Colors.red;
         }
 
-        return Container(
+        return SizedBox(
           height: 34,
           child: Row(
             children: [
@@ -110,11 +109,11 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                   tooltip: "Boost",
                   itemBuilder: (context) {
                     return [
-                      PopupMenuItem(
+                      const PopupMenuItem(
                         value: "boost",
                         child: Text("Boost"),
                       ),
-                      PopupMenuItem(
+                      const PopupMenuItem(
                         value: "quote",
                         child: Text("Quote"),
                       ),
@@ -145,71 +144,71 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                       PopupMenuItem(
                         value: 10,
                         child: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.bolt, color: Colors.orange),
+                            const Icon(Icons.bolt, color: Colors.orange),
                             Text(" Zap 10", style: popFontStyle)
                           ],
-                          mainAxisSize: MainAxisSize.min,
                         ),
                       ),
                       PopupMenuItem(
                         value: 50,
                         child: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.bolt, color: Colors.orange),
+                            const Icon(Icons.bolt, color: Colors.orange),
                             Text(" Zap 50", style: popFontStyle)
                           ],
-                          mainAxisSize: MainAxisSize.min,
                         ),
                       ),
                       PopupMenuItem(
                         value: 100,
                         child: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.bolt, color: Colors.orange),
+                            const Icon(Icons.bolt, color: Colors.orange),
                             Text(" Zap 100", style: popFontStyle)
                           ],
-                          mainAxisSize: MainAxisSize.min,
                         ),
                       ),
                       PopupMenuItem(
                         value: 500,
                         child: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.bolt, color: Colors.orange),
+                            const Icon(Icons.bolt, color: Colors.orange),
                             Text(" Zap 500", style: popFontStyle)
                           ],
-                          mainAxisSize: MainAxisSize.min,
                         ),
                       ),
                       PopupMenuItem(
                         value: 1000,
                         child: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.bolt, color: Colors.orange),
+                            const Icon(Icons.bolt, color: Colors.orange),
                             Text(" Zap 1000", style: popFontStyle)
                           ],
-                          mainAxisSize: MainAxisSize.min,
                         ),
                       ),
                       PopupMenuItem(
                         value: 5000,
                         child: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.bolt, color: Colors.orange),
+                            const Icon(Icons.bolt, color: Colors.orange),
                             Text(" Zap 5000", style: popFontStyle)
                           ],
-                          mainAxisSize: MainAxisSize.min,
                         ),
                       ),
                       PopupMenuItem(
                         value: -1,
                         child: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.bolt, color: Colors.orange),
+                            const Icon(Icons.bolt, color: Colors.orange),
                             Text(" ${"Custom"}", style: popFontStyle)
                           ],
-                          mainAxisSize: MainAxisSize.min,
                         ),
                       ),
                     ];
@@ -245,7 +244,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                         value: "copyId",
                         child: Text("Copy Note Id", style: popFontStyle),
                       ),
-                      PopupMenuDivider(),
+                      const PopupMenuDivider(),
                     ];
 
                     if (widget.showDetailBtn) {
@@ -259,7 +258,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                       value: "share",
                       child: Text("Share", style: popFontStyle),
                     ));
-                    list.add(PopupMenuDivider());
+                    list.add(const PopupMenuDivider());
                     if (listProvider.checkPrivateBookmark(bookmarkItem)) {
                       list.add(PopupMenuItem(
                         value: "removeFromPrivateBookmark",
@@ -286,7 +285,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                             Text("Add to public bookmark", style: popFontStyle),
                       ));
                     }
-                    list.add(PopupMenuDivider());
+                    list.add(const PopupMenuDivider());
                     list.add(PopupMenuItem(
                       value: "source",
                       child: Text("Source", style: popFontStyle),
@@ -301,7 +300,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                     ));
 
                     if (widget.event.pubKey == nostr!.publicKey) {
-                      list.add(PopupMenuDivider());
+                      list.add(const PopupMenuDivider());
                       list.add(PopupMenuItem(
                         value: "delete",
                         child: Text(
@@ -328,8 +327,8 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
           ),
         );
       },
-      selector: (context, _provider) {
-        return _provider.get(widget.event.id);
+      selector: (context, provider) {
+        return provider.get(widget.event.id);
       },
       shouldRebuild: (previous, next) {
         if ((previous == null && next != null) ||
@@ -498,13 +497,11 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
   void onShareTap() {
     widget.screenshotController.capture().then((Uint8List? imageData) async {
       if (imageData != null) {
-        if (imageData != null) {
-          var tempFile = await StoreUtil.saveBS2TempFile(
-            "png",
-            imageData,
-          );
-          Share.shareXFiles([XFile(tempFile)]);
-        }
+        var tempFile = await StoreUtil.saveBS2TempFile(
+          "png",
+          imageData,
+        );
+        Share.shareXFiles([XFile(tempFile)]);
       }
     }).catchError((onError) {
       print(onError);
@@ -529,7 +526,7 @@ class EventReactionNumComponent extends StatelessWidget {
 
   double fontSize;
 
-  EventReactionNumComponent({
+  EventReactionNumComponent({super.key, 
     required this.iconData,
     required this.num,
     this.onTap,

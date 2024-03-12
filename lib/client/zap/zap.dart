@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bech32/bech32.dart';
-import 'package:bot_toast/bot_toast.dart';
 
 import '../event.dart';
 import '../event_kind.dart' as kind;

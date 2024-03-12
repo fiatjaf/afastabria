@@ -13,7 +13,7 @@ class LightningQrcodeDialog extends StatefulWidget {
 
   String text;
 
-  LightningQrcodeDialog({
+  LightningQrcodeDialog({super.key, 
     this.title,
     required this.text,
   });
@@ -22,7 +22,7 @@ class LightningQrcodeDialog extends StatefulWidget {
       {String? content, String? title}) async {
     return await showDialog<bool>(
       context: context,
-      builder: (_context) {
+      builder: (context) {
         return LightningQrcodeDialog(
           text: text,
           title: title,
@@ -50,12 +50,12 @@ class _LightningQrcodeDialog extends State<LightningQrcodeDialog> {
     List<Widget> list = [];
     if (widget.title == null) {
       list.add(Container(
-        child: Text("Use lightning wallet scan and send sats."),
+        child: const Text("Use lightning wallet scan and send sats."),
       ));
     } else {
       if (StringUtil.isNotBlank(widget.title)) {
         list.add(Container(
-          child: Text("Use lightning wallet scan and send sats."),
+          child: const Text("Use lightning wallet scan and send sats."),
         ));
       }
     }
@@ -127,11 +127,11 @@ class _LightningQrcodeDialog extends State<LightningQrcodeDialog> {
               left: Base.BASE_PADDING,
               right: Base.BASE_PADDING,
             ),
+            alignment: Alignment.center,
             child: GestureDetector(
               onTap: () {},
               child: main,
             ),
-            alignment: Alignment.center,
           ),
         ),
       ),

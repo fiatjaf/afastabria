@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/content/content_decoder.dart';
 import 'package:nostrmo/consts/base.dart';
 import 'package:nostrmo/provider/contact_list_provider.dart';
 import 'package:nostrmo/util/string_util.dart';
@@ -14,7 +12,7 @@ import 'image_component.dart';
 class CommunityInfoComponent extends StatefulWidget {
   CommunityInfo info;
 
-  CommunityInfoComponent({required this.info});
+  CommunityInfoComponent({super.key, required this.info});
 
   @override
   State<StatefulWidget> createState() {
@@ -33,11 +31,11 @@ class _CommunityInfoComponent extends State<CommunityInfoComponent> {
     Widget? imageWidget;
     if (StringUtil.isNotBlank(widget.info.image)) {
       imageWidget = ImageComponent(
-        imageUrl: widget.info!.image!,
+        imageUrl: widget.info.image!,
         width: IMAGE_WIDTH,
         height: IMAGE_WIDTH,
         fit: BoxFit.cover,
-        placeholder: (context, url) => CircularProgressIndicator(),
+        placeholder: (context, url) => const CircularProgressIndicator(),
       );
     }
 
@@ -69,13 +67,13 @@ class _CommunityInfoComponent extends State<CommunityInfoComponent> {
           ),
         ),
       );
-    }, selector: (context, _provider) {
-      return _provider.containCommunity(widget.info.aId.toAString());
+    }, selector: (context, provider) {
+      return provider.containCommunity(widget.info.aId.toAString());
     });
 
     List<Widget> list = [
       Container(
-        margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+        margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
         child: Row(
           children: [
             Container(
@@ -113,8 +111,8 @@ class _CommunityInfoComponent extends State<CommunityInfoComponent> {
 
     return Container(
       decoration: BoxDecoration(color: cardColor),
-      padding: EdgeInsets.all(Base.BASE_PADDING),
-      margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+      padding: const EdgeInsets.all(Base.BASE_PADDING),
+      margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: list,

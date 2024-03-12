@@ -10,7 +10,7 @@ class EnumMultiSelectorComponent extends StatefulWidget {
 
   final List<EnumObj> values;
 
-  EnumMultiSelectorComponent({
+  const EnumMultiSelectorComponent({super.key, 
     required this.list,
     required this.values,
   });
@@ -19,7 +19,7 @@ class EnumMultiSelectorComponent extends StatefulWidget {
       BuildContext context, List<EnumObj> list, List<EnumObj> values) async {
     return await showDialog<List<EnumObj>?>(
       context: context,
-      builder: (_context) {
+      builder: (context) {
         return EnumMultiSelectorComponent(
           list: list,
           values: values,

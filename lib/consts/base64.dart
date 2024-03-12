@@ -9,7 +9,7 @@ class BASE64 {
   }
 
   static Uint8List toData(String base64Str) {
-    return Base64Decoder().convert(base64Str.replaceFirst(PREFIX, ""));
+    return const Base64Decoder().convert(base64Str.replaceFirst(PREFIX, ""));
   }
 
   static String toBase64(Uint8List data) {

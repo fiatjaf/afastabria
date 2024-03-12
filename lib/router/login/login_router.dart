@@ -11,6 +11,8 @@ import '../../main.dart';
 import '../../util/string_util.dart';
 
 class LoginRouter extends StatefulWidget {
+  const LoginRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _LoginRouter();
@@ -132,7 +134,7 @@ class _LoginRouter extends State<LoginRouter>
                 checkTerms = val;
               });
             }),
-        Text("I accept the" + " "),
+        const Text("I accept the" " "),
         Container(
           child: GestureDetector(
             onTap: () {
@@ -149,22 +151,22 @@ class _LoginRouter extends State<LoginRouter>
         ),
       ],
     ).animate(controller: animationController, effects: [
-      ShakeEffect(),
+      const ShakeEffect(),
     ]);
 
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         width: double.maxFinite,
         height: double.maxFinite,
         child: Stack(
           alignment: AlignmentDirectional.center,
           children: [
-            Container(
+            SizedBox(
               width: mainWidth,
               // color: Colors.red,
               child: Column(
-                children: mainList,
                 mainAxisSize: MainAxisSize.min,
+                children: mainList,
               ),
             ),
             Positioned(

@@ -17,7 +17,7 @@ class EditorNotifyItem {
 class EditorNotifyItemComponent extends StatefulWidget {
   EditorNotifyItem item;
 
-  EditorNotifyItemComponent({required this.item});
+  EditorNotifyItemComponent({super.key, required this.item});
 
   @override
   State<StatefulWidget> createState() {
@@ -41,8 +41,8 @@ class _EditorNotifyItemComponent extends State<EditorNotifyItemComponent> {
         name,
         style: TextStyle(color: textColor),
       );
-    }, selector: (context, _provider) {
-      return _provider.getMetadata(widget.item.pubkey);
+    }, selector: (context, provider) {
+      return provider.getMetadata(widget.item.pubkey);
     }));
 
     list.add(SizedBox(
@@ -64,15 +64,15 @@ class _EditorNotifyItemComponent extends State<EditorNotifyItemComponent> {
         color: mainColor.withOpacity(0.65),
         borderRadius: BorderRadius.circular(15),
       ),
-      child: Row(
-        children: list,
-        mainAxisSize: MainAxisSize.min,
-      ),
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: Base.BASE_PADDING,
         right: Base.BASE_PADDING,
         top: Base.BASE_PADDING_HALF / 2,
         bottom: Base.BASE_PADDING_HALF / 2,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: list,
       ),
     );
   }

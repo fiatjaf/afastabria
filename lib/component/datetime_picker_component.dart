@@ -14,7 +14,7 @@ class DatetimePickerComponent extends StatefulWidget {
 
   bool showHour;
 
-  DatetimePickerComponent({
+  DatetimePickerComponent({super.key, 
     this.dateTime,
     required this.showDate,
     required this.showHour,
@@ -28,7 +28,7 @@ class DatetimePickerComponent extends StatefulWidget {
   }) async {
     return await showDialog(
       context: context,
-      builder: (_context) {
+      builder: (context) {
         return DatetimePickerComponent(
           dateTime: dateTime,
           showDate: showDate,
@@ -74,20 +74,20 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
     var bigTextSize = themeData.textTheme.bodyLarge!.fontSize;
     
     var now = DateTime.now();
-    var calendarFirstDay = now.add(Duration(days: -3650));
-    var calendarLastDay = now.add(Duration(days: 3650));
+    var calendarFirstDay = now.add(const Duration(days: -3650));
+    var calendarLastDay = now.add(const Duration(days: 3650));
 
     var titleDateFormat = DateFormat("MMM yyyy");
 
     var datePicker = Container(
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         bottom: Base.BASE_PADDING,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            margin: EdgeInsets.only(
+            margin: const EdgeInsets.only(
               top: Base.BASE_PADDING,
               bottom: Base.BASE_PADDING + Base.BASE_PADDING_HALF,
             ),
@@ -113,10 +113,10 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
                 color: mainColor.withOpacity(0.8),
                 shape: BoxShape.circle,
               ),
-              todayTextStyle: TextStyle(
+              todayTextStyle: const TextStyle(
                 fontSize: 16.0,
               ),
-              todayDecoration: BoxDecoration(
+              todayDecoration: const BoxDecoration(
                 color: null,
               ),
             ),
@@ -176,6 +176,7 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
     }
 
     mainList.add(InkWell(
+      onTap: confirm,
       child: Container(
         height: 40,
         color: mainColor,
@@ -189,7 +190,6 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
           ),
         ),
       ),
-      onTap: confirm,
     ));
 
     var main = Container(
@@ -213,12 +213,12 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
           child: Container(
             width: double.infinity,
             height: double.infinity,
+            alignment: Alignment.center,
             child: GestureDetector(
               // 防止误关闭了页面
               onTap: () {},
               child: main,
             ),
-            alignment: Alignment.center,
           ),
         ),
       ),

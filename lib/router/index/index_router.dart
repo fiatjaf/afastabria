@@ -1,19 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
-import 'package:nostrmo/client/cashu/cashu_tokens.dart';
-import 'package:nostrmo/client/nip19/nip19_tlv.dart';
 import 'package:nostrmo/component/cust_state.dart';
 import 'package:nostrmo/component/pc_router_fake.dart';
 import 'package:nostrmo/consts/base_consts.dart';
-import 'package:nostrmo/consts/router_path.dart';
 import 'package:nostrmo/provider/pc_router_fake_provider.dart';
-import 'package:nostrmo/router/thread/thread_detail_router.dart';
-import 'package:nostrmo/router/user/user_router.dart';
 import 'package:nostrmo/util/platform_util.dart';
 import 'package:nostrmo/util/string_util.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +29,7 @@ import 'index_drawer_content.dart';
 class IndexRouter extends StatefulWidget {
   Function reload;
 
-  IndexRouter({required this.reload});
+  IndexRouter({super.key, required this.reload});
 
   @override
   State<StatefulWidget> createState() {
@@ -126,18 +120,18 @@ class _IndexRouter extends CustState<IndexRouter>
   Widget doBuild(BuildContext context) {
     mediaDataCache.update(context);
     
-    var _settingProvider = Provider.of<SettingProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
     if (nostr == null) {
-      return LoginRouter();
+      return const LoginRouter();
     }
 
     if (!unlock) {
-      return Scaffold();
+      return const Scaffold();
     }
 
-    var _indexProvider = Provider.of<IndexProvider>(context);
-    _indexProvider.setFollowTabController(followTabController);
-    _indexProvider.setGlobalTabController(globalsTabController);
+    var indexProvider = Provider.of<IndexProvider>(context);
+    indexProvider.setFollowTabController(followTabController);
+    indexProvider.setGlobalTabController(globalsTabController);
     var themeData = Theme.of(context);
     var mainColor = themeData.primaryColor;
     var titleTextColor = themeData.appBarTheme.titleTextStyle!.color;
@@ -151,7 +145,7 @@ class _IndexRouter extends CustState<IndexRouter>
     }
 
     Widget? appBarCenter;
-    if (_indexProvider.currentTap == 0) {
+    if (indexProvider.currentTap == 0) {
       appBarCenter = TabBar(
         indicatorColor: indicatorColor,
         indicatorWeight: 3,
@@ -186,7 +180,7 @@ class _IndexRouter extends CustState<IndexRouter>
         ],
         controller: followTabController,
       );
-    } else if (_indexProvider.currentTap == 1) {
+    } else if (indexProvider.currentTap == 1) {
       appBarCenter = TabBar(
         indicatorColor: indicatorColor,
         indicatorWeight: 3,
@@ -220,14 +214,14 @@ class _IndexRouter extends CustState<IndexRouter>
         ],
         controller: globalsTabController,
       );
-    } else if (_indexProvider.currentTap == 2) {
+    } else if (indexProvider.currentTap == 2) {
       appBarCenter = Center(
         child: Text(
           "Search",
           style: titleTextStyle,
         ),
       );
-    } else if (_indexProvider.currentTap == 3) {
+    } else if (indexProvider.currentTap == 3) {
       appBarCenter = TabBar(
         indicatorColor: indicatorColor,
         indicatorWeight: 3,
@@ -272,7 +266,7 @@ class _IndexRouter extends CustState<IndexRouter>
       removeTop: true,
       child: Expanded(
           child: IndexedStack(
-        index: _indexProvider.currentTap,
+        index: indexProvider.currentTap,
         children: [
           FollowIndexRouter(
             tabController: followTabController,
@@ -280,7 +274,7 @@ class _IndexRouter extends CustState<IndexRouter>
           GlobalsIndexRouter(
             tabController: globalsTabController,
           ),
-          SearchRouter(),
+          const SearchRouter(),
           DMRouter(
             tabController: dmTabController,
           ),
@@ -313,13 +307,13 @@ class _IndexRouter extends CustState<IndexRouter>
         // floatingActionButton: addBtn,
         // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: Row(children: [
-          Container(
+          SizedBox(
             width: column0Width,
-            child: IndexDrawerContnetComponnent(),
+            child: const IndexDrawerContnetComponnent(),
           ),
           Container(
             width: column1Width,
-            margin: EdgeInsets.only(
+            margin: const EdgeInsets.only(
               // left: 1,
               right: 1,
             ),
@@ -331,7 +325,7 @@ class _IndexRouter extends CustState<IndexRouter>
                 builder: (context, infos, child) {
                   if (infos.isEmpty) {
                     return Container(
-                      child: Center(
+                      child: const Center(
                         child: Text("There should be a universe here."),
                       ),
                     );
@@ -361,8 +355,8 @@ class _IndexRouter extends CustState<IndexRouter>
                     children: pages,
                   );
                 },
-                selector: (context, _provider) {
-                  return _provider.routerFakeInfos;
+                selector: (context, provider) {
+                  return provider.routerFakeInfos;
                 },
                 shouldRebuild: (previous, next) {
                   if (previous != next) {
@@ -381,10 +375,10 @@ class _IndexRouter extends CustState<IndexRouter>
         floatingActionButton: addBtn,
         floatingActionButtonLocation:
             FloatingActionButtonLocation.miniCenterDocked,
-        drawer: Drawer(
+        drawer: const Drawer(
           child: IndexDrawerContnetComponnent(),
         ),
-        bottomNavigationBar: IndexBottomBar(),
+        bottomNavigationBar: const IndexBottomBar(),
       );
     }
   }

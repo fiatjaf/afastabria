@@ -14,7 +14,7 @@ import '../../util/router_util.dart';
 class UserContactListComponent extends StatefulWidget {
   CustContactList contactList;
 
-  UserContactListComponent({required this.contactList});
+  UserContactListComponent({super.key, required this.contactList});
 
   @override
   State<StatefulWidget> createState() {
@@ -23,7 +23,7 @@ class UserContactListComponent extends StatefulWidget {
 }
 
 class _UserContactListComponent extends State<UserContactListComponent> {
-  ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
 
   List<Contact>? list;
 
@@ -36,7 +36,7 @@ class _UserContactListComponent extends State<UserContactListComponent> {
       itemBuilder: (context, index) {
         var contact = list![index];
         return Container(
-          margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+          margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
           child: Selector<MetadataProvider, Metadata?>(
             builder: (context, metadata, child) {
               return GestureDetector(
@@ -52,8 +52,8 @@ class _UserContactListComponent extends State<UserContactListComponent> {
                 ),
               );
             },
-            selector: (context, _provider) {
-              return _provider.getMetadata(contact.publicKey);
+            selector: (context, provider) {
+              return provider.getMetadata(contact.publicKey);
             },
           ),
         );

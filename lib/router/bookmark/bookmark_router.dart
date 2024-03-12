@@ -7,13 +7,14 @@ import 'package:provider/provider.dart';
 import '../../component/content/content_link_pre_component.dart';
 import '../../component/cust_state.dart';
 import '../../component/event/event_quote_component.dart';
-import '../../consts/base.dart';
 import '../../provider/setting_provider.dart';
 import '../../util/platform_util.dart';
 import '../../util/router_util.dart';
 import '../index/index_app_bar.dart';
 
 class BookmarkRouter extends StatefulWidget {
+  const BookmarkRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _BookmarkRouter();
@@ -23,7 +24,7 @@ class BookmarkRouter extends StatefulWidget {
 class _BookmarkRouter extends CustState<BookmarkRouter> {
   @override
   Widget doBuild(BuildContext context) {
-    var _settingProvider = Provider.of<SettingProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
     var themeData = Theme.of(context);
     var titleTextColor = themeData.appBarTheme.titleTextStyle!.color;
     var titleTextStyle = TextStyle(
@@ -45,8 +46,8 @@ class _BookmarkRouter extends CustState<BookmarkRouter> {
           ],
         ),
       );
-    }, selector: (context, _provider) {
-      return _provider.getBookmarks();
+    }, selector: (context, provider) {
+      return provider.getBookmarks();
     });
 
     return DefaultTabController(

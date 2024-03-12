@@ -60,14 +60,14 @@ class _UserBadgesComponent extends CustState<UserBadgesComponent>
                   BadgeDetailDialog.show(context, badgeDefinition);
                 },
                 child: Container(
-                  margin: EdgeInsets.only(right: Base.BASE_PADDING_HALF),
+                  margin: const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
                   child: BedgeComponent(
                     badgeDefinition: badgeDefinition,
                   ),
                 ),
               );
-            }, selector: (context, _provider) {
-              return _provider.get(badgeId, event.pubKey);
+            }, selector: (context, provider) {
+              return provider.get(badgeId, event.pubKey);
             });
 
             list.add(itemWidget);
@@ -78,7 +78,7 @@ class _UserBadgesComponent extends CustState<UserBadgesComponent>
     }
 
     return Container(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         right: Base.BASE_PADDING,
         left: Base.BASE_PADDING,
       ),

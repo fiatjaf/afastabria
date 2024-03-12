@@ -1,20 +1,16 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:nostrmo/component/content/content_custom_emoji_component.dart';
 import 'package:nostrmo/component/datetime_picker_component.dart';
 import 'package:nostrmo/component/editor/zap_goal_input_component.dart';
 import 'package:nostrmo/component/webview_router.dart';
-import 'package:nostrmo/provider/custom_emoji_provider.dart';
 import 'package:nostrmo/provider/list_provider.dart';
 import 'package:nostrmo/sendbox/sendbox.dart';
 import 'package:pointycastle/ecc/api.dart';
@@ -93,7 +89,7 @@ mixin EditorMixin {
     if (!PlatformUtil.isWeb()) {
       inputBtnList.add(quill.QuillToolbarIconButton(
         onPressed: pickImage,
-        icon: Icon(Icons.image),
+        icon: const Icon(Icons.image),
         isSelected: false,
         iconTheme: null,
       ));
@@ -101,13 +97,13 @@ mixin EditorMixin {
     if (!PlatformUtil.isPC() && !PlatformUtil.isWeb()) {
       inputBtnList.add(quill.QuillToolbarIconButton(
         onPressed: takeAPhoto,
-        icon: Icon(Icons.camera),
+        icon: const Icon(Icons.camera),
         isSelected: false,
         iconTheme: null,
       ));
       inputBtnList.add(quill.QuillToolbarIconButton(
         onPressed: tackAVideo,
-        icon: Icon(Icons.video_call),
+        icon: const Icon(Icons.video_call),
         isSelected: false,
         iconTheme: null,
       ));
@@ -115,37 +111,37 @@ mixin EditorMixin {
     inputBtnList.addAll([
       quill.QuillToolbarIconButton(
         onPressed: _inputLnbc,
-        icon: Icon(Icons.bolt),
+        icon: const Icon(Icons.bolt),
         isSelected: false,
         iconTheme: null,
       ),
       quill.QuillToolbarIconButton(
         onPressed: customEmojiSelect,
-        icon: Icon(Icons.add_reaction_outlined),
+        icon: const Icon(Icons.add_reaction_outlined),
         isSelected: false,
         iconTheme: null,
       ),
       quill.QuillToolbarIconButton(
         onPressed: emojiBeginToSelect,
-        icon: Icon(Icons.tag_faces),
+        icon: const Icon(Icons.tag_faces),
         isSelected: false,
         iconTheme: null,
       ),
       quill.QuillToolbarIconButton(
         onPressed: _inputMentionUser,
-        icon: Icon(Icons.alternate_email_sharp),
+        icon: const Icon(Icons.alternate_email_sharp),
         isSelected: false,
         iconTheme: null,
       ),
       quill.QuillToolbarIconButton(
         onPressed: _inputMentionEvent,
-        icon: Icon(Icons.format_quote),
+        icon: const Icon(Icons.format_quote),
         isSelected: false,
         iconTheme: null,
       ),
       quill.QuillToolbarIconButton(
         onPressed: _inputTag,
-        icon: Icon(Icons.tag),
+        icon: const Icon(Icons.tag),
         isSelected: false,
         iconTheme: null,
       ),
@@ -211,7 +207,7 @@ mixin EditorMixin {
             ? [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.2),
-                  offset: Offset(0, -5),
+                  offset: const Offset(0, -5),
                   blurRadius: 10,
                   spreadRadius: 0,
                 ),
@@ -233,7 +229,7 @@ mixin EditorMixin {
     var mainColor = themeData.primaryColor;
     var bgColor = themeData.scaffoldBackgroundColor;
 
-    return Container(
+    return SizedBox(
       height: 260,
       child: EmojiPicker(
         onEmojiSelected: (Category? category, Emoji emoji) {
@@ -262,7 +258,7 @@ mixin EditorMixin {
           recentsLimit: 30,
           emojiTextStyle:
               PlatformUtil.isWeb() ? GoogleFonts.notoColorEmoji() : null,
-          noRecents: Text(
+          noRecents: const Text(
             'No Recents',
             style: TextStyle(fontSize: 14, color: Colors.black26),
             textAlign: TextAlign.center,
@@ -320,16 +316,16 @@ mixin EditorMixin {
   }
 
   Future<void> takeAPhoto() async {
-    ImagePicker _picker = ImagePicker();
-    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+    ImagePicker picker = ImagePicker();
+    final XFile? photo = await picker.pickImage(source: ImageSource.camera);
     if (photo != null) {
       _imageSubmitted(photo.path);
     }
   }
 
   Future<void> tackAVideo() async {
-    ImagePicker _picker = ImagePicker();
-    final XFile? photo = await _picker.pickVideo(source: ImageSource.camera);
+    ImagePicker picker = ImagePicker();
+    final XFile? photo = await picker.pickVideo(source: ImageSource.camera);
     if (photo != null) {
       _imageSubmitted(photo.path);
     }
@@ -341,7 +337,7 @@ mixin EditorMixin {
       context,
       "Search",
       "Please input event id",
-      SearchMentionEventComponent(),
+      const SearchMentionEventComponent(),
       hintText: "Note Id",
     );
     if (StringUtil.isNotBlank(value)) {
@@ -371,7 +367,7 @@ mixin EditorMixin {
       context,
       "Search",
       "Please input user pubkey",
-      SearchMentionUserComponent(),
+      const SearchMentionUserComponent(),
       hintText: "User Pubkey",
     );
     if (StringUtil.isNotBlank(value)) {
@@ -401,7 +397,7 @@ mixin EditorMixin {
       context,
       S.of(context).Input_Sats_num,
       S.of(context).Please_input_lnbc_text,
-      GenLnbcComponent(),
+      const GenLnbcComponent(),
       hintText: "lnbc...",
     );
     if (StringUtil.isNotBlank(value)) {
@@ -466,8 +462,8 @@ mixin EditorMixin {
 
     // customEmoji map
     Map<String, int> customEmojiMap = {};
-    var tags = []..addAll(getTags());
-    var tagsAddedWhenSend = []..addAll(getTagsAddedWhenSend());
+    var tags = [...getTags()];
+    var tagsAddedWhenSend = [...getTagsAddedWhenSend()];
 
     if (inputPoll) {
       var checkResult = pollInputController.checkInput(context);
@@ -650,7 +646,7 @@ mixin EditorMixin {
     if (!_lastIsSpace(result) && !_lastIsLineEnd(result)) {
       result += " ";
     }
-    result += value + " ";
+    result += "$value ";
     return result;
   }
 
@@ -658,7 +654,7 @@ mixin EditorMixin {
     if (!_lastIsLineEnd(result)) {
       result += "\n";
     }
-    result += value + "\n";
+    result += "$value\n";
     return result;
   }
 
@@ -775,7 +771,7 @@ mixin EditorMixin {
             onTap: () {
               WebViewRouter.open(context, "https://emojis-iota.vercel.app/");
             },
-            child: Container(
+            child: const SizedBox(
               width: 40,
               child: Icon(Icons.search),
             ),
@@ -786,12 +782,12 @@ mixin EditorMixin {
               child: Container(
                 child: Column(
                   children: [
-                    Container(
+                    SizedBox(
                       height: Base.TABBAR_HEIGHT,
                       child: Row(
                         children: [
                           Expanded(
-                            child: Container(
+                            child: SizedBox(
                               height: Base.TABBAR_HEIGHT,
                               child: TabBar(
                                 tabs: tabBarList,
@@ -813,8 +809,8 @@ mixin EditorMixin {
                 ),
               ));
         },
-        selector: (context, _provider) {
-          return _provider.getEmojiEvent();
+        selector: (context, provider) {
+          return provider.getEmojiEvent();
         },
       ),
     );
@@ -829,7 +825,7 @@ mixin EditorMixin {
         onTap: () {
           addCustomEmoji();
         },
-        child: Container(
+        child: SizedBox(
           width: emojiBtnWidth,
           height: emojiBtnWidth,
           child: const Icon(
@@ -862,15 +858,16 @@ mixin EditorMixin {
     var main = SingleChildScrollView(
       child: Wrap(
         // runAlignment: WrapAlignment.center,
-        children: list,
         runSpacing: Base.BASE_PADDING_HALF,
         spacing: Base.BASE_PADDING_HALF,
+        // runAlignment: WrapAlignment.center,
+        children: list,
       ),
     );
 
     return Container(
       height: 260,
-      padding: EdgeInsets.only(left: Base.BASE_PADDING_HALF),
+      padding: const EdgeInsets.only(left: Base.BASE_PADDING_HALF),
       width: double.infinity,
       child: main,
     );
@@ -931,7 +928,7 @@ mixin EditorMixin {
 
   Future<void> selectedTime() async {
     var dt = await DatetimePickerComponent.show(getContext(),
-        dateTime: publishAt != null ? publishAt : DateTime.now());
+        dateTime: publishAt ?? DateTime.now());
     publishAt = dt;
     updateUI();
   }

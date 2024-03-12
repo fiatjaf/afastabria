@@ -39,7 +39,7 @@ class MentionMeProvider extends ChangeNotifier
     return _initTime;
   }
 
-  List<String> _subscribeIds = [];
+  final List<String> _subscribeIds = [];
 
   List<int> queryEventKinds() {
     return [

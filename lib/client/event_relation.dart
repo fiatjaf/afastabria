@@ -1,7 +1,6 @@
 import 'package:nostrmo/client/aid.dart';
 import 'package:nostrmo/client/nip19/nip19.dart';
 import 'package:nostrmo/client/nip19/nip19_tlv.dart';
-import 'package:nostrmo/client/event_kind.dart' as kind;
 
 import 'event.dart';
 
@@ -42,7 +41,7 @@ class EventRelation {
     for (var i = 0; i < length; i++) {
       var tag = event.tags[i];
 
-      var mentionStr = "#[" + i.toString() + "]";
+      var mentionStr = "#[$i]";
       if (event.content.contains(mentionStr)) {
         continue;
       }

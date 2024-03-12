@@ -53,7 +53,7 @@ class ContentComponent extends StatefulWidget {
 
   bool smallest;
 
-  ContentComponent({
+  ContentComponent({super.key, 
     this.content,
     this.event,
     this.textOnTap,
@@ -211,7 +211,7 @@ class _ContentComponent extends State<ContentComponent> {
             alignment: Alignment.center,
             children: [
               Container(
-                decoration: BoxDecoration(),
+                decoration: const BoxDecoration(),
                 clipBehavior: Clip.hardEdge,
                 height: lineHeight * MAX_SHOW_LINE_NUM,
                 child: Wrap(
@@ -224,7 +224,7 @@ class _ContentComponent extends State<ContentComponent> {
                 right: 0,
                 child: Container(
                   alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: Base.BASE_PADDING),
+                  padding: const EdgeInsets.only(right: Base.BASE_PADDING),
                   height: 30,
                   color: themeData.cardColor.withOpacity(0.85),
                   child: Text(
@@ -369,7 +369,7 @@ class _ContentComponent extends State<ContentComponent> {
     }
     bufferToList(buffer, allList);
 
-    var main = Container(
+    var main = SizedBox(
       width: !widget.smallest ? double.infinity : null,
       // padding: EdgeInsets.only(bottom: 20),
       // color: Colors.red,
@@ -393,7 +393,7 @@ class _ContentComponent extends State<ContentComponent> {
       for (var image in images) {
         imageWidgetList.add(SliverToBoxAdapter(
           child: Container(
-            margin: EdgeInsets.only(right: Base.BASE_PADDING_HALF),
+            margin: const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
             width: CONTENT_IMAGE_LIST_HEIGHT,
             height: CONTENT_IMAGE_LIST_HEIGHT,
             child: ContentImageComponent(
@@ -409,7 +409,7 @@ class _ContentComponent extends State<ContentComponent> {
         index++;
       }
 
-      mainList.add(Container(
+      mainList.add(SizedBox(
         height: CONTENT_IMAGE_LIST_HEIGHT,
         width: double.infinity,
         child: CustomScrollView(

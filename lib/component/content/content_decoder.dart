@@ -1,20 +1,13 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:nostrmo/client/event_kind.dart';
 import 'package:nostrmo/component/content/content_event_tag_infos.dart';
-import 'package:string_validator/string_validator.dart';
 
 import '../../client/event.dart';
 import '../../client/nip19/nip19.dart';
 import '../../client/nip19/nip19_tlv.dart';
 import '../../consts/base.dart';
 import '../../consts/base64.dart';
-import '../../main.dart';
 import '../../util/platform_util.dart';
 import '../../util/string_util.dart';
 import '../event/event_quote_component.dart';
@@ -26,10 +19,8 @@ import 'content_link_pre_component.dart';
 import 'content_lnbc_component.dart';
 import 'content_mention_user_component.dart';
 import 'content_relay_component.dart';
-import 'content_str_link_component.dart';
 import 'content_tag_component.dart';
 import 'content_video_component.dart';
-import 'content_youtube_component.dart';
 
 class ContentDecoder {
   static const OTHER_LIGHTNING = "lightning=";
@@ -78,7 +69,7 @@ class ContentDecoder {
           //   textOnTap: textOnTap,
           // ));
           list.add(LineTranslateComponent(
-            []..add(inlines[0]),
+            [inlines[0]],
             textOnTap: textOnTap,
           ));
         } else {
@@ -100,7 +91,7 @@ class ContentDecoder {
         // list.add(Text.rich(TextSpan(children: spans)));
 
         list.add(LineTranslateComponent(
-          []..addAll(inlines),
+          [...inlines],
           textOnTap: textOnTap,
         ));
       }
@@ -496,7 +487,7 @@ class ContentDecoder {
       for (var image in imageList) {
         imageWidgetList.add(SliverToBoxAdapter(
           child: Container(
-            margin: EdgeInsets.only(right: Base.BASE_PADDING_HALF),
+            margin: const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
             width: CONTENT_IMAGE_LIST_HEIGHT,
             height: CONTENT_IMAGE_LIST_HEIGHT,
             child: ContentImageComponent(
@@ -512,7 +503,7 @@ class ContentDecoder {
         index++;
       }
 
-      list.add(Container(
+      list.add(SizedBox(
         height: CONTENT_IMAGE_LIST_HEIGHT,
         width: double.infinity,
         child: CustomScrollView(

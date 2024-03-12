@@ -9,7 +9,7 @@ class Appbar4Stack extends StatefulWidget {
 
   Widget? action;
 
-  Appbar4Stack({
+  Appbar4Stack({super.key, 
     this.title,
     this.backgroundColor,
     this.action,
@@ -28,16 +28,14 @@ class _Appbar4Stack extends State<Appbar4Stack> {
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
     var backgroundColor = widget.backgroundColor;
-    if (backgroundColor == null) {
-      backgroundColor = themeData.appBarTheme.backgroundColor;
-    }
+    backgroundColor ??= themeData.appBarTheme.backgroundColor;
 
     List<Widget> list = [
       GestureDetector(
         child: Container(
           alignment: Alignment.center,
           width: height,
-          child: Icon(Icons.arrow_back_ios_new),
+          child: const Icon(Icons.arrow_back_ios_new),
         ),
         onTap: () {
           RouterUtil.back(context);

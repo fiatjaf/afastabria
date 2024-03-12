@@ -11,7 +11,7 @@ class EventReactionsProvider extends ChangeNotifier
     with LaterFunction, WhenStopFunction {
   int update_time = 1000 * 60 * 10;
 
-  Map<String, EventReactions> _eventReactionsMap = {};
+  final Map<String, EventReactions> _eventReactionsMap = {};
 
   EventReactionsProvider() {
     laterTimeMS = 2000;
@@ -101,7 +101,7 @@ class EventReactionsProvider extends ChangeNotifier
     }
   }
 
-  Map<String, int> _penddingIds = {};
+  final Map<String, int> _penddingIds = {};
 
   void _doPull() {
     if (_penddingIds.isEmpty) {
@@ -126,7 +126,7 @@ class EventReactionsProvider extends ChangeNotifier
     _penddingEvents.addAll(events);
   }
 
-  List<Event> _penddingEvents = [];
+  final List<Event> _penddingEvents = [];
 
   void _handleEvent() {
     bool updated = false;

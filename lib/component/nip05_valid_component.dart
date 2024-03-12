@@ -7,7 +7,7 @@ import '../provider/metadata_provider.dart';
 class Nip05ValidComponent extends StatefulWidget {
   String pubkey;
 
-  Nip05ValidComponent({required this.pubkey});
+  Nip05ValidComponent({super.key, required this.pubkey});
 
   @override
   State<StatefulWidget> createState() {
@@ -27,7 +27,7 @@ class _Nip05ValidComponent extends State<Nip05ValidComponent> {
       var iconData = Icons.check_circle;
       if (nip05Status == Nip05Status.NIP05_NOT_FOUND || nip05Status == Nip05Status.METADATA_NOT_FOUND) {
         // iconData = Icons.error;
-        return Container(width: 0,height: 0,);
+        return const SizedBox(width: 0,height: 0,);
       }
 
       Color iconColor = Colors.red;
@@ -42,8 +42,8 @@ class _Nip05ValidComponent extends State<Nip05ValidComponent> {
         color: iconColor,
         size: smallTextSize,
       );
-    }, selector: (context, _provider) {
-      return _provider.getNip05Status(widget.pubkey);
+    }, selector: (context, provider) {
+      return provider.getNip05Status(widget.pubkey);
     });
   }
 }

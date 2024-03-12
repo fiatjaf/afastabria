@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../data/metadata.dart';
-import '../../main.dart';
 import '../../util/string_util.dart';
 import '../../util/when_stop_function.dart';
 
@@ -14,7 +12,7 @@ class SaerchMentionComponent extends StatefulWidget {
 
   HandleSearchFunc handleSearchFunc;
 
-  SaerchMentionComponent({
+  SaerchMentionComponent({super.key, 
     required this.resultBuildFunc,
     required this.handleSearchFunc,
   });
@@ -65,7 +63,7 @@ class _SaerchMentionComponent extends State<SaerchMentionComponent>
         onTap: () {
           controller.text = "";
         },
-        child: Icon(Icons.close),
+        child: const Icon(Icons.close),
       );
     }
     list.add(Container(
@@ -73,7 +71,7 @@ class _SaerchMentionComponent extends State<SaerchMentionComponent>
         autofocus: true,
         controller: controller,
         decoration: InputDecoration(
-          prefixIcon: Icon(Icons.search),
+          prefixIcon: const Icon(Icons.search),
           hintText: "Please input search content",
           suffixIcon: suffixWidget,
         ),

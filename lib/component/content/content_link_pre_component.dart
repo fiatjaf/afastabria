@@ -11,7 +11,7 @@ import '../../consts/base.dart';
 class ContentLinkPreComponent extends StatefulWidget {
   String link;
 
-  ContentLinkPreComponent({required this.link});
+  ContentLinkPreComponent({super.key, required this.link});
 
   @override
   State<StatefulWidget> createState() {
@@ -41,7 +41,7 @@ class _ContentLinkPreComponent extends State<ContentLinkPreComponent> {
             ],
           ),
           child: LinkPreview(
-            linkStyle: TextStyle(
+            linkStyle: const TextStyle(
               color: Colors.blue,
               decorationColor: Colors.blue,
             ),
@@ -59,8 +59,8 @@ class _ContentLinkPreComponent extends State<ContentLinkPreComponent> {
           ),
         );
       },
-      selector: (context, _provider) {
-        return _provider.getPreviewData(widget.link);
+      selector: (context, provider) {
+        return provider.getPreviewData(widget.link);
       },
     );
   }

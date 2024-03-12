@@ -9,7 +9,7 @@ class PointComponent extends StatelessWidget {
 
   Color? color;
 
-  PointComponent({
+  PointComponent({super.key, 
     this.marginRight = 0,
     this.marginTop = 0,
     this.width = 10,

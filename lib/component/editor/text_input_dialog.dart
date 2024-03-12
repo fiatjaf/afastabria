@@ -15,7 +15,7 @@ class TextInputDialog extends StatefulWidget {
   bool Function(BuildContext, String)? valueCheck;
 
   TextInputDialog(
-    this.title, {
+    this.title, {super.key, 
     this.hintText,
     this.value,
     this.valueCheck,
@@ -32,7 +32,7 @@ class TextInputDialog extends StatefulWidget {
       bool Function(BuildContext, String)? valueCheck}) async {
     return await showDialog<String>(
         context: context,
-        builder: (_context) {
+        builder: (context) {
           return TextInputDialog(
             StringUtil.breakWord(title),
             hintText: hintText,
@@ -69,11 +69,11 @@ class _TextInputDialog extends State<TextInputDialog> {
               left: Base.BASE_PADDING,
               right: Base.BASE_PADDING,
             ),
+            alignment: Alignment.center,
             child: GestureDetector(
               onTap: () {},
               child: main,
             ),
-            alignment: Alignment.center,
           ),
         ),
       ),

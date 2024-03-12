@@ -6,6 +6,8 @@ import '../../client/nip02/cust_contact_list.dart';
 import '../../util/router_util.dart';
 
 class FollowedTagsListRouter extends StatefulWidget {
+  const FollowedTagsListRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _FollowedTagsListRouter();

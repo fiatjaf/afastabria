@@ -16,6 +16,8 @@ import '../../util/router_util.dart';
 import '../thread/thread_detail_router.dart';
 
 class EventDetailRouter extends StatefulWidget {
+  const EventDetailRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _EventDetailRouter();
@@ -29,7 +31,7 @@ class _EventDetailRouter extends State<EventDetailRouter> {
 
   bool showTitle = false;
 
-  ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
 
   double rootEventHeight = 120;
 
@@ -82,20 +84,20 @@ class _EventDetailRouter extends State<EventDetailRouter> {
       );
     } else if (eventId != null) {
       mainEventWidget = Selector<SingleEventProvider, Event?>(
-        builder: (context, _event, child) {
-          if (_event == null) {
-            return EventLoadListComponent();
+        builder: (context, event, child) {
+          if (event == null) {
+            return const EventLoadListComponent();
           } else {
-            event = _event;
+            event = event;
             return EventListComponent(
-              event: _event,
+              event: event,
               showVideo: true,
               showDetailBtn: false,
             );
           }
         },
-        selector: (context, _provider) {
-          return _provider.getEvent(eventId!);
+        selector: (context, provider) {
+          return provider.getEvent(eventId!);
         },
       );
     }
@@ -156,8 +158,8 @@ class _EventDetailRouter extends State<EventDetailRouter> {
 
         return main;
       },
-      selector: (context, _provider) {
-        return _provider.get(eventId!);
+      selector: (context, provider) {
+        return provider.get(eventId!);
       },
       shouldRebuild: (previous, next) {
         if ((previous == null && next != null) ||

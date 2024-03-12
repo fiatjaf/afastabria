@@ -15,9 +15,10 @@ import '../../component/appbar4stack.dart';
 import '../../component/cust_state.dart';
 import '../../consts/base.dart';
 import '../../main.dart';
-import '../index/index_app_bar.dart';
 
 class ProfileEditorRouter extends StatefulWidget {
+  const ProfileEditorRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _ProfileEditorRouter();
@@ -38,7 +39,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
   Metadata? metadata;
 
   String getText(String? str) {
-    return str != null ? str : "";
+    return str ?? "";
   }
 
   @override
@@ -67,6 +68,8 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
     var textColor = themeData.textTheme.bodyMedium!.color;
 
     var submitBtn = TextButton(
+      onPressed: profileSave,
+      style: const ButtonStyle(),
       child: Text(
         "Submit",
         style: TextStyle(
@@ -74,8 +77,6 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
           fontSize: 16,
         ),
       ),
-      onPressed: profileSave,
-      style: ButtonStyle(),
     );
 
     Color? appbarBackgroundColor = Colors.transparent;
@@ -83,13 +84,13 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       backgroundColor: appbarBackgroundColor,
       // title: appbarTitle,
       action: Container(
-        margin: EdgeInsets.only(right: Base.BASE_PADDING),
+        margin: const EdgeInsets.only(right: Base.BASE_PADDING),
         child: submitBtn,
       ),
     );
 
-    var margin = EdgeInsets.only(bottom: Base.BASE_PADDING);
-    var padding = EdgeInsets.only(left: 20, right: 20);
+    var margin = const EdgeInsets.only(bottom: Base.BASE_PADDING);
+    var padding = const EdgeInsets.only(left: 20, right: 20);
 
     List<Widget> list = [];
 
@@ -106,20 +107,20 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
         Expanded(
           child: TextField(
             controller: displayNameController,
-            decoration: InputDecoration(labelText: "Display Name"),
+            decoration: const InputDecoration(labelText: "Display Name"),
           ),
         ),
         Container(
-          margin: EdgeInsets.only(
+          margin: const EdgeInsets.only(
             left: Base.BASE_PADDING_HALF,
             right: Base.BASE_PADDING_HALF,
           ),
-          child: Text(" @ "),
+          child: const Text(" @ "),
         ),
         Expanded(
           child: TextField(
             controller: nameController,
-            decoration: InputDecoration(labelText: "Name"),
+            decoration: const InputDecoration(labelText: "Name"),
           ),
         ),
       ]),
@@ -132,7 +133,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
         minLines: 2,
         maxLines: 10,
         controller: aboutController,
-        decoration: InputDecoration(labelText: "About"),
+        decoration: const InputDecoration(labelText: "About"),
       ),
     ));
 
@@ -144,7 +145,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
         decoration: InputDecoration(
           prefixIcon: GestureDetector(
             onTap: pickPicture,
-            child: Icon(Icons.image),
+            child: const Icon(Icons.image),
           ),
           labelText: "Picture",
         ),
@@ -159,7 +160,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
         decoration: InputDecoration(
           prefixIcon: GestureDetector(
             onTap: pickBanner,
-            child: Icon(Icons.image),
+            child: const Icon(Icons.image),
           ),
           labelText: "Banner",
         ),
@@ -171,7 +172,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       padding: padding,
       child: TextField(
         controller: websiteController,
-        decoration: InputDecoration(labelText: "Website"),
+        decoration: const InputDecoration(labelText: "Website"),
       ),
     ));
 
@@ -180,7 +181,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       padding: padding,
       child: TextField(
         controller: nip05Controller,
-        decoration: InputDecoration(labelText: "Nip05"),
+        decoration: const InputDecoration(labelText: "Nip05"),
       ),
     ));
 
@@ -189,7 +190,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       padding: padding,
       child: TextField(
         controller: lud16Controller,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
             labelText: "Lud16", hintText: "walletname@walletservice.com"),
       ),
     ));
@@ -199,7 +200,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       padding: padding,
       child: TextField(
         controller: lud06Controller,
-        decoration: InputDecoration(labelText: "Lnurl"),
+        decoration: const InputDecoration(labelText: "Lnurl"),
       ),
     ));
 
@@ -262,6 +263,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
         imageService: settingProvider.imageService,
       );
     }
+    return null;
   }
 
   void profileSave() {

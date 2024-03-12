@@ -6,7 +6,6 @@ import '../../consts/base.dart';
 import '../../router/index/index_app_bar.dart';
 import '../../util/router_util.dart';
 import '../../util/string_util.dart';
-import 'search_mention_user_component.dart';
 import 'text_input_dialog_inner_component.dart';
 
 class TextInputAndSearchDialog extends StatefulWidget {
@@ -25,7 +24,7 @@ class TextInputAndSearchDialog extends StatefulWidget {
   TextInputAndSearchDialog(
     this.searchTabName,
     this.title,
-    this.searchWidget, {
+    this.searchWidget, {super.key, 
     this.hintText,
     this.value,
     this.valueCheck,
@@ -38,7 +37,7 @@ class TextInputAndSearchDialog extends StatefulWidget {
       bool Function(BuildContext, String)? valueCheck}) async {
     return await showDialog<String>(
         context: context,
-        builder: (_context) {
+        builder: (context) {
           return TextInputAndSearchDialog(
             searchTabName,
             StringUtil.breakWord(title),
@@ -97,7 +96,7 @@ class _TextInputAndSearchDialog extends State<TextInputAndSearchDialog>
           Container(
             height: IndexAppBar.height,
             alignment: Alignment.center,
-            child: Text(
+            child: const Text(
               "Input",
               textAlign: TextAlign.center,
             ),
@@ -106,15 +105,15 @@ class _TextInputAndSearchDialog extends State<TextInputAndSearchDialog>
         controller: tabController,
       ),
     ));
-    list.add(Container(
+    list.add(SizedBox(
       height: mainHeight,
       width: double.infinity,
       child: TabBarView(
+        controller: tabController,
         children: [
           widget.searchWidget,
           textInputWidget,
         ],
-        controller: tabController,
       ),
     ));
 
@@ -142,11 +141,11 @@ class _TextInputAndSearchDialog extends State<TextInputAndSearchDialog>
               left: Base.BASE_PADDING,
               right: Base.BASE_PADDING,
             ),
+            alignment: Alignment.center,
             child: GestureDetector(
               onTap: () {},
               child: main,
             ),
-            alignment: Alignment.center,
           ),
         ),
       ),

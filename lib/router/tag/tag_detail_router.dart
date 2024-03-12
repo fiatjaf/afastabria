@@ -8,7 +8,6 @@ import '../../client/filter.dart';
 import '../../component/cust_state.dart';
 import '../../component/event/event_list_component.dart';
 import '../../component/tag_info_component.dart';
-import '../../consts/base.dart';
 import '../../consts/base_consts.dart';
 import '../../data/event_mem_box.dart';
 import '../../main.dart';
@@ -20,6 +19,8 @@ import '../../client/event_kind.dart' as kind;
 import '../../util/string_util.dart';
 
 class TagDetailRouter extends StatefulWidget {
+  const TagDetailRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _TagDetailRouter();
@@ -30,7 +31,7 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
     with PenddingEventsLaterFunction {
   EventMemBox box = EventMemBox();
 
-  ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
 
   bool showTitle = false;
 
@@ -56,7 +57,7 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
 
   @override
   Widget doBuild(BuildContext context) {
-    var _settingProvider = Provider.of<SettingProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
     if (StringUtil.isBlank(tag)) {
       var arg = RouterUtil.routerArgs(context);
       if (arg != null && arg is String) {
@@ -110,7 +111,7 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
 
           return EventListComponent(
             event: event,
-            showVideo: _settingProvider.videoPreviewInList == OpenStatus.OPEN,
+            showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
           );
         },
         itemCount: box.length() + 1,
@@ -138,7 +139,7 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
             color: themeData.appBarTheme.titleTextStyle!.color,
           ),
         ),
-        actions: [],
+        actions: const [],
         title: appBarTitle,
       ),
       body: main,

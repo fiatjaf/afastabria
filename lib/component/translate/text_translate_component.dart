@@ -8,7 +8,6 @@ import 'package:nostrmo/provider/setting_provider.dart';
 import 'package:nostrmo/util/string_util.dart';
 import 'package:provider/provider.dart';
 
-import '../../consts/base.dart';
 import '../cust_state.dart';
 
 class TextTranslateComponent extends StatefulWidget {
@@ -16,7 +15,7 @@ class TextTranslateComponent extends StatefulWidget {
 
   Function? textOnTap;
 
-  TextTranslateComponent(this.text, {this.textOnTap});
+  TextTranslateComponent(this.text, {super.key, this.textOnTap});
 
   @override
   State<StatefulWidget> createState() {
@@ -39,7 +38,7 @@ class _TextTranslateComponent extends CustState<TextTranslateComponent> {
 
   @override
   Widget doBuild(BuildContext context) {
-    var _settingProvider = Provider.of<SettingProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
 
     if (isInited) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

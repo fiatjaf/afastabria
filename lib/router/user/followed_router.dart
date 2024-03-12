@@ -11,6 +11,8 @@ import '../../util/router_util.dart';
 import '../../util/string_util.dart';
 
 class FollowedRouter extends StatefulWidget {
+  const FollowedRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _FollowedRouter();
@@ -47,7 +49,7 @@ class _FollowedRouter extends State<FollowedRouter> {
         }
 
         return Container(
-          margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+          margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
           child: Selector<MetadataProvider, Metadata?>(
             builder: (context, metadata, child) {
               return GestureDetector(
@@ -62,8 +64,8 @@ class _FollowedRouter extends State<FollowedRouter> {
                 ),
               );
             },
-            selector: (context, _provider) {
-              return _provider.getMetadata(pubkey);
+            selector: (context, provider) {
+              return provider.getMetadata(pubkey);
             },
           ),
         );

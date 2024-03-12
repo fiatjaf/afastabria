@@ -18,6 +18,8 @@ import '../../../util/router_util.dart';
 import '../../../util/string_util.dart';
 
 class GlobalsUsersRouter extends StatefulWidget {
+  const GlobalsUsersRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _GlobalsUsersRouter();
@@ -46,7 +48,7 @@ class _GlobalsUsersRouter extends KeepAliveCustState<GlobalsUsersRouter> {
         }
 
         return Container(
-          margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+          margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
           child: Selector<MetadataProvider, Metadata?>(
             builder: (context, metadata, child) {
               return GestureDetector(
@@ -61,8 +63,8 @@ class _GlobalsUsersRouter extends KeepAliveCustState<GlobalsUsersRouter> {
                 ),
               );
             },
-            selector: (context, _provider) {
-              return _provider.getMetadata(pubkey);
+            selector: (context, provider) {
+              return provider.getMetadata(pubkey);
             },
           ),
         );
@@ -111,7 +113,7 @@ class _GlobalsUsersRouter extends KeepAliveCustState<GlobalsUsersRouter> {
   }
 
   int getRandomInt(int min, int max) {
-    final _random = new Random();
-    return _random.nextInt((max - min).floor()) + min;
+    final random = Random();
+    return random.nextInt((max - min).floor()) + min;
   }
 }

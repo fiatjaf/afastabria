@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +43,7 @@ class EditorRouter extends StatefulWidget {
 
   List<quill.BlockEmbed>? initEmbeds;
 
-  EditorRouter({
+  EditorRouter({super.key, 
     required this.tags,
     required this.tagsAddedWhenSend,
     required this.tagPs,
@@ -142,7 +141,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(right: Base.BASE_PADDING),
+                      margin: const EdgeInsets.only(right: Base.BASE_PADDING),
                       child: Icon(
                         Icons.groups,
                         size: largeTextSize,
@@ -151,7 +150,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
                     ),
                     Text(
                       aid.title,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -167,7 +166,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
     if ((notifyItems != null && notifyItems!.isNotEmpty) ||
         (editorNotifyItems.isNotEmpty)) {
       List<Widget> tagPsWidgets = [];
-      tagPsWidgets.add(Text("${"Notify"}:"));
+      tagPsWidgets.add(const Text("${"Notify"}:"));
       for (var item in notifyItems!) {
         tagPsWidgets.add(EditorNotifyItemComponent(item: item));
       }
@@ -181,14 +180,14 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
       }
       list.add(Container(
         padding:
-            EdgeInsets.only(left: Base.BASE_PADDING, right: Base.BASE_PADDING),
-        margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+            const EdgeInsets.only(left: Base.BASE_PADDING, right: Base.BASE_PADDING),
+        margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
         width: double.maxFinite,
         child: Wrap(
           spacing: Base.BASE_PADDING_HALF,
           runSpacing: Base.BASE_PADDING_HALF,
-          children: tagPsWidgets,
           crossAxisAlignment: WrapCrossAlignment.center,
+          children: tagPsWidgets,
         ),
       ));
     }
@@ -204,12 +203,12 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
         onTap: selectedTime,
         behavior: HitTestBehavior.translucent,
         child: Container(
-          margin: EdgeInsets.only(left: 10, bottom: Base.BASE_PADDING_HALF),
+          margin: const EdgeInsets.only(left: 10, bottom: Base.BASE_PADDING_HALF),
           child: Row(
             children: [
-              Icon(Icons.timer_outlined),
+              const Icon(Icons.timer_outlined),
               Container(
-                margin: EdgeInsets.only(left: 4),
+                margin: const EdgeInsets.only(left: 4),
                 child: Text(
                   dateFormate.format(publishAt!),
                 ),
@@ -247,7 +246,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
     );
     List<Widget> editorList = [];
     var editorInputWidget = Container(
-      margin: EdgeInsets.only(bottom: Base.BASE_PADDING),
+      margin: const EdgeInsets.only(bottom: Base.BASE_PADDING),
       child: quillWidget,
     );
     editorList.add(editorInputWidget);
@@ -298,18 +297,20 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
         // title: Text("Note"),
         backgroundColor: scaffoldBackgroundColor,
         leading: TextButton(
+          onPressed: () {
+            RouterUtil.back(context);
+          },
+          style: const ButtonStyle(),
           child: Icon(
             Icons.arrow_back_ios,
             color: textColor,
           ),
-          onPressed: () {
-            RouterUtil.back(context);
-          },
-          style: ButtonStyle(),
         ),
         actions: [
           Container(
             child: TextButton(
+              onPressed: documentSave,
+              style: const ButtonStyle(),
               child: Text(
                 "Send",
                 style: TextStyle(
@@ -317,8 +318,6 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
                   fontSize: fontSize,
                 ),
               ),
-              onPressed: documentSave,
-              style: ButtonStyle(),
             ),
           ),
         ],
@@ -375,14 +374,14 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
       }
 
       List<EditorNotifyItem> needDeleds = [];
-      for (var item in editorNotifyItems!) {
+      for (var item in editorNotifyItems) {
         var exist = mentionUserMap.remove(item.pubkey);
         if (exist == null) {
           updated = true;
           needDeleds.add(item);
         }
       }
-      editorNotifyItems!.removeWhere((element) => needDeleds.contains(element));
+      editorNotifyItems.removeWhere((element) => needDeleds.contains(element));
 
       if (mentionUserMap.isNotEmpty) {
         var entries = mentionUserMap.entries;

@@ -15,6 +15,8 @@ import '../../util/string_util.dart';
 import '../content/content_str_link_component.dart';
 
 class GenLnbcComponent extends StatefulWidget {
+  const GenLnbcComponent({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _GenLnbcComponent();
@@ -72,7 +74,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
         List<Widget> list = [];
 
         list.add(Container(
-          margin: EdgeInsets.only(bottom: Base.BASE_PADDING),
+          margin: const EdgeInsets.only(bottom: Base.BASE_PADDING),
           child: Text(
             "Input Sats num to gen lightning invoice",
             style: TextStyle(
@@ -83,13 +85,13 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
         ));
 
         list.add(Container(
-          margin: EdgeInsets.only(bottom: Base.BASE_PADDING),
+          margin: const EdgeInsets.only(bottom: Base.BASE_PADDING),
           child: TextField(
             controller: controller,
             minLines: 1,
             maxLines: 1,
             autofocus: true,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: "Input Sats num",
               border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
             ),
@@ -102,7 +104,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
             minLines: 1,
             maxLines: 1,
             autofocus: true,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: "${"Input Comment"} (${"Optional"})",
               border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
             ),
@@ -112,7 +114,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
         list.add(Expanded(child: Container()));
 
         list.add(Container(
-          margin: EdgeInsets.only(
+          margin: const EdgeInsets.only(
             top: Base.BASE_PADDING,
             bottom: 6,
           ),
@@ -140,7 +142,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
         ));
 
         var main = Container(
-          padding: EdgeInsets.all(Base.BASE_PADDING),
+          padding: const EdgeInsets.all(Base.BASE_PADDING),
           decoration: BoxDecoration(
             color: cardColor,
           ),
@@ -153,8 +155,8 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
 
         return main;
       },
-      selector: (context, _provider) {
-        return _provider.getMetadata(nostr!.publicKey);
+      selector: (context, provider) {
+        return provider.getMetadata(nostr!.publicKey);
       },
     );
   }

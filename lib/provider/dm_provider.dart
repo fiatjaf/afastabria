@@ -15,11 +15,11 @@ import '../util/string_util.dart';
 class DMProvider extends ChangeNotifier with PenddingEventsLaterFunction {
   static DMProvider? _dmProvider;
 
-  List<DMSessionDetail> _knownList = [];
+  final List<DMSessionDetail> _knownList = [];
 
-  List<DMSessionDetail> _unknownList = [];
+  final List<DMSessionDetail> _unknownList = [];
 
-  Map<String, DMSession> _sessions = {};
+  final Map<String, DMSession> _sessions = {};
 
   Map<String, DMSessionInfo> infoMap = {};
 

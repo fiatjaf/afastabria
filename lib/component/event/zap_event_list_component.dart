@@ -11,7 +11,7 @@ class ZapEventListComponent extends StatefulWidget {
 
   bool jumpable;
 
-  ZapEventListComponent({
+  ZapEventListComponent({super.key, 
     required this.event,
     this.jumpable = true,
   });

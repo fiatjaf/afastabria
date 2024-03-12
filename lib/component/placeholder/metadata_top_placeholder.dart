@@ -13,6 +13,8 @@ class MetadataTopPlaceholder extends StatelessWidget {
 
   static const double HALF_IMAGE_WIDTH = 40;
 
+  const MetadataTopPlaceholder({super.key});
+
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
@@ -33,7 +35,7 @@ class MetadataTopPlaceholder extends StatelessWidget {
     ];
     topBtnList.add(Container(
       width: 140,
-      margin: EdgeInsets.only(right: Base.BASE_PADDING_HALF),
+      margin: const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
       child: PlaceholderLines(
         count: 1,
         lineHeight: 30,
@@ -65,7 +67,7 @@ class MetadataTopPlaceholder extends StatelessWidget {
       height: bannerHeight,
       color: Colors.grey.withOpacity(0.5),
     ));
-    topList.add(Container(
+    topList.add(SizedBox(
       height: 50,
       // color: Colors.red,
       child: Row(

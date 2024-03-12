@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/painting/text_style.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:markdown/src/ast.dart';
-import 'package:nostrmo/client/nip19/nip19.dart';
 import 'package:nostrmo/client/nip19/nip19_tlv.dart';
-import 'package:nostrmo/component/content/content_mention_user_component.dart';
 import 'package:nostrmo/component/content/content_relay_component.dart';
 
 class MarkdownNrelayElementBuilder implements MarkdownElementBuilder {
@@ -28,13 +23,16 @@ class MarkdownNrelayElementBuilder implements MarkdownElementBuilder {
     if (key != null) {
       return ContentRelayComponent(key);
     }
+    return null;
   }
 
   @override
   void visitElementBefore(md.Element element) {}
 
   @override
-  Widget? visitText(md.Text text, TextStyle? preferredStyle) {}
+  Widget? visitText(md.Text text, TextStyle? preferredStyle) {
+    return null;
+  }
 
   @override
   Widget? visitElementAfterWithContext(BuildContext context, md.Element element,

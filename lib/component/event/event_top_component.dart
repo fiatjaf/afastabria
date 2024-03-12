@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:nostrmo/client/event_kind.dart';
@@ -11,10 +10,8 @@ import 'package:nostrmo/util/string_util.dart';
 import 'package:provider/provider.dart';
 
 import '../../client/event.dart';
-import '../../client/nip19/nip19.dart';
 import '../../consts/base.dart';
 import '../../data/metadata.dart';
-import '../../main.dart';
 import '../../provider/metadata_provider.dart';
 import '../image_component.dart';
 
@@ -22,7 +19,7 @@ class EventTopComponent extends StatefulWidget {
   Event event;
   String? pagePubkey;
 
-  EventTopComponent({
+  EventTopComponent({super.key, 
     required this.event,
     this.pagePubkey,
   });
@@ -62,8 +59,8 @@ class _EventTopComponent extends State<EventTopComponent> {
       shouldRebuild: (previous, next) {
         return previous != next;
       },
-      selector: (context, _metadataProvider) {
-        return _metadataProvider.getMetadata(pubkey);
+      selector: (context, metadataProvider) {
+        return metadataProvider.getMetadata(pubkey);
       },
       builder: (context, metadata, child) {
         var themeData = Theme.of(context);
@@ -93,7 +90,7 @@ class _EventTopComponent extends State<EventTopComponent> {
               jumpWrap(Container(
                 width: IMAGE_WIDTH,
                 height: IMAGE_WIDTH,
-                margin: EdgeInsets.only(top: 4),
+                margin: const EdgeInsets.only(top: 4),
                 clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(HALF_IMAGE_WIDTH),

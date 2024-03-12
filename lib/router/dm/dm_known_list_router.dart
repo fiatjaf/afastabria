@@ -10,7 +10,7 @@ import 'dm_session_list_item_component.dart';
 class DMKnownListRouter extends StatefulWidget {
   ECDHBasicAgreement agreement;
 
-  DMKnownListRouter({required this.agreement});
+  DMKnownListRouter({super.key, required this.agreement});
 
   @override
   State<StatefulWidget> createState() {
@@ -21,13 +21,13 @@ class DMKnownListRouter extends StatefulWidget {
 class _DMKnownListRouter extends State<DMKnownListRouter> {
   @override
   Widget build(BuildContext context) {
-    var _dmProvider = Provider.of<DMProvider>(context);
-    var details = _dmProvider.knownList;
+    var dmProvider = Provider.of<DMProvider>(context);
+    var details = dmProvider.knownList;
     var allLength = details.length;
 
-    var _noticeProvider = Provider.of<NoticeProvider>(context);
-    var notices = _noticeProvider.notices;
-    bool hasNewNotice = _noticeProvider.hasNewMessage();
+    var noticeProvider = Provider.of<NoticeProvider>(context);
+    var notices = noticeProvider.notices;
+    bool hasNewNotice = noticeProvider.hasNewMessage();
     int flag = 0;
     if (notices.isNotEmpty) {
       allLength += 1;

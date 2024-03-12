@@ -1,8 +1,6 @@
 import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
-import 'package:nostrmo/client/nip19/nip19.dart';
 import 'package:nostrmo/client/nip75/zap_goals_info.dart';
-import 'package:nostrmo/component/event/event_reactions_component.dart';
 import 'package:nostrmo/util/string_util.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +14,7 @@ import 'event_quote_component.dart';
 class EventZapGoalsComponent extends StatefulWidget {
   Event event;
 
-  EventZapGoalsComponent({required this.event});
+  EventZapGoalsComponent({super.key, required this.event});
 
   @override
   State<StatefulWidget> createState() {
@@ -74,10 +72,10 @@ class _EventZapGoalsComponent extends State<EventZapGoalsComponent> {
             alignment: Alignment.center,
             children: [
               Container(
-                padding: EdgeInsets.all(Base.BASE_PADDING_HALF),
+                padding: const EdgeInsets.all(Base.BASE_PADDING_HALF),
                 width: double.maxFinite,
                 child: Row(children: [
-                  Icon(Icons.bolt),
+                  const Icon(Icons.bolt),
                   Expanded(child: Container()),
                 ]),
               ),
@@ -100,7 +98,7 @@ class _EventZapGoalsComponent extends State<EventZapGoalsComponent> {
                 right: Base.BASE_PADDING,
                 child: Text(
                   "${(percent * 100).toStringAsFixed(2)}%  ${NumberFormatUtil.format(zapNum)}/${NumberFormatUtil.format(zapGoalsInfo!.amount!)} sats",
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -136,8 +134,8 @@ class _EventZapGoalsComponent extends State<EventZapGoalsComponent> {
           ),
         );
       },
-      selector: (context, _provider) {
-        return _provider.get(widget.event.id);
+      selector: (context, provider) {
+        return provider.get(widget.event.id);
       },
     );
   }

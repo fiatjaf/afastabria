@@ -10,6 +10,8 @@ import '../../main.dart';
 import '../../util/router_util.dart';
 
 class FollowedCommunitiesRouter extends StatefulWidget {
+  const FollowedCommunitiesRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _FollowedCommunitiesRouter();
@@ -90,8 +92,8 @@ class _FollowedCommunitiesRouter extends State<FollowedCommunitiesRouter> {
                       ),
                     ),
                   );
-                }, selector: (context, _provider) {
-                  return _provider.containCommunity(id.toAString());
+                }, selector: (context, provider) {
+                  return provider.containCommunity(id.toAString());
                 })
               ])),
         );

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nostrmo/component/keep_alive_cust_state.dart';
-import 'package:nostrmo/component/placeholder/event_placeholder.dart';
-import 'package:nostrmo/consts/router_path.dart';
 import 'package:nostrmo/data/event_mem_box.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/provider/follow_event_provider.dart';
 import 'package:nostrmo/util/platform_util.dart';
-import 'package:nostrmo/util/router_util.dart';
 import 'package:provider/provider.dart';
 
 import '../../component/event/event_list_component.dart';
@@ -19,6 +16,8 @@ import '../../provider/setting_provider.dart';
 import '../../util/load_more_event.dart';
 
 class FollowRouter extends StatefulWidget {
+  const FollowRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _FollowRouter();
@@ -27,7 +26,7 @@ class FollowRouter extends StatefulWidget {
 
 class _FollowRouter extends KeepAliveCustState<FollowRouter>
     with LoadMoreEvent {
-  ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -37,10 +36,10 @@ class _FollowRouter extends KeepAliveCustState<FollowRouter>
 
   @override
   Widget doBuild(BuildContext context) {
-    var _settingProvider = Provider.of<SettingProvider>(context);
-    var _followEventProvider = Provider.of<FollowEventProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
+    var followEventProvider = Provider.of<FollowEventProvider>(context);
 
-    var eventBox = _followEventProvider.eventBox;
+    var eventBox = followEventProvider.eventBox;
     var events = eventBox.all();
     if (events.isEmpty) {
       return EventListPlaceholder(
@@ -65,7 +64,7 @@ class _FollowRouter extends KeepAliveCustState<FollowRouter>
         var event = events[index];
         return EventListComponent(
           event: event,
-          showVideo: _settingProvider.videoPreviewInList == OpenStatus.OPEN,
+          showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
         );
       },
       itemCount: events.length,
@@ -105,8 +104,8 @@ class _FollowRouter extends KeepAliveCustState<FollowRouter>
             },
           );
         },
-        selector: (context, _provider) {
-          return _provider.eventMemBox.length();
+        selector: (context, provider) {
+          return provider.eventMemBox.length();
         },
       ),
     ));

@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:nostrmo/client/event.dart';
@@ -10,13 +9,12 @@ import 'package:nostrmo/provider/badge_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../generated/l10n.dart';
-import 'badge_component.dart';
 import 'badge_detail_component.dart';
 
 class BadgeAwardComponent extends StatefulWidget {
   Event event;
 
-  BadgeAwardComponent({
+  BadgeAwardComponent({super.key, 
     required this.event,
   });
 
@@ -55,8 +53,8 @@ class _BadgeAwardComponent extends State<BadgeAwardComponent> {
       return BadgeDetailComponent(
         badgeDefinition: badgeDefinition,
       );
-    }, selector: (context, _provider) {
-      return _provider.get(badgeId, widget.event.pubKey);
+    }, selector: (context, provider) {
+      return provider.get(badgeId, widget.event.pubKey);
     });
 
     List<Widget> list = [badgeDetailComp];
@@ -85,9 +83,9 @@ class _BadgeAwardComponent extends State<BadgeAwardComponent> {
             width: double.infinity,
             height: 40,
             alignment: Alignment.center,
-            child: Text(
+            child: const Text(
               "Wear",
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
               ),
             ),

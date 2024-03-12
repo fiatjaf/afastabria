@@ -9,7 +9,7 @@ class EnumSelectorComponent extends StatelessWidget {
 
   Widget Function(BuildContext, EnumObj)? enumItemBuild;
 
-  EnumSelectorComponent({
+  EnumSelectorComponent({super.key, 
     required this.list,
     this.enumItemBuild,
   });
@@ -17,7 +17,7 @@ class EnumSelectorComponent extends StatelessWidget {
   static Future<EnumObj?> show(BuildContext context, List<EnumObj> list) async {
     return await showDialog<EnumObj?>(
       context: context,
-      builder: (_context) {
+      builder: (context) {
         return EnumSelectorComponent(
           list: list,
         );
@@ -53,7 +53,7 @@ class EnumSelectorComponent extends StatelessWidget {
         bottom: Base.BASE_PADDING_HALF,
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderRadius: const BorderRadius.all(Radius.circular(15)),
         color: cardColor,
       ),
       constraints: BoxConstraints(
@@ -83,11 +83,11 @@ class EnumSelectorComponent extends StatelessWidget {
               left: Base.BASE_PADDING,
               right: Base.BASE_PADDING,
             ),
+            alignment: Alignment.center,
             child: GestureDetector(
               onTap: () {},
               child: main,
             ),
-            alignment: Alignment.center,
           ),
         ),
       ),
@@ -106,7 +106,7 @@ class EnumSelectorItemComponent extends StatelessWidget {
 
   Color? color;
 
-  EnumSelectorItemComponent({
+  EnumSelectorItemComponent({super.key, 
     required this.enumObj,
     this.isLast = false,
     this.onTap,

@@ -26,7 +26,7 @@ class SimpleNameComponent extends StatefulWidget {
 
   TextStyle? textStyle;
 
-  SimpleNameComponent({
+  SimpleNameComponent({super.key, 
     required this.pubkey,
     this.textStyle,
   });
@@ -49,8 +49,8 @@ class _SimpleNameComponent extends State<SimpleNameComponent> {
           style: widget.textStyle,
         ),
       );
-    }, selector: (context, _provider) {
-      return _provider.getMetadata(widget.pubkey);
+    }, selector: (context, provider) {
+      return provider.getMetadata(widget.pubkey);
     });
   }
 }

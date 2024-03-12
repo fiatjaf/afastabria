@@ -8,7 +8,7 @@ class WebUtilItemComponent extends StatelessWidget {
 
   String des;
 
-  WebUtilItemComponent({required this.link, required this.des});
+  WebUtilItemComponent({super.key, required this.link, required this.des});
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +29,9 @@ class WebUtilItemComponent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: EdgeInsets.only(bottom: 3),
+            margin: const EdgeInsets.only(bottom: 3),
             child: Text(
-              this.link,
+              link,
               style: TextStyle(
                 fontSize: largeTextSize,
                 fontWeight: FontWeight.bold,
@@ -39,7 +39,7 @@ class WebUtilItemComponent extends StatelessWidget {
             ),
           ),
           Text(
-            this.des,
+            des,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(

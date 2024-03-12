@@ -13,9 +13,9 @@ class CustContactList {
         _followedCommunitys = {};
 
   factory CustContactList.fromJson(List<dynamic> tags) {
-    Map<String, Contact> _contacts = {};
-    Map<String, int> _followedTags = {};
-    Map<String, int> _followedCommunitys = {};
+    Map<String, Contact> contacts = {};
+    Map<String, int> followedTags = {};
+    Map<String, int> followedCommunitys = {};
     for (List<dynamic> tag in tags) {
       var length = tag.length;
       if (length == 0) {
@@ -33,16 +33,16 @@ class CustContactList {
           petname = tag[3];
         }
         final contact = Contact(publicKey: tag[1], url: url, petname: petname);
-        _contacts[contact.publicKey] = contact;
+        contacts[contact.publicKey] = contact;
       } else if (t == "t" && length > 1) {
         var tagName = tag[1];
-        _followedTags[tagName] = 1;
+        followedTags[tagName] = 1;
       } else if (t == "a" && length > 1) {
         var id = tag[1];
-        _followedCommunitys[id] = 1;
+        followedCommunitys[id] = 1;
       }
     }
-    return CustContactList._(_contacts, _followedTags, _followedCommunitys);
+    return CustContactList._(contacts, followedTags, followedCommunitys);
   }
 
   CustContactList._(

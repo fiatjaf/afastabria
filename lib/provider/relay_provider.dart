@@ -15,7 +15,6 @@ import '../client/relay/relay_isolate.dart';
 import '../consts/client_connected.dart';
 import '../data/relay_status.dart';
 import '../main.dart';
-import 'data_util.dart';
 
 class RelayProvider extends ChangeNotifier {
   static RelayProvider? _relayProvider;
@@ -25,10 +24,7 @@ class RelayProvider extends ChangeNotifier {
   Map<String, RelayStatus> relayStatusMap = {};
 
   static RelayProvider getInstance() {
-    if (_relayProvider == null) {
-      _relayProvider = RelayProvider();
-      // _relayProvider!._load();
-    }
+    _relayProvider ??= RelayProvider();
     return _relayProvider!;
   }
 
@@ -86,36 +82,36 @@ class RelayProvider extends ChangeNotifier {
   }
 
   Nostr genNostr(String pk) {
-    var _nostr = Nostr(privateKey: pk);
+    var nostr = Nostr(privateKey: pk);
     log("nostr init over");
 
     // add initQuery
-    var dmInitFuture = dmProvider.initDMSessions(_nostr.publicKey);
-    contactListProvider.reload(targetNostr: _nostr);
-    contactListProvider.query(targetNostr: _nostr);
-    followEventProvider.doQuery(targetNostr: _nostr, initQuery: true);
-    mentionMeProvider.doQuery(targetNostr: _nostr, initQuery: true);
+    var dmInitFuture = dmProvider.initDMSessions(nostr.publicKey);
+    contactListProvider.reload(targetNostr: nostr);
+    contactListProvider.query(targetNostr: nostr);
+    followEventProvider.doQuery(targetNostr: nostr, initQuery: true);
+    mentionMeProvider.doQuery(targetNostr: nostr, initQuery: true);
     dmInitFuture.then((_) {
-      dmProvider.query(targetNostr: _nostr, initQuery: true);
+      dmProvider.query(targetNostr: nostr, initQuery: true);
     });
 
     loadRelayAddrs(contactListProvider.content);
-    listProvider.load(_nostr.publicKey,
+    listProvider.load(nostr.publicKey,
         [kind.EventKind.BOOKMARKS_LIST, kind.EventKind.EMOJIS_LIST],
-        targetNostr: _nostr, initQuery: true);
-    badgeProvider.reload(targetNostr: _nostr, initQuery: true);
+        targetNostr: nostr, initQuery: true);
+    badgeProvider.reload(targetNostr: nostr, initQuery: true);
 
     for (var relayAddr in relayAddrs) {
       log("begin to init $relayAddr");
       var custRelay = genRelay(relayAddr);
       try {
-        _nostr.addRelay(custRelay, init: true);
+        nostr.addRelay(custRelay, init: true);
       } catch (e) {
         log("relay $relayAddr add to pool error ${e.toString()}");
       }
     }
 
-    return _nostr;
+    return nostr;
   }
 
   void onRelayStatusChange() {

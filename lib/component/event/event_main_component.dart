@@ -112,17 +112,17 @@ class _EventMainComponent extends State<EventMainComponent> {
 
   @override
   Widget build(BuildContext context) {
-        var _settingProvider = Provider.of<SettingProvider>(context);
+        var settingProvider = Provider.of<SettingProvider>(context);
     if (eventRelation.id != widget.event.id) {
       // change when thead root load lazy
       eventRelation = EventRelation.fromEvent(widget.event);
     }
 
-    bool imagePreview = _settingProvider.imagePreview == null ||
-        _settingProvider.imagePreview == OpenStatus.OPEN;
+    bool imagePreview = settingProvider.imagePreview == null ||
+        settingProvider.imagePreview == OpenStatus.OPEN;
     bool videoPreview = widget.showVideo;
-    if (_settingProvider.videoPreview != null) {
-      videoPreview = _settingProvider.videoPreview == OpenStatus.OPEN;
+    if (settingProvider.videoPreview != null) {
+      videoPreview = settingProvider.videoPreview == OpenStatus.OPEN;
     }
 
     var themeData = Theme.of(context);
@@ -157,14 +157,14 @@ class _EventMainComponent extends State<EventMainComponent> {
       }
     }
 
-    if (_settingProvider.autoOpenSensitive == OpenStatus.OPEN) {
+    if (settingProvider.autoOpenSensitive == OpenStatus.OPEN) {
       showWarning = true;
     }
 
     List<Widget> list = [];
     if (showWarning || !eventRelation.warning) {
       if (widget.event.kind == kind.EventKind.LONG_FORM) {
-        var longFormMargin = EdgeInsets.only(bottom: Base.BASE_PADDING_HALF);
+        var longFormMargin = const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF);
 
         List<Widget> subList = [];
         var longFormInfo = LongFormInfo.fromEvent(widget.event);
@@ -223,7 +223,7 @@ class _EventMainComponent extends State<EventMainComponent> {
         }
 
         list.add(
-          Container(
+          SizedBox(
             width: double.maxFinite,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -236,7 +236,7 @@ class _EventMainComponent extends State<EventMainComponent> {
         if (widget.showLongContent) {
           var markdownWidget = buildMarkdownWidget(themeData);
 
-          list.add(Container(
+          list.add(SizedBox(
             width: double.infinity,
             child: RepaintBoundary(child: markdownWidget),
           ));
@@ -252,7 +252,7 @@ class _EventMainComponent extends State<EventMainComponent> {
           widget.event.kind == kind.EventKind.GENERIC_REPOST) {
         list.add(Container(
           alignment: Alignment.centerLeft,
-          child: Text("${"Boost"}:"),
+          child: const Text("${"Boost"}:"),
         ));
         if (repostEvent != null) {
           list.add(EventQuoteComponent(
@@ -266,7 +266,7 @@ class _EventMainComponent extends State<EventMainComponent> {
           ));
         } else {
           list.add(
-            buildContentWidget(_settingProvider, imagePreview, videoPreview),
+            buildContentWidget(settingProvider, imagePreview, videoPreview),
           );
         }
       } else {
@@ -309,7 +309,7 @@ class _EventMainComponent extends State<EventMainComponent> {
               list.add(Container(
                 width: double.infinity,
                 alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+                margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
                 child: Text(
                   eventRelation.subject!,
                   maxLines: 10,
@@ -324,7 +324,7 @@ class _EventMainComponent extends State<EventMainComponent> {
         }
 
         list.add(
-          buildContentWidget(_settingProvider, imagePreview, videoPreview),
+          buildContentWidget(settingProvider, imagePreview, videoPreview),
         );
 
         if (widget.event.kind == kind.EventKind.POLL) {
@@ -422,7 +422,7 @@ class _EventMainComponent extends State<EventMainComponent> {
             color: hintColor,
           ),
           Container(
-            margin: EdgeInsets.only(
+            margin: const EdgeInsets.only(
               left: Base.BASE_PADDING_HALF,
               right: 3,
             ),
@@ -488,8 +488,8 @@ class _EventMainComponent extends State<EventMainComponent> {
   bool hideLongContent = false;
 
   Widget buildContentWidget(
-      SettingProvider _settingProvider, bool imagePreview, bool videoPreview) {
-    var main = Container(
+      SettingProvider settingProvider, bool imagePreview, bool videoPreview) {
+    var main = SizedBox(
       width: double.maxFinite,
       child: ContentComponent(
         content: widget.event.content,
@@ -497,7 +497,7 @@ class _EventMainComponent extends State<EventMainComponent> {
         textOnTap: widget.textOnTap,
         showImage: imagePreview,
         showVideo: videoPreview,
-        showLinkPreview: _settingProvider.linkPreview == OpenStatus.OPEN,
+        showLinkPreview: settingProvider.linkPreview == OpenStatus.OPEN,
         imageListMode: widget.imageListMode,
       ),
       // child: Column(
@@ -552,7 +552,7 @@ class _EventMainComponent extends State<EventMainComponent> {
             MarkdownMentionEventElementBuilder(),
         MarkdownNrelayElementBuilder.TAG: MarkdownNrelayElementBuilder(),
       },
-      blockSyntaxes: [],
+      blockSyntaxes: const [],
       inlineSyntaxes: [
         MarkdownMentionEventInlineSyntax(),
         MarkdownMentionUserInlineSyntax(),
@@ -628,16 +628,16 @@ class _EventMainComponent extends State<EventMainComponent> {
     
     return Container(
       margin:
-          EdgeInsets.only(bottom: Base.BASE_PADDING, top: Base.BASE_PADDING),
+          const EdgeInsets.only(bottom: Base.BASE_PADDING, top: Base.BASE_PADDING),
       width: double.maxFinite,
       child: Column(
         children: [
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.warning),
+              const Icon(Icons.warning),
               Container(
-                margin: EdgeInsets.only(left: Base.BASE_PADDING_HALF),
+                margin: const EdgeInsets.only(left: Base.BASE_PADDING_HALF),
                 child: Text(
                   "Content warning",
                   style: TextStyle(fontSize: largeTextSize),
@@ -645,7 +645,7 @@ class _EventMainComponent extends State<EventMainComponent> {
               )
             ],
           ),
-          Text("This note contains sensitive content"),
+          const Text("This note contains sensitive content"),
           GestureDetector(
             onTap: () {
               setState(() {
@@ -653,7 +653,7 @@ class _EventMainComponent extends State<EventMainComponent> {
               });
             },
             child: Container(
-              margin: EdgeInsets.only(top: Base.BASE_PADDING_HALF),
+              margin: const EdgeInsets.only(top: Base.BASE_PADDING_HALF),
               padding: const EdgeInsets.only(
                 top: 4,
                 bottom: 4,
@@ -664,7 +664,7 @@ class _EventMainComponent extends State<EventMainComponent> {
                 color: mainColor,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Text(
+              child: const Text(
                 "Show",
                 style: TextStyle(color: Colors.white),
               ),
@@ -679,7 +679,7 @@ class _EventMainComponent extends State<EventMainComponent> {
 class EventReplyingcomponent extends StatefulWidget {
   String pubkey;
 
-  EventReplyingcomponent({required this.pubkey});
+  EventReplyingcomponent({super.key, required this.pubkey});
 
   @override
   State<StatefulWidget> createState() {
@@ -711,8 +711,8 @@ class _EventReplyingcomponent extends State<EventReplyingcomponent> {
             ),
           );
         },
-        selector: (context, _provider) {
-          return _provider.getMetadata(widget.pubkey);
+        selector: (context, provider) {
+          return provider.getMetadata(widget.pubkey);
         },
       ),
     );

@@ -1,9 +1,6 @@
-import 'dart:io';
 
-import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:nostrmo/util/lightning_util.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../client/zap/zap_num_util.dart';
 import '../../consts/base.dart';
@@ -11,7 +8,7 @@ import '../../consts/base.dart';
 class ContentLnbcComponent extends StatelessWidget {
   String lnbc;
 
-  ContentLnbcComponent({required this.lnbc});
+  ContentLnbcComponent({super.key, required this.lnbc});
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +59,7 @@ class ContentLnbcComponent extends StatelessWidget {
                     color: Colors.orange,
                   ),
                 ),
-                Text("Lightning Invoice"),
+                const Text("Lightning Invoice"),
               ],
             ),
           ),
@@ -79,7 +76,7 @@ class ContentLnbcComponent extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  margin: EdgeInsets.only(right: Base.BASE_PADDING_HALF),
+                  margin: const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
                   child: Text(
                     numStr,
                     style: TextStyle(
@@ -98,7 +95,7 @@ class ContentLnbcComponent extends StatelessWidget {
               ],
             ),
           ),
-          Container(
+          SizedBox(
             width: double.maxFinite,
             child: InkWell(
               onTap: () async {
@@ -109,7 +106,7 @@ class ContentLnbcComponent extends StatelessWidget {
                 color: Colors.black,
                 height: 50,
                 alignment: Alignment.center,
-                child: Text(
+                child: const Text(
                   "Pay",
                   style: TextStyle(
                     color: Colors.white,

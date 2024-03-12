@@ -10,6 +10,8 @@ import '../event/event_list_component.dart';
 import 'search_mention_component.dart';
 
 class SearchMentionEventComponent extends StatefulWidget {
+  const SearchMentionEventComponent({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _SearchMentionEventComponent();

@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/component/simple_name_component.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/nip19/nip19.dart';
 import '../../consts/router_path.dart';
 import '../../data/metadata.dart';
 import '../../provider/metadata_provider.dart';
 import '../../util/router_util.dart';
-import '../../util/string_util.dart';
 import 'content_str_link_component.dart';
 
 class ContentMentionUserComponent extends StatefulWidget {
   String pubkey;
 
-  ContentMentionUserComponent({required this.pubkey});
+  ContentMentionUserComponent({super.key, required this.pubkey});
 
   @override
   State<StatefulWidget> createState() {
@@ -37,8 +35,8 @@ class _ContentMentionUserComponent extends State<ContentMentionUserComponent> {
           },
         );
       },
-      selector: (context, _provider) {
-        return _provider.getMetadata(widget.pubkey);
+      selector: (context, provider) {
+        return provider.getMetadata(widget.pubkey);
       },
     );
   }

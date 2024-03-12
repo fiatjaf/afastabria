@@ -7,7 +7,7 @@ import 'follow_router.dart';
 class FollowIndexRouter extends StatefulWidget {
   TabController tabController;
 
-  FollowIndexRouter({required this.tabController});
+  FollowIndexRouter({super.key, required this.tabController});
 
   @override
   State<StatefulWidget> createState() {
@@ -21,12 +21,12 @@ class _FollowIndexRouter extends State<FollowIndexRouter> {
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: TabBarView(
-        children: [
+        controller: widget.tabController,
+        children: const [
           FollowPostsRouter(),
           FollowRouter(),
           MentionMeRouter(),
         ],
-        controller: widget.tabController,
       ),
     );
   }

@@ -23,6 +23,8 @@ import '../../util/string_util.dart';
 import '../edit/editor_router.dart';
 
 class CommunityDetailRouter extends StatefulWidget {
+  const CommunityDetailRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _CommunityDetailRouter();
@@ -35,7 +37,7 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
 
   AId? aId;
 
-  ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
 
   bool showTitle = false;
 
@@ -69,7 +71,7 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
       RouterUtil.back(context);
       return Container();
     }
-    var _settingProvider = Provider.of<SettingProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
     var themeData = Theme.of(context);
     var bodyLargeFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
@@ -100,10 +102,10 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
                 onChange: (s) {
                   infoHeight = s.height;
                 },
-                child: CommunityInfoComponent(info: info!),
+                child: CommunityInfoComponent(info: info),
               );
-            }, selector: (context, _provider) {
-              return _provider.getCommunity(aId!.toAString());
+            }, selector: (context, provider) {
+              return provider.getCommunity(aId!.toAString());
             });
           }
 
@@ -114,7 +116,7 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
 
           return EventListComponent(
             event: event,
-            showVideo: _settingProvider.videoPreviewInList == OpenStatus.OPEN,
+            showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
             showCommunity: false,
           );
         },

@@ -8,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../consts/base.dart';
 import '../consts/base_consts.dart';
-import '../consts/relay_mode.dart';
 import '../consts/theme_style.dart';
 import '../util/string_util.dart';
 import 'data_util.dart';
@@ -20,7 +19,7 @@ class SettingProvider extends ChangeNotifier {
 
   SettingData? _settingData;
 
-  Map<String, String> _privateKeyMap = {};
+  final Map<String, String> _privateKeyMap = {};
 
   static Future<SettingProvider> getInstance() async {
     if (_settingProvider == null) {
@@ -112,8 +111,8 @@ class SettingProvider extends ChangeNotifier {
 
     for (var i = 0; i < 20; i++) {
       var index = i.toString();
-      var _pk = _privateKeyMap[index];
-      if (_pk == null) {
+      var pk0 = _privateKeyMap[index];
+      if (pk0 == null) {
         _privateKeyMap[index] = pk;
 
         _settingData!.privateKeyIndex = i;
@@ -208,11 +207,12 @@ class SettingProvider extends ChangeNotifier {
     if (StringUtil.isNotBlank(_settingData!.translateSourceArgs)) {
       return _settingData!.translateSourceArgs!;
     }
+    return null;
   }
 
   String? get translateTarget => _settingData!.translateTarget;
 
-  Map<String, int> _translateSourceArgsMap = {};
+  final Map<String, int> _translateSourceArgsMap = {};
 
   void _reloadTranslateSourceArgs() {
     _translateSourceArgsMap.clear();
@@ -344,8 +344,8 @@ class SettingProvider extends ChangeNotifier {
   }
 
   /// fontFamily
-  set fontFamily(String? _fontFamily) {
-    _settingData!.fontFamily = _fontFamily;
+  set fontFamily(String? fontFamily) {
+    _settingData!.fontFamily = fontFamily;
     saveAndNotifyListeners();
   }
 
@@ -553,9 +553,7 @@ class SettingData {
     translateSourceArgs = json['translateSourceArgs'];
     broadcaseWhenBoost = json['broadcaseWhenBoost'];
     fontSize = json['fontSize'];
-    webviewAppbarOpen = json['webviewAppbarOpen'] != null
-        ? json['webviewAppbarOpen']
-        : OpenStatus.OPEN;
+    webviewAppbarOpen = json['webviewAppbarOpen'] ?? OpenStatus.OPEN;
     tableMode = json['tableMode'];
     autoOpenSensitive = json['autoOpenSensitive'];
     relayMode = json['relayMode'];
@@ -569,37 +567,37 @@ class SettingData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['privateKeyIndex'] = this.privateKeyIndex;
-    data['privateKeyMap'] = this.privateKeyMap;
-    data['encryptPrivateKeyMap'] = this.encryptPrivateKeyMap;
-    data['lockOpen'] = this.lockOpen;
-    data['defaultIndex'] = this.defaultIndex;
-    data['defaultTab'] = this.defaultTab;
-    data['linkPreview'] = this.linkPreview;
-    data['videoPreviewInList'] = this.videoPreviewInList;
-    data['network'] = this.network;
-    data['imageService'] = this.imageService;
-    data['videoPreview'] = this.videoPreview;
-    data['imagePreview'] = this.imagePreview;
-    data['i18n'] = this.i18n;
-    data['i18nCC'] = this.i18nCC;
-    data['imgCompress'] = this.imgCompress;
-    data['themeStyle'] = this.themeStyle;
-    data['themeColor'] = this.themeColor;
-    data['fontFamily'] = this.fontFamily;
-    data['openTranslate'] = this.openTranslate;
-    data['translateTarget'] = this.translateTarget;
-    data['translateSourceArgs'] = this.translateSourceArgs;
-    data['broadcaseWhenBoost'] = this.broadcaseWhenBoost;
-    data['fontSize'] = this.fontSize;
-    data['webviewAppbarOpen'] = this.webviewAppbarOpen;
-    data['tableMode'] = this.tableMode;
-    data['autoOpenSensitive'] = this.autoOpenSensitive;
-    data['relayMode'] = this.relayMode;
-    data['eventSignCheck'] = this.eventSignCheck;
-    data['limitNoteHeight'] = this.limitNoteHeight;
-    data['updatedTime'] = this.updatedTime;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['privateKeyIndex'] = privateKeyIndex;
+    data['privateKeyMap'] = privateKeyMap;
+    data['encryptPrivateKeyMap'] = encryptPrivateKeyMap;
+    data['lockOpen'] = lockOpen;
+    data['defaultIndex'] = defaultIndex;
+    data['defaultTab'] = defaultTab;
+    data['linkPreview'] = linkPreview;
+    data['videoPreviewInList'] = videoPreviewInList;
+    data['network'] = network;
+    data['imageService'] = imageService;
+    data['videoPreview'] = videoPreview;
+    data['imagePreview'] = imagePreview;
+    data['i18n'] = i18n;
+    data['i18nCC'] = i18nCC;
+    data['imgCompress'] = imgCompress;
+    data['themeStyle'] = themeStyle;
+    data['themeColor'] = themeColor;
+    data['fontFamily'] = fontFamily;
+    data['openTranslate'] = openTranslate;
+    data['translateTarget'] = translateTarget;
+    data['translateSourceArgs'] = translateSourceArgs;
+    data['broadcaseWhenBoost'] = broadcaseWhenBoost;
+    data['fontSize'] = fontSize;
+    data['webviewAppbarOpen'] = webviewAppbarOpen;
+    data['tableMode'] = tableMode;
+    data['autoOpenSensitive'] = autoOpenSensitive;
+    data['relayMode'] = relayMode;
+    data['eventSignCheck'] = eventSignCheck;
+    data['limitNoteHeight'] = limitNoteHeight;
+    data['updatedTime'] = updatedTime;
     return data;
   }
 }

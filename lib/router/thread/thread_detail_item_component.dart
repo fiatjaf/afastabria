@@ -15,7 +15,7 @@ class ThreadDetailItemComponent extends StatefulWidget {
 
   GlobalKey sourceEventKey;
 
-  ThreadDetailItemComponent({
+  ThreadDetailItemComponent({super.key, 
     required this.item,
     required this.totalMaxWidth,
     required this.sourceEventId,
@@ -46,7 +46,7 @@ class _ThreadDetailItemComponent extends State<ThreadDetailItemComponent> {
       main = Stack(
         children: [
           main,
-          Positioned(
+          const Positioned(
             top: -35,
             right: -10,
             child: EventBitcionIconComponent(),
@@ -57,7 +57,7 @@ class _ThreadDetailItemComponent extends State<ThreadDetailItemComponent> {
 
     return Container(
       color: cardColor,
-      margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+      margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
       child: main,
     );
   }

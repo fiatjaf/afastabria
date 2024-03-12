@@ -4,13 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/client/nip04/dm_session.dart';
 import 'package:nostrmo/component/cust_state.dart';
 import 'package:nostrmo/component/editor/editor_mixin.dart';
-import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/data/dm_session_info_db.dart';
-import 'package:nostrmo/router/edit/editor_router.dart';
-import 'package:nostrmo/router/index/index_app_bar.dart';
 import 'package:pointycastle/ecc/api.dart';
 import 'package:provider/provider.dart';
-import 'package:pointycastle/export.dart' as pointycastle;
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 import '../../client/nip04/nip04.dart';
@@ -23,7 +18,6 @@ import '../../component/editor/tag_embed_builder.dart';
 import '../../component/editor/video_embed_builder.dart';
 import '../../component/name_component.dart';
 import '../../consts/base.dart';
-import '../../data/dm_session_info.dart';
 import '../../data/metadata.dart';
 import '../../main.dart';
 import '../../provider/dm_provider.dart';
@@ -32,7 +26,7 @@ import '../../util/router_util.dart';
 import 'dm_detail_item_component.dart';
 
 class DMDetailRouter extends StatefulWidget {
-  DMDetailRouter();
+  const DMDetailRouter({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -73,8 +67,8 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
           metadata: metadata,
         );
       },
-      selector: (context, _provider) {
-        return _provider.getMetadata(detail!.dmSession.pubkey);
+      selector: (context, provider) {
+        return provider.getMetadata(detail!.dmSession.pubkey);
       },
     );
 
@@ -108,14 +102,14 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
           dragStartBehavior: DragStartBehavior.down,
         );
       },
-      selector: (context, _provider) {
-        return _provider.getSession(detail!.dmSession.pubkey);
+      selector: (context, provider) {
+        return provider.getSession(detail!.dmSession.pubkey);
       },
     );
 
     list.add(Expanded(
       child: Container(
-        margin: EdgeInsets.only(
+        margin: const EdgeInsets.only(
           bottom: Base.BASE_PADDING,
         ),
         child: listWidget,
@@ -128,7 +122,7 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
-            offset: Offset(0, -5),
+            offset: const Offset(0, -5),
             blurRadius: 10,
             spreadRadius: 0,
           ),
@@ -165,6 +159,8 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
             ),
           ),
           TextButton(
+            onPressed: send,
+            style: const ButtonStyle(),
             child: Text(
               "Send",
               style: TextStyle(
@@ -172,8 +168,6 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
                 fontSize: 16,
               ),
             ),
-            onPressed: send,
-            style: ButtonStyle(),
           )
         ],
       ),
@@ -187,14 +181,14 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
       list.add(buildEmojiListsWidget());
     }
 
-    Widget main = Container(
+    Widget main = SizedBox(
       width: double.maxFinite,
       height: double.maxFinite,
       child: Column(children: list),
     );
 
     if (detail!.info == null && detail!.dmSession.newestEvent != null) {
-      main = Container(
+      main = SizedBox(
         width: double.maxFinite,
         height: double.maxFinite,
         child: Stack(
@@ -211,7 +205,7 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
                     color: Colors.orange,
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       "Add to known list",
                       style: TextStyle(
@@ -262,9 +256,9 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
   }
 
   Future<void> addDmSessionToKnown() async {
-    var _detail = await dmProvider.addDmSessionToKnown(detail!);
+    var detail = await dmProvider.addDmSessionToKnown(detail!);
     setState(() {
-      detail = _detail;
+      detail = detail;
     });
   }
 

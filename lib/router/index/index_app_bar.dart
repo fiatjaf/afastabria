@@ -14,7 +14,7 @@ class IndexAppBar extends StatefulWidget {
 
   Widget? center;
 
-  IndexAppBar({this.center});
+  IndexAppBar({super.key, this.center});
 
   @override
   State<StatefulWidget> createState() {
@@ -58,8 +58,8 @@ class _IndexAppBar extends State<IndexAppBar> {
         relayNum,
         style: TextStyle(color: textColor),
       );
-    }, selector: (context, _provider) {
-      return _provider.relayNumStr();
+    }, selector: (context, provider) {
+      return provider.relayNumStr();
     });
 
     return Container(

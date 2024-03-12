@@ -3,22 +3,21 @@ import 'package:nostrmo/component/keep_alive_cust_state.dart';
 import 'package:nostrmo/component/new_notes_updated_component.dart';
 import 'package:nostrmo/consts/base.dart';
 import 'package:nostrmo/consts/base_consts.dart';
-import 'package:nostrmo/consts/router_path.dart';
 import 'package:nostrmo/data/event_mem_box.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/provider/follow_event_provider.dart';
 import 'package:nostrmo/provider/follow_new_event_provider.dart';
-import 'package:nostrmo/util/router_util.dart';
 import 'package:provider/provider.dart';
 
 import '../../component/event/event_list_component.dart';
 import '../../component/placeholder/event_list_placeholder.dart';
-import '../../component/placeholder/event_placeholder.dart';
 import '../../provider/setting_provider.dart';
 import '../../util/load_more_event.dart';
 import '../../util/platform_util.dart';
 
 class FollowPostsRouter extends StatefulWidget {
+  const FollowPostsRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _FollowPostsRouter();
@@ -27,7 +26,7 @@ class FollowPostsRouter extends StatefulWidget {
 
 class _FollowPostsRouter extends KeepAliveCustState<FollowPostsRouter>
     with LoadMoreEvent {
-  ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -37,10 +36,10 @@ class _FollowPostsRouter extends KeepAliveCustState<FollowPostsRouter>
 
   @override
   Widget doBuild(BuildContext context) {
-    var _settingProvider = Provider.of<SettingProvider>(context);
-    var _followEventProvider = Provider.of<FollowEventProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
+    var followEventProvider = Provider.of<FollowEventProvider>(context);
 
-    var eventBox = _followEventProvider.postsBox;
+    var eventBox = followEventProvider.postsBox;
     var events = eventBox.all();
     if (events.isEmpty) {
       return EventListPlaceholder(
@@ -58,7 +57,7 @@ class _FollowPostsRouter extends KeepAliveCustState<FollowPostsRouter>
         var event = events[index];
         return EventListComponent(
           event: event,
-          showVideo: _settingProvider.videoPreviewInList == OpenStatus.OPEN,
+          showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
         );
       },
       itemCount: events.length,
@@ -98,8 +97,8 @@ class _FollowPostsRouter extends KeepAliveCustState<FollowPostsRouter>
             },
           );
         },
-        selector: (context, _provider) {
-          return _provider.eventPostMemBox.length();
+        selector: (context, provider) {
+          return provider.eventPostMemBox.length();
         },
       ),
     ));

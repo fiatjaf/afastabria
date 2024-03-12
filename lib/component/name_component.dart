@@ -20,7 +20,7 @@ class NameComponnet extends StatefulWidget {
 
   int? maxLines;
 
-  NameComponnet({
+  NameComponnet({super.key, 
     required this.pubkey,
     this.metadata,
     this.showNip05 = true,
@@ -87,7 +87,7 @@ class _NameComponnet extends State<NameComponnet> {
     if (StringUtil.isNotBlank(name)) {
       nameList.add(WidgetSpan(
         child: Container(
-          margin: EdgeInsets.only(left: 2),
+          margin: const EdgeInsets.only(left: 2),
           child: Text(
             StringUtil.breakWord("@$name"),
             style: TextStyle(

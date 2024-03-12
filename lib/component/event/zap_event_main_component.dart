@@ -2,13 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../client/event.dart';
 import '../../client/zap/zap_num_util.dart';
-import '../../consts/base.dart';
-import '../../data/metadata.dart';
-import '../../provider/metadata_provider.dart';
 import '../../util/number_format_util.dart';
 import '../../util/spider_util.dart';
 import '../../util/string_util.dart';
@@ -17,7 +13,7 @@ import 'reaction_event_item_component.dart';
 class ZapEventMainComponent extends StatefulWidget {
   Event event;
 
-  ZapEventMainComponent({required this.event});
+  ZapEventMainComponent({super.key, required this.event});
 
   @override
   State<StatefulWidget> createState() {

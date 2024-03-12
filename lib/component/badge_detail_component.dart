@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nostrmo/component/image_component.dart';
-import 'package:nostrmo/component/name_component.dart';
 import 'package:nostrmo/component/simple_name_component.dart';
 import 'package:nostrmo/component/user_pic_component.dart';
 import 'package:nostrmo/consts/base.dart';
@@ -13,7 +12,7 @@ import '../client/nip58/badge_definition.dart';
 class BadgeDetailComponent extends StatefulWidget {
   BadgeDefinition badgeDefinition;
 
-  BadgeDetailComponent({
+  BadgeDetailComponent({super.key, 
     required this.badgeDefinition,
   });
 
@@ -34,7 +33,7 @@ class _BadgeDetailComponent extends State<BadgeDetailComponent> {
 
     if (StringUtil.isNotBlank(widget.badgeDefinition.image)) {
       list.add(Container(
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           top: Base.BASE_PADDING,
           left: Base.BASE_PADDING,
           right: Base.BASE_PADDING,
@@ -45,7 +44,7 @@ class _BadgeDetailComponent extends State<BadgeDetailComponent> {
 
     if (StringUtil.isNotBlank(widget.badgeDefinition.name)) {
       list.add(Container(
-        margin: EdgeInsets.only(top: Base.BASE_PADDING),
+        margin: const EdgeInsets.only(top: Base.BASE_PADDING),
         child: Text(
           widget.badgeDefinition.name!,
           style: TextStyle(
@@ -59,7 +58,7 @@ class _BadgeDetailComponent extends State<BadgeDetailComponent> {
 
     if (StringUtil.isNotBlank(widget.badgeDefinition.description)) {
       list.add(Container(
-        margin: EdgeInsets.only(top: Base.BASE_PADDING),
+        margin: const EdgeInsets.only(top: Base.BASE_PADDING),
         child: Text(
           widget.badgeDefinition.description!,
           textAlign: TextAlign.center,
@@ -69,10 +68,10 @@ class _BadgeDetailComponent extends State<BadgeDetailComponent> {
 
     if (StringUtil.isNotBlank(widget.badgeDefinition.pubkey)) {
       list.add(Container(
-        margin: EdgeInsets.only(top: Base.BASE_PADDING),
+        margin: const EdgeInsets.only(top: Base.BASE_PADDING),
         child: Row(
           children: [
-            Expanded(child: Text("Creator")),
+            const Expanded(child: Text("Creator")),
             GestureDetector(
               onTap: () {
                 RouterUtil.router(
@@ -85,7 +84,7 @@ class _BadgeDetailComponent extends State<BadgeDetailComponent> {
                   UserPicComponent(
                       pubkey: widget.badgeDefinition.pubkey, width: 26),
                   Container(
-                    margin: EdgeInsets.only(left: Base.BASE_PADDING_HALF),
+                    margin: const EdgeInsets.only(left: Base.BASE_PADDING_HALF),
                     child: SimpleNameComponent(
                         pubkey: widget.badgeDefinition.pubkey),
                   ),
@@ -98,7 +97,7 @@ class _BadgeDetailComponent extends State<BadgeDetailComponent> {
     }
 
     return Container(
-      padding: EdgeInsets.all(Base.BASE_PADDING * 2),
+      padding: const EdgeInsets.all(Base.BASE_PADDING * 2),
       color: cardColor,
       child: Column(
         mainAxisSize: MainAxisSize.min,

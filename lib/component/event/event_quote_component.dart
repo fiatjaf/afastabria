@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:nostrmo/client/aid.dart';
@@ -23,7 +22,7 @@ class EventQuoteComponent extends StatefulWidget {
 
   bool showVideo;
 
-  EventQuoteComponent({
+  EventQuoteComponent({super.key, 
     this.event,
     this.id,
     this.aId,
@@ -68,8 +67,8 @@ class _EventQuoteComponent extends CustState<EventQuoteComponent> {
 
           return buildEventWidget(event, cardColor, boxDecoration);
         },
-        selector: (context, _provider) {
-          return _provider.getEvent(widget.aId!);
+        selector: (context, provider) {
+          return provider.getEvent(widget.aId!);
         },
       );
     }
@@ -82,8 +81,8 @@ class _EventQuoteComponent extends CustState<EventQuoteComponent> {
 
         return buildEventWidget(event, cardColor, boxDecoration);
       },
-      selector: (context, _provider) {
-        return _provider.getEvent(widget.id!);
+      selector: (context, provider) {
+        return provider.getEvent(widget.id!);
       },
     );
   }

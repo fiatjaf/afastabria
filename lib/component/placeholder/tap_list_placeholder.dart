@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/component/placeholder/tap_placeholder.dart';
 
 class TapListPlaceholder extends StatelessWidget {
+  const TapListPlaceholder({super.key});
+
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
@@ -21,10 +23,10 @@ class TapListPlaceholder extends StatelessWidget {
     return Container(
       child: Center(
         child: Wrap(
-          children: list,
           spacing: 14,
           runSpacing: 14,
           alignment: WrapAlignment.center,
+          children: list,
         ),
       ),
     );

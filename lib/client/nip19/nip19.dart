@@ -34,7 +34,7 @@ class Nip19 {
   static String encodeSimplePubKey(String pubKey) {
     var code = encodePubKey(pubKey);
     var length = code.length;
-    return code.substring(0, 6) + ":" + code.substring(length - 6);
+    return "${code.substring(0, 6)}:${code.substring(length - 6)}";
   }
 
   // static String decode(String npub) {
@@ -85,7 +85,7 @@ class Nip19 {
     var result = <int>[];
     var maxv = (1 << to) - 1;
 
-    data.forEach((v) {
+    for (var v in data) {
       if (v < 0 || (v >> from) != 0) {
         throw Exception();
       }
@@ -95,7 +95,7 @@ class Nip19 {
         bits -= to;
         result.add((acc >> bits) & maxv);
       }
-    });
+    }
 
     if (pad) {
       if (bits > 0) {

@@ -13,6 +13,8 @@ import '../../util/string_util.dart';
 import 'relays_item_component.dart';
 
 class RelaysRouter extends StatefulWidget {
+  const RelaysRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _RelaysRouter();
@@ -23,9 +25,9 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
   TextEditingController controller = TextEditingController();
   @override
   Widget doBuild(BuildContext context) {
-    var _relayProvider = Provider.of<RelayProvider>(context);
-    var relayAddrs = _relayProvider.relayAddrs;
-    var relayStatusMap = _relayProvider.relayStatusMap;
+    var relayProvider = Provider.of<RelayProvider>(context);
+    var relayAddrs = relayProvider.relayAddrs;
+    var relayStatusMap = relayProvider.relayStatusMap;
     var themeData = Theme.of(context);
     var color = themeData.textTheme.bodyLarge!.color;
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
@@ -74,10 +76,10 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
           child: TextField(
             controller: controller,
             decoration: InputDecoration(
-              prefixIcon: Icon(Icons.cloud),
+              prefixIcon: const Icon(Icons.cloud),
               hintText: "Input relay address.",
               suffixIcon: IconButton(
-                icon: Icon(Icons.add),
+                icon: const Icon(Icons.add),
                 onPressed: addRelay,
               ),
             ),

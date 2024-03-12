@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 import '../../consts/base.dart';
 
 class FilterBlockComponent extends StatefulWidget {
+  const FilterBlockComponent({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _FilterBlockComponent();
@@ -18,8 +20,8 @@ class FilterBlockComponent extends StatefulWidget {
 class _FilterBlockComponent extends State<FilterBlockComponent> {
   @override
   Widget build(BuildContext context) {
-    var _filterProvider = Provider.of<FilterProvider>(context);
-    var blockMap = _filterProvider.blocks;
+    var filterProvider = Provider.of<FilterProvider>(context);
+    var blockMap = filterProvider.blocks;
     var blocks = blockMap.keys.toList();
     // print(blocks);
     return Container(
@@ -37,7 +39,7 @@ class _FilterBlockComponent extends State<FilterBlockComponent> {
 class FilterBlockItemComponent extends StatelessWidget {
   String pubkey;
 
-  FilterBlockItemComponent({required this.pubkey});
+  FilterBlockItemComponent({super.key, required this.pubkey});
 
   @override
   Widget build(BuildContext context) {
@@ -52,19 +54,19 @@ class FilterBlockItemComponent extends StatelessWidget {
         });
       },
       child: Container(
-        margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+        margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
         decoration: BoxDecoration(
           color: cardColor,
           borderRadius: BorderRadius.circular(8),
         ),
-        padding: EdgeInsets.all(Base.BASE_PADDING),
+        padding: const EdgeInsets.all(Base.BASE_PADDING),
         child: Row(children: [
           Expanded(child: Text(nip19Pubkey)),
           GestureDetector(
             onTap: delBlock,
             child: Container(
-              margin: EdgeInsets.only(left: Base.BASE_PADDING_HALF),
-              child: Icon(
+              margin: const EdgeInsets.only(left: Base.BASE_PADDING_HALF),
+              child: const Icon(
                 Icons.delete,
               ),
             ),

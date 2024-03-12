@@ -5,13 +5,13 @@ import '../consts/colors.dart';
 import '../util/router_util.dart';
 
 class ColorSelectorComponent extends StatelessWidget {
-  ColorSelectorComponent();
+  const ColorSelectorComponent({super.key});
 
   static Future<Color?> show(BuildContext context) async {
     return await showDialog(
       context: context,
-      builder: (_context) {
-        return ColorSelectorComponent();
+      builder: (context) {
+        return const ColorSelectorComponent();
       },
     );
   }
@@ -84,7 +84,7 @@ class ColorSelectorItemComponent extends StatelessWidget {
 
   // final bool isLast;
 
-  ColorSelectorItemComponent({
+  const ColorSelectorItemComponent({super.key, 
     required this.color,
     // this.isLast = false,
   });
@@ -103,7 +103,7 @@ class ColorSelectorItemComponent extends StatelessWidget {
         //     border: isLast
         //         ? null
         //         : Border(bottom: BorderSide(color: dividerColor))),
-        margin: EdgeInsets.all(Base.BASE_PADDING),
+        margin: const EdgeInsets.all(Base.BASE_PADDING),
         alignment: Alignment.center,
         height: HEIGHT,
         child: Container(

@@ -62,7 +62,7 @@ class PollInputController {
 class PollInputComponent extends StatefulWidget {
   PollInputController pollInputController;
 
-  PollInputComponent({required this.pollInputController});
+  PollInputComponent({super.key, required this.pollInputController});
 
   @override
   State<StatefulWidget> createState() {
@@ -95,7 +95,7 @@ class _PollInputComponent extends State<PollInputComponent> {
     for (var controller in widget.pollInputController.pollOptionControllers) {
       Widget inputWidget = TextField(
         controller: controller,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           hintText: "poll option info",
         ),
       );
@@ -108,7 +108,7 @@ class _PollInputComponent extends State<PollInputComponent> {
                 onPressed: () {
                   delPollOption(controller);
                 },
-                icon: Icon(Icons.delete)),
+                icon: const Icon(Icons.delete)),
           ],
         );
       }
@@ -119,14 +119,14 @@ class _PollInputComponent extends State<PollInputComponent> {
     }
 
     list.add(Container(
-      margin: EdgeInsets.only(top: Base.BASE_PADDING),
+      margin: const EdgeInsets.only(top: Base.BASE_PADDING),
       child: InkWell(
         onTap: addPollOption,
         child: Container(
           height: 36,
           color: mainColor,
           alignment: Alignment.center,
-          child: Text(
+          child: const Text(
             "add poll option",
             style: TextStyle(
               color: Colors.white,
@@ -143,7 +143,7 @@ class _PollInputComponent extends State<PollInputComponent> {
         Expanded(
             child: TextField(
           controller: widget.pollInputController.minValueController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: "min zap num",
           ),
           keyboardType: TextInputType.number,
@@ -154,7 +154,7 @@ class _PollInputComponent extends State<PollInputComponent> {
         Expanded(
             child: TextField(
           controller: widget.pollInputController.maxValueController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: "max zap num",
           ),
           keyboardType: TextInputType.number,

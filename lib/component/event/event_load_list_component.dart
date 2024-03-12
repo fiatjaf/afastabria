@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../consts/base.dart';
 
 class EventLoadListComponent extends StatelessWidget {
+  const EventLoadListComponent({super.key});
+
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
@@ -13,7 +15,7 @@ class EventLoadListComponent extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
       color: cardColor,
       height: 60,
-      child: Center(child: Text("Note loading...")),
+      child: const Center(child: Text("Note loading...")),
     );
   }
 }

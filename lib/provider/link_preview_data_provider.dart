@@ -5,11 +5,11 @@ import 'package:nostrmo/util/string_util.dart';
 class LinkPreviewDataProvider extends ChangeNotifier {
   static const CACHE_LENGTH = 100;
 
-  Map<String, PreviewData> _data = {};
+  final Map<String, PreviewData> _data = {};
 
   int _index = 0;
 
-  List<String?> _cacheKey = List.filled(CACHE_LENGTH, null);
+  final List<String?> _cacheKey = List.filled(CACHE_LENGTH, null);
 
   void set(String link, PreviewData? data) {
     if (data != null) {

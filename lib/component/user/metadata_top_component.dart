@@ -25,7 +25,6 @@ import '../../util/string_util.dart';
 import '../confirm_dialog.dart';
 import '../image_component.dart';
 import '../image_preview_dialog.dart';
-import 'metadata_component.dart';
 
 class MetadataTopComponent extends StatefulWidget {
   static double getPcBannerHeight(double maxHeight) {
@@ -48,7 +47,7 @@ class MetadataTopComponent extends StatefulWidget {
 
   bool userPicturePreview;
 
-  MetadataTopComponent({
+  MetadataTopComponent({super.key, 
     required this.pubkey,
     this.metadata,
     this.isLocal = false,
@@ -115,7 +114,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
         width: IMAGE_WIDTH,
         height: IMAGE_WIDTH,
         fit: BoxFit.cover,
-        placeholder: (context, url) => CircularProgressIndicator(),
+        placeholder: (context, url) => const CircularProgressIndicator(),
       );
     }
     Widget? bannerImage;
@@ -157,64 +156,64 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
         topBtnList.add(wrapBtn(PopupMenuButton<int>(
           itemBuilder: (context) {
             return [
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 10,
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.bolt, color: Colors.orange),
                     Text(" Zap 10")
                   ],
-                  mainAxisSize: MainAxisSize.min,
                 ),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 50,
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.bolt, color: Colors.orange),
                     Text(" Zap 50")
                   ],
-                  mainAxisSize: MainAxisSize.min,
                 ),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 100,
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.bolt, color: Colors.orange),
                     Text(" Zap 100")
                   ],
-                  mainAxisSize: MainAxisSize.min,
                 ),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 500,
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.bolt, color: Colors.orange),
                     Text(" Zap 500")
                   ],
-                  mainAxisSize: MainAxisSize.min,
                 ),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 1000,
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.bolt, color: Colors.orange),
                     Text(" Zap 1000")
                   ],
-                  mainAxisSize: MainAxisSize.min,
                 ),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 5000,
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.bolt, color: Colors.orange),
                     Text(" Zap 5000")
                   ],
-                  mainAxisSize: MainAxisSize.min,
                 ),
               ),
             ];
@@ -253,8 +252,8 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
             ));
           }
         },
-        selector: (context, _provider) {
-          return _provider.getContact(widget.pubkey);
+        selector: (context, provider) {
+          return provider.getContact(widget.pubkey);
         },
       ));
     }
@@ -312,7 +311,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
       color: Colors.grey.withOpacity(0.5),
       child: bannerImage,
     ));
-    topList.add(Container(
+    topList.add(SizedBox(
       height: 50,
       // color: Colors.red,
       child: Row(
@@ -405,7 +404,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
 
   Widget wrapBtn(Widget child) {
     return Container(
-      margin: EdgeInsets.only(right: 8),
+      margin: const EdgeInsets.only(right: 8),
       child: child,
     );
   }
@@ -438,7 +437,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
       } else if (NIP19Tlv.isNprofile(result)) {
         var nprofile = NIP19Tlv.decodeNprofile(result);
         if (nprofile != null) {
-          RouterUtil.router(context, RouterPath.USER, nprofile!.pubkey);
+          RouterUtil.router(context, RouterPath.USER, nprofile.pubkey);
         }
       } else if (Nip19.isNoteId(result)) {
         var noteId = Nip19.decode(result);
@@ -489,7 +488,7 @@ class MetadataIconBtn extends StatelessWidget {
 
   IconData iconData;
 
-  MetadataIconBtn({required this.iconData, this.onTap, this.onLongPress});
+  MetadataIconBtn({super.key, required this.iconData, this.onTap, this.onLongPress});
 
   @override
   Widget build(BuildContext context) {
@@ -497,7 +496,7 @@ class MetadataIconBtn extends StatelessWidget {
       borderRadius: BorderRadius.circular(14),
       border: Border.all(width: 1),
     );
-    var main = Container(
+    var main = SizedBox(
       height: 28,
       width: 28,
       child: Icon(
@@ -540,7 +539,7 @@ class MetadataTextBtn extends StatelessWidget {
 
   Color? borderColor;
 
-  MetadataTextBtn({
+  MetadataTextBtn({super.key, 
     required this.text,
     required this.onTap,
     this.borderColor,
@@ -559,7 +558,7 @@ class MetadataTextBtn extends StatelessWidget {
         onTap: onTap,
         child: Container(
           height: 28,
-          padding: EdgeInsets.only(left: 8, right: 8),
+          padding: const EdgeInsets.only(left: 8, right: 8),
           alignment: Alignment.center,
           child: Text(
             text,
@@ -587,7 +586,7 @@ class MetadataIconDataComp extends StatelessWidget {
 
   Widget? leftWidget;
 
-  MetadataIconDataComp({
+  MetadataIconDataComp({super.key, 
     required this.text,
     this.iconData,
     this.leftWidget,

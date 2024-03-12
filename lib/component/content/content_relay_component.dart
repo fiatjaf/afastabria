@@ -6,12 +6,11 @@ import 'package:nostrmo/provider/relay_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../consts/base.dart';
-import 'content_str_link_component.dart';
 
 class ContentRelayComponent extends StatelessWidget {
   String addr;
 
-  ContentRelayComponent(this.addr);
+  ContentRelayComponent(this.addr, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +74,8 @@ class ContentRelayComponent extends StatelessWidget {
       }
 
       return main;
-    }, selector: (context, _provider) {
-      return _provider.getRelayStatus(addr);
+    }, selector: (context, provider) {
+      return provider.getRelayStatus(addr);
     });
   }
 }

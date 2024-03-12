@@ -10,13 +10,13 @@ import '../util/later_function.dart';
 import '../util/string_util.dart';
 
 class CommunityInfoProvider extends ChangeNotifier with LaterFunction {
-  Map<String, CommunityInfo> _cache = {};
+  final Map<String, CommunityInfo> _cache = {};
 
-  Map<String, int> _handingIds = {};
+  final Map<String, int> _handingIds = {};
 
-  List<String> _needPullIds = [];
+  final List<String> _needPullIds = [];
 
-  List<Event> _penddingEvents = [];
+  final List<Event> _penddingEvents = [];
 
   CommunityInfo? getCommunity(String aid) {
     var ci = _cache[aid];

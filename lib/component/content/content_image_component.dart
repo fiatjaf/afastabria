@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
-import 'package:nostrmo/main.dart';
 
 import '../../consts/base.dart';
 import '../image_component.dart';
@@ -20,7 +19,7 @@ class ContentImageComponent extends StatelessWidget {
 
   BoxFit imageBoxFix;
 
-  ContentImageComponent({
+  ContentImageComponent({super.key, 
     required this.imageUrl,
     this.imageList,
     this.imageIndex = 0,

@@ -12,7 +12,7 @@ import '../../consts/base64.dart';
 import 'nostr_build_uploader.dart';
 
 class VoidCatUploader {
-  static final String UPLOAD_ACTION = "https://void.cat/upload?cli=true";
+  static const String UPLOAD_ACTION = "https://void.cat/upload?cli=true";
 
   static Future<String?> upload(String filePath, {String? fileName}) async {
     Uint8List? bytes;
@@ -23,7 +23,7 @@ class VoidCatUploader {
       bytes = await tempFile.readAsBytes();
     }
 
-    var digest = sha256.convert(bytes!);
+    var digest = sha256.convert(bytes);
     var fileHex = hex.encode(digest.bytes);
 
     Map<String, dynamic> headers = {};

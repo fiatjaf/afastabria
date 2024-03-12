@@ -29,6 +29,8 @@ import '../../util/router_util.dart';
 import '../../util/string_util.dart';
 
 class SearchRouter extends StatefulWidget {
+  const SearchRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _SearchRouter();
@@ -68,7 +70,7 @@ class _SearchRouter extends CustState<SearchRouter>
 
   @override
   Widget doBuild(BuildContext context) {
-    var _settingProvider = Provider.of<SettingProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
     preBuild();
 
     Widget? suffixWidget;
@@ -77,7 +79,7 @@ class _SearchRouter extends CustState<SearchRouter>
         onTap: () {
           controller.text = "";
         },
-        child: Icon(Icons.close),
+        child: const Icon(Icons.close),
       );
     }
 
@@ -149,7 +151,7 @@ class _SearchRouter extends CustState<SearchRouter>
               return EventListComponent(
                 event: event,
                 showVideo:
-                    _settingProvider.videoPreviewInList == OpenStatus.OPEN,
+                    settingProvider.videoPreviewInList == OpenStatus.OPEN,
               );
             },
             itemCount: events.length,
@@ -167,7 +169,7 @@ class _SearchRouter extends CustState<SearchRouter>
               return EventListComponent(
                 event: event,
                 showVideo:
-                    _settingProvider.videoPreviewInList == OpenStatus.OPEN,
+                    settingProvider.videoPreviewInList == OpenStatus.OPEN,
               );
             },
             itemCount: itemLength,
@@ -205,7 +207,7 @@ class _SearchRouter extends CustState<SearchRouter>
               child: TextField(
                 controller: controller,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search),
                   hintText: "Please input search content",
                   suffixIcon: suffixWidget,
                 ),

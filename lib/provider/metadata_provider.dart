@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:nostrmo/client/nip05/nip05_validor.dart';
@@ -16,9 +15,9 @@ import '../util/later_function.dart';
 import '../util/string_util.dart';
 
 class MetadataProvider extends ChangeNotifier with LaterFunction {
-  Map<String, Metadata> _metadataCache = {};
+  final Map<String, Metadata> _metadataCache = {};
 
-  Map<String, int> _handingPubkeys = {};
+  final Map<String, int> _handingPubkeys = {};
 
   static MetadataProvider? _metadataProvider;
 
@@ -69,7 +68,7 @@ class MetadataProvider extends ChangeNotifier with LaterFunction {
     }
   }
 
-  List<String> _needUpdatePubKeys = [];
+  final List<String> _needUpdatePubKeys = [];
 
   void update(String pubkey) {
     if (!_needUpdatePubKeys.contains(pubkey)) {
@@ -135,7 +134,7 @@ class MetadataProvider extends ChangeNotifier with LaterFunction {
     return Nip05Status.NIP05_NOT_FOUND;
   }
 
-  List<Event> _penddingEvents = [];
+  final List<Event> _penddingEvents = [];
 
   void _handlePenddingEvents() {
     for (var event in _penddingEvents) {

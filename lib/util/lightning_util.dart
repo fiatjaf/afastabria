@@ -1,6 +1,4 @@
-import 'dart:io';
 
-import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:nostrmo/component/lightning_qrcode_dialog.dart';
 import 'package:nostrmo/util/platform_util.dart';
@@ -8,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class LightningUtil {
   static Future<void> goToPay(BuildContext context, String invoiceCode) async {
-    var link = 'lightning:' + invoiceCode;
+    var link = 'lightning:$invoiceCode';
     if (PlatformUtil.isPC() || PlatformUtil.isWeb()) {
       await LightningQrcodeDialog.show(context, link);
     } else {

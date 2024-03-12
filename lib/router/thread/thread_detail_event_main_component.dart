@@ -19,7 +19,7 @@ class ThreadDetailItemMainComponent extends StatefulWidget {
 
   GlobalKey sourceEventKey;
 
-  ThreadDetailItemMainComponent({
+  ThreadDetailItemMainComponent({super.key, 
     required this.item,
     required this.totalMaxWidth,
     required this.sourceEventId,
@@ -66,7 +66,7 @@ class _ThreadDetailItemMainComponent
       child: currentMainEvent,
     ));
 
-    if (widget.item.subItems != null && widget.item.subItems.isNotEmpty) {
+    if (widget.item.subItems.isNotEmpty) {
       List<Widget> subWidgets = [];
       for (var subItem in widget.item.subItems) {
         subWidgets.add(

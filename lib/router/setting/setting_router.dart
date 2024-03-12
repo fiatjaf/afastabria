@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +40,7 @@ import 'setting_group_title_component.dart';
 class SettingRouter extends StatefulWidget {
   Function indexReload;
 
-  SettingRouter({
+  SettingRouter({super.key, 
     required this.indexReload,
   });
 
@@ -60,7 +59,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
-    var _settingProvider = Provider.of<SettingProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
 
     var mainColor = themeData.primaryColor;
     var hintColor = themeData.hintColor;
@@ -83,7 +82,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     list.add(
       SettingGroupItemComponent(
         name: "Language",
-        value: getI18nList(_settingProvider.i18n, _settingProvider.i18nCC).name,
+        value: getI18nList(settingProvider.i18n, settingProvider.i18nCC).name,
         onTap: pickI18N,
       ),
     );
@@ -120,7 +119,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     list.add(
       SettingGroupItemComponent(
         name: "Theme Style",
-        value: getThemeStyle(_settingProvider.themeStyle).name,
+        value: getThemeStyle(settingProvider.themeStyle).name,
         onTap: pickThemeStyle,
       ),
     );
@@ -172,7 +171,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     }
     String? networkHintText = settingProvider.network;
     if (StringUtil.isBlank(networkHintText)) {
-      networkHintText = "Please input" + " " + "Network";
+      networkHintText = "Please input Network";
     }
     Widget networkWidget = Text(
       networkHintText!,
@@ -286,8 +285,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.only(top: Base.BASE_PADDING),
-        padding: EdgeInsets.only(
+        margin: const EdgeInsets.only(top: Base.BASE_PADDING),
+        padding: const EdgeInsets.only(
           left: 20,
           right: 20,
         ),
@@ -366,7 +365,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
         }
       }
       resetTheme();
-      Future.delayed(Duration(seconds: 1), () {
+      Future.delayed(const Duration(seconds: 1), () {
         setState(() {
           // TODO others setting enumObjList
           i18nList = null;

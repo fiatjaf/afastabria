@@ -13,7 +13,7 @@ class HomeComponent extends StatefulWidget {
 
   ThemeData? theme;
 
-  HomeComponent({
+  HomeComponent({super.key, 
     required this.child,
     this.locale,
     this.theme,
@@ -29,7 +29,7 @@ class _HomeComponent extends State<HomeComponent> {
   @override
   Widget build(BuildContext context) {
     PlatformUtil.init(context);
-    var _webviewProvider = Provider.of<WebViewProvider>(context);
+    var webviewProvider = Provider.of<WebViewProvider>(context);
 
     return MaterialApp(
       locale: widget.locale,
@@ -48,8 +48,8 @@ class _HomeComponent extends State<HomeComponent> {
           webViewProvider.url != null
               ? Positioned(
                   child: Offstage(
-                  offstage: !_webviewProvider.showable,
-                  child: WebViewRouter(url: _webviewProvider.url!),
+                  offstage: !webviewProvider.showable,
+                  child: WebViewRouter(url: webviewProvider.url!),
                 ))
               : Container()
         ],

@@ -8,6 +8,8 @@ import '../../consts/base.dart';
 import '../../util/string_util.dart';
 
 class FilterDirtywordComponent extends StatefulWidget {
+  const FilterDirtywordComponent({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _FilterDirtywordComponent();
@@ -19,8 +21,8 @@ class _FilterDirtywordComponent extends State<FilterDirtywordComponent> {
 
   @override
   Widget build(BuildContext context) {
-        var _filterProvider = Provider.of<FilterProvider>(context);
-    var dirtywordList = _filterProvider.dirtywordList;
+        var filterProvider = Provider.of<FilterProvider>(context);
+    var dirtywordList = filterProvider.dirtywordList;
 
     List<Widget> list = [];
     for (var dirtyword in dirtywordList) {
@@ -33,11 +35,11 @@ class _FilterDirtywordComponent extends State<FilterDirtywordComponent> {
           Expanded(
             child: Container(
               width: double.maxFinite,
-              padding: EdgeInsets.all(Base.BASE_PADDING),
+              padding: const EdgeInsets.all(Base.BASE_PADDING),
               child: Wrap(
-                children: list,
                 spacing: Base.BASE_PADDING,
                 runSpacing: Base.BASE_PADDING,
+                children: list,
               ),
             ),
           ),
@@ -45,10 +47,10 @@ class _FilterDirtywordComponent extends State<FilterDirtywordComponent> {
             child: TextField(
               controller: controller,
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.abc),
+                prefixIcon: const Icon(Icons.abc),
                 hintText: "Input dirtyword.",
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.add),
+                  icon: const Icon(Icons.add),
                   onPressed: addDirtyWord,
                 ),
               ),
@@ -77,7 +79,7 @@ class _FilterDirtywordComponent extends State<FilterDirtywordComponent> {
 class FilterDirtywordItemComponent extends StatefulWidget {
   String word;
 
-  FilterDirtywordItemComponent({required this.word});
+  FilterDirtywordItemComponent({super.key, required this.word});
 
   @override
   State<StatefulWidget> createState() {
@@ -104,7 +106,7 @@ class _FilterDirtywordItemComponent
           });
         },
         child: Container(
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
             left: Base.BASE_PADDING_HALF,
             right: Base.BASE_PADDING_HALF,
             top: 4,
@@ -129,7 +131,7 @@ class _FilterDirtywordItemComponent
         onTap: () {
           filterProvider.removeDirtyword(widget.word);
         },
-        child: Icon(
+        child: const Icon(
           Icons.delete,
           color: Colors.red,
         ),

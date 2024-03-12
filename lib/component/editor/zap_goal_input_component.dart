@@ -42,7 +42,7 @@ class ZapGoalInputController {
 class ZapGoalInputComponent extends StatefulWidget {
   ZapGoalInputController zapGoalInputController;
 
-  ZapGoalInputComponent({required this.zapGoalInputController});
+  ZapGoalInputComponent({super.key, required this.zapGoalInputController});
 
   @override
   State<StatefulWidget> createState() {
@@ -64,7 +64,7 @@ class _ZapGoalInputComponent extends State<ZapGoalInputComponent> {
 
     Widget inputWidget = TextField(
       controller: widget.zapGoalInputController.goalAmountController,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: "Goal Amount In Sats",
       ),
     );

@@ -14,7 +14,7 @@ import '../../../generated/l10n.dart';
 class GlobalEventItemComponent extends StatefulWidget {
   String eventId;
 
-  GlobalEventItemComponent({required this.eventId});
+  GlobalEventItemComponent({super.key, required this.eventId});
 
   @override
   State<StatefulWidget> createState() {
@@ -37,7 +37,7 @@ class _GlobalEventItemComponent extends State<GlobalEventItemComponent> {
       builder: (context, event, child) {
         if (event == null) {
           return Container(
-            margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+            margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
             color: cardColor,
             height: 150,
             child: Center(
@@ -53,10 +53,11 @@ class _GlobalEventItemComponent extends State<GlobalEventItemComponent> {
         _event = event;
 
         var main = Screenshot(
+          controller: screenshotController,
           child: Container(
             color: cardColor,
-            margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
-            padding: EdgeInsets.only(
+            margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+            padding: const EdgeInsets.only(
               top: Base.BASE_PADDING,
               // bottom: Base.BASE_PADDING,
             ),
@@ -67,7 +68,6 @@ class _GlobalEventItemComponent extends State<GlobalEventItemComponent> {
               textOnTap: jumpToThread,
             ),
           ),
-          controller: screenshotController,
         );
 
         return GestureDetector(
@@ -75,8 +75,8 @@ class _GlobalEventItemComponent extends State<GlobalEventItemComponent> {
           child: main,
         );
       },
-      selector: (context, _provider) {
-        return _provider.getEvent(widget.eventId);
+      selector: (context, provider) {
+        return provider.getEvent(widget.eventId);
       },
     );
   }

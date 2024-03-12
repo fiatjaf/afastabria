@@ -1,7 +1,5 @@
-import 'dart:typed_data';
 
 import 'package:bot_toast/bot_toast.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nostrmo/client/nip19/nip19.dart';
@@ -15,7 +13,6 @@ import 'package:share_plus/share_plus.dart';
 
 import '../consts/base.dart';
 import '../generated/l10n.dart';
-import '../main.dart';
 import '../provider/metadata_provider.dart';
 import '../util/router_util.dart';
 import '../util/store_util.dart';
@@ -25,12 +22,12 @@ import 'image_component.dart';
 class QrcodeDialog extends StatefulWidget {
   String pubkey;
 
-  QrcodeDialog({required this.pubkey});
+  QrcodeDialog({super.key, required this.pubkey});
 
   static Future<String?> show(BuildContext context, String pubkey) async {
     return await showDialog<String>(
         context: context,
-        builder: (_context) {
+        builder: (context) {
           return QrcodeDialog(
             pubkey: pubkey,
           );
@@ -66,7 +63,7 @@ class _QrcodeDialog extends State<QrcodeDialog> {
             width: IMAGE_WIDTH,
             height: IMAGE_WIDTH,
             fit: BoxFit.cover,
-            placeholder: (context, url) => CircularProgressIndicator(),
+            placeholder: (context, url) => const CircularProgressIndicator(),
           );
         }
 
@@ -98,8 +95,8 @@ class _QrcodeDialog extends State<QrcodeDialog> {
             children: [
               userImageWidget,
               Container(
-                margin: EdgeInsets.only(left: Base.BASE_PADDING_HALF),
-                child: Container(
+                margin: const EdgeInsets.only(left: Base.BASE_PADDING_HALF),
+                child: SizedBox(
                   width: QR_WIDTH - IMAGE_WIDTH - Base.BASE_PADDING_HALF,
                   child: userNameWidget,
                 ),
@@ -108,8 +105,8 @@ class _QrcodeDialog extends State<QrcodeDialog> {
           ),
         );
       },
-      selector: (content, _provider) {
-        return _provider.getMetadata(widget.pubkey);
+      selector: (content, provider) {
+        return provider.getMetadata(widget.pubkey);
       },
     );
     list.add(topWidget);
@@ -123,7 +120,7 @@ class _QrcodeDialog extends State<QrcodeDialog> {
       child: PrettyQr(
         data: nip19Pubkey,
         size: QR_WIDTH,
-        image: AssetImage("assets/imgs/logo/logo512.png"),
+        image: const AssetImage("assets/imgs/logo/logo512.png"),
       ),
     ));
     list.add(GestureDetector(
@@ -132,7 +129,7 @@ class _QrcodeDialog extends State<QrcodeDialog> {
       },
       child: Container(
         width: QR_WIDTH + Base.BASE_PADDING_HALF * 2,
-        padding: EdgeInsets.all(Base.BASE_PADDING_HALF),
+        padding: const EdgeInsets.all(Base.BASE_PADDING_HALF),
         decoration: BoxDecoration(
           color: hintColor.withOpacity(0.5),
           borderRadius: BorderRadius.circular(10),
@@ -189,11 +186,11 @@ class _QrcodeDialog extends State<QrcodeDialog> {
               left: Base.BASE_PADDING,
               right: Base.BASE_PADDING,
             ),
+            alignment: Alignment.center,
             child: GestureDetector(
               onTap: () {},
               child: main,
             ),
-            alignment: Alignment.center,
           ),
         ),
       ),
@@ -209,13 +206,11 @@ class _QrcodeDialog extends State<QrcodeDialog> {
   void onShareTap() {
     screenshotController.capture().then((Uint8List? imageData) async {
       if (imageData != null) {
-        if (imageData != null) {
-          var tempFile = await StoreUtil.saveBS2TempFile(
-            "png",
-            imageData,
-          );
-          Share.shareXFiles([XFile(tempFile)]);
-        }
+        var tempFile = await StoreUtil.saveBS2TempFile(
+          "png",
+          imageData,
+        );
+        Share.shareXFiles([XFile(tempFile)]);
       }
     }).catchError((onError) {
       print(onError);

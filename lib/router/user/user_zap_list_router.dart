@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../client/event.dart';
-import '../../client/nip02/cust_contact_list.dart';
 import '../../component/event/zap_event_list_component.dart';
-import '../../component/user/metadata_component.dart';
-import '../../consts/base.dart';
-import '../../consts/router_path.dart';
-import '../../data/metadata.dart';
-import '../../provider/metadata_provider.dart';
 import '../../util/router_util.dart';
 
 class UserZapListRouter extends StatefulWidget {
+  const UserZapListRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _UserZapListRouter();

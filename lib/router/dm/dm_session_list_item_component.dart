@@ -1,7 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-import 'package:nostrmo/client/nip04/dm_session.dart';
 import 'package:nostrmo/client/nip04/nip04.dart';
 import 'package:nostrmo/component/name_component.dart';
 import 'package:nostrmo/component/point_component.dart';
@@ -9,7 +7,6 @@ import 'package:nostrmo/component/user_pic_component.dart';
 import 'package:nostrmo/consts/base.dart';
 import 'package:nostrmo/consts/router_path.dart';
 import 'package:nostrmo/data/metadata.dart';
-import 'package:nostrmo/main.dart';
 import 'package:nostrmo/provider/dm_provider.dart';
 import 'package:nostrmo/provider/metadata_provider.dart';
 import 'package:nostrmo/util/router_util.dart';
@@ -23,7 +20,7 @@ class DMSessionListItemComponent extends StatefulWidget {
 
   pointycastle.ECDHBasicAgreement agreement;
 
-  DMSessionListItemComponent({
+  DMSessionListItemComponent({super.key, 
     required this.detail,
     required this.agreement,
   });
@@ -56,7 +53,7 @@ class _DMSessionListItemComponent extends State<DMSessionListItemComponent> {
         content = content.replaceAll("\n", " ");
 
         var leftWidget = Container(
-          margin: EdgeInsets.only(top: 4),
+          margin: const EdgeInsets.only(top: 4),
           child: UserPicComponent(
             pubkey: dmSession.pubkey,
             width: IMAGE_WIDTH,
@@ -86,7 +83,7 @@ class _DMSessionListItemComponent extends State<DMSessionListItemComponent> {
         }
 
         return Container(
-          padding: EdgeInsets.all(Base.BASE_PADDING),
+          padding: const EdgeInsets.all(Base.BASE_PADDING),
           decoration: BoxDecoration(
               border: Border(
                   bottom: BorderSide(
@@ -144,8 +141,8 @@ class _DMSessionListItemComponent extends State<DMSessionListItemComponent> {
           ),
         );
       },
-      selector: (context, _provider) {
-        return _provider.getMetadata(widget.detail.dmSession.pubkey);
+      selector: (context, provider) {
+        return provider.getMetadata(widget.detail.dmSession.pubkey);
       },
     );
 

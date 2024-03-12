@@ -14,7 +14,7 @@ class LineTranslateComponent extends StatefulWidget {
 
   Function? textOnTap;
 
-  LineTranslateComponent(this.inlines, {this.textOnTap});
+  LineTranslateComponent(this.inlines, {super.key, this.textOnTap});
 
   @override
   State<StatefulWidget> createState() {
@@ -37,7 +37,7 @@ class _LineTranslateComponent extends CustState<LineTranslateComponent> {
 
   @override
   Widget doBuild(BuildContext context) {
-    var _settingProvider = Provider.of<SettingProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
     var themeData = Theme.of(context);
     var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
     var fontSize = themeData.textTheme.bodyMedium!.fontSize;
@@ -71,14 +71,14 @@ class _LineTranslateComponent extends CustState<LineTranslateComponent> {
             if (showSource) {
               spans.add(translateTips);
               spans.add(TextSpan(
-                text: "${inline} ",
+                text: "$inline ",
                 style: TextStyle(
                   color: hintColor,
                 ),
               ));
             }
           } else {
-            spans.add(TextSpan(text: "${inline} "));
+            spans.add(TextSpan(text: "$inline "));
           }
         } else {
           spans.add(WidgetSpan(child: inline));

@@ -5,6 +5,8 @@ import '../../util/router_util.dart';
 import 'user_contact_list_component.dart';
 
 class UserContactListRouter extends StatefulWidget {
+  const UserContactListRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _UserContactListRouter();

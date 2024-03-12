@@ -147,7 +147,7 @@ Future<void> main() async {
   if (!PlatformUtil.isWeb() && PlatformUtil.isPC()) {
     await windowManager.ensureInitialized();
 
-    WindowOptions windowOptions = WindowOptions(
+    WindowOptions windowOptions = const WindowOptions(
       size: Size(1280, 800),
       center: true,
       backgroundColor: Colors.transparent,
@@ -226,10 +226,12 @@ Future<void> main() async {
   }
 
   FlutterNativeSplash.remove();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _MyApp();
@@ -248,17 +250,17 @@ class _MyApp extends State<MyApp> {
     //   statusBarColor: mainColor,
     // ));
 
-    Locale? _locale;
+    Locale? locale;
     if (StringUtil.isNotBlank(settingProvider.i18n)) {
       for (var item in S.delegate.supportedLocales) {
         if (item.languageCode == settingProvider.i18n &&
             item.countryCode == settingProvider.i18nCC) {
-          _locale = Locale(settingProvider.i18n!, settingProvider.i18nCC);
+          locale = Locale(settingProvider.i18n!, settingProvider.i18nCC);
           break;
         }
       }
     }
-    setGetTimeAgoDefaultLocale(_locale);
+    setGetTimeAgoDefaultLocale(locale);
 
     var lightTheme = getLightTheme();
     var darkTheme = getDarkTheme();
@@ -275,31 +277,31 @@ class _MyApp extends State<MyApp> {
 
     routes = {
       RouterPath.INDEX: (context) => IndexRouter(reload: reload),
-      RouterPath.DONATE: (context) => DonateRouter(),
-      RouterPath.USER: (context) => UserRouter(),
-      RouterPath.USER_CONTACT_LIST: (context) => UserContactListRouter(),
+      RouterPath.DONATE: (context) => const DonateRouter(),
+      RouterPath.USER: (context) => const UserRouter(),
+      RouterPath.USER_CONTACT_LIST: (context) => const UserContactListRouter(),
       RouterPath.USER_HISTORY_CONTACT_LIST: (context) =>
-          UserHistoryContactListRouter(),
-      RouterPath.USER_ZAP_LIST: (context) => UserZapListRouter(),
-      RouterPath.USER_RELAYS: (context) => UserRelayRouter(),
-      RouterPath.DM_DETAIL: (context) => DMDetailRouter(),
-      RouterPath.THREAD_DETAIL: (context) => ThreadDetailRouter(),
-      RouterPath.EVENT_DETAIL: (context) => EventDetailRouter(),
-      RouterPath.TAG_DETAIL: (context) => TagDetailRouter(),
-      RouterPath.NOTICES: (context) => NoticeRouter(),
-      RouterPath.KEY_BACKUP: (context) => KeyBackupRouter(),
-      RouterPath.RELAYS: (context) => RelaysRouter(),
-      RouterPath.FILTER: (context) => FilterRouter(),
-      RouterPath.PROFILE_EDITOR: (context) => ProfileEditorRouter(),
+          const UserHistoryContactListRouter(),
+      RouterPath.USER_ZAP_LIST: (context) => const UserZapListRouter(),
+      RouterPath.USER_RELAYS: (context) => const UserRelayRouter(),
+      RouterPath.DM_DETAIL: (context) => const DMDetailRouter(),
+      RouterPath.THREAD_DETAIL: (context) => const ThreadDetailRouter(),
+      RouterPath.EVENT_DETAIL: (context) => const EventDetailRouter(),
+      RouterPath.TAG_DETAIL: (context) => const TagDetailRouter(),
+      RouterPath.NOTICES: (context) => const NoticeRouter(),
+      RouterPath.KEY_BACKUP: (context) => const KeyBackupRouter(),
+      RouterPath.RELAYS: (context) => const RelaysRouter(),
+      RouterPath.FILTER: (context) => const FilterRouter(),
+      RouterPath.PROFILE_EDITOR: (context) => const ProfileEditorRouter(),
       RouterPath.SETTING: (context) => SettingRouter(indexReload: reload),
-      RouterPath.QRSCANNER: (context) => QRScannerRouter(),
-      RouterPath.WEBUTILS: (context) => WebUtilsRouter(),
-      RouterPath.RELAY_INFO: (context) => RelayInfoRouter(),
-      RouterPath.FOLLOWED_TAGS_LIST: (context) => FollowedTagsListRouter(),
-      RouterPath.COMMUNITY_DETAIL: (context) => CommunityDetailRouter(),
-      RouterPath.FOLLOWED_COMMUNITIES: (context) => FollowedCommunitiesRouter(),
-      RouterPath.FOLLOWED: (context) => FollowedRouter(),
-      RouterPath.BOOKMARK: (context) => BookmarkRouter(),
+      RouterPath.QRSCANNER: (context) => const QRScannerRouter(),
+      RouterPath.WEBUTILS: (context) => const WebUtilsRouter(),
+      RouterPath.RELAY_INFO: (context) => const RelayInfoRouter(),
+      RouterPath.FOLLOWED_TAGS_LIST: (context) => const FollowedTagsListRouter(),
+      RouterPath.COMMUNITY_DETAIL: (context) => const CommunityDetailRouter(),
+      RouterPath.FOLLOWED_COMMUNITIES: (context) => const FollowedCommunitiesRouter(),
+      RouterPath.FOLLOWED: (context) => const FollowedRouter(),
+      RouterPath.BOOKMARK: (context) => const BookmarkRouter(),
     };
 
     return MultiProvider(
@@ -381,14 +383,14 @@ class _MyApp extends State<MyApp> {
         ),
       ],
       child: HomeComponent(
-        locale: _locale,
+        locale: locale,
         theme: defaultTheme,
         child: MaterialApp(
           builder: BotToastInit(),
           navigatorObservers: [BotToastNavigatorObserver()],
           // showPerformanceOverlay: true,
           debugShowCheckedModeBanner: false,
-          locale: _locale,
+          locale: locale,
           title: Base.APP_NAME,
           localizationsDelegates: const [
             S.delegate,
@@ -469,7 +471,7 @@ class _MyApp extends State<MyApp> {
       // indicatorColor: ColorsUtil.hexToColor("#818181"),
       textTheme: textTheme,
       hintColor: hintColor,
-      buttonTheme: ButtonThemeData(),
+      buttonTheme: const ButtonThemeData(),
       shadowColor: Colors.black.withOpacity(0.1),
       tabBarTheme: TabBarTheme(
         indicatorColor: Colors.white,

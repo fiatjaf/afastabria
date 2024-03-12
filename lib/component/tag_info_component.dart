@@ -14,7 +14,7 @@ class TagInfoComponent extends StatefulWidget {
 
   bool jumpable;
 
-  TagInfoComponent({
+  TagInfoComponent({super.key, 
     required this.tag,
     this.height = 80,
     this.jumpable = false,
@@ -37,7 +37,7 @@ class _TagInfoComponent extends State<TagInfoComponent> {
       height: widget.height,
       color: cardColor,
       alignment: Alignment.center,
-      margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+      margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -71,8 +71,8 @@ class _TagInfoComponent extends State<TagInfoComponent> {
                 ),
               ),
             );
-          }, selector: (context, _provider) {
-            return _provider.containTag(widget.tag);
+          }, selector: (context, provider) {
+            return provider.containTag(widget.tag);
           }),
         ],
       ),

@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:bot_toast/bot_toast.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:nostrmo/component/editor/text_input_dialog.dart';
 import 'package:nostrmo/component/name_component.dart';
@@ -24,6 +23,8 @@ import '../../util/string_util.dart';
 import 'index_drawer_content.dart';
 
 class AccountManagerComponent extends StatefulWidget {
+  const AccountManagerComponent({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return AccountManagerComponentState();
@@ -33,8 +34,8 @@ class AccountManagerComponent extends StatefulWidget {
 class AccountManagerComponentState extends State<AccountManagerComponent> {
   @override
   Widget build(BuildContext context) {
-        var _settingProvider = Provider.of<SettingProvider>(context);
-    var privateKeyMap = _settingProvider.privateKeyMap;
+        var settingProvider = Provider.of<SettingProvider>(context);
+    var privateKeyMap = settingProvider.privateKeyMap;
 
     var themeData = Theme.of(context);
     var hintColor = themeData.hintColor;
@@ -70,7 +71,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
       list.add(AccountManagerItemComponent(
         index: index,
         privateKey: value,
-        isCurrent: _settingProvider.privateKeyIndex == index,
+        isCurrent: settingProvider.privateKeyIndex == index,
         onLoginTap: onLoginTap,
         onLogoutTap: (index) {
           onLogoutTap(index, context: context);
@@ -236,7 +237,7 @@ class AccountManagerItemComponent extends StatefulWidget {
 
   Function(int)? onLogoutTap;
 
-  AccountManagerItemComponent({
+  AccountManagerItemComponent({super.key, 
     required this.isCurrent,
     required this.index,
     required this.privateKey,
@@ -295,7 +296,7 @@ class _AccountManagerItemComponent extends State<AccountManagerItemComponent> {
       list.add(Container(
         width: 24,
         alignment: Alignment.centerLeft,
-        child: Container(
+        child: SizedBox(
           width: 15,
           child: widget.isCurrent
               ? PointComponent(
@@ -318,7 +319,7 @@ class _AccountManagerItemComponent extends State<AccountManagerItemComponent> {
       ));
 
       list.add(Container(
-        margin: EdgeInsets.only(left: 5, right: 5),
+        margin: const EdgeInsets.only(left: 5, right: 5),
         child: NameComponnet(
           pubkey: pubkey,
           metadata: metadata,
@@ -346,9 +347,9 @@ class _AccountManagerItemComponent extends State<AccountManagerItemComponent> {
       list.add(GestureDetector(
         onTap: onLogout,
         child: Container(
-          padding: EdgeInsets.only(left: 5),
+          padding: const EdgeInsets.only(left: 5),
           height: LINE_HEIGHT,
-          child: Icon(Icons.logout),
+          child: const Icon(Icons.logout),
         ),
       ));
 
@@ -368,8 +369,8 @@ class _AccountManagerItemComponent extends State<AccountManagerItemComponent> {
           ),
         ),
       );
-    }, selector: (context, _provider) {
-      return _provider.getMetadata(pubkey);
+    }, selector: (context, provider) {
+      return provider.getMetadata(pubkey);
     });
   }
 

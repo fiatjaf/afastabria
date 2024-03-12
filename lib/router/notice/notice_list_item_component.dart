@@ -8,7 +8,7 @@ import '../../util/string_util.dart';
 class NoticeListItemComponent extends StatelessWidget {
   NoticeData notice;
 
-  NoticeListItemComponent({required this.notice});
+  NoticeListItemComponent({super.key, required this.notice});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class NoticeListItemComponent extends StatelessWidget {
     var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
 
     return Container(
-      padding: EdgeInsets.all(Base.BASE_PADDING),
+      padding: const EdgeInsets.all(Base.BASE_PADDING),
       decoration: BoxDecoration(
           border: Border(
               bottom: BorderSide(
@@ -32,7 +32,7 @@ class NoticeListItemComponent extends StatelessWidget {
             children: [
               Text(
                 notice.url,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -52,7 +52,7 @@ class NoticeListItemComponent extends StatelessWidget {
             ],
           ),
           Container(
-            margin: EdgeInsets.only(top: 2),
+            margin: const EdgeInsets.only(top: 2),
             child: Text(
               StringUtil.breakWord(notice.content),
               style: TextStyle(

@@ -4,13 +4,11 @@ import 'package:provider/provider.dart';
 
 import '../../client/event_kind.dart' as kind;
 import '../../client/filter.dart';
-import '../../client/nip19/nip19.dart';
 import '../../component/appbar4stack.dart';
 import '../../component/cust_state.dart';
 import '../../component/event/event_list_component.dart';
 import '../../component/user/metadata_component.dart';
 import '../../consts/base_consts.dart';
-import '../../consts/router_path.dart';
 import '../../data/event_mem_box.dart';
 import '../../data/metadata.dart';
 import '../../main.dart';
@@ -18,12 +16,13 @@ import '../../provider/metadata_provider.dart';
 import '../../provider/setting_provider.dart';
 import '../../util/load_more_event.dart';
 import '../../util/peddingevents_later_function.dart';
-import '../../util/platform_util.dart';
 import '../../util/router_util.dart';
 import '../../util/string_util.dart';
 import 'user_statistics_component.dart';
 
 class UserRouter extends StatefulWidget {
+  const UserRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _UserRouter();
@@ -34,7 +33,7 @@ class _UserRouter extends CustState<UserRouter>
     with PenddingEventsLaterFunction, LoadMoreEvent {
   final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
 
-  ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
 
   String? pubkey;
 
@@ -51,21 +50,21 @@ class _UserRouter extends CustState<UserRouter>
     queryLimit = 200;
 
     _controller.addListener(() {
-      var _showTitle = false;
-      var _showAppbarBG = false;
+      var showTitle = false;
+      var showAppbarBG = false;
 
       var offset = _controller.offset;
       if (offset > showTitleHeight) {
-        _showTitle = true;
+        showTitle = true;
       }
       if (offset > showAppbarBGHeight) {
-        _showAppbarBG = true;
+        showAppbarBG = true;
       }
 
-      if (_showTitle != showTitle || _showAppbarBG != showAppbarBG) {
+      if (showTitle != showTitle || showAppbarBG != showAppbarBG) {
         setState(() {
-          showTitle = _showTitle;
-          showAppbarBG = _showAppbarBG;
+          showTitle = showTitle;
+          showAppbarBG = showAppbarBG;
         });
       }
     });
@@ -79,7 +78,7 @@ class _UserRouter extends CustState<UserRouter>
 
   @override
   Widget doBuild(BuildContext context) {
-    var _settingProvider = Provider.of<SettingProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
     if (StringUtil.isBlank(pubkey)) {
       pubkey = RouterUtil.routerArgs(context) as String?;
       if (StringUtil.isBlank(pubkey)) {
@@ -87,7 +86,7 @@ class _UserRouter extends CustState<UserRouter>
         return Container();
       }
       var events = followEventProvider.eventsByPubkey(pubkey!);
-      if (events != null && events.isNotEmpty) {
+      if (events.isNotEmpty) {
         box.addList(events);
       }
     } else {
@@ -118,8 +117,8 @@ class _UserRouter extends CustState<UserRouter>
       shouldRebuild: (previous, next) {
         return previous != next;
       },
-      selector: (context, _metadataProvider) {
-        return _metadataProvider.getMetadata(pubkey!);
+      selector: (context, metadataProvider) {
+        return metadataProvider.getMetadata(pubkey!);
       },
       builder: (context, metadata, child) {
         Color? appbarBackgroundColor = Colors.transparent;
@@ -184,7 +183,7 @@ class _UserRouter extends CustState<UserRouter>
                 return EventListComponent(
                   event: event,
                   showVideo:
-                      _settingProvider.videoPreviewInList == OpenStatus.OPEN,
+                      settingProvider.videoPreviewInList == OpenStatus.OPEN,
                 );
               },
               itemCount: box.length(),
@@ -198,7 +197,7 @@ class _UserRouter extends CustState<UserRouter>
             main,
             Positioned(
               top: paddingTop,
-              child: Container(
+              child: SizedBox(
                 width: maxWidth,
                 child: appBar,
               ),

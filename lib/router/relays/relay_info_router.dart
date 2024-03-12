@@ -1,22 +1,19 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:nostrmo/component/name_component.dart';
-import 'package:nostrmo/component/user_pic_component.dart';
 import 'package:nostrmo/consts/base.dart';
 import 'package:nostrmo/consts/router_path.dart';
 import 'package:nostrmo/data/metadata.dart';
-import 'package:nostrmo/main.dart';
 import 'package:nostrmo/provider/metadata_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/nip19/nip19.dart';
 import '../../client/relay/relay.dart';
 import '../../component/image_component.dart';
 import '../../component/webview_router.dart';
 import '../../util/router_util.dart';
-import '../../util/string_util.dart';
 
 class RelayInfoRouter extends StatefulWidget {
+  const RelayInfoRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _RelayInfoRouter();
@@ -33,18 +30,18 @@ class _RelayInfoRouter extends State<RelayInfoRouter> {
     var mainColor = themeData.primaryColor;
     
     var relayItf = RouterUtil.routerArgs(context);
-    if (relayItf == null || !(relayItf is Relay)) {
+    if (relayItf == null || relayItf is! Relay) {
       RouterUtil.back(context);
       return Container();
     }
 
-    var relay = relayItf as Relay;
+    var relay = relayItf;
     var relayInfo = relay.info!;
 
     List<Widget> list = [];
 
     list.add(Container(
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         top: Base.BASE_PADDING,
         bottom: Base.BASE_PADDING,
       ),
@@ -58,7 +55,7 @@ class _RelayInfoRouter extends State<RelayInfoRouter> {
     ));
 
     list.add(Container(
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         bottom: Base.BASE_PADDING,
       ),
       child: Text(relayInfo.description),
@@ -82,7 +79,7 @@ class _RelayInfoRouter extends State<RelayInfoRouter> {
               width: IMAGE_WIDTH,
               height: IMAGE_WIDTH,
               fit: BoxFit.cover,
-              placeholder: (context, url) => CircularProgressIndicator(),
+              placeholder: (context, url) => const CircularProgressIndicator(),
             );
           }
           list.add(Container(
@@ -98,7 +95,7 @@ class _RelayInfoRouter extends State<RelayInfoRouter> {
           ));
 
           list.add(Container(
-            margin: EdgeInsets.only(left: Base.BASE_PADDING),
+            margin: const EdgeInsets.only(left: Base.BASE_PADDING),
             child: NameComponnet(
               pubkey: relayInfo.pubKey,
               metadata: metadata,
@@ -114,8 +111,8 @@ class _RelayInfoRouter extends State<RelayInfoRouter> {
             ),
           );
         },
-        selector: (context, _provider) {
-          return _provider.getMetadata(relayInfo.pubKey);
+        selector: (context, provider) {
+          return provider.getMetadata(relayInfo.pubKey);
         },
       ),
     ));
@@ -142,9 +139,9 @@ class _RelayInfoRouter extends State<RelayInfoRouter> {
     list.add(RelayInfoItemComponent(
       title: "NIPs",
       child: Wrap(
-        children: nipWidgets,
         spacing: Base.BASE_PADDING,
         runSpacing: Base.BASE_PADDING,
+        children: nipWidgets,
       ),
     ));
 
@@ -168,7 +165,7 @@ class _RelayInfoRouter extends State<RelayInfoRouter> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           width: double.maxFinite,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -185,7 +182,7 @@ class RelayInfoItemComponent extends StatelessWidget {
 
   Widget child;
 
-  RelayInfoItemComponent({
+  RelayInfoItemComponent({super.key, 
     required this.title,
     required this.child,
   });
@@ -197,14 +194,14 @@ class RelayInfoItemComponent extends StatelessWidget {
     list.add(Container(
       child: Text(
         "$title :",
-        style: TextStyle(
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
         ),
       ),
     ));
 
     list.add(Container(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: Base.BASE_PADDING,
         right: Base.BASE_PADDING,
       ),
@@ -212,11 +209,11 @@ class RelayInfoItemComponent extends StatelessWidget {
     ));
 
     return Container(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: Base.BASE_PADDING,
         right: Base.BASE_PADDING,
       ),
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         bottom: Base.BASE_PADDING,
       ),
       width: double.maxFinite,
@@ -232,7 +229,7 @@ class RelayInfoItemComponent extends StatelessWidget {
 class NipComponent extends StatelessWidget {
   dynamic nip;
 
-  NipComponent({required this.nip});
+  NipComponent({super.key, required this.nip});
 
   @override
   Widget build(BuildContext context) {

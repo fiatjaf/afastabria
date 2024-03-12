@@ -15,7 +15,7 @@ class NIP07Dialog extends StatefulWidget {
 
   String? content;
 
-  NIP07Dialog({
+  NIP07Dialog({super.key, 
     required this.method,
     this.content,
   });
@@ -24,7 +24,7 @@ class NIP07Dialog extends StatefulWidget {
       {String? content}) async {
     return await showDialog<bool>(
       context: context,
-      builder: (_context) {
+      builder: (context) {
         return NIP07Dialog(
           method: method,
           content: content,
@@ -60,13 +60,13 @@ class _NIP07Dialog extends State<NIP07Dialog> {
       ),
     ));
 
-    list.add(Divider());
+    list.add(const Divider());
 
     list.add(Container(
-      margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+      margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
       child: Row(
         children: [
-          Text("${"Method"}:  "),
+          const Text("${"Method"}:  "),
           Text(widget.method),
         ],
       ),
@@ -93,7 +93,7 @@ class _NIP07Dialog extends State<NIP07Dialog> {
       methodDesc = "Lightning payment";
     }
     list.add(Container(
-      margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+      margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
       child: Row(
         children: [
           Text(methodDesc),
@@ -103,7 +103,7 @@ class _NIP07Dialog extends State<NIP07Dialog> {
 
     if (StringUtil.isNotBlank(widget.content)) {
       list.add(Container(
-        child: Text("${"Content"}:"),
+        child: const Text("${"Content"}:"),
       ));
       list.add(Container(
         width: double.maxFinite,
@@ -121,7 +121,7 @@ class _NIP07Dialog extends State<NIP07Dialog> {
     }
 
     list.add(Container(
-      margin: EdgeInsets.only(top: Base.BASE_PADDING_HALF),
+      margin: const EdgeInsets.only(top: Base.BASE_PADDING_HALF),
       child: Row(children: [
         Expanded(
             child: InkWell(

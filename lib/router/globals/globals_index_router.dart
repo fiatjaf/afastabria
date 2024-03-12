@@ -7,7 +7,7 @@ import 'users/globals_users_router.dart';
 class GlobalsIndexRouter extends StatefulWidget {
   TabController tabController;
 
-  GlobalsIndexRouter({required this.tabController});
+  GlobalsIndexRouter({super.key, required this.tabController});
 
   @override
   State<StatefulWidget> createState() {
@@ -19,12 +19,12 @@ class _GlobalsIndexRouter extends State<GlobalsIndexRouter> {
   @override
   Widget build(BuildContext context) {
     return TabBarView(
-      children: [
+      controller: widget.tabController,
+      children: const [
         GlobalsEventsRouter(),
         GlobalsUsersRouter(),
         GlobalsTagsRouter(),
       ],
-      controller: widget.tabController,
     );
   }
 }

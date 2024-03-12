@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,7 @@ class RelaysItemComponent extends StatelessWidget {
 
   RelayStatus relayStatus;
 
-  RelaysItemComponent({required this.addr, required this.relayStatus});
+  RelaysItemComponent({super.key, required this.addr, required this.relayStatus});
 
   @override
   Widget build(BuildContext context) {
@@ -72,13 +71,13 @@ class RelaysItemComponent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(bottom: 2),
+                      margin: const EdgeInsets.only(bottom: 2),
                       child: Text(addr),
                     ),
                     Row(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(right: Base.BASE_PADDING),
+                          margin: const EdgeInsets.only(right: Base.BASE_PADDING),
                           child: RelaysItemNumComponent(
                             iconData: Icons.mail,
                             num: relayStatus.noteReceived,
@@ -104,8 +103,8 @@ class RelaysItemComponent extends StatelessWidget {
                   });
                 },
                 child: Container(
-                  margin: EdgeInsets.only(right: Base.BASE_PADDING),
-                  child: Icon(
+                  margin: const EdgeInsets.only(right: Base.BASE_PADDING),
+                  child: const Icon(
                     Icons.copy,
                   ),
                 ),
@@ -115,7 +114,7 @@ class RelaysItemComponent extends StatelessWidget {
                   removeRelay(addr);
                 },
                 child: Container(
-                  child: Icon(
+                  child: const Icon(
                     Icons.delete,
                     color: Colors.red,
                   ),
@@ -140,7 +139,7 @@ class RelaysItemNumComponent extends StatelessWidget {
 
   int num;
 
-  RelaysItemNumComponent({
+  RelaysItemNumComponent({super.key, 
     this.iconColor,
     required this.iconData,
     required this.num,
@@ -156,7 +155,7 @@ class RelaysItemNumComponent extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            margin: EdgeInsets.only(right: Base.BASE_PADDING_HALF),
+            margin: const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
             child: Icon(
               iconData,
               color: iconColor,

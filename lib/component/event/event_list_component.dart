@@ -33,7 +33,7 @@ class EventListComponent extends StatefulWidget {
 
   bool showCommunity;
 
-  EventListComponent({
+  EventListComponent({super.key, 
     required this.event,
     this.pagePubkey,
     this.jumpable = true,
@@ -87,7 +87,7 @@ class _EventListComponent extends State<EventListComponent> {
       main = Stack(
         children: [
           main,
-          Positioned(
+          const Positioned(
             top: -35,
             right: -10,
             child: EventBitcionIconComponent(),
@@ -103,8 +103,8 @@ class _EventListComponent extends State<EventListComponent> {
       }
 
       return Container();
-    }, selector: (context, _provider) {
-      return _provider.check(widget.event.pubKey, widget.event.id,
+    }, selector: (context, provider) {
+      return provider.check(widget.event.pubKey, widget.event.id,
           aId: eventRelation.aId);
     });
 

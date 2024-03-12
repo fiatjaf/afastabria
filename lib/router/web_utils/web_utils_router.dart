@@ -10,6 +10,8 @@ import '../../util/string_util.dart';
 import 'web_util_item_component.dart';
 
 class WebUtilsRouter extends StatefulWidget {
+  const WebUtilsRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _WebUtilsRouter();

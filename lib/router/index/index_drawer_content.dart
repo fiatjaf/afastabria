@@ -2,19 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/component/user/metadata_top_component.dart';
 import 'package:nostrmo/consts/base.dart';
 import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/data/dm_session_info_db.dart';
-import 'package:nostrmo/data/event_db.dart';
-import 'package:nostrmo/data/metadata_db.dart';
 import 'package:nostrmo/provider/index_provider.dart';
 import 'package:nostrmo/provider/webview_provider.dart';
-import 'package:nostrmo/router/index/index_app_bar.dart';
 import 'package:nostrmo/router/user/user_statistics_component.dart';
 import 'package:nostrmo/util/platform_util.dart';
 import 'package:nostrmo/util/router_util.dart';
 import 'package:nostrmo/util/string_util.dart';
 import 'package:provider/provider.dart';
 
-import '../../component/user/metadata_component.dart';
 import '../../data/metadata.dart';
 import '../../main.dart';
 import '../../provider/metadata_provider.dart';
@@ -22,6 +17,8 @@ import '../edit/editor_router.dart';
 import 'account_manager_component.dart';
 
 class IndexDrawerContnetComponnent extends StatefulWidget {
+  const IndexDrawerContnetComponnent({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _IndexDrawerContnetComponnent();
@@ -36,7 +33,7 @@ class _IndexDrawerContnetComponnent
 
   @override
   Widget build(BuildContext context) {
-    var _indexProvider = Provider.of<IndexProvider>(context);
+    var indexProvider = Provider.of<IndexProvider>(context);
 
         var pubkey = nostr!.publicKey;
     var paddingTop = mediaDataCache.padding.top;
@@ -58,8 +55,8 @@ class _IndexDrawerContnetComponnent
               jumpable: true,
             );
           },
-          selector: (context, _provider) {
-            return _provider.getMetadata(pubkey);
+          selector: (context, provider) {
+            return provider.getMetadata(pubkey);
           },
         ),
         Positioned(
@@ -73,7 +70,7 @@ class _IndexDrawerContnetComponnent
               borderRadius: BorderRadius.circular(profileEditBtnWidth / 2),
             ),
             child: IconButton(
-              icon: Icon(Icons.edit_square),
+              icon: const Icon(Icons.edit_square),
               onPressed: jumpToProfileEdit,
             ),
           ),
@@ -99,7 +96,7 @@ class _IndexDrawerContnetComponnent
       centerList.add(IndexDrawerItem(
         iconData: Icons.home,
         name: "Home",
-        color: _indexProvider.currentTap == 0 ? mainColor : null,
+        color: indexProvider.currentTap == 0 ? mainColor : null,
         onTap: () {
           indexProvider.setCurrentTap(0);
         },
@@ -110,7 +107,7 @@ class _IndexDrawerContnetComponnent
       centerList.add(IndexDrawerItem(
         iconData: Icons.public,
         name: "Globals",
-        color: _indexProvider.currentTap == 1 ? mainColor : null,
+        color: indexProvider.currentTap == 1 ? mainColor : null,
         onTap: () {
           indexProvider.setCurrentTap(1);
         },
@@ -121,7 +118,7 @@ class _IndexDrawerContnetComponnent
       centerList.add(IndexDrawerItem(
         iconData: Icons.search,
         name: "Search",
-        color: _indexProvider.currentTap == 2 ? mainColor : null,
+        color: indexProvider.currentTap == 2 ? mainColor : null,
         onTap: () {
           indexProvider.setCurrentTap(2);
         },
@@ -129,7 +126,7 @@ class _IndexDrawerContnetComponnent
       centerList.add(IndexDrawerItem(
         iconData: Icons.mail,
         name: "DMs",
-        color: _indexProvider.currentTap == 3 ? mainColor : null,
+        color: indexProvider.currentTap == 3 ? mainColor : null,
         onTap: () {
           indexProvider.setCurrentTap(3);
         },
@@ -208,8 +205,8 @@ class _IndexDrawerContnetComponnent
             webViewProvider.show();
           },
         );
-      }, selector: (context, _provider) {
-        return _provider.url;
+      }, selector: (context, provider) {
+        return provider.url;
       }));
     }
 
@@ -259,7 +256,7 @@ class _IndexDrawerContnetComponnent
         color: hintColor,
       ))),
       alignment: Alignment.centerLeft,
-      child: Text("V " + Base.VERSION_NAME),
+      child: Text("V ${Base.VERSION_NAME}"),
     ));
 
     return Container(
@@ -279,7 +276,7 @@ class _IndexDrawerContnetComponnent
       isScrollControlled: false, // true 为 全屏
       context: context,
       builder: (BuildContext context) {
-        return AccountManagerComponent();
+        return const AccountManagerComponent();
       },
     );
   }
@@ -300,7 +297,7 @@ class IndexDrawerItem extends StatelessWidget {
 
   // bool borderBottom;
 
-  IndexDrawerItem({
+  IndexDrawerItem({super.key, 
     required this.iconData,
     required this.name,
     required this.onTap,
@@ -317,7 +314,7 @@ class IndexDrawerItem extends StatelessWidget {
     List<Widget> list = [];
 
     list.add(Container(
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         left: Base.BASE_PADDING * 2,
         right: Base.BASE_PADDING,
       ),
@@ -341,7 +338,7 @@ class IndexDrawerItem extends StatelessWidget {
         }
       },
       behavior: HitTestBehavior.translucent,
-      child: Container(
+      child: SizedBox(
         height: 34,
         // decoration: BoxDecoration(
         //   border: Border(

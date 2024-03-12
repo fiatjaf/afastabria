@@ -8,6 +8,8 @@ import 'package:nostrmo/main.dart';
 import '../../component/appbar4stack.dart';
 
 class KeyBackupRouter extends StatefulWidget {
+  const KeyBackupRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _KeyBackupRouter();
@@ -49,8 +51,8 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
 
     List<Widget> list = [];
     list.add(Container(
-      margin: EdgeInsets.only(bottom: 20),
-      child: Text(
+      margin: const EdgeInsets.only(bottom: 20),
+      child: const Text(
         "Backup and Safety tips",
         style: TextStyle(
           fontWeight: FontWeight.bold,
@@ -60,8 +62,8 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
     ));
 
     list.add(Container(
-      margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
-      child: Text(
+      margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+      child: const Text(
         "The key is a random string that resembles your account password. Anyone with this key can access and control your account.",
       ),
     ));
@@ -71,16 +73,16 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
     }
 
     list.add(Container(
-      margin: EdgeInsets.all(Base.BASE_PADDING),
+      margin: const EdgeInsets.all(Base.BASE_PADDING),
       child: InkWell(
         onTap: copyKey,
         child: Container(
           height: 36,
           color: mainColor,
           alignment: Alignment.center,
-          child: Text(
+          child: const Text(
             "Copy Key",
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -113,7 +115,7 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
             child: Container(
               color: cardColor,
               child: Center(
-                child: Container(
+                child: SizedBox(
                   width: mediaDataCache.size.width * 0.8,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -125,7 +127,7 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
           ),
           Positioned(
             top: mediaDataCache.padding.top,
-            child: Container(
+            child: SizedBox(
               width: mediaDataCache.size.width,
               child: appBar,
             ),

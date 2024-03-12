@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:nostrmo/router/tag/topic_map.dart';
@@ -24,10 +23,7 @@ class ContactListProvider extends ChangeNotifier {
   CustContactList? _contactList;
 
   static ContactListProvider getInstance() {
-    if (_contactListProvider == null) {
-      _contactListProvider = ContactListProvider();
-      // _contactListProvider!.reload();
-    }
+    _contactListProvider ??= ContactListProvider();
     return _contactListProvider!;
   }
 

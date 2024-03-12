@@ -16,7 +16,7 @@ class DMNoticeItemComponent extends StatelessWidget {
 
   bool hasNewMessage;
 
-  DMNoticeItemComponent({
+  DMNoticeItemComponent({super.key, 
     required this.newestNotice,
     this.hasNewMessage = false,
   });
@@ -33,7 +33,7 @@ class DMNoticeItemComponent extends StatelessWidget {
     content = content.replaceAll("\n", " ");
 
     var leftWidget = Container(
-      margin: EdgeInsets.only(top: 4),
+      margin: const EdgeInsets.only(top: 4),
       child: Container(
         width: IMAGE_WIDTH,
         height: IMAGE_WIDTH,
@@ -65,7 +65,7 @@ class DMNoticeItemComponent extends StatelessWidget {
     }
 
     var main = Container(
-      padding: EdgeInsets.all(Base.BASE_PADDING),
+      padding: const EdgeInsets.all(Base.BASE_PADDING),
       decoration: BoxDecoration(
           border: Border(
               bottom: BorderSide(

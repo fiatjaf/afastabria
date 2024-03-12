@@ -8,7 +8,7 @@ import '../../consts/base.dart';
 class ContentVideoComponent extends StatefulWidget {
   String url;
 
-  ContentVideoComponent({required this.url});
+  ContentVideoComponent({super.key, required this.url});
 
   @override
   State<StatefulWidget> createState() {
@@ -67,7 +67,7 @@ class _ContentVideoComponent extends State<ContentVideoComponent> {
 class ControlsOverlay extends StatefulWidget {
   final VideoPlayerController controller;
 
-  ControlsOverlay({required this.controller});
+  const ControlsOverlay({super.key, required this.controller});
 
   @override
   State<StatefulWidget> createState() {

@@ -6,7 +6,7 @@ import 'package:nostrmo/util/later_function.dart';
 import '../client/event_kind.dart' as kind;
 
 class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
-  Map<String, int> _approvedMap = {};
+  final Map<String, int> _approvedMap = {};
 
   List<String> eids = [];
 

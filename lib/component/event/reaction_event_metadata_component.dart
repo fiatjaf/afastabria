@@ -1,11 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:nostrmo/consts/router_path.dart';
 import 'package:nostrmo/util/router_util.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/metadata.dart';
-import '../../main.dart';
 import '../../provider/metadata_provider.dart';
 import '../../util/string_util.dart';
 import '../image_component.dart';
@@ -14,7 +12,7 @@ import '../simple_name_component.dart';
 class ReactionEventMetadataComponent extends StatefulWidget {
   String pubkey;
 
-  ReactionEventMetadataComponent({
+  ReactionEventMetadataComponent({super.key, 
     required this.pubkey,
   });
 
@@ -61,7 +59,7 @@ class _ReactionEventMetadataComponent
       ));
 
       list.add(Container(
-        margin: EdgeInsets.only(left: 5),
+        margin: const EdgeInsets.only(left: 5),
         child: Text(
           name,
           style: const TextStyle(
@@ -81,8 +79,8 @@ class _ReactionEventMetadataComponent
           ),
         ),
       );
-    }, selector: (context, _provider) {
-      return _provider.getMetadata(widget.pubkey);
+    }, selector: (context, provider) {
+      return provider.getMetadata(widget.pubkey);
     });
   }
 }

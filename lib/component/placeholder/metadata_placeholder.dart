@@ -5,6 +5,8 @@ import '../../consts/base.dart';
 import 'metadata_top_placeholder.dart';
 
 class MetadataPlaceholder extends StatelessWidget {
+  const MetadataPlaceholder({super.key});
+
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
@@ -15,7 +17,7 @@ class MetadataPlaceholder extends StatelessWidget {
 
     List<Widget> mainList = [];
 
-    mainList.add(MetadataTopPlaceholder());
+    mainList.add(const MetadataTopPlaceholder());
 
     mainList.add(
       Container(

@@ -97,10 +97,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
         },
         onContextMenuActionItemClicked: (contextMenuItemClicked) async {
           var id = contextMenuItemClicked.id;
-          print("onContextMenuActionItemClicked: " +
-              id.toString() +
-              " " +
-              contextMenuItemClicked.title);
+          print("onContextMenuActionItemClicked: $id ${contextMenuItemClicked.title}");
         });
 
     pullToRefreshController = kIsWeb ||
@@ -130,8 +127,8 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
     var paddingTop = mediaDataCache.padding.top;
     var mainColor = themeData.primaryColor;
     var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
-    var _settingProvider = Provider.of<SettingProvider>(context);
-    var _webViewProvider = Provider.of<WebViewProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
+    var webViewProvider = Provider.of<WebViewProvider>(context);
 
     var btnTopPosition = Base.BASE_PADDING + Base.BASE_PADDING_HALF;
 
@@ -215,21 +212,21 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
 
     AppBar? appbar;
     late Widget bodyWidget;
-    if (_settingProvider.webviewAppbarOpen == OpenStatus.OPEN) {
+    if (settingProvider.webviewAppbarOpen == OpenStatus.OPEN) {
       bodyWidget = main;
       appbar = AppBar(
         backgroundColor: mainColor,
         leading: GestureDetector(
-          child: Icon(Icons.arrow_back_ios_new),
           onTap: handleBack,
+          child: const Icon(Icons.arrow_back_ios_new),
         ),
         actions: [
           getMoreWidget(Container(
             height: btnWidth,
             width: btnWidth,
-            margin: EdgeInsets.only(right: Base.BASE_PADDING),
-            child: Icon(Icons.more_horiz),
+            margin: const EdgeInsets.only(right: Base.BASE_PADDING),
             alignment: Alignment.center,
+            child: const Icon(Icons.more_horiz),
           ))
         ],
       );
@@ -243,8 +240,8 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
             color: scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(btnWidth / 2),
           ),
-          child: Icon(Icons.arrow_back_ios_new),
           alignment: Alignment.center,
+          child: const Icon(Icons.arrow_back_ios_new),
         ),
       );
 
@@ -268,8 +265,8 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
                   color: scaffoldBackgroundColor,
                   borderRadius: BorderRadius.circular(btnWidth / 2),
                 ),
-                child: Icon(Icons.more_horiz),
                 alignment: Alignment.center,
+                child: const Icon(Icons.more_horiz),
               )),
             ),
           ],
@@ -277,7 +274,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
       );
     }
 
-    if (_webViewProvider.showable) {
+    if (webViewProvider.showable) {
       bodyWidget = WillPopScope(
         child: bodyWidget,
         onWillPop: () async {
@@ -300,27 +297,27 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
     return PopupMenuButton<String>(
       itemBuilder: (context) {
         return [
-          PopupMenuItem(
+          const PopupMenuItem(
             value: "copyCurrentUrl",
             child: Text("Copy current Url"),
           ),
-          PopupMenuItem(
+          const PopupMenuItem(
             value: "copyInitUrl",
             child: Text("Copy init Url"),
           ),
-          PopupMenuItem(
+          const PopupMenuItem(
             value: "openInBrowser",
             child: Text("Open in browser"),
           ),
-          PopupMenuItem(
+          const PopupMenuItem(
             value: "requestPermission",
             child: Text("WebRTC Permission"),
           ),
-          PopupMenuItem(
+          const PopupMenuItem(
             value: "hideBrowser",
             child: Text("Hide"),
           ),
-          PopupMenuItem(
+          const PopupMenuItem(
             value: "close",
             child: Text("Close"),
           ),
@@ -343,8 +340,8 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
     } else if (value == "copyInitUrl") {
       _doCopy(widget.url);
     } else if (value == "openInBrowser") {
-      var _url = Uri.parse(widget.url);
-      launchUrl(_url);
+      var url0 = Uri.parse(widget.url);
+      launchUrl(url0);
     } else if (value == "hideBrowser") {
       webViewProvider.hide();
     } else if (value == "close") {

@@ -27,6 +27,8 @@ import 'thread_detail_event_main_component.dart';
 import 'thread_detail_item_component.dart';
 
 class ThreadDetailRouter extends StatefulWidget {
+  const ThreadDetailRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _ThreadDetailRouter();
@@ -44,7 +46,7 @@ class ThreadDetailRouter extends StatefulWidget {
       ),
     );
     appBarTitleList.add(nameComponnet);
-    appBarTitleList.add(Text(" : "));
+    appBarTitleList.add(const Text(" : "));
     appBarTitleList.add(Expanded(
         child: Text(
       event.content.replaceAll("\n", " ").replaceAll("\r", " "),
@@ -70,7 +72,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
 
   bool showTitle = false;
 
-  ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
 
   double rootEventHeight = 120;
 
@@ -191,7 +193,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
         rootEventWidget = Selector<SingleEventProvider, Event?>(
             builder: (context, event, child) {
           if (event == null) {
-            return EventLoadListComponent();
+            return const EventLoadListComponent();
           }
 
           {
@@ -225,7 +227,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
         rootEventWidget = Selector<ReplaceableEventProvider, Event?>(
             builder: (context, event, child) {
           if (event == null) {
-            return EventLoadListComponent();
+            return const EventLoadListComponent();
           }
 
           if (rootId != null) {
@@ -282,7 +284,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
       if (needWidth > mediaDataCache.size.width) {
         mainList.add(SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Container(
+          child: SizedBox(
             width: needWidth,
             child: ThreadDetailItemComponent(
               item: item,
@@ -337,8 +339,8 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
         title: appBarTitle,
       ),
       body: EventReplyCallback(
-        child: main,
         onReplyCallback: onReplyCallback,
+        child: main,
       ),
     );
   }
@@ -407,7 +409,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
     // event in box had been sorted. The last one is the oldest.
     var all = box.all();
     var length = all.length;
-    List<ThreadDetailEvent> _rootSubList = [];
+    List<ThreadDetailEvent> rootSubList = [];
     // key - id, value - item
     Map<String, ThreadDetailEvent> itemMap = {};
     for (var i = length - 1; i > -1; i--) {
@@ -422,19 +424,19 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
       var item = itemMap[event.id]!;
 
       if (relation.replyId == null) {
-        _rootSubList.add(item);
+        rootSubList.add(item);
       } else {
         var replyItem = itemMap[relation.replyId];
         if (replyItem == null) {
-          _rootSubList.add(item);
+          rootSubList.add(item);
         } else {
           replyItem.subItems.add(item);
         }
       }
     }
 
-    rootSubList = _rootSubList;
-    for (var rootSub in rootSubList!) {
+    rootSubList = rootSubList;
+    for (var rootSub in rootSubList) {
       rootSub.handleTotalLevelNum(0);
     }
 

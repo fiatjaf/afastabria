@@ -9,6 +9,8 @@ import '../../consts/base.dart';
 import '../../util/router_util.dart';
 
 class UserRelayRouter extends StatefulWidget {
+  const UserRelayRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _UserRelayRouter();
@@ -25,7 +27,7 @@ class _UserRelayRouter extends State<UserRelayRouter> {
       relays = [];
       var arg = RouterUtil.routerArgs(context);
       if (arg != null && arg is List<dynamic>) {
-        for (var tag in arg as List<dynamic>) {
+        for (var tag in arg) {
           if (tag is List<dynamic>) {
             var length = tag.length;
             bool write = true;
@@ -62,7 +64,7 @@ class _UserRelayRouter extends State<UserRelayRouter> {
             color: themeData.appBarTheme.titleTextStyle!.color,
           ),
         ),
-        title: Text("Relays"),
+        title: const Text("Relays"),
       ),
       body: Container(
         margin: const EdgeInsets.only(
@@ -77,8 +79,8 @@ class _UserRelayRouter extends State<UserRelayRouter> {
                 relayMetadata: relayMetadata,
                 addAble: relayStatus == null,
               );
-            }, selector: (context, _provider) {
-              return _provider.getRelayStatus(relayMetadata.addr);
+            }, selector: (context, provider) {
+              return provider.getRelayStatus(relayMetadata.addr);
             });
           },
           itemCount: relays!.length,
@@ -93,7 +95,7 @@ class RelayMetadataComponent extends StatelessWidget {
 
   bool addAble;
 
-  RelayMetadataComponent({required this.relayMetadata, this.addAble = true});
+  RelayMetadataComponent({super.key, required this.relayMetadata, this.addAble = true});
 
   @override
   Widget build(BuildContext context) {
@@ -151,13 +153,13 @@ class RelayMetadataComponent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(bottom: 2),
+                    margin: const EdgeInsets.only(bottom: 2),
                     child: Text(relayMetadata.addr),
                   ),
                   Row(
                     children: [
                       Container(
-                        margin: EdgeInsets.only(right: Base.BASE_PADDING),
+                        margin: const EdgeInsets.only(right: Base.BASE_PADDING),
                         child: Text(
                           "Read",
                           style: TextStyle(
@@ -168,7 +170,7 @@ class RelayMetadataComponent extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(right: Base.BASE_PADDING),
+                        margin: const EdgeInsets.only(right: Base.BASE_PADDING),
                         child: Text(
                           "Write",
                           style: TextStyle(

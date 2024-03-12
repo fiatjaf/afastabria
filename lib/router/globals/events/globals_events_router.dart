@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import '../../../client/event.dart';
 import '../../../client/event_kind.dart' as kind;
 import '../../../client/filter.dart';
-import '../../../component/cust_state.dart';
 import '../../../component/event/event_list_component.dart';
 import '../../../component/placeholder/event_list_placeholder.dart';
 import '../../../consts/base.dart';
@@ -20,9 +19,10 @@ import '../../../util/dio_util.dart';
 import '../../../util/peddingevents_later_function.dart';
 import '../../../util/platform_util.dart';
 import '../../../util/string_util.dart';
-import 'globals_event_item_component.dart';
 
 class GlobalsEventsRouter extends StatefulWidget {
+  const GlobalsEventsRouter({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _GlobalsEventsRouter();
@@ -39,7 +39,7 @@ class _GlobalsEventsRouter extends KeepAliveCustState<GlobalsEventsRouter>
 
   @override
   Widget doBuild(BuildContext context) {
-    var _settingProvider = Provider.of<SettingProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
     if (eventBox.isEmpty()) {
       return EventListPlaceholder(
         onRefresh: refresh,
@@ -56,7 +56,7 @@ class _GlobalsEventsRouter extends KeepAliveCustState<GlobalsEventsRouter>
           var event = list[index];
           return EventListComponent(
             event: event,
-            showVideo: _settingProvider.videoPreviewInList == OpenStatus.OPEN,
+            showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
           );
         },
         itemCount: list.length,
