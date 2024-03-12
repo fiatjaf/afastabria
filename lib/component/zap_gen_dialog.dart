@@ -62,7 +62,7 @@ class _ZapGenDialog extends State<ZapGenDialog> {
     list.add(Container(
       margin: const EdgeInsets.only(bottom: Base.BASE_PADDING),
       child: Text(
-        s.Input_Sats_num,
+        "Input Sats num",
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: titleFontSize,
@@ -78,7 +78,7 @@ class _ZapGenDialog extends State<ZapGenDialog> {
         maxLines: 1,
         autofocus: true,
         decoration: InputDecoration(
-          hintText: s.Input_Sats_num,
+          hintText: "Input Sats num",
           border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
         ),
       ),
@@ -91,7 +91,7 @@ class _ZapGenDialog extends State<ZapGenDialog> {
         maxLines: 1,
         autofocus: true,
         decoration: InputDecoration(
-          hintText: "${s.Input_Comment} (${s.Optional})",
+          hintText: "${"Input Comment"} (${"Optional"})",
           border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
         ),
       ),

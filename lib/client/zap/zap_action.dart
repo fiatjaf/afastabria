@@ -19,7 +19,7 @@ class ZapAction {
           eventId: eventId, pollOption: pollOption, comment: comment);
 
       if (StringUtil.isBlank(invoiceCode)) {
-        BotToast.showText(text: s.Gen_invoice_code_error);
+        BotToast.showText(text: "Gen invoice code error.");
         return;
       }
 
@@ -47,7 +47,7 @@ class ZapAction {
     var s = S.of(context);
     var metadata = metadataProvider.getMetadata(pubkey);
     if (metadata == null) {
-      BotToast.showText(text: s.Metadata_can_not_be_found);
+      BotToast.showText(text: "Metadata can not be found.");
       return null;
     }
 
@@ -65,7 +65,7 @@ class ZapAction {
       }
     }
     if (StringUtil.isBlank(lnurl)) {
-      BotToast.showText(text: "Lnurl ${s.not_found}");
+      BotToast.showText(text: "Lnurl ${"not found"}");
       return null;
     }
     // check if user set wrong

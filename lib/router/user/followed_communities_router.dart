@@ -120,7 +120,7 @@ class _FollowedCommunitiesRouter extends State<FollowedCommunitiesRouter> {
           ),
         ),
         title: Text(
-          s.Followed_Communities,
+          "Followed Communities",
           style: TextStyle(
             fontSize: titleFontSize,
             fontWeight: FontWeight.bold,

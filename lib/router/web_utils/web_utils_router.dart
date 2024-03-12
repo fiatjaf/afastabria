@@ -88,7 +88,7 @@ class _WebUtilsRouter extends CustState<WebUtilsRouter> {
           ),
         ),
         title: Text(
-          s.Web_Utils,
+          "Web Utils",
           style: TextStyle(
             fontSize: titleFontSize,
             fontWeight: FontWeight.bold,

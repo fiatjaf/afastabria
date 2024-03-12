@@ -26,13 +26,13 @@ class ZapGoalInputController {
     var s = S.of(context);
     if (StringUtil.isBlank(goalAmountController.text)) {
       print("checked is blank!");
-      BotToast.showText(text: s.Input_can_not_be_null);
+      BotToast.showText(text: "Input can not be null");
       return false;
     }
     if (StringUtil.isNotBlank(goalAmountController.text)) {
       var num = int.tryParse(goalAmountController.text);
       if (num == null) {
-        BotToast.showText(text: s.Number_parse_error);
+        BotToast.showText(text: "Number parse error");
         return false;
       }
     }
@@ -68,7 +68,7 @@ class _ZapGoalInputComponent extends State<ZapGoalInputComponent> {
     Widget inputWidget = TextField(
       controller: widget.zapGoalInputController.goalAmountController,
       decoration: InputDecoration(
-        hintText: s.Goal_Amount_In_Sats,
+        hintText: "Goal Amount In Sats",
       ),
     );
 

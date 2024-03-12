@@ -47,7 +47,7 @@ class _UserHistoryContactListRouter
           ),
         ),
         title: Text(
-          s.Following,
+          "Following",
           style: TextStyle(
             fontSize: titleFontSize,
             fontWeight: FontWeight.bold,
@@ -57,7 +57,7 @@ class _UserHistoryContactListRouter
           Container(
             child: TextButton(
               child: Text(
-                s.Recovery,
+                "Recovery",
                 style: TextStyle(
                   color: titleTextColor,
                   fontSize: 16,

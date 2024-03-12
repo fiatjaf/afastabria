@@ -22,7 +22,6 @@ class RelayPool {
 
   // init query
   final Map<String, Subscription> _initQuery = {};
-
   final Map<String, Function> _queryCompleteCallbacks = {};
 
   RelayPool(this.localNostr, this.eventVerification);

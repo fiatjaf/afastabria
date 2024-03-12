@@ -93,22 +93,22 @@ class _SearchRouter extends CustState<SearchRouter>
       for (var action in searchAbles) {
         if (action == SearchActions.openPubkey) {
           list.add(SearchActionItemComponent(
-              title: s.Open_User_page, onTap: openPubkey));
+              title: "Open User page", onTap: openPubkey));
         } else if (action == SearchActions.openNoteId) {
           list.add(SearchActionItemComponent(
-              title: s.Open_Note_detail, onTap: openNoteId));
+              title: "Open Note detail", onTap: openNoteId));
         } else if (action == SearchActions.searchMetadataFromCache) {
           list.add(SearchActionItemComponent(
-              title: s.Search_User_from_cache, onTap: searchMetadataFromCache));
+              title: "Search User from cache", onTap: searchMetadataFromCache));
         } else if (action == SearchActions.searchEventFromCache) {
           list.add(SearchActionItemComponent(
-              title: s.Open_Event_from_cache, onTap: searchEventFromCache));
+              title: "Open Event from cache", onTap: searchEventFromCache));
         } else if (action == SearchActions.searchPubkeyEvent) {
           list.add(SearchActionItemComponent(
-              title: s.Search_pubkey_event, onTap: onEditingComplete));
+              title: "Search pubkey event", onTap: onEditingComplete));
         } else if (action == SearchActions.searchNoteContent) {
           list.add(SearchActionItemComponent(
-              title: "${s.Search_note_content} NIP-50",
+              title: "${"Search note content"} NIP-50",
               onTap: searchNoteContent));
         }
       }
@@ -210,7 +210,7 @@ class _SearchRouter extends CustState<SearchRouter>
                 controller: controller,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.search),
-                  hintText: s.Please_input_search_content,
+                  hintText: "Please input search content",
                   suffixIcon: suffixWidget,
                 ),
                 onEditingComplete: onEditingComplete,

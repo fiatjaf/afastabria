@@ -64,7 +64,7 @@ class _UserRelayRouter extends State<UserRelayRouter> {
             color: themeData.appBarTheme.titleTextStyle!.color,
           ),
         ),
-        title: Text(s.Relays),
+        title: Text("Relays"),
       ),
       body: Container(
         margin: const EdgeInsets.only(
@@ -162,7 +162,7 @@ class RelayMetadataComponent extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(right: Base.BASE_PADDING),
                         child: Text(
-                          s.Read,
+                          "Read",
                           style: TextStyle(
                             fontSize: bodySmallFontSize,
                             color:
@@ -173,7 +173,7 @@ class RelayMetadataComponent extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(right: Base.BASE_PADDING),
                         child: Text(
-                          s.Write,
+                          "Write",
                           style: TextStyle(
                             fontSize: bodySmallFontSize,
                             color:

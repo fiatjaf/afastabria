@@ -35,14 +35,12 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
     return Selector<MetadataProvider, Metadata?>(
       builder: (context, metadata, child) {
         var themeData = Theme.of(context);
         Color cardColor = themeData.cardColor;
         var mainColor = themeData.primaryColor;
         var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
-        var s = S.of(context);
         if (metadata == null ||
             (StringUtil.isBlank(metadata.lud06) &&
                 StringUtil.isBlank(metadata.lud16))) {
@@ -51,16 +49,16 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    s.Lnurl_and_Lud16_can_t_found,
-                    style: const TextStyle(
+                  const Text(
+                    "Lnurl and Lud16 can't found.",
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Container(
                     padding: const EdgeInsets.all(Base.BASE_PADDING),
                     child: ContentStrLinkComponent(
-                      str: s.Add_now,
+                      str: "Add now",
                       onTap: () async {
                         await RouterUtil.router(
                             context, RouterPath.PROFILE_EDITOR, metadata);
@@ -79,7 +77,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
         list.add(Container(
           margin: EdgeInsets.only(bottom: Base.BASE_PADDING),
           child: Text(
-            s.Input_Sats_num_to_gen_lightning_invoice,
+            "Input Sats num to gen lightning invoice",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: titleFontSize,
@@ -95,7 +93,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
             maxLines: 1,
             autofocus: true,
             decoration: InputDecoration(
-              hintText: s.Input_Sats_num,
+              hintText: "Input Sats num",
               border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
             ),
           ),
@@ -108,7 +106,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
             maxLines: 1,
             autofocus: true,
             decoration: InputDecoration(
-              hintText: "${s.Input_Comment} (${s.Optional})",
+              hintText: "${"Input Comment"} (${"Optional"})",
               border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
             ),
           ),

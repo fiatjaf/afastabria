@@ -100,7 +100,7 @@ class _IndexDrawerContnetComponnent
     if (PlatformUtil.isTableMode()) {
       centerList.add(IndexDrawerItem(
         iconData: Icons.home,
-        name: s.Home,
+        name: "Home",
         color: _indexProvider.currentTap == 0 ? mainColor : null,
         onTap: () {
           indexProvider.setCurrentTap(0);
@@ -111,7 +111,7 @@ class _IndexDrawerContnetComponnent
       ));
       centerList.add(IndexDrawerItem(
         iconData: Icons.public,
-        name: s.Globals,
+        name: "Globals",
         color: _indexProvider.currentTap == 1 ? mainColor : null,
         onTap: () {
           indexProvider.setCurrentTap(1);
@@ -122,7 +122,7 @@ class _IndexDrawerContnetComponnent
       ));
       centerList.add(IndexDrawerItem(
         iconData: Icons.search,
-        name: s.Search,
+        name: "Search",
         color: _indexProvider.currentTap == 2 ? mainColor : null,
         onTap: () {
           indexProvider.setCurrentTap(2);
@@ -140,7 +140,7 @@ class _IndexDrawerContnetComponnent
 
     centerList.add(IndexDrawerItem(
       iconData: Icons.block,
-      name: s.Filter,
+      name: "Filter",
       onTap: () {
         RouterUtil.router(context, RouterPath.FILTER);
       },
@@ -149,7 +149,7 @@ class _IndexDrawerContnetComponnent
     if (!PlatformUtil.isTableMode()) {
       centerList.add(IndexDrawerItem(
         iconData: Icons.cloud,
-        name: s.Relays,
+        name: "Relays",
         onTap: () {
           RouterUtil.router(context, RouterPath.RELAYS);
         },
@@ -158,7 +158,7 @@ class _IndexDrawerContnetComponnent
 
     centerList.add(IndexDrawerItem(
       iconData: Icons.key,
-      name: s.Key_Backup,
+      name: "Key Backup",
       onTap: () {
         RouterUtil.router(context, RouterPath.KEY_BACKUP);
       },
@@ -166,7 +166,7 @@ class _IndexDrawerContnetComponnent
 
     centerList.add(IndexDrawerItem(
       iconData: Icons.bookmarks,
-      name: s.Bookmark,
+      name: "Bookmark",
       onTap: () {
         RouterUtil.router(context, RouterPath.BOOKMARK);
       },
@@ -175,7 +175,7 @@ class _IndexDrawerContnetComponnent
     if (!PlatformUtil.isPC() && !PlatformUtil.isWeb()) {
       centerList.add(IndexDrawerItem(
         iconData: Icons.coffee_outlined,
-        name: s.Donate,
+        name: "Donate",
         onTap: () {
           RouterUtil.router(context, RouterPath.DONATE);
         },
@@ -184,7 +184,7 @@ class _IndexDrawerContnetComponnent
 
     centerList.add(IndexDrawerItem(
       iconData: Icons.settings,
-      name: s.Setting,
+      name: "Setting",
       onTap: () {
         RouterUtil.router(context, RouterPath.SETTING);
       },
@@ -196,7 +196,7 @@ class _IndexDrawerContnetComponnent
         if (StringUtil.isBlank(url)) {
           return IndexDrawerItem(
             iconData: Icons.view_list,
-            name: s.Web_Utils,
+            name: "Web Utils",
             onTap: () {
               RouterUtil.router(context, RouterPath.WEBUTILS);
             },
@@ -205,7 +205,7 @@ class _IndexDrawerContnetComponnent
 
         return IndexDrawerItem(
           iconData: Icons.public,
-          name: s.Show_web,
+          name: "Show web",
           onTap: () {
             webViewProvider.show();
           },
@@ -227,7 +227,7 @@ class _IndexDrawerContnetComponnent
     if (PlatformUtil.isTableMode()) {
       list.add(IndexDrawerItem(
         iconData: Icons.add,
-        name: s.Add_a_Note,
+        name: "Add a Note",
         onTap: () {
           EditorRouter.open(context);
         },
@@ -236,7 +236,7 @@ class _IndexDrawerContnetComponnent
 
     list.add(IndexDrawerItem(
       iconData: Icons.account_box,
-      name: s.Account_Manager,
+      name: "Account Manager",
       onTap: () {
         _showBasicModalBottomSheet(context);
       },

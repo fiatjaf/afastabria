@@ -141,7 +141,7 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
           Expanded(
             child: quill.QuillEditor(
               configurations: quill.QuillEditorConfigurations(
-                placeholder: s.What_s_happening,
+                placeholder: "What's happening?",
                 readOnly: false,
                 embedBuilders: [
                   MentionUserEmbedBuilder(),
@@ -156,7 +156,7 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
                 autoFocus: false,
                 expands: false,
                 // padding: EdgeInsets.zero,
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   left: Base.BASE_PADDING,
                   right: Base.BASE_PADDING,
                 ),
@@ -168,7 +168,7 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
           ),
           TextButton(
             child: Text(
-              s.Send,
+              "Send",
               style: TextStyle(
                 color: textColor,
                 fontSize: 16,
@@ -215,7 +215,7 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
                   ),
                   child: Center(
                     child: Text(
-                      s.Add_to_known_list,
+                      "Add to known list",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

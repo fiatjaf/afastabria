@@ -104,14 +104,14 @@ class _EventPollComponent extends State<EventPollComponent> {
               DateTime.fromMillisecondsSinceEpoch(pollInfo!.closedAt!);
           var format = FixedDateTimeFormatter("YYYY-MM-DD hh:mm:ss");
           list.add(Row(
-            children: [Text("${s.Close_at} ${format.encode(closeAtDT)}")],
+            children: [Text("${"Close at"} ${format.encode(closeAtDT)}")],
           ));
         }
 
         if (myNum > 0) {
           var myNumStr = NumberFormatUtil.format(myNum);
           list.add(Container(
-            child: Text("${s.You_had_voted_with} $myNumStr sats."),
+            child: Text("${"You had voted with"} $myNumStr sats."),
           ));
         }
 
@@ -202,7 +202,7 @@ class _EventPollComponent extends State<EventPollComponent> {
           list.add(Container(
             margin: const EdgeInsets.only(top: Base.BASE_PADDING_HALF),
             child: Text(
-              "${s.min_zap_num}: ${pollInfo!.valueMinimum}  ${s.max_zap_num}: ${pollInfo!.valueMaximum}",
+              "${"min zap num"}: ${pollInfo!.valueMinimum}  ${"max zap num"}: ${pollInfo!.valueMaximum}",
               style: TextStyle(
                 color: hintColor,
               ),

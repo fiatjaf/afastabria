@@ -48,7 +48,7 @@ class _FilterDirtywordComponent extends State<FilterDirtywordComponent> {
               controller: controller,
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.abc),
-                hintText: s.Input_dirtyword,
+                hintText: "Input dirtyword.",
                 suffixIcon: IconButton(
                   icon: Icon(Icons.add),
                   onPressed: addDirtyWord,
@@ -65,7 +65,7 @@ class _FilterDirtywordComponent extends State<FilterDirtywordComponent> {
     var word = controller.text;
     word = word.trim();
     if (StringUtil.isBlank(word)) {
-      BotToast.showText(text: S.of(context).Word_can_t_be_null);
+      BotToast.showText(text: "Word can't be null");
       return;
     }
 
@@ -75,6 +75,7 @@ class _FilterDirtywordComponent extends State<FilterDirtywordComponent> {
   }
 }
 
+// ignore: must_be_immutable
 class FilterDirtywordItemComponent extends StatefulWidget {
   String word;
 

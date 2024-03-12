@@ -164,7 +164,7 @@ class _IndexRouter extends CustState<IndexRouter>
             height: IndexAppBar.height,
             alignment: Alignment.center,
             child: Text(
-              s.Posts,
+              "Posts",
               style: titleTextStyle,
             ),
           ),
@@ -172,7 +172,7 @@ class _IndexRouter extends CustState<IndexRouter>
             height: IndexAppBar.height,
             alignment: Alignment.center,
             child: Text(
-              s.Posts_and_replies,
+              "Posts & Replies",
               textAlign: TextAlign.center,
               style: titleTextStyle,
             ),
@@ -181,7 +181,7 @@ class _IndexRouter extends CustState<IndexRouter>
             height: IndexAppBar.height,
             alignment: Alignment.center,
             child: Text(
-              s.Mentions,
+              "Mentions",
               style: titleTextStyle,
             ),
           ),
@@ -199,7 +199,7 @@ class _IndexRouter extends CustState<IndexRouter>
             height: IndexAppBar.height,
             alignment: Alignment.center,
             child: Text(
-              s.Notes,
+              "Notes",
               style: titleTextStyle,
             ),
           ),
@@ -207,7 +207,7 @@ class _IndexRouter extends CustState<IndexRouter>
             height: IndexAppBar.height,
             alignment: Alignment.center,
             child: Text(
-              s.Users,
+              "Users",
               style: titleTextStyle,
             ),
           ),
@@ -215,7 +215,7 @@ class _IndexRouter extends CustState<IndexRouter>
             height: IndexAppBar.height,
             alignment: Alignment.center,
             child: Text(
-              s.Topics,
+              "Topics",
               style: titleTextStyle,
             ),
           ),
@@ -225,7 +225,7 @@ class _IndexRouter extends CustState<IndexRouter>
     } else if (_indexProvider.currentTap == 2) {
       appBarCenter = Center(
         child: Text(
-          s.Search,
+          "Search",
           style: titleTextStyle,
         ),
       );
@@ -248,7 +248,7 @@ class _IndexRouter extends CustState<IndexRouter>
             height: IndexAppBar.height,
             alignment: Alignment.center,
             child: Text(
-              s.Request,
+              "Request",
               style: themeData.appBarTheme.titleTextStyle,
             ),
           ),
@@ -334,7 +334,7 @@ class _IndexRouter extends CustState<IndexRouter>
                   if (infos.isEmpty) {
                     return Container(
                       child: Center(
-                        child: Text(s.There_should_be_a_universe_here),
+                        child: Text("There should be a universe here."),
                       ),
                     );
                   }

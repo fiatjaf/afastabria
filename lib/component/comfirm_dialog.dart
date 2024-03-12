@@ -10,17 +10,17 @@ class ComfirmDialog {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text(s.Notice),
+            title: Text("Notice"),
             content: Text(content),
             actions: <Widget>[
               TextButton(
-                child: Text(s.Cancel),
+                child: Text("Cancel"),
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
               ),
               TextButton(
-                child: Text(s.Comfirm),
+                child: Text("Comfirm"),
                 onPressed: () async {
                   RouterUtil.back(context, true);
                 },

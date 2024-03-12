@@ -91,7 +91,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
           Selector<ContactListProvider, int>(builder: (context, num, child) {
         return UserStatisticsItemComponent(
           num: num,
-          name: s.Following,
+          name: "Following",
           onTap: onFollowingTap,
           onLongPressStart: onLongPressStart,
           onLongPressEnd: onLongPressEnd,
@@ -104,13 +104,13 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
         length = contactList!.list().length;
       }
       list.add(UserStatisticsItemComponent(
-          num: length, name: s.Following, onTap: onFollowingTap));
+          num: length, name: "Following", onTap: onFollowingTap));
     }
 
     if (isLocal) {
       list.add(Selector<RelayProvider, int>(builder: (context, num, child) {
         return UserStatisticsItemComponent(
-            num: num, name: s.Relays, onTap: onRelaysTap);
+            num: num, name: "Relays", onTap: onRelaysTap);
       }, selector: (context, _provider) {
         return _provider.total();
       }));
@@ -119,12 +119,12 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
         relaysNum = relaysTags!.length;
       }
       list.add(UserStatisticsItemComponent(
-          num: relaysNum, name: s.Relays, onTap: onRelaysTap));
+          num: relaysNum, name: "Relays", onTap: onRelaysTap));
     }
 
     list.add(UserStatisticsItemComponent(
       num: followedNum,
-      name: s.Followed,
+      name: "Followed",
       onTap: onFollowedTap,
       formatNum: true,
     ));
@@ -141,7 +141,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
           Selector<ContactListProvider, int>(builder: (context, num, child) {
         return UserStatisticsItemComponent(
           num: num,
-          name: s.Followed_Tags,
+          name: "Followed Tags",
           onTap: onFollowedTagsTap,
         );
       }, selector: (context, _provider) {
@@ -153,7 +153,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
       }
       list.add(UserStatisticsItemComponent(
           num: followedTagsLength,
-          name: s.Followed_Tags,
+          name: "Followed Tags",
           onTap: onFollowedTagsTap));
     }
 
@@ -162,7 +162,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
           Selector<ContactListProvider, int>(builder: (context, num, child) {
         return UserStatisticsItemComponent(
           num: num,
-          name: s.Followed_Communities,
+          name: "Followed Communities",
           onTap: onFollowedCommunitiesTap,
         );
       }, selector: (context, _provider) {
@@ -175,7 +175,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
       }
       list.add(UserStatisticsItemComponent(
           num: followedCommunitiesLength,
-          name: s.Followed_Communities,
+          name: "Followed Communities",
           onTap: onFollowedCommunitiesTap));
     }
 

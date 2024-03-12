@@ -97,7 +97,7 @@ class _LoginRouter extends State<LoginRouter>
           color: mainColor,
           alignment: Alignment.center,
           child: Text(
-            s.Login,
+            "Login",
             style: TextStyle(
               color: Colors.white,
               fontSize: 16,
@@ -113,7 +113,7 @@ class _LoginRouter extends State<LoginRouter>
       child: GestureDetector(
         onTap: generatePK,
         child: Text(
-          s.Generate_a_new_private_key,
+          "Generate a new private key",
           style: TextStyle(
             color: mainColor,
             decoration: TextDecoration.underline,
@@ -132,14 +132,14 @@ class _LoginRouter extends State<LoginRouter>
                   checkTerms = val;
                 });
               }),
-          Text(s.I_accept_the + " "),
+          Text("I accept the" + " "),
           Container(
             child: GestureDetector(
               onTap: () {
                 WebViewRouter.open(context, Base.PRIVACY_LINK);
               },
               child: Text(
-                s.terms_of_user,
+                "terms of user",
                 style: TextStyle(
                   color: mainColor,
                   decoration: TextDecoration.underline,

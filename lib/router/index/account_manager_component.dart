@@ -58,7 +58,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
       ),
       child: IndexDrawerItem(
         iconData: Icons.account_box,
-        name: s.Account_Manager,
+        name: "Account Manager",
         onTap: () {},
       ),
     ));
@@ -99,7 +99,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
           )),
         ),
         child: Text(
-          s.Add_Account,
+          "Add Account",
           style: TextStyle(color: btnTextColor),
         ),
       ),

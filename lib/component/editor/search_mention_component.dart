@@ -76,7 +76,7 @@ class _SaerchMentionComponent extends State<SaerchMentionComponent>
         controller: controller,
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.search),
-          hintText: s.Please_input_search_content,
+          hintText: "Please input search content",
           suffixIcon: suffixWidget,
         ),
         onEditingComplete: checkInput,

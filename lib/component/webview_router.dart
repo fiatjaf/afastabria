@@ -307,27 +307,27 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
         return [
           PopupMenuItem(
             value: "copyCurrentUrl",
-            child: Text(s.Copy_current_Url),
+            child: Text("Copy current Url"),
           ),
           PopupMenuItem(
             value: "copyInitUrl",
-            child: Text(s.Copy_init_Url),
+            child: Text("Copy init Url"),
           ),
           PopupMenuItem(
             value: "openInBrowser",
-            child: Text(s.Open_in_browser),
+            child: Text("Open in browser"),
           ),
           PopupMenuItem(
             value: "requestPermission",
-            child: Text(s.WebRTC_Permission),
+            child: Text("WebRTC Permission"),
           ),
           PopupMenuItem(
             value: "hideBrowser",
-            child: Text(s.Hide),
+            child: Text("Hide"),
           ),
           PopupMenuItem(
             value: "close",
-            child: Text(s.close),
+            child: Text("Close"),
           ),
         ];
       },
@@ -865,15 +865,15 @@ nip04: {
 //         return [
 //           PopupMenuItem(
 //             value: "copyCurrentUrl",
-//             child: Text(s.Copy_current_Url),
+//             child: Text("Copy current Url"),
 //           ),
 //           PopupMenuItem(
 //             value: "copyInitUrl",
-//             child: Text(s.Copy_init_Url),
+//             child: Text("Copy init Url"),
 //           ),
 //           PopupMenuItem(
 //             value: "openInBrowser",
-//             child: Text(s.Open_in_browser),
+//             child: Text("Open in browser"),
 //           ),
 //           PopupMenuItem(
 //             value: "requestPermission",
@@ -881,11 +881,11 @@ nip04: {
 //           ),
 //           PopupMenuItem(
 //             value: "hideBrowser",
-//             child: Text(s.Hide),
+//             child: Text("Hide"),
 //           ),
 //           PopupMenuItem(
 //             value: "close",
-//             child: Text(s.close),
+//             child: Text("Close"),
 //           ),
 //         ];
 //       },

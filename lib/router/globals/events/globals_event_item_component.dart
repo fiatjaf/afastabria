@@ -43,7 +43,7 @@ class _GlobalEventItemComponent extends State<GlobalEventItemComponent> {
             height: 150,
             child: Center(
               child: Text(
-                s.loading,
+                "loading",
                 style: TextStyle(
                   color: hintColor,
                 ),

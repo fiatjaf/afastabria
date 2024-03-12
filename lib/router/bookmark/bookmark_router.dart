@@ -72,7 +72,7 @@ class _BookmarkRouter extends CustState<BookmarkRouter> {
                 height: IndexAppBar.height,
                 alignment: Alignment.center,
                 child: Text(
-                  s.Private,
+                  "Private",
                   style: titleTextStyle,
                 ),
               ),
@@ -80,7 +80,7 @@ class _BookmarkRouter extends CustState<BookmarkRouter> {
                 height: IndexAppBar.height,
                 alignment: Alignment.center,
                 child: Text(
-                  s.Public,
+                  "Public",
                   style: titleTextStyle,
                 ),
               )

@@ -341,10 +341,10 @@ mixin EditorMixin {
     var s = S.of(context);
     var value = await TextInputAndSearchDialog.show(
       context,
-      s.Search,
-      s.Please_input_event_id,
+      "Search",
+      "Please input event id",
       SearchMentionEventComponent(),
-      hintText: s.Note_Id,
+      hintText: "Note Id",
     );
     if (StringUtil.isNotBlank(value)) {
       // check nip19 value
@@ -372,10 +372,10 @@ mixin EditorMixin {
     var s = S.of(context);
     var value = await TextInputAndSearchDialog.show(
       context,
-      s.Search,
-      s.Please_input_user_pubkey,
+      "Search",
+      "Please input user pubkey",
       SearchMentionUserComponent(),
-      hintText: s.User_Pubkey,
+      hintText: "User Pubkey",
     );
     if (StringUtil.isNotBlank(value)) {
       // check nip19 value
@@ -436,11 +436,11 @@ mixin EditorMixin {
 
   bool baseInputCheck(BuildContext context, String value) {
     if (value.contains(" ")) {
-      BotToast.showText(text: S.of(context).Text_can_t_contain_blank_space);
+      BotToast.showText(text: "Text can't contain blank space");
       return false;
     }
     if (value.contains("\n")) {
-      BotToast.showText(text: S.of(context).Text_can_t_contain_new_line);
+      BotToast.showText(text: "Text can't contain newline");
       return false;
     }
     return true;
@@ -918,7 +918,7 @@ mixin EditorMixin {
           fontWeight: FontWeight.bold,
         ),
         decoration: InputDecoration(
-          hintText: s.Please_input_title,
+          hintText: "Please input title",
           border: InputBorder.none,
           hintStyle: TextStyle(
             fontSize: fontSize,

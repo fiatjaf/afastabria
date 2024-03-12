@@ -30,7 +30,7 @@ class _DonateRouter extends CustState<DonateRouter> {
     var appBar = Appbar4Stack(
       backgroundColor: appbarBackgroundColor,
       title: Text(
-        s.Donate,
+        "Donate",
         style: TextStyle(
           fontWeight: FontWeight.bold,
         ),
@@ -50,7 +50,7 @@ class _DonateRouter extends CustState<DonateRouter> {
       margin: EdgeInsets.only(
         bottom: 40,
       ),
-      child: Text(s.Buy_me_a_coffee),
+      child: Text("Buy me a coffee!"),
     ));
 
     list.add(Container(

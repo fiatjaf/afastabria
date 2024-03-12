@@ -50,7 +50,7 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
           ),
         ),
         title: Text(
-          s.Relays,
+          "Relays",
           style: TextStyle(
             fontSize: titleFontSize,
             fontWeight: FontWeight.bold,
@@ -83,7 +83,7 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
             controller: controller,
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.cloud),
-              hintText: s.Input_relay_address,
+              hintText: "Input relay address.",
               suffixIcon: IconButton(
                 icon: Icon(Icons.add),
                 onPressed: addRelay,
@@ -99,7 +99,7 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
     var addr = controller.text;
     addr = addr.trim();
     if (StringUtil.isBlank(addr)) {
-      BotToast.showText(text: S.of(context).Address_can_t_be_null);
+      BotToast.showText(text: "Address can't be null");
       return;
     }
 

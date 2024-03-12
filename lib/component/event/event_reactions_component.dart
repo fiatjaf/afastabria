@@ -109,16 +109,16 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
               // )),
               Expanded(
                 child: PopupMenuButton<String>(
-                  tooltip: s.Boost,
+                  tooltip: "Boost",
                   itemBuilder: (context) {
                     return [
                       PopupMenuItem(
                         value: "boost",
-                        child: Text(s.Boost),
+                        child: Text("Boost"),
                       ),
                       PopupMenuItem(
                         value: "quote",
-                        child: Text(s.Quote),
+                        child: Text("Quote"),
                       ),
                     ];
                   },
@@ -209,7 +209,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                         child: Row(
                           children: [
                             Icon(Icons.bolt, color: Colors.orange),
-                            Text(" ${s.Custom}", style: popFontStyle)
+                            Text(" ${"Custom"}", style: popFontStyle)
                           ],
                           mainAxisSize: MainAxisSize.min,
                         ),
@@ -229,7 +229,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
               ),
               Expanded(
                 child: PopupMenuButton<String>(
-                  tooltip: s.More,
+                  tooltip: "More",
                   itemBuilder: (context) {
                     var bookmarkItem = BookmarkItem.getFromEventReactions(
                         widget.eventRelation);
@@ -237,15 +237,15 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                     List<PopupMenuEntry<String>> list = [
                       PopupMenuItem(
                         value: "copyEvent",
-                        child: Text(s.Copy_Note_Json, style: popFontStyle),
+                        child: Text("Copy Note Json", style: popFontStyle),
                       ),
                       PopupMenuItem(
                         value: "copyPubkey",
-                        child: Text(s.Copy_Note_Pubkey, style: popFontStyle),
+                        child: Text("Copy Note Pubkey", style: popFontStyle),
                       ),
                       PopupMenuItem(
                         value: "copyId",
-                        child: Text(s.Copy_Note_Id, style: popFontStyle),
+                        child: Text("Copy Note Id", style: popFontStyle),
                       ),
                       PopupMenuDivider(),
                     ];
@@ -253,53 +253,53 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                     if (widget.showDetailBtn) {
                       list.add(PopupMenuItem(
                         value: "detail",
-                        child: Text(s.Detail, style: popFontStyle),
+                        child: Text("Detail", style: popFontStyle),
                       ));
                     }
 
                     list.add(PopupMenuItem(
                       value: "share",
-                      child: Text(s.Share, style: popFontStyle),
+                      child: Text("Share", style: popFontStyle),
                     ));
                     list.add(PopupMenuDivider());
                     if (listProvider.checkPrivateBookmark(bookmarkItem)) {
                       list.add(PopupMenuItem(
                         value: "removeFromPrivateBookmark",
-                        child: Text(s.Remove_from_private_bookmark,
+                        child: Text("Remove from private bookmark",
                             style: popFontStyle),
                       ));
                     } else {
                       list.add(PopupMenuItem(
                         value: "addToPrivateBookmark",
-                        child: Text(s.Add_to_private_bookmark,
+                        child: Text("Add to private bookmark",
                             style: popFontStyle),
                       ));
                     }
                     if (listProvider.checkPublicBookmark(bookmarkItem)) {
                       list.add(PopupMenuItem(
                         value: "removeFromPublicBookmark",
-                        child: Text(s.Remove_from_public_bookmark,
+                        child: Text("Remove from public bookmark",
                             style: popFontStyle),
                       ));
                     } else {
                       list.add(PopupMenuItem(
                         value: "addToPublicBookmark",
                         child:
-                            Text(s.Add_to_public_bookmark, style: popFontStyle),
+                            Text("Add to public bookmark", style: popFontStyle),
                       ));
                     }
                     list.add(PopupMenuDivider());
                     list.add(PopupMenuItem(
                       value: "source",
-                      child: Text(s.Source, style: popFontStyle),
+                      child: Text("Source", style: popFontStyle),
                     ));
                     list.add(PopupMenuItem(
                       value: "broadcase",
-                      child: Text(s.Broadcast, style: popFontStyle),
+                      child: Text("Broadcast", style: popFontStyle),
                     ));
                     list.add(PopupMenuItem(
                       value: "block",
-                      child: Text(s.Block, style: popFontStyle),
+                      child: Text("Block", style: popFontStyle),
                     ));
 
                     if (widget.event.pubKey == nostr!.publicKey) {
@@ -307,7 +307,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                       list.add(PopupMenuItem(
                         value: "delete",
                         child: Text(
-                          s.Delete,
+                          "Delete",
                           style: TextStyle(
                             color: Colors.red,
                             fontSize: mediumFontSize,

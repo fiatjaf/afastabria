@@ -38,21 +38,21 @@ class PollInputController {
     if (StringUtil.isNotBlank(maxValueController.text)) {
       var num = int.tryParse(maxValueController.text);
       if (num == null) {
-        BotToast.showText(text: s.Number_parse_error);
+        BotToast.showText(text: "Number parse error");
         return false;
       }
     }
     if (StringUtil.isNotBlank(minValueController.text)) {
       var num = int.tryParse(minValueController.text);
       if (num == null) {
-        BotToast.showText(text: s.Number_parse_error);
+        BotToast.showText(text: "Number parse error");
         return false;
       }
     }
 
     for (var pollOptionController in pollOptionControllers) {
       if (StringUtil.isBlank(pollOptionController.text)) {
-        BotToast.showText(text: s.Input_can_not_be_null);
+        BotToast.showText(text: "Input can not be null");
         return false;
       }
     }
@@ -99,7 +99,7 @@ class _PollInputComponent extends State<PollInputComponent> {
       Widget inputWidget = TextField(
         controller: controller,
         decoration: InputDecoration(
-          hintText: s.poll_option_info,
+          hintText: "poll option info",
         ),
       );
       if (delAble) {
@@ -130,7 +130,7 @@ class _PollInputComponent extends State<PollInputComponent> {
           color: mainColor,
           alignment: Alignment.center,
           child: Text(
-            s.add_poll_option,
+            "add poll option",
             style: TextStyle(
               color: Colors.white,
               fontSize: 16,
@@ -147,7 +147,7 @@ class _PollInputComponent extends State<PollInputComponent> {
             child: TextField(
           controller: widget.pollInputController.minValueController,
           decoration: InputDecoration(
-            hintText: s.min_zap_num,
+            hintText: "min zap num",
           ),
           keyboardType: TextInputType.number,
         )),
@@ -158,7 +158,7 @@ class _PollInputComponent extends State<PollInputComponent> {
             child: TextField(
           controller: widget.pollInputController.maxValueController,
           decoration: InputDecoration(
-            hintText: s.max_zap_num,
+            hintText: "max zap num",
           ),
           keyboardType: TextInputType.number,
         )),

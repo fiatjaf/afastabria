@@ -74,7 +74,7 @@ class _BadgeDetailComponent extends State<BadgeDetailComponent> {
         margin: EdgeInsets.only(top: Base.BASE_PADDING),
         child: Row(
           children: [
-            Expanded(child: Text(s.Creator)),
+            Expanded(child: Text("Creator")),
             GestureDetector(
               onTap: () {
                 RouterUtil.router(

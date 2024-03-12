@@ -44,7 +44,7 @@ class _UserContactListRouter extends State<UserContactListRouter> {
           ),
         ),
         title: Text(
-          s.Following,
+          "Following",
           style: TextStyle(
             fontSize: titleFontSize,
             fontWeight: FontWeight.bold,

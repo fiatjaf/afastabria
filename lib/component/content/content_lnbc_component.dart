@@ -22,7 +22,7 @@ class ContentLnbcComponent extends StatelessWidget {
     var cardColor = themeData.cardColor;
     double largeFontSize = 20;
 
-    var numStr = s.Any;
+    var numStr = "Any";
     var num = ZapNumUtil.getNumFromStr(lnbc);
     if (num > 0) {
       numStr = num.toString();
@@ -64,7 +64,7 @@ class ContentLnbcComponent extends StatelessWidget {
                     color: Colors.orange,
                   ),
                 ),
-                Text(s.Lightning_Invoice),
+                Text("Lightning Invoice"),
               ],
             ),
           ),
@@ -112,7 +112,7 @@ class ContentLnbcComponent extends StatelessWidget {
                 height: 50,
                 alignment: Alignment.center,
                 child: Text(
-                  s.Pay,
+                  "Pay",
                   style: TextStyle(
                     color: Colors.white,
                   ),

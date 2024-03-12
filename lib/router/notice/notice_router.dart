@@ -34,7 +34,7 @@ class _NoticeRouter extends State<NoticeRouter> {
             onTap: () {
               EditorRouter.open(context);
             },
-            child: Text(s.Notices),
+            child: Text("Notices"),
           ),
         ),
       );
@@ -52,7 +52,7 @@ class _NoticeRouter extends State<NoticeRouter> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(s.Notices),
+        title: Text("Notices"),
       ),
       body: main,
     );

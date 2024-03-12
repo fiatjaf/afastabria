@@ -53,7 +53,7 @@ class _NIP07Dialog extends State<NIP07Dialog> {
     List<Widget> list = [];
     list.add(Container(
       child: Text(
-        "NIP-07 ${s.Comfirm}",
+        "NIP-07 ${"Comfirm"}",
         style: TextStyle(
           fontSize: titleFontSize! + 4,
           fontWeight: FontWeight.bold,
@@ -67,21 +67,21 @@ class _NIP07Dialog extends State<NIP07Dialog> {
       margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
       child: Row(
         children: [
-          Text("${s.Method}:  "),
+          Text("${"Method"}:  "),
           Text(widget.method),
         ],
       ),
     ));
 
-    String methodDesc = s.NIP07_getPublicKey;
+    String methodDesc = "Get Public Key";
     if (widget.method == NIP07Methods.getRelays) {
-      methodDesc = s.NIP07_getRelays;
+      methodDesc = "Get Relays";
     } else if (widget.method == NIP07Methods.nip04_encrypt) {
-      methodDesc = s.NIP07_encrypt;
+      methodDesc = "Encrypt";
     } else if (widget.method == NIP07Methods.nip04_decrypt) {
-      methodDesc = s.NIP07_decrypt;
+      methodDesc = "Decrypt";
     } else if (widget.method == NIP07Methods.signEvent) {
-      methodDesc = s.NIP07_signEvent;
+      methodDesc = "Sign Event";
       try {
         if (StringUtil.isNotBlank(widget.content)) {
           var jsonObj = jsonDecode(widget.content!);
@@ -91,7 +91,7 @@ class _NIP07Dialog extends State<NIP07Dialog> {
         }
       } catch (e) {}
     } else if (widget.method == NIP07Methods.lightning) {
-      methodDesc = s.NIP07_lightning;
+      methodDesc = "Lightning payment";
     }
     list.add(Container(
       margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
@@ -104,7 +104,7 @@ class _NIP07Dialog extends State<NIP07Dialog> {
 
     if (StringUtil.isNotBlank(widget.content)) {
       list.add(Container(
-        child: Text("${s.Content}:"),
+        child: Text("${"Content"}:"),
       ));
       list.add(Container(
         width: double.maxFinite,
@@ -134,7 +134,7 @@ class _NIP07Dialog extends State<NIP07Dialog> {
             color: hintColor.withOpacity(0.3),
             alignment: Alignment.center,
             child: Text(
-              s.Cancel,
+              "Cancel",
               style: TextStyle(
                 fontSize: titleFontSize,
                 fontWeight: FontWeight.bold,
@@ -155,7 +155,7 @@ class _NIP07Dialog extends State<NIP07Dialog> {
             color: hintColor.withOpacity(0.3),
             alignment: Alignment.center,
             child: Text(
-              s.Comfirm,
+              "Comfirm",
               style: TextStyle(
                 fontSize: titleFontSize,
                 fontWeight: FontWeight.bold,

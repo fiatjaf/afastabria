@@ -147,7 +147,7 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          buildNumberPicker(s.Hour, 0, 23, hour, (value) {
+          buildNumberPicker("Hour", 0, 23, hour, (value) {
             setState(() {
               hour = value;
             });
@@ -156,7 +156,7 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
             ":",
             style: timeTitleTextStyle,
           ),
-          buildNumberPicker(s.Minute, 0, 59, minute, (value) {
+          buildNumberPicker("Minute", 0, 59, minute, (value) {
             setState(() {
               minute = value;
             });
@@ -182,7 +182,7 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
         color: mainColor,
         child: Center(
           child: Text(
-            s.Comfirm,
+            "Comfirm",
             style: TextStyle(
               color: Colors.white,
               fontSize: bigTextSize,

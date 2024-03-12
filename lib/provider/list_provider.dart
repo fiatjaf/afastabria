@@ -136,7 +136,7 @@ class ListProvider extends ChangeNotifier {
         }
       }
     }
-    result.insert(0, MapEntry(s.Custom, list));
+    result.insert(0, MapEntry("Custom", list));
     // for (var testAId in testAIds) {
     //   var listSetEvent = listSetProvider.getByAId(testAId);
     //   if (listSetEvent != null) {

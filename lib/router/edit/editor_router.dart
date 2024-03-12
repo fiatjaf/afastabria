@@ -169,7 +169,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
     if ((notifyItems != null && notifyItems!.isNotEmpty) ||
         (editorNotifyItems.isNotEmpty)) {
       List<Widget> tagPsWidgets = [];
-      tagPsWidgets.add(Text("${s.Notify}:"));
+      tagPsWidgets.add(Text("${"Notify"}:"));
       for (var item in notifyItems!) {
         tagPsWidgets.add(EditorNotifyItemComponent(item: item));
       }
@@ -224,7 +224,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
 
     Widget quillWidget = quill.QuillEditor(
       configurations: quill.QuillEditorConfigurations(
-        placeholder: s.What_s_happening,
+        placeholder: "What's happening",
         embedBuilders: [
           MentionUserEmbedBuilder(),
           MentionEventEmbedBuilder(),
@@ -238,7 +238,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
         autoFocus: false,
         expands: false,
         // padding: EdgeInsets.zero,
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           left: Base.BASE_PADDING,
           right: Base.BASE_PADDING,
         ),
@@ -313,7 +313,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
           Container(
             child: TextButton(
               child: Text(
-                s.Send,
+                "Send",
                 style: TextStyle(
                   color: textColor,
                   fontSize: fontSize,

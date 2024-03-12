@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import '../../consts/client_connected.dart';
 import '../../data/relay_status.dart';
 import '../subscription.dart';
@@ -10,19 +8,13 @@ enum WriteAccess { readOnly, writeOnly, readWrite }
 
 abstract class Relay {
   final String url;
-
   RelayStatus relayStatus;
-
   WriteAccess access;
-
   RelayInfo? info;
-
   Function(Relay, List<dynamic>)? onMessage;
-
-  // quries
   final Map<String, Subscription> _queries = {};
 
-  Relay(this.url, this.relayStatus, {this.access = WriteAccess.readWrite}) {}
+  Relay(this.url, this.relayStatus, {this.access = WriteAccess.readWrite});
 
   Future<bool> connect() async {
     try {

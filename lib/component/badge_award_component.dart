@@ -87,7 +87,7 @@ class _BadgeAwardComponent extends State<BadgeAwardComponent> {
             height: 40,
             alignment: Alignment.center,
             child: Text(
-              s.Wear,
+              "Wear",
               style: const TextStyle(
                 color: Colors.white,
               ),

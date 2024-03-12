@@ -51,12 +51,12 @@ class _LightningQrcodeDialog extends State<LightningQrcodeDialog> {
     List<Widget> list = [];
     if (widget.title == null) {
       list.add(Container(
-        child: Text(s.Use_lightning_wallet_scan_and_send_sats),
+        child: Text("Use lightning wallet scan and send sats."),
       ));
     } else {
       if (StringUtil.isNotBlank(widget.title)) {
         list.add(Container(
-          child: Text(s.Use_lightning_wallet_scan_and_send_sats),
+          child: Text("Use lightning wallet scan and send sats."),
         ));
       }
     }

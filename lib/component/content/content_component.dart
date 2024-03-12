@@ -230,7 +230,7 @@ class _ContentComponent extends State<ContentComponent> {
                   height: 30,
                   color: themeData.cardColor.withOpacity(0.85),
                   child: Text(
-                    s.Show_more,
+                    "Show more",
                     style: TextStyle(
                       color: themeData.primaryColor,
                     ),

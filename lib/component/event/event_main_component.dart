@@ -2,11 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:markdown/markdown.dart' as md;
 import 'package:nostrmo/component/content/content_video_component.dart';
 import 'package:nostrmo/component/content/markdown/markdown_mention_event_element_builder.dart';
 import 'package:nostrmo/component/event/event_zap_goals_component.dart';
-import 'package:nostrmo/component/name_component.dart';
 import 'package:nostrmo/component/simple_name_component.dart';
 import 'package:nostrmo/util/platform_util.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +23,6 @@ import '../../data/metadata.dart';
 import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../provider/metadata_provider.dart';
-import '../../provider/replaceable_event_provider.dart';
 import '../../provider/setting_provider.dart';
 import '../../util/router_util.dart';
 import '../../util/string_util.dart';
@@ -35,7 +32,7 @@ import '../content/content_decoder.dart';
 import '../content/content_image_component.dart';
 import '../content/content_link_component.dart';
 import '../content/content_tag_component.dart';
-import '../content/markdown/markdown_mention_event_Inline_syntax.dart';
+import '../content/markdown/markdown_mention_event_inline_syntax.dart';
 import '../content/markdown/markdown_mention_user_element_builder.dart';
 import '../content/markdown/markdown_mention_user_inline_syntax.dart';
 import '../content/markdown/markdown_nevent_inline_syntax.dart';
@@ -48,6 +45,7 @@ import 'event_quote_component.dart';
 import 'event_reactions_component.dart';
 import 'event_top_component.dart';
 
+// ignore: must_be_immutable
 class EventMainComponent extends StatefulWidget {
   ScreenshotController screenshotController;
 
@@ -256,7 +254,7 @@ class _EventMainComponent extends State<EventMainComponent> {
           widget.event.kind == kind.EventKind.GENERIC_REPOST) {
         list.add(Container(
           alignment: Alignment.centerLeft,
-          child: Text("${s.Boost}:"),
+          child: Text("${"Boost"}:"),
         ));
         if (repostEvent != null) {
           list.add(EventQuoteComponent(
@@ -282,7 +280,7 @@ class _EventMainComponent extends State<EventMainComponent> {
           List<Widget> replyingList = [];
           var length = eventRelation.tagPList.length;
           replyingList.add(Text(
-            "${s.Replying}: ",
+            "${"Replying"}: ",
             style: textStyle,
           ));
           for (var index = 0; index < length; index++) {
@@ -431,7 +429,7 @@ class _EventMainComponent extends State<EventMainComponent> {
               right: 3,
             ),
             child: Text(
-              s.From,
+              "From",
               style: TextStyle(
                 color: hintColor,
                 fontSize: smallTextSize,
@@ -644,13 +642,13 @@ class _EventMainComponent extends State<EventMainComponent> {
               Container(
                 margin: EdgeInsets.only(left: Base.BASE_PADDING_HALF),
                 child: Text(
-                  s.Content_warning,
+                  "Content warning",
                   style: TextStyle(fontSize: largeTextSize),
                 ),
               )
             ],
           ),
-          Text(s.This_note_contains_sensitive_content),
+          Text("This note contains sensitive content"),
           GestureDetector(
             onTap: () {
               setState(() {
@@ -670,7 +668,7 @@ class _EventMainComponent extends State<EventMainComponent> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
-                s.Show,
+                "Show",
                 style: TextStyle(color: Colors.white),
               ),
             ),

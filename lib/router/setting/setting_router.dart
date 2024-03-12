@@ -84,25 +84,25 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
 
     list.add(
       SettingGroupItemComponent(
-        name: s.Language,
+        name: "Language",
         value: getI18nList(_settingProvider.i18n, _settingProvider.i18nCC).name,
         onTap: pickI18N,
       ),
     );
     // list.add(SettingGroupItemComponent(
-    //   name: s.Image_Compress,
+    //   name: "Image Compress",
     //   value: getCompressList(settingProvider.imgCompress).name,
     //   onTap: pickImageCompressList,
     // ));
     if (!PlatformUtil.isPC()) {
       list.add(SettingGroupItemComponent(
-        name: s.Privacy_Lock,
+        name: "Privacy Lock",
         value: getLockOpenList(settingProvider.lockOpen).name,
         onTap: pickLockOpenList,
       ));
     }
     list.add(SettingGroupItemComponent(
-      name: s.Default_index,
+      name: "Default index",
       value: getDefaultIndex(settingProvider.defaultIndex).name,
       onTap: pickDefaultIndex,
     ));
@@ -111,7 +111,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
       defaultTabList = defaultTabListGlobal!;
     }
     list.add(SettingGroupItemComponent(
-      name: s.Default_tab,
+      name: "Default tab",
       value: getDefaultTab(defaultTabList, settingProvider.defaultTab).name,
       onTap: () {
         pickDefaultTab(defaultTabList);
@@ -121,13 +121,13 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     list.add(SettingGroupTitleComponent(iconData: Icons.palette, title: "UI"));
     list.add(
       SettingGroupItemComponent(
-        name: s.Theme_Style,
+        name: "Theme Style",
         value: getThemeStyle(_settingProvider.themeStyle).name,
         onTap: pickThemeStyle,
       ),
     );
     list.add(SettingGroupItemComponent(
-      name: s.Theme_Color,
+      name: "Theme Color",
       onTap: pickColor,
       child: Container(
         height: 28,
@@ -136,45 +136,45 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
       ),
     ));
     list.add(SettingGroupItemComponent(
-      name: s.Font_Family,
+      name: "Font Family",
       value: getFontEnumResult(settingProvider.fontFamily),
       onTap: pickFontEnum,
     ));
     list.add(SettingGroupItemComponent(
-      name: s.Font_Size,
+      name: "Font Size",
       value: getFontSize(settingProvider.fontSize).name,
       onTap: pickFontSize,
     ));
     list.add(SettingGroupItemComponent(
-      name: s.Web_Appbar,
+      name: "Web Appbar",
       value: getOpenList(settingProvider.webviewAppbarOpen).name,
       onTap: pickWebviewAppbar,
     ));
     if (!PlatformUtil.isPC()) {
       list.add(SettingGroupItemComponent(
-        name: s.Table_Mode,
+        name: "Table Mode",
         value: getOpenMode(settingProvider.tableMode).name,
         onTap: pickOpenMode,
       ));
     }
 
     list.add(
-        SettingGroupTitleComponent(iconData: Icons.article, title: s.Notes));
+        SettingGroupTitleComponent(iconData: Icons.article, title: "Notes"));
     list.add(SettingGroupItemComponent(
-      name: s.Link_preview,
+      name: "Link preview",
       value: getOpenList(settingProvider.linkPreview).name,
       onTap: pickLinkPreview,
     ));
     if (!PlatformUtil.isPC()) {
       list.add(SettingGroupItemComponent(
-        name: s.Video_preview_in_list,
+        name: "Video preview in list",
         value: getOpenList(settingProvider.videoPreviewInList).name,
         onTap: pickVideoPreviewInList,
       ));
     }
     String? networkHintText = settingProvider.network;
     if (StringUtil.isBlank(networkHintText)) {
-      networkHintText = s.Please_input + " " + s.Network;
+      networkHintText = "Please input" + " " + "Network";
     }
     Widget networkWidget = Text(
       networkHintText!,
@@ -186,78 +186,78 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
       ),
     );
     list.add(SettingGroupItemComponent(
-      name: s.Network,
+      name: "Network",
       onTap: inputNetwork,
       child: networkWidget,
     ));
     list.add(SettingGroupItemComponent(
-      name: s.Image_service,
+      name: "Image service",
       value: getImageServcie(settingProvider.imageService).name,
       onTap: pickImageServcie,
     ));
     list.add(SettingGroupItemComponent(
-      name: s.Limit_Note_Height,
+      name: "Limit Note Height",
       value: getOpenList(settingProvider.limitNoteHeight).name,
       onTap: pickLimitNoteHeight,
     ));
     list.add(SettingGroupItemComponent(
-      name: s.Forbid_image,
+      name: "Forbid image",
       value: getOpenList(settingProvider.imagePreview).name,
       onTap: pickImagePreview,
     ));
     if (!PlatformUtil.isPC()) {
       list.add(SettingGroupItemComponent(
-        name: s.Forbid_video,
+        name: "Forbid video",
         value: getOpenList(settingProvider.videoPreview).name,
         onTap: pickVideoPreview,
       ));
       list.add(SettingGroupItemComponent(
-        name: s.Translate,
+        name: "Translate",
         value: getOpenTranslate(settingProvider.openTranslate).name,
         onTap: pickOpenTranslate,
       ));
       if (settingProvider.openTranslate == OpenStatus.OPEN) {
         list.add(SettingGroupItemComponent(
-          name: s.Translate_Source_Language,
+          name: "Translate Source Language",
           value: settingProvider.translateSourceArgs,
           onTap: pickTranslateSource,
         ));
         list.add(SettingGroupItemComponent(
-          name: s.Translate_Target_Language,
+          name: "Translate Target Language",
           value: settingProvider.translateTarget,
           onTap: pickTranslateTarget,
         ));
       }
     }
     list.add(SettingGroupItemComponent(
-      name: s.Broadcast_When_Boost,
+      name: "Broadcast When Boost",
       value: getOpenList(settingProvider.broadcaseWhenBoost).name,
       onTap: pickBroadcaseWhenBoost,
     ));
     list.add(SettingGroupItemComponent(
-      name: s.Auto_Open_Sensitive_Content,
+      name: "Auto Open Sensitive Content",
       value: getOpenListDefault(settingProvider.autoOpenSensitive).name,
       onTap: pickAutoOpenSensitive,
     ));
 
     if (!PlatformUtil.isWeb()) {
       list.add(SettingGroupItemComponent(
-        name: s.Relay_Mode,
+        name: "Relay Mode",
         value: getRelayMode(settingProvider.relayMode).name,
         onTap: pickRelayModes,
       ));
       if (settingProvider.relayMode != RelayMode.BASE_MODE) {
         list.add(SettingGroupItemComponent(
-          name: s.Event_Sign_Check,
+          name: "Event Sign Check",
           value: getOpenListDefault(settingProvider.eventSignCheck).name,
           onTap: pickEventSignCheck,
         ));
       }
     }
 
-    list.add(SettingGroupTitleComponent(iconData: Icons.source, title: s.Data));
+    list.add(SettingGroupTitleComponent(iconData: Icons.source, title: "Data"));
     list.add(SettingGroupItemComponent(
-      name: s.Delete_Account,
+      name: "Delete Account",
       nameColor: Colors.red,
       onTap: askToDeleteAccount,
     ));
@@ -280,7 +280,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
           ),
         ),
         title: Text(
-          s.Setting,
+          "Setting",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: titleFontSize,
@@ -305,8 +305,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   void initOpenList(S s) {
     if (openList == null) {
       openList = [];
-      openList!.add(EnumObj(OpenStatus.OPEN, s.open));
-      openList!.add(EnumObj(OpenStatus.CLOSE, s.close));
+      openList!.add(EnumObj(OpenStatus.OPEN, "Open"));
+      openList!.add(EnumObj(OpenStatus.CLOSE, "Close"));
     }
   }
 
@@ -335,7 +335,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   void initI18nList(S s) {
     if (i18nList == null) {
       i18nList = [];
-      i18nList!.add(EnumObj("", s.auto));
+      i18nList!.add(EnumObj("", "Auto"));
       for (var item in S.delegate.supportedLocales) {
         var key = LocaleUtil.getLocaleKey(item);
         i18nList!.add(EnumObj(key, key));
@@ -383,7 +383,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   void initCompressList(S s) {
     if (compressList == null) {
       compressList = [];
-      compressList!.add(EnumObj(100, s.Dont_Compress));
+      compressList!.add(EnumObj(100, "Don't compress"));
       compressList!.add(EnumObj(90, "90%"));
       compressList!.add(EnumObj(80, "80%"));
       compressList!.add(EnumObj(70, "70%"));
@@ -437,14 +437,14 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     if (resultEnumObj != null) {
       if (resultEnumObj.value == OpenStatus.CLOSE) {
         bool didAuthenticate = await AuthUtil.authenticate(
-            context, s.Please_authenticate_to_turn_off_the_privacy_lock);
+            context, "Please authenticate to turn off the privacy lock");
         if (didAuthenticate) {
           settingProvider.lockOpen = resultEnumObj.value;
         }
         settingProvider.lockOpen = resultEnumObj.value;
       } else if (resultEnumObj.value == OpenStatus.OPEN) {
         bool didAuthenticate = await AuthUtil.authenticate(
-            context, s.Please_authenticate_to_turn_on_the_privacy_lock);
+            context, "Please authenticate to turn on the privacy lock");
         if (didAuthenticate) {
           settingProvider.lockOpen = resultEnumObj.value;
         }
@@ -457,8 +457,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   void initDefaultList(S s) {
     if (defaultIndexList == null) {
       defaultIndexList = [];
-      defaultIndexList!.add(EnumObj(0, s.Timeline));
-      defaultIndexList!.add(EnumObj(1, s.Global));
+      defaultIndexList!.add(EnumObj(0, "Timeline"));
+      defaultIndexList!.add(EnumObj(1, "Global"));
     }
   }
 
@@ -485,9 +485,9 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   void initDefaultTabListTimeline(S s) {
     if (defaultTabListTimeline == null) {
       defaultTabListTimeline = [];
-      defaultTabListTimeline!.add(EnumObj(0, s.Posts));
-      defaultTabListTimeline!.add(EnumObj(1, s.Posts_and_replies));
-      defaultTabListTimeline!.add(EnumObj(2, s.Mentions));
+      defaultTabListTimeline!.add(EnumObj(0, "Posts"));
+      defaultTabListTimeline!.add(EnumObj(1, "Posts & Replies"));
+      defaultTabListTimeline!.add(EnumObj(2, "Mentions"));
     }
   }
 
@@ -496,9 +496,9 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   void initDefaultTabListGlobal(S s) {
     if (defaultTabListGlobal == null) {
       defaultTabListGlobal = [];
-      defaultTabListGlobal!.add(EnumObj(0, s.Notes));
-      defaultTabListGlobal!.add(EnumObj(1, s.Users));
-      defaultTabListGlobal!.add(EnumObj(2, s.Topics));
+      defaultTabListGlobal!.add(EnumObj(0, "Notes"));
+      defaultTabListGlobal!.add(EnumObj(1, "Users"));
+      defaultTabListGlobal!.add(EnumObj(2, "Topics"));
     }
   }
 
@@ -524,9 +524,9 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   void initThemeStyleList(S s) {
     if (themeStyleList == null) {
       themeStyleList = [];
-      themeStyleList?.add(EnumObj(ThemeStyle.AUTO, s.Follow_System));
-      themeStyleList?.add(EnumObj(ThemeStyle.LIGHT, s.Light));
-      themeStyleList?.add(EnumObj(ThemeStyle.DARK, s.Dark));
+      themeStyleList?.add(EnumObj(ThemeStyle.AUTO, "Follow System"));
+      themeStyleList?.add(EnumObj(ThemeStyle.LIGHT, "Light"));
+      themeStyleList?.add(EnumObj(ThemeStyle.DARK, "Dark"));
     }
   }
 
@@ -561,8 +561,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   void initFontEnumList(S s) {
     if (fontEnumList == null) {
       fontEnumList = [];
-      fontEnumList!.add(EnumObj(false, s.Default_Font_Family));
-      fontEnumList!.add(EnumObj(true, s.Custom_Font_Family));
+      fontEnumList!.add(EnumObj(false, "Default Font Family"));
+      fontEnumList!.add(EnumObj(true, "Custom Font Family"));
     }
   }
 
@@ -649,11 +649,12 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     var s = S.of(context);
     var text = await TextInputDialog.show(
       context,
-      "${s.Please_input} ${s.Network}\nSOCKS5/SOCKS4/PROXY username:password@host:port",
+      "${"Please input"} ${"Network"}\nSOCKS5/SOCKS4/PROXY username:password@host:port",
       value: settingProvider.network,
     );
     settingProvider.network = text;
-    BotToast.showText(text: s.network_take_effect_tip);
+    BotToast.showText(
+        text: "The network will take effect the next time the app is launched");
   }
 
   List<EnumObj>? imageServcieList;
@@ -939,8 +940,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     var s = S.of(context);
     if (relayModes == null) {
       relayModes = [];
-      relayModes!.add(EnumObj(RelayMode.FAST_MODE, s.Fast_Mode));
-      relayModes!.add(EnumObj(RelayMode.BASE_MODE, s.Base_Mode));
+      relayModes!.add(EnumObj(RelayMode.FAST_MODE, "Fast Mode"));
+      relayModes!.add(EnumObj(RelayMode.BASE_MODE, "Base Mode"));
     }
     return relayModes!;
   }

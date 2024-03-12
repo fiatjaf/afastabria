@@ -70,7 +70,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
 
     var submitBtn = TextButton(
       child: Text(
-        s.Submit,
+        "Submit",
         style: TextStyle(
           color: textColor,
           fontSize: 16,
@@ -108,7 +108,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
         Expanded(
           child: TextField(
             controller: displayNameController,
-            decoration: InputDecoration(labelText: s.Display_Name),
+            decoration: InputDecoration(labelText: "Display Name"),
           ),
         ),
         Container(
@@ -121,7 +121,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
         Expanded(
           child: TextField(
             controller: nameController,
-            decoration: InputDecoration(labelText: s.Name),
+            decoration: InputDecoration(labelText: "Name"),
           ),
         ),
       ]),
@@ -134,7 +134,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
         minLines: 2,
         maxLines: 10,
         controller: aboutController,
-        decoration: InputDecoration(labelText: s.About),
+        decoration: InputDecoration(labelText: "About"),
       ),
     ));
 
@@ -148,7 +148,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
             onTap: pickPicture,
             child: Icon(Icons.image),
           ),
-          labelText: s.Picture,
+          labelText: "Picture",
         ),
       ),
     ));
@@ -163,7 +163,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
             onTap: pickBanner,
             child: Icon(Icons.image),
           ),
-          labelText: s.Banner,
+          labelText: "Banner",
         ),
       ),
     ));
@@ -173,7 +173,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       padding: padding,
       child: TextField(
         controller: websiteController,
-        decoration: InputDecoration(labelText: s.Website),
+        decoration: InputDecoration(labelText: "Website"),
       ),
     ));
 
@@ -182,7 +182,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       padding: padding,
       child: TextField(
         controller: nip05Controller,
-        decoration: InputDecoration(labelText: s.Nip05),
+        decoration: InputDecoration(labelText: "Nip05"),
       ),
     ));
 
@@ -192,7 +192,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       child: TextField(
         controller: lud16Controller,
         decoration: InputDecoration(
-            labelText: s.Lud16, hintText: "walletname@walletservice.com"),
+            labelText: "Lud16", hintText: "walletname@walletservice.com"),
       ),
     ));
 

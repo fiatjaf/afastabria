@@ -15,7 +15,7 @@ class EventLoadListComponent extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
       color: cardColor,
       height: 60,
-      child: Center(child: Text(s.Note_loading)),
+      child: Center(child: Text("Note loading...")),
     );
   }
 }

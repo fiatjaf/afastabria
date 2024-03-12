@@ -19,11 +19,8 @@ class RelayIsolate extends Relay {
       : super(url, relayStatus, access: access);
 
   Isolate? isolate;
-
   ReceivePort? subToMainReceivePort;
-
   SendPort? mainToSubSendPort;
-
   Completer<bool>? relayConnectResultComplete;
 
   @override

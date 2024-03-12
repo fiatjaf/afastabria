@@ -27,11 +27,11 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
       var s = S.of(context);
       checkboxItems = [];
       checkboxItems!.add(CheckboxItem(
-          s.Please_do_not_disclose_or_share_the_key_to_anyone, false));
+          "Please do not disclose or share the key to anyone.", false));
       checkboxItems!.add(CheckboxItem(
-          s.Nostromo_developers_will_never_require_a_key_from_you, false));
+          "Nostrmo developers will never require a key from you.", false));
       checkboxItems!.add(CheckboxItem(
-          s.Please_keep_the_key_properly_for_account_recovery, false));
+          "Please keep the key properly for account recovery.", false));
     }
   }
 
@@ -54,7 +54,7 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
     list.add(Container(
       margin: EdgeInsets.only(bottom: 20),
       child: Text(
-        s.Backup_and_Safety_tips,
+        "Backup and Safety tips",
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20,
@@ -65,7 +65,7 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
     list.add(Container(
       margin: EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
       child: Text(
-        s.The_key_is_a_random_string_that_resembles_,
+        "The key is a random string that resembles your account password. Anyone with this key can access and control your account.",
       ),
     ));
 
@@ -82,7 +82,7 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
           color: mainColor,
           alignment: Alignment.center,
           child: Text(
-            s.Copy_Key,
+            "Copy Key",
             style: const TextStyle(
               color: Colors.white,
               fontSize: 16,
@@ -97,7 +97,7 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
       child: GestureDetector(
         onTap: copyHexKey,
         child: Text(
-          s.Copy_Hex_Key,
+          "Copy Hex Key",
           style: TextStyle(
             color: mainColor,
             decoration: TextDecoration.underline,

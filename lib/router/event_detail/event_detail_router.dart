@@ -133,12 +133,12 @@ class _EventDetailRouter extends State<EventDetailRouter> {
             if (event.kind == kind.EventKind.ZAP) {
               return ZapEventListComponent(event: event);
             } else if (event.kind == kind.EventKind.TEXT_NOTE) {
-              return ReactionEventListComponent(event: event, text: s.replied);
+              return ReactionEventListComponent(event: event, text: "replied");
             } else if (event.kind == kind.EventKind.REPOST ||
                 event.kind == kind.EventKind.GENERIC_REPOST) {
-              return ReactionEventListComponent(event: event, text: s.boosted);
+              return ReactionEventListComponent(event: event, text: "boosted");
             } else if (event.kind == kind.EventKind.REACTION) {
-              return ReactionEventListComponent(event: event, text: s.liked);
+              return ReactionEventListComponent(event: event, text: "liked");
             }
 
             return Container();

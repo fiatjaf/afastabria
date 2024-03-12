@@ -14,11 +14,11 @@ class AuthUtil {
         localizedReason: reason,
       );
       if (!didAuthenticate && showFail) {
-        BotToast.showText(text: s.Verify_failure);
+        BotToast.showText(text: "Verify failure");
       }
       return didAuthenticate;
     } catch (e) {
-      BotToast.showText(text: s.Verify_error);
+      BotToast.showText(text: "Verify error");
     }
     return false;
   }
