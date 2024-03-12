@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/comfirm_dialog.dart';
+import 'package:nostrmo/component/confirm_dialog.dart';
 import 'package:nostrmo/data/relay_status.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/provider/relay_provider.dart';

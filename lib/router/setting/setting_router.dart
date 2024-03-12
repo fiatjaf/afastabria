@@ -19,7 +19,7 @@ import 'package:provider/provider.dart';
 import '../../client/event.dart';
 import '../../client/event_kind.dart' as kind;
 import '../../component/colors_selector_component.dart';
-import '../../component/comfirm_dialog.dart';
+import '../../component/confirm_dialog.dart';
 import '../../component/editor/text_input_dialog.dart';
 import '../../component/enum_multi_selector_component.dart';
 import '../../component/enum_selector_component.dart';

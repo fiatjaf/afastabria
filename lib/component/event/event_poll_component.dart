@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
@@ -18,13 +15,13 @@ import '../../provider/event_reactions_provider.dart';
 import '../../util/number_format_util.dart';
 import '../../util/spider_util.dart';
 import '../../util/string_util.dart';
-import '../content/content_decoder.dart';
 import '../editor/text_input_dialog.dart';
 
+// ignore: must_be_immutable
 class EventPollComponent extends StatefulWidget {
   Event event;
 
-  EventPollComponent({required this.event});
+  EventPollComponent({super.key, required this.event});
 
   @override
   State<StatefulWidget> createState() {

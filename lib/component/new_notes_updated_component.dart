@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nostrmo/consts/base.dart';
 
-import '../generated/l10n.dart';
-
+// ignore: must_be_immutable
 class NewNotesUpdatedComponent extends StatelessWidget {
   int num;
 
   Function? onTap;
 
-  NewNotesUpdatedComponent({required this.num, this.onTap});
+  NewNotesUpdatedComponent({super.key, required this.num, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +33,7 @@ class NewNotesUpdatedComponent extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
-          "$num ${S.of(context).notes_updated}",
+          "$num notes updated",
           style: TextStyle(color: textColor),
         ),
       ),

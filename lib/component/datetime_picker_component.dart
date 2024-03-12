@@ -189,7 +189,7 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
           ),
         ),
       ),
-      onTap: comfirm,
+      onTap: confirm,
     ));
 
     var main = Container(
@@ -251,7 +251,7 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
     );
   }
 
-  void comfirm() {
+  void confirm() {
     var dateTime = DateTime(
         _selectedDay.year, _selectedDay.month, _selectedDay.day, hour, minute);
     RouterUtil.back(context, dateTime);

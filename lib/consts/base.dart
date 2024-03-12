@@ -1,6 +1,6 @@
 import 'package:nostrmo/util/hash_util.dart';
 
-// ignore: constant_identifier_names
+// ignore_for_file: non_constant_identifier_names
 class Base {
   static const APP_NAME = "afastabria";
   static String VERSION_NAME = "1.0.0";

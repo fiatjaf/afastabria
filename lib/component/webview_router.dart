@@ -65,8 +65,8 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
 
   double progress = 0;
 
-  Future<void> nip07Reject(String resultId, String contnet) async {
-    var script = "window.nostr.reject(\"$resultId\", \"${contnet}\");";
+  Future<void> nip07Reject(String resultId, String content) async {
+    var script = "window.nostr.reject(\"$resultId\", \"$content\");";
     await webViewController!.evaluateJavascript(source: script);
     // _controller.runJavaScript(script);
   }
@@ -389,9 +389,9 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
         var jsonObj = jsonDecode(jsMsg);
         var resultId = jsonObj["resultId"];
 
-        var comfirmResult =
+        var confirmResult =
             await NIP07Dialog.show(context, NIP07Methods.getPublicKey);
-        if (comfirmResult == true) {
+        if (confirmResult == true) {
           var pubkey = nostr!.publicKey;
           var script = "window.nostr.callback(\"$resultId\", \"$pubkey\");";
           controller.evaluateJavascript(source: script);
@@ -409,11 +409,11 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
         var resultId = jsonObj["resultId"];
         var content = jsonObj["msg"];
 
-        var comfirmResult = await NIP07Dialog.show(
+        var confirmResult = await NIP07Dialog.show(
             context, NIP07Methods.signEvent,
             content: content);
 
-        if (comfirmResult == true) {
+        if (confirmResult == true) {
           try {
             var eventObj = jsonDecode(content);
             var tags = eventObj["tags"];
@@ -443,9 +443,9 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
         var jsonObj = jsonDecode(jsMsg);
         var resultId = jsonObj["resultId"];
 
-        var comfirmResult =
+        var confirmResult =
             await NIP07Dialog.show(context, NIP07Methods.getRelays);
-        if (comfirmResult == true) {
+        if (confirmResult == true) {
           var relayMaps = {};
           var relayAddrs = relayProvider.relayAddrs;
           for (var relayAddr in relayAddrs) {
@@ -473,10 +473,10 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
           var pubkey = msg["pubkey"];
           var plaintext = msg["plaintext"];
 
-          var comfirmResult = await NIP07Dialog.show(
+          var confirmResult = await NIP07Dialog.show(
               context, NIP07Methods.nip04_encrypt,
               content: plaintext);
-          if (comfirmResult == true) {
+          if (confirmResult == true) {
             var agreement = NIP04.getAgreement(nostr!.privateKey!);
             var resultStr = NIP04.encrypt(plaintext, agreement, pubkey);
             var script =
@@ -500,10 +500,10 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
           var pubkey = msg["pubkey"];
           var ciphertext = msg["ciphertext"];
 
-          var comfirmResult = await NIP07Dialog.show(
+          var confirmResult = await NIP07Dialog.show(
               context, NIP07Methods.nip04_decrypt,
               content: ciphertext);
-          if (comfirmResult == true) {
+          if (confirmResult == true) {
             var agreement = NIP04.getAgreement(nostr!.privateKey!);
             var resultStr = NIP04.decrypt(ciphertext, agreement, pubkey);
             var script =
@@ -584,9 +584,9 @@ nip04: {
 //       var jsonObj = jsonDecode(jsMsg.message);
 //       var resultId = jsonObj["resultId"];
 
-//       var comfirmResult =
+//       var confirmResult =
 //           await NIP07Dialog.show(context, NIP07Methods.getPublicKey);
-//       if (comfirmResult == true) {
+//       if (confirmResult == true) {
 //         var pubkey = nostr!.publicKey;
 //         var script = "window.nostr.callback(\"$resultId\", \"$pubkey\");";
 //         _controller.runJavaScript(script);
@@ -602,11 +602,11 @@ nip04: {
 //       var resultId = jsonObj["resultId"];
 //       var content = jsonObj["msg"];
 
-//       var comfirmResult = await NIP07Dialog.show(
+//       var confirmResult = await NIP07Dialog.show(
 //           context, NIP07Methods.signEvent,
 //           content: content);
 
-//       if (comfirmResult == true) {
+//       if (confirmResult == true) {
 //         try {
 //           var eventObj = jsonDecode(content);
 //           var tags = eventObj["tags"];
@@ -634,9 +634,9 @@ nip04: {
 //       var jsonObj = jsonDecode(jsMsg.message);
 //       var resultId = jsonObj["resultId"];
 
-//       var comfirmResult =
+//       var confirmResult =
 //           await NIP07Dialog.show(context, NIP07Methods.getRelays);
-//       if (comfirmResult == true) {
+//       if (confirmResult == true) {
 //         var relayMaps = {};
 //         var relayAddrs = relayProvider.relayAddrs;
 //         for (var relayAddr in relayAddrs) {
@@ -662,10 +662,10 @@ nip04: {
 //         var pubkey = msg["pubkey"];
 //         var plaintext = msg["plaintext"];
 
-//         var comfirmResult = await NIP07Dialog.show(
+//         var confirmResult = await NIP07Dialog.show(
 //             context, NIP07Methods.nip04_encrypt,
 //             content: plaintext);
-//         if (comfirmResult == true) {
+//         if (confirmResult == true) {
 //           var agreement = NIP04.getAgreement(nostr!.privateKey!);
 //           var resultStr = NIP04.encrypt(plaintext, agreement, pubkey);
 //           var script = "window.nostr.callback(\"$resultId\", \"$resultStr\");";
@@ -686,10 +686,10 @@ nip04: {
 //         var pubkey = msg["pubkey"];
 //         var ciphertext = msg["ciphertext"];
 
-//         var comfirmResult = await NIP07Dialog.show(
+//         var confirmResult = await NIP07Dialog.show(
 //             context, NIP07Methods.nip04_decrypt,
 //             content: ciphertext);
-//         if (comfirmResult == true) {
+//         if (confirmResult == true) {
 //           var agreement = NIP04.getAgreement(nostr!.privateKey!);
 //           var resultStr = NIP04.decrypt(ciphertext, agreement, pubkey);
 //           var script = "window.nostr.callback(\"$resultId\", \"$resultStr\");";

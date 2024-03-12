@@ -22,7 +22,7 @@ import '../../client/zap/zap_action.dart';
 import '../../consts/base.dart';
 import '../../data/metadata.dart';
 import '../../util/string_util.dart';
-import '../comfirm_dialog.dart';
+import '../confirm_dialog.dart';
 import '../image_component.dart';
 import '../image_preview_dialog.dart';
 import 'metadata_component.dart';

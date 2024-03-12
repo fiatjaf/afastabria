@@ -25,7 +25,7 @@ import '../../provider/metadata_provider.dart';
 import '../../provider/setting_provider.dart';
 import '../../util/router_util.dart';
 import '../../util/string_util.dart';
-import '../comfirm_dialog.dart';
+import '../confirm_dialog.dart';
 import '../content/content_component.dart';
 import '../content/content_decoder.dart';
 import '../content/content_image_component.dart';
