@@ -116,11 +116,11 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
 
   Future<void> addAccount() async {
     var privateKey = await TextInputDialog.show(
-        context, S.of(context).Input_account_private_key,
+        context, "Input_account_private_key",
         valueCheck: addAccountCheck);
     if (StringUtil.isNotBlank(privateKey)) {
-      var result = await ComfirmDialog.show(
-          context, S.of(context).Add_account_and_login);
+      var result = await ConfirmDialog.show(
+          context, "Add_account_and_login");
       if (result == true) {
         if (Nip19.isPrivateKey(privateKey!)) {
           privateKey = Nip19.decode(privateKey);
@@ -148,7 +148,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
       try {
         getPublicKey(privateKey);
       } catch (e) {
-        BotToast.showText(text: S.of(context).Wrong_Private_Key_format);
+        BotToast.showText(text: "Wrong_Private_Key_format");
         return false;
       }
     }

@@ -96,7 +96,7 @@ class _CustomEmojiAddDialog extends State<CustomEmojiAddDialog> {
         decoration: BoxDecoration(color: mainColor),
         child: InkWell(
           onTap: () {
-            _onComfirm();
+            _onConfirm();
           },
           highlightColor: mainColor.withOpacity(0.2),
           child: Container(
@@ -104,7 +104,7 @@ class _CustomEmojiAddDialog extends State<CustomEmojiAddDialog> {
             height: 40,
             alignment: Alignment.center,
             child: Text(
-              S.of(context).Comfirm,
+              "Confirm",
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -163,7 +163,7 @@ class _CustomEmojiAddDialog extends State<CustomEmojiAddDialog> {
 
   String? filepath;
 
-  Future<void> _onComfirm() async {
+  Future<void> _onConfirm() async {
         var text = controller.text;
     if (StringUtil.isBlank(text)) {
       BotToast.showText(text: "Input can not be null");

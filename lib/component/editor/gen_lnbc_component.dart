@@ -122,7 +122,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
             decoration: BoxDecoration(color: mainColor),
             child: InkWell(
               onTap: () {
-                _onComfirm(metadata.pubKey!);
+                _onConfirm(metadata.pubKey!);
               },
               highlightColor: mainColor.withOpacity(0.2),
               child: Container(
@@ -161,7 +161,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
     );
   }
 
-  Future<void> _onComfirm(String pubkey) async {
+  Future<void> _onConfirm(String pubkey) async {
     var text = controller.text;
     var num = int.tryParse(text);
     if (num == null) {

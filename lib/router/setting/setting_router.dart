@@ -32,15 +32,16 @@ import '../../data/metadata.dart';
 import '../../main.dart';
 import '../../provider/setting_provider.dart';
 import '../../util/auth_util.dart';
-import '../../util/locale_util.dart';
 import '../../util/string_util.dart';
 import 'setting_group_item_component.dart';
 import 'setting_group_title_component.dart';
 
+// ignore: must_be_immutable
 class SettingRouter extends StatefulWidget {
   Function indexReload;
 
-  SettingRouter({super.key, 
+  SettingRouter({
+    super.key,
     required this.indexReload,
   });
 
@@ -64,28 +65,19 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     var mainColor = themeData.primaryColor;
     var hintColor = themeData.hintColor;
 
-    
-    initOpenList(s);
-    initI18nList(s);
-    initCompressList(s);
-    initDefaultList(s);
-    initDefaultTabListTimeline(s);
-    initDefaultTabListGlobal(s);
+    initOpenList();
+    initCompressList();
+    initDefaultList();
+    initDefaultTabListTimeline();
+    initDefaultTabListGlobal();
 
-    initThemeStyleList(s);
-    initFontEnumList(s);
+    initThemeStyleList();
+    initFontEnumList();
     initImageServcieList();
     initTranslateLanguages();
 
     List<Widget> list = [];
 
-    list.add(
-      SettingGroupItemComponent(
-        name: "Language",
-        value: getI18nList(settingProvider.i18n, settingProvider.i18nCC).name,
-        onTap: pickI18N,
-      ),
-    );
     // list.add(SettingGroupItemComponent(
     //   name: "Image Compress",
     //   value: getCompressList(settingProvider.imgCompress).name,
@@ -299,7 +291,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
 
   List<EnumObj>? openList;
 
-  void initOpenList(S s) {
+  void initOpenList() {
     if (openList == null) {
       openList = [];
       openList!.add(EnumObj(OpenStatus.OPEN, "Open"));
@@ -327,57 +319,9 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     return openList![1];
   }
 
-  List<EnumObj>? i18nList;
-
-  void initI18nList(S s) {
-    if (i18nList == null) {
-      i18nList = [];
-      i18nList!.add(EnumObj("", "Auto"));
-      for (var item in S.delegate.supportedLocales) {
-        var key = LocaleUtil.getLocaleKey(item);
-        i18nList!.add(EnumObj(key, key));
-      }
-    }
-  }
-
-  EnumObj getI18nList(String? i18n, String? i18nCC) {
-    var key = LocaleUtil.genLocaleKeyFromSring(i18n, i18nCC);
-    for (var eo in i18nList!) {
-      if (eo.value == key) {
-        return eo;
-      }
-    }
-    return EnumObj("", S.of(context).auto);
-  }
-
-  Future pickI18N() async {
-    EnumObj? resultEnumObj =
-        await EnumSelectorComponent.show(context, i18nList!);
-    if (resultEnumObj != null) {
-      if (resultEnumObj.value == "") {
-        settingProvider.setI18n(null, null);
-      } else {
-        for (var item in S.delegate.supportedLocales) {
-          var key = LocaleUtil.getLocaleKey(item);
-          if (resultEnumObj.value == key) {
-            settingProvider.setI18n(item.languageCode, item.countryCode);
-          }
-        }
-      }
-      resetTheme();
-      Future.delayed(const Duration(seconds: 1), () {
-        setState(() {
-          // TODO others setting enumObjList
-          i18nList = null;
-          themeStyleList = null;
-        });
-      });
-    }
-  }
-
   List<EnumObj>? compressList;
 
-  void initCompressList(S s) {
+  void initCompressList() {
     if (compressList == null) {
       compressList = [];
       compressList!.add(EnumObj(100, "Don't compress"));
@@ -427,7 +371,6 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
       newLockOpenList.add(openList![0]);
     }
 
-    
     EnumObj? resultEnumObj =
         await EnumSelectorComponent.show(context, newLockOpenList);
     if (resultEnumObj != null) {
@@ -450,7 +393,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
 
   List<EnumObj>? defaultIndexList;
 
-  void initDefaultList(S s) {
+  void initDefaultList() {
     if (defaultIndexList == null) {
       defaultIndexList = [];
       defaultIndexList!.add(EnumObj(0, "Timeline"));
@@ -478,7 +421,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
 
   List<EnumObj>? defaultTabListTimeline;
 
-  void initDefaultTabListTimeline(S s) {
+  void initDefaultTabListTimeline() {
     if (defaultTabListTimeline == null) {
       defaultTabListTimeline = [];
       defaultTabListTimeline!.add(EnumObj(0, "Posts"));
@@ -489,7 +432,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
 
   List<EnumObj>? defaultTabListGlobal;
 
-  void initDefaultTabListGlobal(S s) {
+  void initDefaultTabListGlobal() {
     if (defaultTabListGlobal == null) {
       defaultTabListGlobal = [];
       defaultTabListGlobal!.add(EnumObj(0, "Notes"));
@@ -517,7 +460,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
 
   List<EnumObj>? themeStyleList;
 
-  void initThemeStyleList(S s) {
+  void initThemeStyleList() {
     if (themeStyleList == null) {
       themeStyleList = [];
       themeStyleList?.add(EnumObj(ThemeStyle.AUTO, "Follow System"));
@@ -554,7 +497,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
 
   List<EnumObj>? fontEnumList;
 
-  void initFontEnumList(S s) {
+  void initFontEnumList() {
     if (fontEnumList == null) {
       fontEnumList = [];
       fontEnumList!.add(EnumObj(false, "Default Font Family"));
@@ -642,7 +585,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   }
 
   inputNetwork() async {
-        var text = await TextInputDialog.show(
+    var text = await TextInputDialog.show(
       context,
       "${"Please input"} ${"Network"}\nSOCKS5/SOCKS4/PROXY username:password@host:port",
       value: settingProvider.network,
@@ -716,8 +659,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   CancelFunc? deleteAccountLoadingCancel;
 
   askToDeleteAccount() async {
-    var result =
-        await ComfirmDialog.show(context, S.of(context).Delete_Account_Tips);
+    var result = await ConfirmDialog.show(context, "Delete_Account_Tips");
     if (result == true) {
       deleteAccountLoadingCancel = BotToast.showLoading();
       try {
@@ -863,7 +805,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
       bcpCodes.add(translateTarget!);
 
       var translateModelManager = TranslateModelManager.getInstance();
-      BotToast.showText(text: S.of(context).Begin_to_download_translate_model);
+      BotToast.showText(text: "Begin_to_download_translate_model");
       var cancelFunc = BotToast.showLoading();
       try {
         await translateModelManager.checkAndDownloadTargetModel(bcpCodes);
@@ -932,7 +874,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   List<EnumObj>? relayModes;
 
   List<EnumObj> getRelayModes() {
-        if (relayModes == null) {
+    if (relayModes == null) {
       relayModes = [];
       relayModes!.add(EnumObj(RelayMode.FAST_MODE, "Fast Mode"));
       relayModes!.add(EnumObj(RelayMode.BASE_MODE, "Base Mode"));

@@ -611,8 +611,8 @@ class _EventMainComponent extends State<EventMainComponent> {
             } else if (NIP19Tlv.isNrelay(link)) {
               var nrelay = NIP19Tlv.decodeNrelay(link);
               if (nrelay != null) {
-                var result = await ComfirmDialog.show(
-                    context, S.of(context).Add_this_relay_to_local);
+                var result = await ConfirmDialog.show(
+                    context, "Add_this_relay_to_local");
                 if (result == true) {
                   relayProvider.addRelay(nrelay.addr);
                 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nostrmo/util/router_util.dart';
 
-class ComfirmDialog {
+class ConfirmDialog {
   static Future<bool?> show(BuildContext context, String content) async {
     return await showDialog<bool>(
         context: context,

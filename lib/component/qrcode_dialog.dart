@@ -1,4 +1,3 @@
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,13 +11,13 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../consts/base.dart';
-import '../generated/l10n.dart';
 import '../provider/metadata_provider.dart';
 import '../util/router_util.dart';
 import '../util/store_util.dart';
 import '../util/string_util.dart';
 import 'image_component.dart';
 
+// ignore: must_be_immutable
 class QrcodeDialog extends StatefulWidget {
   String pubkey;
 
@@ -199,7 +198,7 @@ class _QrcodeDialog extends State<QrcodeDialog> {
 
   void _doCopy(String text) {
     Clipboard.setData(ClipboardData(text: text)).then((_) {
-      BotToast.showText(text: S.of(context).key_has_been_copy);
+      BotToast.showText(text: "key_has_been_copy");
     });
   }
 

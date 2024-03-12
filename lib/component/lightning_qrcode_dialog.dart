@@ -5,15 +5,16 @@ import 'package:nostrmo/util/string_util.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 import '../consts/base.dart';
-import '../generated/l10n.dart';
 import '../util/router_util.dart';
 
+// ignore: must_be_immutable
 class LightningQrcodeDialog extends StatefulWidget {
   String? title;
 
   String text;
 
-  LightningQrcodeDialog({super.key, 
+  LightningQrcodeDialog({
+    super.key,
     this.title,
     required this.text,
   });
@@ -43,7 +44,7 @@ class _LightningQrcodeDialog extends State<LightningQrcodeDialog> {
 
   @override
   Widget build(BuildContext context) {
-        var themeData = Theme.of(context);
+    var themeData = Theme.of(context);
     Color cardColor = themeData.cardColor;
     var hintColor = themeData.hintColor;
 
@@ -140,7 +141,7 @@ class _LightningQrcodeDialog extends State<LightningQrcodeDialog> {
 
   void _doCopy(String text) {
     Clipboard.setData(ClipboardData(text: text)).then((_) {
-      BotToast.showText(text: S.of(context).Copy_success);
+      BotToast.showText(text: "Copy_success");
     });
   }
 }

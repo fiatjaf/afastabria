@@ -244,13 +244,13 @@ class _EventPollComponent extends State<EventPollComponent> {
 
   bool inputCheck(BuildContext context, String value) {
     if (StringUtil.isBlank(value)) {
-      BotToast.showText(text: S.of(context).Input_can_not_be_null);
+      BotToast.showText(text: "Input_can_not_be_null");
       return false;
     }
 
     var num = int.tryParse(value);
     if (num == null) {
-      BotToast.showText(text: S.of(context).Input_parse_error);
+      BotToast.showText(text: "Input_parse_error");
       return false;
     } else {
       if (pollInfo != null &&
@@ -258,7 +258,7 @@ class _EventPollComponent extends State<EventPollComponent> {
           pollInfo!.valueMinimum! > num) {
         BotToast.showText(
             text:
-                "${S.of(context).Zap_num_can_not_smaller_then} ${pollInfo!.valueMinimum!}");
+                "${"Zap_num_can_not_smaller_then"} ${pollInfo!.valueMinimum!}");
         return false;
       }
       if (pollInfo != null &&
@@ -266,7 +266,7 @@ class _EventPollComponent extends State<EventPollComponent> {
           pollInfo!.valueMaximum! < num) {
         BotToast.showText(
             text:
-                "${S.of(context).Zap_num_can_not_bigger_then} ${pollInfo!.valueMaximum!}");
+                "${"Zap_num_can_not_bigger_then"} ${pollInfo!.valueMaximum!}");
         return false;
       }
     }

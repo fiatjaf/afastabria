@@ -73,7 +73,7 @@ class _TextInputDialogInnerComponent
       child: Ink(
         decoration: BoxDecoration(color: mainColor),
         child: InkWell(
-          onTap: _onComfirm,
+          onTap: _onConfirm,
           highlightColor: mainColor.withOpacity(0.2),
           child: Container(
             color: mainColor,
@@ -106,7 +106,7 @@ class _TextInputDialogInnerComponent
     return main;
   }
 
-  void _onComfirm() {
+  void _onConfirm() {
     var value = controller.text;
     // if (StringUtil.isBlank(value)) {
     //   BotToast.showText(text: "Input can't be null");

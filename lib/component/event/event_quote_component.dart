@@ -120,7 +120,7 @@ class _EventQuoteComponent extends CustState<EventQuoteComponent> {
       margin: const EdgeInsets.all(Base.BASE_PADDING),
       height: 60,
       decoration: boxDecoration,
-      child: Center(child: Text(S.of(context).Note_loading)),
+      child: Center(child: Text("Note_loading")),
     );
   }
 

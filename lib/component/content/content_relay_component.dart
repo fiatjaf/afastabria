@@ -63,8 +63,8 @@ class ContentRelayComponent extends StatelessWidget {
       if (relayStatus == null) {
         main = GestureDetector(
           onTap: () async {
-            var result = await ComfirmDialog.show(
-                context, S.of(context).Add_this_relay_to_local);
+            var result = await ConfirmDialog.show(
+                context, "Add_this_relay_to_local");
             if (result == true) {
               relayProvider.addRelay(addr);
             }

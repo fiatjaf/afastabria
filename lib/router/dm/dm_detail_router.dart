@@ -51,8 +51,8 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
     var textColor = themeData.textTheme.bodyMedium!.color;
     var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
 
-    var hintColor = themeData.hintColor;
-    
+    // var hintColor = themeData.hintColor;
+
     var arg = RouterUtil.routerArgs(context);
     if (arg == null) {
       RouterUtil.back(context);
@@ -244,7 +244,7 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
     try {
       var event = await doDocumentSave();
       if (event == null) {
-        BotToast.showText(text: S.of(context).Send_fail);
+        BotToast.showText(text: "Send_fail");
         return;
       }
       dmProvider.addEventAndUpdateReadedTime(detail!, event);
@@ -256,9 +256,9 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
   }
 
   Future<void> addDmSessionToKnown() async {
-    var detail = await dmProvider.addDmSessionToKnown(detail!);
+    var detail_ = await dmProvider.addDmSessionToKnown(detail!);
     setState(() {
-      detail = detail;
+      detail = detail_;
     });
   }
 

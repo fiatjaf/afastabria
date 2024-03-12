@@ -127,8 +127,8 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
   // if (remoteRelayEvent != null &&
   //     (relaysUpdatedTime == null ||
   //         remoteRelayEvent!.createdAt - relaysUpdatedTime > 60 * 5)) {
-  //   var result = await ComfirmDialog.show(context,
-  //       S.of(context).Find_clouded_relay_list_do_you_want_to_download);
+  //   var result = await ConfirmDialog.show(context,
+  //       "Find_clouded_relay_list_do_you_want_to_download");
   //   if (result == true) {
   //     List<String> list = [];
   //     for (var tag in remoteRelayEvent!.tags) {

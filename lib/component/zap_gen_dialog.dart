@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../client/zap/zap_action.dart';
 import '../consts/base.dart';
-import '../generated/l10n.dart';
 import '../util/router_util.dart';
 
+// ignore: must_be_immutable
 class ZapGenDialog extends StatefulWidget {
   String pubkey;
 
@@ -14,7 +14,10 @@ class ZapGenDialog extends StatefulWidget {
   BuildContext parentContext;
 
   ZapGenDialog(
-      {super.key, required this.pubkey, this.eventId, required this.parentContext});
+      {super.key,
+      required this.pubkey,
+      this.eventId,
+      required this.parentContext});
 
   static Future<void> show(BuildContext context, String pubkey,
       {String? eventId}) async {
@@ -49,7 +52,7 @@ class _ZapGenDialog extends State<ZapGenDialog> {
 
   @override
   Widget build(BuildContext context) {
-        var themeData = Theme.of(context);
+    var themeData = Theme.of(context);
     Color cardColor = themeData.cardColor;
     var mainColor = themeData.primaryColor;
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
@@ -81,8 +84,8 @@ class _ZapGenDialog extends State<ZapGenDialog> {
       ),
     ));
 
-    list.add(Container(
-      child: TextField(
+    list.add(
+      TextField(
         controller: commentController,
         minLines: 1,
         maxLines: 1,
@@ -92,7 +95,7 @@ class _ZapGenDialog extends State<ZapGenDialog> {
           border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
         ),
       ),
-    ));
+    );
 
     // list.add(Expanded(child: Container()));
 
@@ -105,7 +108,7 @@ class _ZapGenDialog extends State<ZapGenDialog> {
         decoration: BoxDecoration(color: mainColor),
         child: InkWell(
           onTap: () {
-            _onComfirm();
+            _onConfirm();
           },
           highlightColor: mainColor.withOpacity(0.2),
           child: Container(
@@ -113,7 +116,7 @@ class _ZapGenDialog extends State<ZapGenDialog> {
             height: 40,
             alignment: Alignment.center,
             child: Text(
-              S.of(context).Comfirm,
+              "Confirm",
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -163,11 +166,11 @@ class _ZapGenDialog extends State<ZapGenDialog> {
     );
   }
 
-  Future<void> _onComfirm() async {
+  Future<void> _onConfirm() async {
     var text = controller.text;
     var num = int.tryParse(text);
     if (num == null) {
-      BotToast.showText(text: S.of(context).Number_parse_error);
+      BotToast.showText(text: "Number_parse_error");
       return;
     }
 

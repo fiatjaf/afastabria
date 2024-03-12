@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:nostrmo/client/event.dart';
 import 'package:nostrmo/client/nip58/badge_definition.dart';
@@ -8,13 +7,14 @@ import 'package:nostrmo/provider/badge_definition_provider.dart';
 import 'package:nostrmo/provider/badge_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../generated/l10n.dart';
 import 'badge_detail_component.dart';
 
+// ignore: must_be_immutable
 class BadgeAwardComponent extends StatefulWidget {
   Event event;
 
-  BadgeAwardComponent({super.key, 
+  BadgeAwardComponent({
+    super.key,
     required this.event,
   });
 
@@ -33,7 +33,7 @@ class _BadgeAwardComponent extends State<BadgeAwardComponent> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-        var badgeId = "";
+    var badgeId = "";
     for (var tag in widget.event.tags) {
       if (tag is List && tag[0] == "a") {
         badgeId = tag[1];

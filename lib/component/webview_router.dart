@@ -97,7 +97,8 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
         },
         onContextMenuActionItemClicked: (contextMenuItemClicked) async {
           var id = contextMenuItemClicked.id;
-          print("onContextMenuActionItemClicked: $id ${contextMenuItemClicked.title}");
+          print(
+              "onContextMenuActionItemClicked: $id ${contextMenuItemClicked.title}");
         });
 
     pullToRefreshController = kIsWeb ||
@@ -292,7 +293,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
 
   Widget getMoreWidget(Widget icon) {
     var themeData = Theme.of(context);
-    var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
+    // var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
 
     return PopupMenuButton<String>(
       itemBuilder: (context) {
@@ -354,7 +355,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
 
   void _doCopy(String text) {
     Clipboard.setData(ClipboardData(text: text)).then((_) {
-      BotToast.showText(text: S.of(context).Copy_success);
+      BotToast.showText(text: "Copy_success");
     });
   }
 
@@ -393,7 +394,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
           var script = "window.nostr.callback(\"$resultId\", \"$pubkey\");";
           controller.evaluateJavascript(source: script);
         } else {
-          nip07Reject(resultId, S.of(context).Forbid);
+          nip07Reject(resultId, "Forbid");
         }
       },
     );
@@ -425,10 +426,10 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
                 "window.nostr.callback(\"$resultId\", JSON.parse(\"$eventResultStr\"));";
             webViewController!.evaluateJavascript(source: script);
           } catch (e) {
-            nip07Reject(resultId, S.of(context).Sign_fail);
+            nip07Reject(resultId, "Sign_fail");
           }
         } else {
-          nip07Reject(resultId, S.of(context).Forbid);
+          nip07Reject(resultId, "Forbid");
         }
       },
     );
@@ -454,7 +455,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
               "window.nostr.callback(\"$resultId\", JSON.parse(\"$resultStr\"));";
           webViewController!.evaluateJavascript(source: script);
         } else {
-          nip07Reject(resultId, S.of(context).Forbid);
+          nip07Reject(resultId, "Forbid");
         }
       },
     );
@@ -480,7 +481,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
                 "window.nostr.callback(\"$resultId\", \"$resultStr\");";
             webViewController!.evaluateJavascript(source: script);
           } else {
-            nip07Reject(resultId, S.of(context).Forbid);
+            nip07Reject(resultId, "Forbid");
           }
         }
       },
@@ -507,7 +508,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
                 "window.nostr.callback(\"$resultId\", \"$resultStr\");";
             webViewController!.evaluateJavascript(source: script);
           } else {
-            nip07Reject(resultId, S.of(context).Forbid);
+            nip07Reject(resultId, "Forbid");
           }
         }
       },
@@ -588,7 +589,7 @@ nip04: {
 //         var script = "window.nostr.callback(\"$resultId\", \"$pubkey\");";
 //         _controller.runJavaScript(script);
 //       } else {
-//         nip07Reject(resultId, S.of(context).Forbid);
+//         nip07Reject(resultId, "Forbid");
 //       }
 //     },
 //   );
@@ -618,10 +619,10 @@ nip04: {
 //               "window.nostr.callback(\"$resultId\", JSON.parse(\"$eventResultStr\"));";
 //           _controller.runJavaScript(script);
 //         } catch (e) {
-//           nip07Reject(resultId, S.of(context).Sign_fail);
+//           nip07Reject(resultId, "Sign_fail");
 //         }
 //       } else {
-//         nip07Reject(resultId, S.of(context).Forbid);
+//         nip07Reject(resultId, "Forbid");
 //       }
 //     },
 //   );
@@ -645,7 +646,7 @@ nip04: {
 //             "window.nostr.callback(\"$resultId\", JSON.parse(\"$resultStr\"));";
 //         _controller.runJavaScript(script);
 //       } else {
-//         nip07Reject(resultId, S.of(context).Forbid);
+//         nip07Reject(resultId, "Forbid");
 //       }
 //     },
 //   );
@@ -668,7 +669,7 @@ nip04: {
 //           var script = "window.nostr.callback(\"$resultId\", \"$resultStr\");";
 //           _controller.runJavaScript(script);
 //         } else {
-//           nip07Reject(resultId, S.of(context).Forbid);
+//           nip07Reject(resultId, "Forbid");
 //         }
 //       }
 //     },
@@ -692,7 +693,7 @@ nip04: {
 //           var script = "window.nostr.callback(\"$resultId\", \"$resultStr\");";
 //           _controller.runJavaScript(script);
 //         } else {
-//           nip07Reject(resultId, S.of(context).Forbid);
+//           nip07Reject(resultId, "Forbid");
 //         }
 //       }
 //     },
@@ -914,7 +915,7 @@ nip04: {
 
 //   void _doCopy(String text) {
 //     Clipboard.setData(ClipboardData(text: text)).then((_) {
-//       BotToast.showText(text: S.of(context).Copy_success);
+//       BotToast.showText(text: "Copy_success");
 //     });
 //   }
 

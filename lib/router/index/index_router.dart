@@ -384,7 +384,7 @@ class _IndexRouter extends CustState<IndexRouter>
   }
 
   void doAuth() {
-    AuthUtil.authenticate(context, S.of(context).Please_authenticate_to_use_app)
+    AuthUtil.authenticate(context, "Please_authenticate_to_use_app")
         .then((didAuthenticate) {
       if (didAuthenticate) {
         setState(() {

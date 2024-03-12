@@ -82,7 +82,7 @@ mixin EditorMixin {
   }) {
     var themeData = Theme.of(getContext());
     var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
-    var hintColor = themeData.hintColor;
+    // var hintColor = themeData.hintColor;
     var mainColor = themeData.primaryColor;
 
     List<Widget> inputBtnList = [];
@@ -333,7 +333,7 @@ mixin EditorMixin {
 
   Future<void> _inputMentionEvent() async {
     var context = getContext();
-        var value = await TextInputAndSearchDialog.show(
+    var value = await TextInputAndSearchDialog.show(
       context,
       "Search",
       "Please input event id",
@@ -363,7 +363,7 @@ mixin EditorMixin {
 
   Future<void> _inputMentionUser() async {
     var context = getContext();
-        var value = await TextInputAndSearchDialog.show(
+    var value = await TextInputAndSearchDialog.show(
       context,
       "Search",
       "Please input user pubkey",
@@ -395,9 +395,9 @@ mixin EditorMixin {
     var context = getContext();
     var value = await TextInputAndSearchDialog.show(
       context,
-      S.of(context).Input_Sats_num,
-      S.of(context).Please_input_lnbc_text,
-      const GenLnbcComponent(),
+      "Input_Sats_num",
+      "Please_input_lnbc_text",
+      GenLnbcComponent(),
       hintText: "lnbc...",
     );
     if (StringUtil.isNotBlank(value)) {
@@ -419,9 +419,8 @@ mixin EditorMixin {
 
   Future<void> _inputTag() async {
     var context = getContext();
-    var value = await TextInputDialog.show(
-        context, S.of(context).Please_input_Topic_text,
-        valueCheck: baseInputCheck, hintText: S.of(context).Topic);
+    var value = await TextInputDialog.show(context, "Please_input_Topic_text",
+        valueCheck: baseInputCheck, hintText: "Topic");
     if (StringUtil.isNotBlank(value)) {
       _submitTag(value);
     }
@@ -440,8 +439,6 @@ mixin EditorMixin {
   }
 
   void _submitTag(String? value) {
-    var context = getContext();
-
     if (value != null && value.isNotEmpty) {
       final index = editorController.selection.baseOffset;
       final length = editorController.selection.extentOffset - index;
@@ -499,7 +496,7 @@ mixin EditorMixin {
               if (StringUtil.isNotBlank(imagePath)) {
                 value = imagePath;
               } else {
-                BotToast.showText(text: S.of(context).Upload_fail);
+                BotToast.showText(text: "Upload_fail");
                 return null;
               }
             }
@@ -515,7 +512,7 @@ mixin EditorMixin {
 
           value = m["tag"];
           if (StringUtil.isNotBlank(value)) {
-            result = handleInlineValue(result, "#" + value);
+            result = handleInlineValue(result, "#$value");
             tags.add(["t", value]);
             continue;
           }
@@ -737,7 +734,7 @@ mixin EditorMixin {
 
   Widget buildEmojiListsWidget() {
     var context = getContext();
-        var themeData = Theme.of(context);
+    var themeData = Theme.of(context);
     var mainColor = themeData.primaryColor;
     var labelUnSelectColor = themeData.dividerColor;
 
@@ -747,7 +744,7 @@ mixin EditorMixin {
       width: double.infinity,
       child: Selector<ListProvider, Event?>(
         builder: (context, emojiEvent, child) {
-          var emojiLists = listProvider.emojis(s, emojiEvent);
+          var emojiLists = listProvider.emojis(emojiEvent);
 
           List<Widget> tabBarList = [];
           List<Widget> tabBarViewList = [];
@@ -778,36 +775,35 @@ mixin EditorMixin {
           );
 
           return DefaultTabController(
-              length: tabBarList.length,
-              child: Container(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: Base.TABBAR_HEIGHT,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              height: Base.TABBAR_HEIGHT,
-                              child: TabBar(
-                                tabs: tabBarList,
-                                indicatorColor: mainColor,
-                                labelColor: mainColor,
-                                unselectedLabelColor: labelUnSelectColor,
-                                isScrollable: true,
-                              ),
-                            ),
+            length: tabBarList.length,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: Base.TABBAR_HEIGHT,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: Base.TABBAR_HEIGHT,
+                          child: TabBar(
+                            tabs: tabBarList,
+                            indicatorColor: mainColor,
+                            labelColor: mainColor,
+                            unselectedLabelColor: labelUnSelectColor,
+                            isScrollable: true,
                           ),
-                          findMoreBtn,
-                        ],
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: TabBarView(children: tabBarViewList),
-                    ),
-                  ],
+                      findMoreBtn,
+                    ],
+                  ),
                 ),
-              ));
+                Expanded(
+                  child: TabBarView(children: tabBarViewList),
+                ),
+              ],
+            ),
+          );
         },
         selector: (context, provider) {
           return provider.getEmojiEvent();
@@ -894,7 +890,6 @@ mixin EditorMixin {
     var themeData = Theme.of(getContext());
     var fontSize = themeData.textTheme.bodyLarge!.fontSize;
     var hintColor = themeData.hintColor;
-    var s = S.of(getContext());
 
     return Container(
       // color: Colors.red,

@@ -7,15 +7,16 @@ import 'package:nostrmo/main.dart';
 import 'package:nostrmo/util/string_util.dart';
 
 import '../consts/base.dart';
-import '../generated/l10n.dart';
 import '../util/router_util.dart';
 
+// ignore: must_be_immutable
 class NIP07Dialog extends StatefulWidget {
   String method;
 
   String? content;
 
-  NIP07Dialog({super.key, 
+  NIP07Dialog({
+    super.key,
     required this.method,
     this.content,
   });
@@ -43,22 +44,21 @@ class _NIP07Dialog extends State<NIP07Dialog> {
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
+    // var mainColor = themeData.primaryColor;
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
     Color cardColor = themeData.cardColor;
     var hintColor = themeData.hintColor;
 
-    
     List<Widget> list = [];
-    list.add(Container(
-      child: Text(
-        "NIP-07 ${"Comfirm"}",
+    list.add(
+      Text(
+        "NIP-07 ${"Confirm"}",
         style: TextStyle(
           fontSize: titleFontSize! + 4,
           fontWeight: FontWeight.bold,
         ),
       ),
-    ));
+    );
 
     list.add(const Divider());
 
@@ -154,7 +154,7 @@ class _NIP07Dialog extends State<NIP07Dialog> {
             color: hintColor.withOpacity(0.3),
             alignment: Alignment.center,
             child: Text(
-              "Comfirm",
+              "Confirm",
               style: TextStyle(
                 fontSize: titleFontSize,
                 fontWeight: FontWeight.bold,

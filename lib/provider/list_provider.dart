@@ -13,7 +13,6 @@ import '../client/nip04/nip04.dart';
 import '../client/nip51/bookmarks.dart';
 import '../client/nostr.dart';
 import '../data/custom_emoji.dart';
-import '../generated/l10n.dart';
 
 /// Standard list provider.
 /// These list usually publish by user himself and the provider will hold the newest one.
@@ -92,7 +91,7 @@ class ListProvider extends ChangeNotifier {
     return "${EventKind.EMOJIS_LIST}:${nostr!.publicKey}";
   }
 
-  List<MapEntry<String, List<CustomEmoji>>> emojis(S s, Event? emojiEvent) {
+  List<MapEntry<String, List<CustomEmoji>>> emojis(Event? emojiEvent) {
     List<MapEntry<String, List<CustomEmoji>>> result = [];
 
     List<CustomEmoji> list = [];

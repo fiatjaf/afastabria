@@ -142,7 +142,7 @@ class _EventZapGoalsComponent extends State<EventZapGoalsComponent> {
 
   Future<void> tapZap(String selectKey) async {
     // var numStr = await TextInputDialog.show(
-    //     context, S.of(context).Input_Sats_num,
+    //     context, "Input_Sats_num",
     //     valueCheck: inputCheck);
     // if (numStr != null) {
     //   var num = int.tryParse(numStr);

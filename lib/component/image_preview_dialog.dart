@@ -9,8 +9,6 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:nostrmo/util/image_tool.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../generated/l10n.dart';
-
 const _defaultBackgroundColor = Colors.black;
 const _defaultCloseButtonColor = Colors.white;
 const _defaultCloseButtonTooltip = 'Close';
@@ -220,7 +218,7 @@ class _ImagePreviewDialog extends State<ImagePreviewDialog> {
         var result =
             await ImageGallerySaver.saveImage(imageAsBytes, quality: 100);
         if (result != null && result is Map && result["isSuccess"]) {
-          BotToast.showText(text: S.of(context).Image_save_success);
+          BotToast.showText(text: "Image_save_success");
         }
       } else {
         var result = await FileSaver.instance.saveFile(
@@ -228,7 +226,7 @@ class _ImagePreviewDialog extends State<ImagePreviewDialog> {
           bytes: imageAsBytes,
           ext: ".png",
         );
-        BotToast.showText(text: "${S.of(context).Image_save_success} $result");
+        BotToast.showText(text: "${"Image_save_success"} $result");
       }
     }
   }

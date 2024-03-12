@@ -4,9 +4,9 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../consts/base.dart';
-import '../generated/l10n.dart';
 import '../util/router_util.dart';
 
+// ignore: must_be_immutable
 class DatetimePickerComponent extends StatefulWidget {
   DateTime? dateTime;
 
@@ -14,7 +14,8 @@ class DatetimePickerComponent extends StatefulWidget {
 
   bool showHour;
 
-  DatetimePickerComponent({super.key, 
+  DatetimePickerComponent({
+    super.key,
     this.dateTime,
     required this.showDate,
     required this.showHour,
@@ -72,7 +73,7 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
     var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
     var mainColor = themeData.appBarTheme.backgroundColor;
     var bigTextSize = themeData.textTheme.bodyLarge!.fontSize;
-    
+
     var now = DateTime.now();
     var calendarFirstDay = now.add(const Duration(days: -3650));
     var calendarLastDay = now.add(const Duration(days: 3650));
@@ -142,26 +143,24 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
       fontSize: bigTextSize,
       fontWeight: FontWeight.bold,
     );
-    var timePicker = Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          buildNumberPicker("Hour", 0, 23, hour, (value) {
-            setState(() {
-              hour = value;
-            });
-          }, timeTitleTextStyle),
-          Text(
-            ":",
-            style: timeTitleTextStyle,
-          ),
-          buildNumberPicker("Minute", 0, 59, minute, (value) {
-            setState(() {
-              minute = value;
-            });
-          }, timeTitleTextStyle),
-        ],
-      ),
+    var timePicker = Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        buildNumberPicker("Hour", 0, 23, hour, (value) {
+          setState(() {
+            hour = value;
+          });
+        }, timeTitleTextStyle),
+        Text(
+          ":",
+          style: timeTitleTextStyle,
+        ),
+        buildNumberPicker("Minute", 0, 59, minute, (value) {
+          setState(() {
+            minute = value;
+          });
+        }, timeTitleTextStyle),
+      ],
     );
 
     List<Widget> mainList = [
@@ -182,7 +181,7 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
         color: mainColor,
         child: Center(
           child: Text(
-            "Comfirm",
+            "Confirm",
             style: TextStyle(
               color: Colors.white,
               fontSize: bigTextSize,

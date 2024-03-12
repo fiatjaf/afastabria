@@ -9,7 +9,6 @@ import 'package:nostrmo/component/qrcode_dialog.dart';
 import 'package:nostrmo/component/webview_router.dart';
 import 'package:nostrmo/component/zap_gen_dialog.dart';
 import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/generated/l10n.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/provider/contact_list_provider.dart';
 import 'package:nostrmo/util/platform_util.dart';
@@ -26,6 +25,7 @@ import '../confirm_dialog.dart';
 import '../image_component.dart';
 import '../image_preview_dialog.dart';
 
+// ignore: must_be_immutable
 class MetadataTopComponent extends StatefulWidget {
   static double getPcBannerHeight(double maxHeight) {
     var height = maxHeight * 0.2;
@@ -47,7 +47,8 @@ class MetadataTopComponent extends StatefulWidget {
 
   bool userPicturePreview;
 
-  MetadataTopComponent({super.key, 
+  MetadataTopComponent({
+    super.key,
     required this.pubkey,
     this.metadata,
     this.isLocal = false,
@@ -411,7 +412,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
 
   copyPubKey() {
     Clipboard.setData(ClipboardData(text: nip19PubKey)).then((_) {
-      BotToast.showText(text: S.of(context).key_has_been_copy);
+      BotToast.showText(text: "key_has_been_copy");
     });
   }
 
@@ -450,8 +451,8 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
       } else if (NIP19Tlv.isNrelay(result)) {
         var nrelay = NIP19Tlv.decodeNrelay(result);
         if (nrelay != null) {
-          var result = await ComfirmDialog.show(
-              context, S.of(context).Add_this_relay_to_local);
+          var result =
+              await ConfirmDialog.show(context, "Add_this_relay_to_local");
           if (result == true) {
             relayProvider.addRelay(nrelay.addr);
           }
@@ -460,7 +461,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
         WebViewRouter.open(context, result);
       } else {
         Clipboard.setData(ClipboardData(text: result)).then((_) {
-          BotToast.showText(text: S.of(context).Copy_success);
+          BotToast.showText(text: "Copy_success");
         });
       }
     }
@@ -488,7 +489,8 @@ class MetadataIconBtn extends StatelessWidget {
 
   IconData iconData;
 
-  MetadataIconBtn({super.key, required this.iconData, this.onTap, this.onLongPress});
+  MetadataIconBtn(
+      {super.key, required this.iconData, this.onTap, this.onLongPress});
 
   @override
   Widget build(BuildContext context) {
@@ -539,7 +541,8 @@ class MetadataTextBtn extends StatelessWidget {
 
   Color? borderColor;
 
-  MetadataTextBtn({super.key, 
+  MetadataTextBtn({
+    super.key,
     required this.text,
     required this.onTap,
     this.borderColor,
@@ -586,7 +589,8 @@ class MetadataIconDataComp extends StatelessWidget {
 
   Widget? leftWidget;
 
-  MetadataIconDataComp({super.key, 
+  MetadataIconDataComp({
+    super.key,
     required this.text,
     this.iconData,
     this.leftWidget,

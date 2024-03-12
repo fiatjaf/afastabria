@@ -1,11 +1,9 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_socks_proxy/socks_proxy.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:get_time_ago/get_time_ago.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nostrmo/client/nostr.dart';
 import 'package:nostrmo/provider/badge_definition_provider.dart';
@@ -21,7 +19,6 @@ import 'package:nostrmo/router/web_utils/web_utils_router.dart';
 import 'package:nostrmo/util/platform_util.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:window_manager/window_manager.dart';
@@ -75,7 +72,6 @@ import 'router/user/user_router.dart';
 import 'system_timer.dart';
 import 'util/colors_util.dart';
 import 'util/image/cache_manager_builder.dart';
-import 'util/locale_util.dart';
 import 'util/media_data_cache.dart';
 import 'util/string_util.dart';
 
@@ -250,18 +246,6 @@ class _MyApp extends State<MyApp> {
     //   statusBarColor: mainColor,
     // ));
 
-    Locale? locale;
-    if (StringUtil.isNotBlank(settingProvider.i18n)) {
-      for (var item in S.delegate.supportedLocales) {
-        if (item.languageCode == settingProvider.i18n &&
-            item.countryCode == settingProvider.i18nCC) {
-          locale = Locale(settingProvider.i18n!, settingProvider.i18nCC);
-          break;
-        }
-      }
-    }
-    setGetTimeAgoDefaultLocale(locale);
-
     var lightTheme = getLightTheme();
     var darkTheme = getDarkTheme();
     ThemeData defaultTheme;
@@ -289,7 +273,7 @@ class _MyApp extends State<MyApp> {
       RouterPath.EVENT_DETAIL: (context) => const EventDetailRouter(),
       RouterPath.TAG_DETAIL: (context) => const TagDetailRouter(),
       RouterPath.NOTICES: (context) => const NoticeRouter(),
-      RouterPath.KEY_BACKUP: (context) => const KeyBackupRouter(),
+      RouterPath.KEY_BACKUP: (context) => KeyBackupRouter(),
       RouterPath.RELAYS: (context) => const RelaysRouter(),
       RouterPath.FILTER: (context) => const FilterRouter(),
       RouterPath.PROFILE_EDITOR: (context) => const ProfileEditorRouter(),
@@ -297,9 +281,11 @@ class _MyApp extends State<MyApp> {
       RouterPath.QRSCANNER: (context) => const QRScannerRouter(),
       RouterPath.WEBUTILS: (context) => const WebUtilsRouter(),
       RouterPath.RELAY_INFO: (context) => const RelayInfoRouter(),
-      RouterPath.FOLLOWED_TAGS_LIST: (context) => const FollowedTagsListRouter(),
+      RouterPath.FOLLOWED_TAGS_LIST: (context) =>
+          const FollowedTagsListRouter(),
       RouterPath.COMMUNITY_DETAIL: (context) => const CommunityDetailRouter(),
-      RouterPath.FOLLOWED_COMMUNITIES: (context) => const FollowedCommunitiesRouter(),
+      RouterPath.FOLLOWED_COMMUNITIES: (context) =>
+          const FollowedCommunitiesRouter(),
       RouterPath.FOLLOWED: (context) => const FollowedRouter(),
       RouterPath.BOOKMARK: (context) => const BookmarkRouter(),
     };
@@ -383,22 +369,13 @@ class _MyApp extends State<MyApp> {
         ),
       ],
       child: HomeComponent(
-        locale: locale,
         theme: defaultTheme,
         child: MaterialApp(
           builder: BotToastInit(),
           navigatorObservers: [BotToastNavigatorObserver()],
           // showPerformanceOverlay: true,
           debugShowCheckedModeBanner: false,
-          locale: locale,
           title: Base.APP_NAME,
-          localizationsDelegates: const [
-            S.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: S.delegate.supportedLocales,
           theme: defaultTheme,
           darkTheme: defaultDarkTheme,
           initialRoute: RouterPath.INDEX,
@@ -424,7 +401,7 @@ class _MyApp extends State<MyApp> {
     Color color500 = _getMainColor();
     MaterialColor themeColor = ColorList.getThemeColor(color500.value);
 
-    Color? mainTextColor;
+    // Color? mainTextColor;
     Color hintColor = Colors.grey;
     var scaffoldBackgroundColor = Colors.grey[100];
 
@@ -487,7 +464,7 @@ class _MyApp extends State<MyApp> {
     Color color500 = _getMainColor();
     MaterialColor themeColor = ColorList.getThemeColor(color500.value);
 
-    Color? mainTextColor;
+    // Color? mainTextColor;
     Color? topFontColor = Colors.white;
     Color hintColor = Colors.grey;
 
@@ -542,21 +519,6 @@ class _MyApp extends State<MyApp> {
       ),
     );
   }
-
-  void setGetTimeAgoDefaultLocale(Locale? locale) {
-    String? localeName = Intl.defaultLocale;
-    if (locale != null) {
-      localeName = LocaleUtil.getLocaleKey(locale);
-    }
-
-    if (StringUtil.isNotBlank(localeName)) {
-      if (GetTimeAgoSupportLocale.containsKey(localeName)) {
-        GetTimeAgo.setDefaultLocale(localeName!);
-      } else if (localeName == "zh_tw") {
-        GetTimeAgo.setDefaultLocale("zh_tr");
-      }
-    }
-  }
 }
 
 Color _getMainColor() {
@@ -566,23 +528,3 @@ Color _getMainColor() {
   }
   return color500;
 }
-
-final Map<String, int> GetTimeAgoSupportLocale = {
-  'ar': 1,
-  'en': 1,
-  'es': 1,
-  'fr': 1,
-  'hi': 1,
-  'pt': 1,
-  'br': 1,
-  'zh': 1,
-  'zh_tr': 1,
-  'ja': 1,
-  'oc': 1,
-  'ko': 1,
-  'de': 1,
-  'id': 1,
-  'tr': 1,
-  'ur': 1,
-  'vi': 1,
-};

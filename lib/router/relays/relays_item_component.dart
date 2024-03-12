@@ -99,7 +99,7 @@ class RelaysItemComponent extends StatelessWidget {
                 onTap: () {
                   var text = NIP19Tlv.encodeNrelay(Nrelay(addr));
                   Clipboard.setData(ClipboardData(text: text)).then((_) {
-                    BotToast.showText(text: S.of(context).Copy_success);
+                    BotToast.showText(text: "Copy_success");
                   });
                 },
                 child: Container(

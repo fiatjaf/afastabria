@@ -402,7 +402,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
     try {
       var event = await doDocumentSave();
       if (event == null) {
-        BotToast.showText(text: S.of(context).Send_fail);
+        BotToast.showText(text: "Send_fail");
         return;
       }
       RouterUtil.back(context, event);

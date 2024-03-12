@@ -6,6 +6,7 @@ import 'package:nostrmo/provider/webview_provider.dart';
 import 'package:nostrmo/util/platform_util.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class HomeComponent extends StatefulWidget {
   Widget child;
 
@@ -13,9 +14,9 @@ class HomeComponent extends StatefulWidget {
 
   ThemeData? theme;
 
-  HomeComponent({super.key, 
+  HomeComponent({
+    super.key,
     required this.child,
-    this.locale,
     this.theme,
   });
 
@@ -32,15 +33,7 @@ class _HomeComponent extends State<HomeComponent> {
     var webviewProvider = Provider.of<WebViewProvider>(context);
 
     return MaterialApp(
-      locale: widget.locale,
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: S.delegate.supportedLocales,
       theme: widget.theme,
       home: Stack(
         children: [
