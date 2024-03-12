@@ -35,8 +35,7 @@ class _BadgeAwardComponent extends State<BadgeAwardComponent> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    var s = S.of(context);
-    var badgeId = "";
+        var badgeId = "";
     for (var tag in widget.event.tags) {
       if (tag is List && tag[0] == "a") {
         badgeId = tag[1];

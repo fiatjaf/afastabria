@@ -1,7 +1,5 @@
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/foundation.dart';
@@ -16,7 +14,6 @@ import 'package:nostrmo/provider/setting_provider.dart';
 import 'package:nostrmo/provider/webview_provider.dart';
 import 'package:nostrmo/util/lightning_util.dart';
 import 'package:nostrmo/util/platform_util.dart';
-import 'package:nostrmo/util/router_util.dart';
 import 'package:nostrmo/util/string_util.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -25,9 +22,9 @@ import 'package:url_launcher/url_launcher.dart';
 import '../client/event.dart';
 import '../client/nip04/nip04.dart';
 import '../client/nip07/nip07_methods.dart';
-import '../generated/l10n.dart';
 import '../main.dart';
 
+// ignore: must_be_immutable
 class WebViewRouter extends StatefulWidget {
   String url;
 
@@ -129,7 +126,6 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
 
   @override
   Widget doBuild(BuildContext context) {
-    var s = S.of(context);
     var themeData = Theme.of(context);
     var paddingTop = mediaDataCache.padding.top;
     var mainColor = themeData.primaryColor;
@@ -298,7 +294,6 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
   }
 
   Widget getMoreWidget(Widget icon) {
-    var s = S.of(context);
     var themeData = Theme.of(context);
     var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
 
@@ -756,8 +751,7 @@ nip04: {
 
 //   @override
 //   Widget doBuild(BuildContext context) {
-//     var s = S.of(context);
-//     var themeData = Theme.of(context);
+//     //     var themeData = Theme.of(context);
 //     var paddingTop = mediaDataCache.padding.top;
 //     var mainColor = themeData.primaryColor;
 //     var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
@@ -856,8 +850,7 @@ nip04: {
 //   }
 
 //   Widget getMoreWidget(Widget icon) {
-//     var s = S.of(context);
-//     var themeData = Theme.of(context);
+//     //     var themeData = Theme.of(context);
 //     var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
 
 //     return PopupMenuButton<String>(

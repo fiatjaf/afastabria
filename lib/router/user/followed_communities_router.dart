@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 
 import '../../client/nip02/cust_contact_list.dart';
 import '../../consts/base.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../util/router_util.dart';
 
@@ -33,8 +32,7 @@ class _FollowedCommunitiesRouter extends State<FollowedCommunitiesRouter> {
       return Container();
     }
 
-    var s = S.of(context);
-    var themeData = Theme.of(context);
+        var themeData = Theme.of(context);
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
     var hintColor = themeData.hintColor;
 

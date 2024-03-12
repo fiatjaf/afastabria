@@ -19,7 +19,6 @@ import '../../component/image_component.dart';
 import '../../consts/base.dart';
 import '../../data/dm_session_info_db.dart';
 import '../../data/event_db.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../util/string_util.dart';
 import 'index_drawer_content.dart';
@@ -34,8 +33,7 @@ class AccountManagerComponent extends StatefulWidget {
 class AccountManagerComponentState extends State<AccountManagerComponent> {
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-    var _settingProvider = Provider.of<SettingProvider>(context);
+        var _settingProvider = Provider.of<SettingProvider>(context);
     var privateKeyMap = _settingProvider.privateKeyMap;
 
     var themeData = Theme.of(context);

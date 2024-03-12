@@ -13,7 +13,6 @@ import '../../client/zap/zap_action.dart';
 import '../../client/zap/zap_num_util.dart';
 import '../../consts/base.dart';
 import '../../data/event_reactions.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../provider/event_reactions_provider.dart';
 import '../../util/number_format_util.dart';
@@ -38,7 +37,6 @@ class _EventPollComponent extends State<EventPollComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
     var themeData = Theme.of(context);
     var hintColor = themeData.hintColor;
     var pollBackgroundColor = hintColor.withOpacity(0.3);
@@ -224,15 +222,14 @@ class _EventPollComponent extends State<EventPollComponent> {
           ),
         );
       },
-      selector: (context, _provider) {
-        return _provider.get(widget.event.id);
+      selector: (context, provider_) {
+        return provider_.get(widget.event.id);
       },
     );
   }
 
   Future<void> tapZap(String selectKey) async {
-    var numStr = await TextInputDialog.show(
-        context, S.of(context).Input_Sats_num,
+    var numStr = await TextInputDialog.show(context, "Input Sats num",
         valueCheck: inputCheck);
     if (numStr != null) {
       var num = int.tryParse(numStr);

@@ -6,7 +6,6 @@ import 'package:nostrmo/data/custom_emoji.dart';
 
 import '../../client/upload/uploader.dart';
 import '../../consts/base.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../util/router_util.dart';
 import '../../util/string_util.dart';
@@ -39,8 +38,7 @@ class _CustomEmojiAddDialog extends State<CustomEmojiAddDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-    var themeData = Theme.of(context);
+        var themeData = Theme.of(context);
     Color cardColor = themeData.cardColor;
     var mainColor = themeData.primaryColor;
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
@@ -164,8 +162,7 @@ class _CustomEmojiAddDialog extends State<CustomEmojiAddDialog> {
   String? filepath;
 
   Future<void> _onComfirm() async {
-    var s = S.of(context);
-    var text = controller.text;
+        var text = controller.text;
     if (StringUtil.isBlank(text)) {
       BotToast.showText(text: "Input can not be null");
       return;

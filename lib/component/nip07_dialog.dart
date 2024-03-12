@@ -48,8 +48,7 @@ class _NIP07Dialog extends State<NIP07Dialog> {
     Color cardColor = themeData.cardColor;
     var hintColor = themeData.hintColor;
 
-    var s = S.of(context);
-
+    
     List<Widget> list = [];
     list.add(Container(
       child: Text(

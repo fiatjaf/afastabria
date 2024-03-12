@@ -7,7 +7,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../client/zap/zap_num_util.dart';
 import '../../consts/base.dart';
-import '../../generated/l10n.dart';
 
 class ContentLnbcComponent extends StatelessWidget {
   String lnbc;
@@ -16,8 +15,7 @@ class ContentLnbcComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-    var themeData = Theme.of(context);
+        var themeData = Theme.of(context);
     var hintColor = themeData.hintColor;
     var cardColor = themeData.cardColor;
     double largeFontSize = 20;

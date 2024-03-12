@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../util/lightning_util.dart';
 import '../../util/string_util.dart';
@@ -12,8 +11,7 @@ import 'zap.dart';
 class ZapAction {
   static Future<void> handleZap(BuildContext context, int sats, String pubkey,
       {String? eventId, String? pollOption, String? comment}) async {
-    var s = S.of(context);
-    var cancelFunc = BotToast.showLoading();
+        var cancelFunc = BotToast.showLoading();
     try {
       var invoiceCode = await _doGenInvoiceCode(context, sats, pubkey,
           eventId: eventId, pollOption: pollOption, comment: comment);
@@ -44,8 +42,7 @@ class ZapAction {
   static Future<String?> _doGenInvoiceCode(
       BuildContext context, int sats, String pubkey,
       {String? eventId, String? pollOption, String? comment}) async {
-    var s = S.of(context);
-    var metadata = metadataProvider.getMetadata(pubkey);
+        var metadata = metadataProvider.getMetadata(pubkey);
     if (metadata == null) {
       BotToast.showText(text: "Metadata can not be found.");
       return null;

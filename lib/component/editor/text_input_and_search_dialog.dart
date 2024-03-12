@@ -3,7 +3,6 @@ import 'package:nostrmo/main.dart';
 import 'package:nostrmo/util/platform_util.dart';
 
 import '../../consts/base.dart';
-import '../../generated/l10n.dart';
 import '../../router/index/index_app_bar.dart';
 import '../../util/router_util.dart';
 import '../../util/string_util.dart';
@@ -69,8 +68,7 @@ class _TextInputAndSearchDialog extends State<TextInputAndSearchDialog>
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-    var themeData = Theme.of(context);
+        var themeData = Theme.of(context);
     var cardColro = themeData.cardColor;
     var mainColor = themeData.primaryColor;
 

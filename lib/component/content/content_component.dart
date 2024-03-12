@@ -14,7 +14,6 @@ import '../../client/event_kind.dart';
 import '../../client/nip19/nip19.dart';
 import '../../client/nip19/nip19_tlv.dart';
 import '../../consts/base.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../util/platform_util.dart';
 import '../event/event_quote_component.dart';
@@ -150,8 +149,7 @@ class _ContentComponent extends State<ContentComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-    var themeData = Theme.of(context);
+        var themeData = Theme.of(context);
     smallTextSize = themeData.textTheme.bodySmall!.fontSize!;
     var fontSize = themeData.textTheme.bodyLarge!.fontSize!;
     iconWidgetWidth = fontSize + 4;

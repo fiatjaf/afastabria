@@ -1,18 +1,11 @@
-import 'dart:convert';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/comfirm_dialog.dart';
 import 'package:nostrmo/util/when_stop_function.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/event.dart';
-import '../../client/event_kind.dart' as kind;
-import '../../client/filter.dart';
 import '../../component/cust_state.dart';
 import '../../consts/base.dart';
 import '../../data/relay_status.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../provider/relay_provider.dart';
 import '../../util/router_util.dart';
@@ -30,7 +23,6 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
   TextEditingController controller = TextEditingController();
   @override
   Widget doBuild(BuildContext context) {
-    var s = S.of(context);
     var _relayProvider = Provider.of<RelayProvider>(context);
     var relayAddrs = _relayProvider.relayAddrs;
     var relayStatusMap = _relayProvider.relayStatusMap;

@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import '../../client/event.dart';
 import '../../consts/base.dart';
 import '../../data/event_reactions.dart';
-import '../../generated/l10n.dart';
 import '../../provider/event_reactions_provider.dart';
 import '../../util/number_format_util.dart';
 import 'event_quote_component.dart';
@@ -30,8 +29,7 @@ class _EventZapGoalsComponent extends State<EventZapGoalsComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-    var themeData = Theme.of(context);
+        var themeData = Theme.of(context);
     var hintColor = themeData.hintColor;
     var pollBackgroundColor = hintColor.withOpacity(0.3);
     var mainColor = themeData.primaryColor;

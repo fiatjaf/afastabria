@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/util/string_util.dart';
 
 import '../../consts/base.dart';
-import '../../generated/l10n.dart';
 
 class PollInputController {
   TextEditingController minValueController = TextEditingController();
@@ -34,8 +33,7 @@ class PollInputController {
   }
 
   bool checkInput(BuildContext context) {
-    var s = S.of(context);
-    if (StringUtil.isNotBlank(maxValueController.text)) {
+        if (StringUtil.isNotBlank(maxValueController.text)) {
       var num = int.tryParse(maxValueController.text);
       if (num == null) {
         BotToast.showText(text: "Number parse error");
@@ -85,8 +83,7 @@ class _PollInputComponent extends State<PollInputComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-    var themeData = Theme.of(context);
+        var themeData = Theme.of(context);
     var mainColor = themeData.primaryColor;
     List<Widget> list = [];
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/router/filter/filter_block_component.dart';
 import 'package:nostrmo/router/filter/filter_dirtyword_component.dart';
 
-import '../../generated/l10n.dart';
 import '../../util/platform_util.dart';
 import '../../util/router_util.dart';
 import '../index/index_app_bar.dart';
@@ -26,8 +25,7 @@ class _FilterRouter extends State<FilterRouter>
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-    var themeData = Theme.of(context);
+        var themeData = Theme.of(context);
     var titleTextColor = themeData.appBarTheme.titleTextStyle!.color;
     var titleTextStyle = TextStyle(
       fontWeight: FontWeight.bold,

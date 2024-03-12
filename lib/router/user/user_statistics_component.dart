@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
@@ -18,12 +16,12 @@ import '../../component/cust_state.dart';
 import '../../consts/base.dart';
 import '../../consts/router_path.dart';
 import '../../data/event_mem_box.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../util/number_format_util.dart';
 import '../../util/router_util.dart';
 import '../../util/string_util.dart';
 
+// ignore: must_be_immutable
 class UserStatisticsComponent extends StatefulWidget {
   String pubkey;
 
@@ -62,7 +60,6 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
 
   @override
   Widget doBuild(BuildContext context) {
-    var s = S.of(context);
     if (pubkey != null && pubkey != widget.pubkey) {
       // arg changed! reset
       contactListEvent = null;
@@ -88,9 +85,9 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
 
     if (isLocal) {
       list.add(
-          Selector<ContactListProvider, int>(builder: (context, num, child) {
+          Selector<ContactListProvider, int>(builder: (context, num_, child) {
         return UserStatisticsItemComponent(
-          num: num,
+          num: num_,
           name: "Following",
           onTap: onFollowingTap,
           onLongPressStart: onLongPressStart,
@@ -203,7 +200,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
       nostr!.query([filter.toJson()], (event) {
         localContactBox!.add(event);
       }, id: fetchLocalContactsId);
-      BotToast.showText(text: S.of(context).Begin_to_load_Contact_History);
+      BotToast.showText(text: "Begin to load contact history");
     }
   }
 
@@ -219,18 +216,18 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
 
       List<EnumObj> enumList = [];
       for (var event in list) {
-        var _contactList = CustContactList.fromJson(event.tags);
+        var contactList = CustContactList.fromJson(event.tags);
         var dt = DateTime.fromMillisecondsSinceEpoch(event.createdAt * 1000);
         enumList.add(
-            EnumObj(event, "${format.encode(dt)} (${_contactList.total()})"));
+            EnumObj(event, "${format.encode(dt)} (${contactList.total()})"));
       }
 
       var result = await EnumSelectorComponent.show(context, enumList);
       if (result != null) {
         var event = result.value as Event;
-        var _contactList = CustContactList.fromJson(event.tags);
+        var contactList = CustContactList.fromJson(event.tags);
         RouterUtil.router(
-            context, RouterPath.USER_HISTORY_CONTACT_LIST, _contactList);
+            context, RouterPath.USER_HISTORY_CONTACT_LIST, contactList);
       }
     }
   }

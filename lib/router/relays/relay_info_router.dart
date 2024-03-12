@@ -13,7 +13,6 @@ import '../../client/nip19/nip19.dart';
 import '../../client/relay/relay.dart';
 import '../../component/image_component.dart';
 import '../../component/webview_router.dart';
-import '../../generated/l10n.dart';
 import '../../util/router_util.dart';
 import '../../util/string_util.dart';
 
@@ -32,8 +31,7 @@ class _RelayInfoRouter extends State<RelayInfoRouter> {
     var themeData = Theme.of(context);
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
     var mainColor = themeData.primaryColor;
-    var s = S.of(context);
-
+    
     var relayItf = RouterUtil.routerArgs(context);
     if (relayItf == null || !(relayItf is Relay)) {
       RouterUtil.back(context);

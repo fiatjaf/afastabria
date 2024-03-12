@@ -9,7 +9,6 @@ import '../../component/event/event_load_list_component.dart';
 import '../../component/event/reaction_event_list_component.dart';
 import '../../component/event/zap_event_list_component.dart';
 import '../../data/event_reactions.dart';
-import '../../generated/l10n.dart';
 import '../../provider/event_reactions_provider.dart';
 import '../../provider/single_event_provider.dart';
 import '../../util/platform_util.dart';
@@ -52,8 +51,7 @@ class _EventDetailRouter extends State<EventDetailRouter> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-
+    
     var arg = RouterUtil.routerArgs(context);
     if (arg != null) {
       if (arg is Event) {

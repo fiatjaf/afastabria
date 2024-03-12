@@ -6,7 +6,6 @@ import 'package:nostrmo/provider/relay_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../consts/base.dart';
-import '../../generated/l10n.dart';
 import 'content_str_link_component.dart';
 
 class ContentRelayComponent extends StatelessWidget {

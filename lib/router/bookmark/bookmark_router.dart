@@ -8,7 +8,6 @@ import '../../component/content/content_link_pre_component.dart';
 import '../../component/cust_state.dart';
 import '../../component/event/event_quote_component.dart';
 import '../../consts/base.dart';
-import '../../generated/l10n.dart';
 import '../../provider/setting_provider.dart';
 import '../../util/platform_util.dart';
 import '../../util/router_util.dart';
@@ -35,8 +34,7 @@ class _BookmarkRouter extends CustState<BookmarkRouter> {
     if (PlatformUtil.isTableMode()) {
       indicatorColor = themeData.primaryColor;
     }
-    var s = S.of(context);
-
+    
     var main =
         Selector<ListProvider, Bookmarks>(builder: (context, bookmarks, child) {
       return Container(

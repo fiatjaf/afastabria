@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../component/user_pic_component.dart';
 import '../../consts/base.dart';
 import '../../consts/router_path.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../provider/relay_provider.dart';
 import '../../util/router_util.dart';

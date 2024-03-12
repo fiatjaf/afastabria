@@ -8,7 +8,6 @@ import '../../client/zap/zap_action.dart';
 import '../../consts/base.dart';
 import '../../consts/router_path.dart';
 import '../../data/metadata.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../provider/metadata_provider.dart';
 import '../../util/router_util.dart';
@@ -44,30 +43,28 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
         if (metadata == null ||
             (StringUtil.isBlank(metadata.lud06) &&
                 StringUtil.isBlank(metadata.lud16))) {
-          return Container(
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    "Lnurl and Lud16 can't found.",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Lnurl and Lud16 can't found.",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(Base.BASE_PADDING),
-                    child: ContentStrLinkComponent(
-                      str: "Add now",
-                      onTap: () async {
-                        await RouterUtil.router(
-                            context, RouterPath.PROFILE_EDITOR, metadata);
-                        metadataProvider.update(nostr!.publicKey);
-                      },
-                    ),
-                  )
-                ],
-              ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(Base.BASE_PADDING),
+                  child: ContentStrLinkComponent(
+                    str: "Add now",
+                    onTap: () async {
+                      await RouterUtil.router(
+                          context, RouterPath.PROFILE_EDITOR, metadata);
+                      metadataProvider.update(nostr!.publicKey);
+                    },
+                  ),
+                )
+              ],
             ),
           );
         }
@@ -130,8 +127,8 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
                 color: mainColor,
                 height: 40,
                 alignment: Alignment.center,
-                child: Text(
-                  S.of(context).Comfirm,
+                child: const Text(
+                  "Confirm",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -166,7 +163,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
     var text = controller.text;
     var num = int.tryParse(text);
     if (num == null) {
-      BotToast.showText(text: S.of(context).Number_parse_error);
+      BotToast.showText(text: "Number parse error");
       return;
     }
 

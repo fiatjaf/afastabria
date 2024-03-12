@@ -9,7 +9,6 @@ import 'package:nostrmo/util/router_util.dart';
 import 'package:nostrmo/util/string_util.dart';
 
 import '../client/nip58/badge_definition.dart';
-import '../generated/l10n.dart';
 
 class BadgeDetailComponent extends StatefulWidget {
   BadgeDefinition badgeDefinition;
@@ -30,8 +29,7 @@ class _BadgeDetailComponent extends State<BadgeDetailComponent> {
     var themeData = Theme.of(context);
     var cardColor = themeData.cardColor;
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
-    var s = S.of(context);
-
+    
     List<Widget> list = [];
 
     if (StringUtil.isNotBlank(widget.badgeDefinition.image)) {

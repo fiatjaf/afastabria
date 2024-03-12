@@ -29,8 +29,7 @@ class _GlobalEventItemComponent extends State<GlobalEventItemComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-    var themeData = Theme.of(context);
+        var themeData = Theme.of(context);
     var cardColor = themeData.cardColor;
     var hintColor = themeData.hintColor;
 

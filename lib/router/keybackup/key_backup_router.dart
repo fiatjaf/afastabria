@@ -6,7 +6,6 @@ import 'package:nostrmo/consts/base.dart';
 import 'package:nostrmo/main.dart';
 
 import '../../component/appbar4stack.dart';
-import '../../generated/l10n.dart';
 
 class KeyBackupRouter extends StatefulWidget {
   @override
@@ -24,7 +23,6 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
 
   void initCheckBoxItems(BuildContext context) {
     if (checkboxItems == null) {
-      var s = S.of(context);
       checkboxItems = [];
       checkboxItems!.add(CheckboxItem(
           "Please do not disclose or share the key to anyone.", false));
@@ -37,7 +35,6 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
     var themeData = Theme.of(context);
     var cardColor = themeData.cardColor;
     var mainColor = themeData.primaryColor;
@@ -173,7 +170,7 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
   bool checkTips() {
     for (var item in checkboxItems!) {
       if (!item.value) {
-        BotToast.showText(text: S.of(context).Please_check_the_tips);
+        BotToast.showText(text: "Please check the tips");
         return false;
       }
     }
@@ -201,7 +198,7 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
 
   void doCopy(String key) {
     Clipboard.setData(ClipboardData(text: key)).then((_) {
-      BotToast.showText(text: S.of(context).key_has_been_copy);
+      BotToast.showText(text: "key has been copy");
     });
   }
 }

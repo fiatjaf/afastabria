@@ -51,8 +51,7 @@ class _ZapGenDialog extends State<ZapGenDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-    var themeData = Theme.of(context);
+        var themeData = Theme.of(context);
     Color cardColor = themeData.cardColor;
     var mainColor = themeData.primaryColor;
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;

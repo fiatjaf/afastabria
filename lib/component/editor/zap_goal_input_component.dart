@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/util/string_util.dart';
 
 import '../../consts/base.dart';
-import '../../generated/l10n.dart';
 
 class ZapGoalInputController {
   TextEditingController goalAmountController = TextEditingController();
@@ -23,8 +22,7 @@ class ZapGoalInputController {
 
   bool checkInput(BuildContext context) {
     print("goal input call");
-    var s = S.of(context);
-    if (StringUtil.isBlank(goalAmountController.text)) {
+        if (StringUtil.isBlank(goalAmountController.text)) {
       print("checked is blank!");
       BotToast.showText(text: "Input can not be null");
       return false;
@@ -60,8 +58,7 @@ class _ZapGoalInputComponent extends State<ZapGoalInputComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-    var themeData = Theme.of(context);
+        var themeData = Theme.of(context);
     var mainColor = themeData.primaryColor;
     List<Widget> list = [];
 

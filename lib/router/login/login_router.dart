@@ -7,7 +7,6 @@ import 'package:nostrmo/util/platform_util.dart';
 import '../../client/client_utils/keys.dart';
 import '../../client/nip19/nip19.dart';
 import '../../consts/base.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../util/string_util.dart';
 
@@ -30,6 +29,8 @@ class _LoginRouter extends State<LoginRouter>
 
   @override
   void initState() {
+    super.initState();
+
     animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 2));
     // animation = ;
@@ -37,7 +38,6 @@ class _LoginRouter extends State<LoginRouter>
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
     var themeData = Theme.of(context);
     var mainColor = themeData.primaryColor;
     var maxWidth = mediaDataCache.size.width;
@@ -57,11 +57,11 @@ class _LoginRouter extends State<LoginRouter>
     List<Widget> mainList = [];
     mainList.add(logoWiget);
     mainList.add(Container(
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         top: Base.BASE_PADDING,
         bottom: 40,
       ),
-      child: Text(
+      child: const Text(
         Base.APP_NAME,
         style: TextStyle(
           fontSize: 24,
@@ -89,14 +89,14 @@ class _LoginRouter extends State<LoginRouter>
     ));
 
     mainList.add(Container(
-      margin: EdgeInsets.all(Base.BASE_PADDING * 2),
+      margin: const EdgeInsets.all(Base.BASE_PADDING * 2),
       child: InkWell(
         onTap: doLogin,
         child: Container(
           height: 36,
           color: mainColor,
           alignment: Alignment.center,
-          child: Text(
+          child: const Text(
             "Login",
             style: TextStyle(
               color: Colors.white,
@@ -109,7 +109,7 @@ class _LoginRouter extends State<LoginRouter>
     ));
 
     mainList.add(Container(
-      margin: EdgeInsets.only(bottom: 100),
+      margin: const EdgeInsets.only(bottom: 100),
       child: GestureDetector(
         onTap: generatePK,
         child: Text(
@@ -122,34 +122,32 @@ class _LoginRouter extends State<LoginRouter>
       ),
     ));
 
-    var termsWiget = Container(
-      child: Row(
-        children: [
-          Checkbox(
-              value: checkTerms,
-              onChanged: (val) {
-                setState(() {
-                  checkTerms = val;
-                });
-              }),
-          Text("I accept the" + " "),
-          Container(
-            child: GestureDetector(
-              onTap: () {
-                WebViewRouter.open(context, Base.PRIVACY_LINK);
-              },
-              child: Text(
-                "terms of user",
-                style: TextStyle(
-                  color: mainColor,
-                  decoration: TextDecoration.underline,
-                ),
+    var termsWiget = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Checkbox(
+            value: checkTerms,
+            onChanged: (val) {
+              setState(() {
+                checkTerms = val;
+              });
+            }),
+        Text("I accept the" + " "),
+        Container(
+          child: GestureDetector(
+            onTap: () {
+              WebViewRouter.open(context, Base.PRIVACY_LINK);
+            },
+            child: Text(
+              "terms of user",
+              style: TextStyle(
+                color: mainColor,
+                decoration: TextDecoration.underline,
               ),
             ),
           ),
-        ],
-        mainAxisSize: MainAxisSize.min,
-      ),
+        ),
+      ],
     ).animate(controller: animationController, effects: [
       ShakeEffect(),
     ]);
@@ -192,7 +190,7 @@ class _LoginRouter extends State<LoginRouter>
 
     var pk = controller.text;
     if (StringUtil.isBlank(pk)) {
-      BotToast.showText(text: S.of(context).Private_key_is_null);
+      BotToast.showText(text: "Private key is null");
       return;
     }
 
@@ -208,7 +206,7 @@ class _LoginRouter extends State<LoginRouter>
   }
 
   void tipAcceptTerm() {
-    BotToast.showText(text: S.of(context).Please_accept_the_terms);
+    BotToast.showText(text: "Please accept the terms");
     animationController.reset();
     animationController.forward();
   }

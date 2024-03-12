@@ -5,7 +5,6 @@ import 'package:nostrmo/provider/filter_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../consts/base.dart';
-import '../../generated/l10n.dart';
 import '../../util/string_util.dart';
 
 class FilterDirtywordComponent extends StatefulWidget {
@@ -20,8 +19,7 @@ class _FilterDirtywordComponent extends State<FilterDirtywordComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-    var _filterProvider = Provider.of<FilterProvider>(context);
+        var _filterProvider = Provider.of<FilterProvider>(context);
     var dirtywordList = _filterProvider.dirtywordList;
 
     List<Widget> list = [];

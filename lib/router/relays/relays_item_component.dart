@@ -11,7 +11,6 @@ import 'package:nostrmo/util/router_util.dart';
 import '../../consts/base.dart';
 import '../../consts/client_connected.dart';
 import '../../data/relay_status.dart';
-import '../../generated/l10n.dart';
 
 class RelaysItemComponent extends StatelessWidget {
   String addr;

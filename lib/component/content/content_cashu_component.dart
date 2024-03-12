@@ -3,7 +3,6 @@ import 'package:nostrmo/client/cashu/cashu_tokens.dart';
 import 'package:nostrmo/util/colors_util.dart';
 
 import '../../consts/base.dart';
-import '../../generated/l10n.dart';
 import '../../util/cashu_util.dart';
 
 class ContentCashuComponent extends StatelessWidget {
@@ -18,8 +17,7 @@ class ContentCashuComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-    var themeData = Theme.of(context);
+        var themeData = Theme.of(context);
     var hintColor = themeData.hintColor;
     var cardColor = themeData.cardColor;
     double largeFontSize = 20;

@@ -15,7 +15,6 @@ import '../../component/event_reply_callback.dart';
 import '../../component/simple_name_component.dart';
 import '../../consts/base.dart';
 import '../../data/event_mem_box.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../util/peddingevents_later_function.dart';
 import '../../util/platform_util.dart';
@@ -147,8 +146,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
 
   @override
   Widget doBuild(BuildContext context) {
-    var s = S.of(context);
-    if (sourceEvent == null) {
+        if (sourceEvent == null) {
       var obj = RouterUtil.routerArgs(context);
       if (obj != null && obj is Event) {
         sourceEvent = obj;

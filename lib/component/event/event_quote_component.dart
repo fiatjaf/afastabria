@@ -9,7 +9,6 @@ import 'package:screenshot/screenshot.dart';
 import '../../client/event.dart';
 import '../../consts/base.dart';
 import '../../consts/router_path.dart';
-import '../../generated/l10n.dart';
 import '../../provider/single_event_provider.dart';
 import '../../util/router_util.dart';
 import '../cust_state.dart';

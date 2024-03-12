@@ -30,7 +30,6 @@ import '../../consts/image_services.dart';
 import '../../consts/relay_mode.dart';
 import '../../consts/theme_style.dart';
 import '../../data/metadata.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../provider/setting_provider.dart';
 import '../../util/auth_util.dart';
@@ -66,8 +65,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     var mainColor = themeData.primaryColor;
     var hintColor = themeData.hintColor;
 
-    var s = S.of(context);
-
+    
     initOpenList(s);
     initI18nList(s);
     initCompressList(s);
@@ -430,8 +428,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
       newLockOpenList.add(openList![0]);
     }
 
-    var s = S.of(context);
-
+    
     EnumObj? resultEnumObj =
         await EnumSelectorComponent.show(context, newLockOpenList);
     if (resultEnumObj != null) {
@@ -646,8 +643,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   }
 
   inputNetwork() async {
-    var s = S.of(context);
-    var text = await TextInputDialog.show(
+        var text = await TextInputDialog.show(
       context,
       "${"Please input"} ${"Network"}\nSOCKS5/SOCKS4/PROXY username:password@host:port",
       value: settingProvider.network,
@@ -937,8 +933,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   List<EnumObj>? relayModes;
 
   List<EnumObj> getRelayModes() {
-    var s = S.of(context);
-    if (relayModes == null) {
+        if (relayModes == null) {
       relayModes = [];
       relayModes!.add(EnumObj(RelayMode.FAST_MODE, "Fast Mode"));
       relayModes!.add(EnumObj(RelayMode.BASE_MODE, "Base Mode"));

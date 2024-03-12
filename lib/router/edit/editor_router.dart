@@ -24,7 +24,6 @@ import '../../component/cust_state.dart';
 import '../../component/editor/custom_emoji_embed_builder.dart';
 import '../../component/editor/editor_mixin.dart';
 import '../../component/editor/poll_input_component.dart';
-import '../../generated/l10n.dart';
 import '../../util/string_util.dart';
 import 'editor_notify_item_component.dart';
 
@@ -112,8 +111,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
       }
     }
 
-    var s = S.of(context);
-    var themeData = Theme.of(context);
+        var themeData = Theme.of(context);
     var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
     var mainColor = themeData.primaryColor;
     var hintColor = themeData.hintColor;

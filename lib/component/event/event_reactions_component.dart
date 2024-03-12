@@ -19,7 +19,6 @@ import '../../client/zap/zap_action.dart';
 import '../../consts/base_consts.dart';
 import '../../consts/router_path.dart';
 import '../../data/event_reactions.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../provider/event_reactions_provider.dart';
 import '../../router/edit/editor_router.dart';
@@ -58,7 +57,6 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
     var themeData = Theme.of(context);
     var hintColor = themeData.hintColor;
     var fontSize = themeData.textTheme.bodySmall!.fontSize!;
@@ -399,7 +397,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
 
   void _doCopy(String text) {
     Clipboard.setData(ClipboardData(text: text)).then((_) {
-      BotToast.showText(text: S.of(context).Copy_success);
+      BotToast.showText(text: "Copy success");
     });
   }
 

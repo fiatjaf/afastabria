@@ -25,7 +25,6 @@ import '../../component/name_component.dart';
 import '../../consts/base.dart';
 import '../../data/dm_session_info.dart';
 import '../../data/metadata.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../provider/dm_provider.dart';
 import '../../provider/metadata_provider.dart';
@@ -59,8 +58,7 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
     var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
 
     var hintColor = themeData.hintColor;
-    var s = S.of(context);
-
+    
     var arg = RouterUtil.routerArgs(context);
     if (arg == null) {
       RouterUtil.back(context);

@@ -5,7 +5,6 @@ import '../../component/user/metadata_component.dart';
 import '../../consts/base.dart';
 import '../../consts/router_path.dart';
 import '../../data/metadata.dart';
-import '../../generated/l10n.dart';
 import '../../provider/metadata_provider.dart';
 import '../../util/platform_util.dart';
 import '../../util/router_util.dart';
@@ -25,8 +24,7 @@ class _FollowedRouter extends State<FollowedRouter> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-
+    
     if (pubkeys == null) {
       var arg = RouterUtil.routerArgs(context);
       if (arg != null) {

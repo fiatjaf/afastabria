@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../../component/cust_state.dart';
 import '../../consts/base.dart';
-import '../../generated/l10n.dart';
 import '../../util/dio_util.dart';
 import '../../util/router_util.dart';
 import '../../util/string_util.dart';
@@ -21,8 +20,7 @@ class _WebUtilsRouter extends CustState<WebUtilsRouter> {
   @override
   Widget doBuild(BuildContext context) {
     var themeData = Theme.of(context);
-    var s = S.of(context);
-    var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+        var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
     List<Widget> list = [
       // WebUtilItemComponent(

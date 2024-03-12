@@ -28,7 +28,6 @@ import '../../client/nip19/nip19_tlv.dart';
 import '../../client/upload/uploader.dart';
 import '../../consts/base.dart';
 import '../../data/custom_emoji.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../router/index/index_app_bar.dart';
 import '../../util/platform_util.dart';
@@ -338,8 +337,7 @@ mixin EditorMixin {
 
   Future<void> _inputMentionEvent() async {
     var context = getContext();
-    var s = S.of(context);
-    var value = await TextInputAndSearchDialog.show(
+        var value = await TextInputAndSearchDialog.show(
       context,
       "Search",
       "Please input event id",
@@ -369,8 +367,7 @@ mixin EditorMixin {
 
   Future<void> _inputMentionUser() async {
     var context = getContext();
-    var s = S.of(context);
-    var value = await TextInputAndSearchDialog.show(
+        var value = await TextInputAndSearchDialog.show(
       context,
       "Search",
       "Please input user pubkey",
@@ -744,8 +741,7 @@ mixin EditorMixin {
 
   Widget buildEmojiListsWidget() {
     var context = getContext();
-    var s = S.of(context);
-    var themeData = Theme.of(context);
+        var themeData = Theme.of(context);
     var mainColor = themeData.primaryColor;
     var labelUnSelectColor = themeData.dividerColor;
 

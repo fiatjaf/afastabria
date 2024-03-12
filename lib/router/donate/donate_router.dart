@@ -5,7 +5,6 @@ import '../../component/appbar4stack.dart';
 import '../../component/cust_state.dart';
 import '../../consts/base.dart';
 import '../../consts/coffee_ids.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../util/string_util.dart';
 
@@ -19,8 +18,7 @@ class DonateRouter extends StatefulWidget {
 class _DonateRouter extends CustState<DonateRouter> {
   @override
   Widget doBuild(BuildContext context) {
-    var s = S.of(context);
-
+    
     var themeData = Theme.of(context);
     var cardColor = themeData.cardColor;
     var mainColor = themeData.primaryColor;

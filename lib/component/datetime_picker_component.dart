@@ -72,8 +72,7 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
     var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
     var mainColor = themeData.appBarTheme.backgroundColor;
     var bigTextSize = themeData.textTheme.bodyLarge!.fontSize;
-    var s = S.of(context);
-
+    
     var now = DateTime.now();
     var calendarFirstDay = now.add(Duration(days: -3650));
     var calendarLastDay = now.add(Duration(days: 3650));

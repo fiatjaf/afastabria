@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../consts/base.dart';
-import '../../generated/l10n.dart';
 import '../../util/router_util.dart';
 
 class TextInputDialogInnerComponent extends StatefulWidget {
@@ -56,21 +55,21 @@ class _TextInputDialogInnerComponent
       ),
     ));
 
-    list.add(Container(
-      child: TextField(
+    list.add(
+      TextField(
         controller: controller,
         minLines: 4,
         maxLines: 4,
         autofocus: true,
         decoration: InputDecoration(
           hintText: widget.hintText,
-          border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
+          border: const OutlineInputBorder(borderSide: BorderSide(width: 1)),
         ),
       ),
-    ));
+    );
 
     list.add(Container(
-      margin: EdgeInsets.only(top: Base.BASE_PADDING),
+      margin: const EdgeInsets.only(top: Base.BASE_PADDING),
       child: Ink(
         decoration: BoxDecoration(color: mainColor),
         child: InkWell(
@@ -80,8 +79,8 @@ class _TextInputDialogInnerComponent
             color: mainColor,
             height: 40,
             alignment: Alignment.center,
-            child: Text(
-              S.of(context).Comfirm,
+            child: const Text(
+              "Confirm",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -93,7 +92,7 @@ class _TextInputDialogInnerComponent
     ));
 
     var main = Container(
-      padding: EdgeInsets.all(Base.BASE_PADDING),
+      padding: const EdgeInsets.all(Base.BASE_PADDING),
       decoration: BoxDecoration(
         color: cardColor,
       ),

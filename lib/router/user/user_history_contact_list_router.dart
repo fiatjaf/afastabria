@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/main.dart';
 
 import '../../client/nip02/cust_contact_list.dart';
-import '../../generated/l10n.dart';
 import '../../util/router_util.dart';
 import 'user_contact_list_component.dart';
 
@@ -19,8 +18,7 @@ class _UserHistoryContactListRouter
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-
+    
     if (contactList == null) {
       var arg = RouterUtil.routerArgs(context);
       if (arg != null) {

@@ -18,7 +18,6 @@ import 'package:nostrmo/util/platform_util.dart';
 import 'package:nostrmo/util/string_util.dart';
 import 'package:provider/provider.dart';
 
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../provider/index_provider.dart';
 import '../../provider/setting_provider.dart';
@@ -126,8 +125,7 @@ class _IndexRouter extends CustState<IndexRouter>
   @override
   Widget doBuild(BuildContext context) {
     mediaDataCache.update(context);
-    var s = S.of(context);
-
+    
     var _settingProvider = Provider.of<SettingProvider>(context);
     if (nostr == null) {
       return LoginRouter();

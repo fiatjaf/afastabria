@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../data/metadata.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../util/string_util.dart';
 import '../../util/when_stop_function.dart';
@@ -58,8 +57,7 @@ class _SaerchMentionComponent extends State<SaerchMentionComponent>
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
     var backgroundColor = themeData.scaffoldBackgroundColor;
-    var s = S.of(context);
-    List<Widget> list = [];
+        List<Widget> list = [];
 
     Widget? suffixWidget;
     if (showSuffix) {

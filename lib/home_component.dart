@@ -6,8 +6,6 @@ import 'package:nostrmo/provider/webview_provider.dart';
 import 'package:nostrmo/util/platform_util.dart';
 import 'package:provider/provider.dart';
 
-import 'generated/l10n.dart';
-
 class HomeComponent extends StatefulWidget {
   Widget child;
 

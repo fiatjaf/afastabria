@@ -16,7 +16,6 @@ import 'package:provider/provider.dart';
 
 import '../../component/user/metadata_component.dart';
 import '../../data/metadata.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../provider/metadata_provider.dart';
 import '../edit/editor_router.dart';
@@ -39,8 +38,7 @@ class _IndexDrawerContnetComponnent
   Widget build(BuildContext context) {
     var _indexProvider = Provider.of<IndexProvider>(context);
 
-    var s = S.of(context);
-    var pubkey = nostr!.publicKey;
+        var pubkey = nostr!.publicKey;
     var paddingTop = mediaDataCache.padding.top;
     var themeData = Theme.of(context);
     var mainColor = themeData.primaryColor;

@@ -20,7 +20,6 @@ import '../../consts/base.dart';
 import '../../consts/base_consts.dart';
 import '../../consts/router_path.dart';
 import '../../data/metadata.dart';
-import '../../generated/l10n.dart';
 import '../../main.dart';
 import '../../provider/metadata_provider.dart';
 import '../../provider/setting_provider.dart';
@@ -113,8 +112,7 @@ class _EventMainComponent extends State<EventMainComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-    var _settingProvider = Provider.of<SettingProvider>(context);
+        var _settingProvider = Provider.of<SettingProvider>(context);
     if (eventRelation.id != widget.event.id) {
       // change when thead root load lazy
       eventRelation = EventRelation.fromEvent(widget.event);
@@ -627,8 +625,7 @@ class _EventMainComponent extends State<EventMainComponent> {
   }
 
   Widget buildWarningWidget(double largeTextSize, Color mainColor) {
-    var s = S.of(context);
-
+    
     return Container(
       margin:
           EdgeInsets.only(bottom: Base.BASE_PADDING, top: Base.BASE_PADDING),

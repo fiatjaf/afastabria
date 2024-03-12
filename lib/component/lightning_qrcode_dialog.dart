@@ -43,8 +43,7 @@ class _LightningQrcodeDialog extends State<LightningQrcodeDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var s = S.of(context);
-    var themeData = Theme.of(context);
+        var themeData = Theme.of(context);
     Color cardColor = themeData.cardColor;
     var hintColor = themeData.hintColor;
 
