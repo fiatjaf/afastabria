@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/component/enum_selector_component.dart';
 import 'package:nostrmo/consts/base_consts.dart';
 import 'package:nostrmo/provider/contact_list_provider.dart';
-import 'package:nostrmo/provider/relay_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../client/event.dart';
@@ -78,8 +77,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
       doQuery();
     }
     pubkey = widget.pubkey;
-
-    isLocal = widget.pubkey == nostr!.publicKey;
+    isLocal = widget.pubkey == nostr.publicKey;
 
     List<Widget> list = [];
 
@@ -91,7 +89,6 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
           name: "Following",
           onTap: onFollowingTap,
           onLongPressStart: onLongPressStart,
-          onLongPressEnd: onLongPressEnd,
         );
       }, selector: (context, provider) {
         return provider.total();
@@ -105,12 +102,12 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     }
 
     if (isLocal) {
-      list.add(Selector<RelayProvider, int>(builder: (context, num, child) {
-        return UserStatisticsItemComponent(
-            num: num, name: "Relays", onTap: onRelaysTap);
-      }, selector: (context, provider) {
-        return provider.total();
-      }));
+      // list.add(Selector<RelayProvider, int>(builder: (context, num, child) {
+      //   return UserStatisticsItemComponent(
+      //       num: num, name: "Relays", onTap: onRelaysTap);
+      // }, selector: (context, provider) {
+      //   return provider.total();
+      // }));
     } else {
       if (relaysTags != null) {
         relaysNum = relaysTags!.length;
@@ -135,9 +132,9 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
 
     if (isLocal) {
       list.add(
-          Selector<ContactListProvider, int>(builder: (context, num, child) {
+          Selector<ContactListProvider, int>(builder: (context, num_, child) {
         return UserStatisticsItemComponent(
-          num: num,
+          num: num_,
           name: "Followed Tags",
           onTap: onFollowedTagsTap,
         );
@@ -156,9 +153,9 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
 
     if (isLocal) {
       list.add(
-          Selector<ContactListProvider, int>(builder: (context, num, child) {
+          Selector<ContactListProvider, int>(builder: (context, num_, child) {
         return UserStatisticsItemComponent(
-          num: num,
+          num: num_,
           name: "Followed Communities",
           onTap: onFollowedCommunitiesTap,
         );
@@ -187,49 +184,19 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     );
   }
 
-  String? fetchLocalContactsId;
-
   EventMemBox? localContactBox;
 
   void onLongPressStart(LongPressStartDetails d) {
-    if (fetchLocalContactsId == null) {
-      fetchLocalContactsId = StringUtil.rndNameStr(16);
-      localContactBox = EventMemBox(sortAfterAdd: false);
-      var filter = Filter(
-          authors: [widget.pubkey], kinds: [kind.EventKind.CONTACT_LIST]);
-      nostr!.query([filter.toJson()], (event) {
-        localContactBox!.add(event);
-      }, id: fetchLocalContactsId);
-      BotToast.showText(text: "Begin to load contact history");
-    }
-  }
-
-  Future<void> onLongPressEnd(LongPressEndDetails d) async {
-    if (fetchLocalContactsId != null) {
-      nostr!.unsubscribe(fetchLocalContactsId!);
-      fetchLocalContactsId = null;
-
-      var format = FixedDateTimeFormatter("YYYY-MM-DD hh:mm:ss");
-
-      localContactBox!.sort();
-      var list = localContactBox!.all();
-
-      List<EnumObj> enumList = [];
-      for (var event in list) {
-        var contactList = CustContactList.fromJson(event.tags);
-        var dt = DateTime.fromMillisecondsSinceEpoch(event.createdAt * 1000);
-        enumList.add(
-            EnumObj(event, "${format.encode(dt)} (${contactList.total()})"));
-      }
-
-      var result = await EnumSelectorComponent.show(context, enumList);
-      if (result != null) {
-        var event = result.value as Event;
-        var contactList = CustContactList.fromJson(event.tags);
-        RouterUtil.router(
-            context, RouterPath.USER_HISTORY_CONTACT_LIST, contactList);
-      }
-    }
+    localContactBox = EventMemBox(sortAfterAdd: false);
+    nostr.pool
+        .querySingle(
+            nostr.CONTACT_RELAYS,
+            Filter(
+                authors: [widget.pubkey], kinds: [kind.EventKind.CONTACT_LIST]))
+        .then((event) {
+      localContactBox!.add(event);
+    });
+    BotToast.showText(text: "Begin to load contact history");
   }
 
   String queryId = "";
@@ -415,15 +382,13 @@ class UserStatisticsItemComponent extends StatelessWidget {
 
   Function(LongPressStartDetails)? onLongPressStart;
 
-  Function(LongPressEndDetails)? onLongPressEnd;
-
-  UserStatisticsItemComponent({super.key, 
+  UserStatisticsItemComponent({
+    super.key,
     required this.num,
     required this.name,
     required this.onTap,
     this.formatNum = false,
     this.onLongPressStart,
-    this.onLongPressEnd,
   });
 
   @override
@@ -468,7 +433,6 @@ class UserStatisticsItemComponent extends StatelessWidget {
         onTap();
       },
       onLongPressStart: onLongPressStart,
-      onLongPressEnd: onLongPressEnd,
       child: Container(
         margin: const EdgeInsets.only(left: Base.BASE_PADDING),
         child: Row(children: list),

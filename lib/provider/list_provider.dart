@@ -11,85 +11,163 @@ import 'package:nostrmo/util/string_util.dart';
 import '../client/event_kind.dart';
 import '../client/nip04/nip04.dart';
 import '../client/nip51/bookmarks.dart';
-import '../client/nostr.dart';
 import '../data/custom_emoji.dart';
 
 /// Standard list provider.
 /// These list usually publish by user himself and the provider will hold the newest one.
-class ListProvider extends ChangeNotifier {
-  // holder, hold the events.
-  // key - “kind:pubkey”, value - event
-  final Map<String, Event> _holder = {};
+abstract class ListProvider extends ChangeNotifier {
+  final int kind;
 
-  void load(
-    String pubkey,
-    List<int> kinds, {
-    Nostr? targetNostr,
-    bool initQuery = false,
-  }) {
-    targetNostr ??= nostr;
+  ListProvider(this.kind);
 
-    Filter filter = Filter();
-    filter.kinds = kinds;
-    filter.authors = [pubkey];
+  Event? latest;
 
-    if (initQuery) {
-      targetNostr!.addInitQuery([filter.toJson()], onEvent);
-    } else {
-      targetNostr!.query([filter.toJson()], onEvent);
-    }
-  }
-
-  void onEvent(Event event) {
-    var key = "${event.kind}:${event.pubKey}";
-
-    var oldEvent = _holder[key];
-    if (oldEvent == null) {
-      _holder[key] = event;
-      _handleExtraAndNotify(event);
-    } else {
-      if (event.createdAt > oldEvent.createdAt) {
-        _holder[key] = event;
-        _handleExtraAndNotify(event);
+  void init() {
+    nostr.pool.subscribeMany(nostr.relayList.write, [
+      Filter(
+        kinds: [this.kind],
+        authors: [nostr.publicKey],
+      )
+    ], onEvent: (Event evt) {
+      if (this.latest == null || evt.createdAt > this.latest!.createdAt) {
+        this.latest = evt;
+        this.processEvent();
+        this.notifyListeners();
       }
+    });
+  }
+
+  void processEvent();
+
+  void clear() {
+    latest = null;
+  }
+}
+
+class BookmarkProvider extends ListProvider {
+  BookmarkProvider() : super(EventKind.BOOKMARKS_LIST);
+
+  Bookmarks bookmarks = Bookmarks();
+
+  @override
+  processEvent() {
+    if (this.latest != null) {
+      this.parseBookmarks(this.latest!);
     }
   }
 
-  // List<String> testAIds = [
-  //   "30030:2d5b6404df532de082d9e77f7f4257a6f43fb79bb9de8dd3ac7df5e6d4b500b0:awayuki",
-  //   "30030:5b75fd5f49e78191a45e1c9438644fe5d065ea98920c63e9eef86e151e99b809:Party",
-  //   "30030:50e8ee3108cdfde4adefe93093cd38bd8692f59f250d3ee4294ef46dc102f370:Suntoshi Emoji",
-  //   "30030:03742c205cb6c8d86031c93bc4a9b3d18484c32c86563fc0e218910a2df9aa5d:Notoshi",
-  //   "30030:7fa56f5d6962ab1e3cd424e758c3002b8665f7b0d8dcee9fe9e288d7751ac194:twitch",
-  //   "30030:6e75f7972397ca3295e0f4ca0fbc6eb9cc79be85bafdd56bd378220ca8eee74e:TheGrinder #ZapStream",
-  // ];
+  void parseBookmarks(Event evt) {
+    var bookmarks = Bookmarks();
+    var content = evt.content;
+    if (StringUtil.isNotBlank(content)) {
+      var agreement = NIP04.getAgreement(nostr.privateKey);
+      var plainContent = NIP04.decrypt(content, agreement, nostr.publicKey);
 
-  void _handleExtraAndNotify(Event event) {
-    if (event.kind == EventKind.EMOJIS_LIST) {
-      // This is a emoji list, try to handle some listSet
-      for (var tag in event.tags) {
-        if (tag.length > 1) {
-          var k = tag[0];
-          var v = tag[1];
-          if (k == "a") {
-            listSetProvider.getByAId(v);
+      var jsonObj = jsonDecode(plainContent);
+      if (jsonObj is List) {
+        List<BookmarkItem> privateItems = [];
+        for (var jsonObjItem in jsonObj) {
+          if (jsonObjItem is List && jsonObjItem.length > 1) {
+            var key = jsonObjItem[0];
+            var value = jsonObjItem[1];
+            if (key is String && value is String) {
+              privateItems.add(BookmarkItem(key: key, value: value));
+            }
           }
         }
+
+        bookmarks.privateItems = privateItems;
       }
-    } else if (event.kind == EventKind.BOOKMARKS_LIST) {
-      // due to bookmarks info will use many times, so it should parse when it was receive.
-      _bookmarks = parseBookmarks();
     }
+
+    List<BookmarkItem> publicItems = [];
+    for (var jsonObjItem in evt.tags) {
+      if (jsonObjItem.length > 1) {
+        var key = jsonObjItem[0];
+        var value = jsonObjItem[1];
+        publicItems.add(BookmarkItem(key: key, value: value));
+      }
+    }
+    bookmarks.publicItems = publicItems;
+    this.bookmarks = bookmarks;
+  }
+
+  void addPrivateBookmark(BookmarkItem bookmarkItem) {
+    this.bookmarks.privateItems.add(bookmarkItem);
+    saveBookmarks();
+  }
+
+  void addPublicBookmark(BookmarkItem bookmarkItem) {
+    this.bookmarks.publicItems.add(bookmarkItem);
+    saveBookmarks();
+  }
+
+  void removePrivateBookmark(String value) {
+    this.bookmarks.privateItems.removeWhere((items) {
+      return items.value == value;
+    });
+    saveBookmarks();
+  }
+
+  void removePublicBookmark(String value) {
+    this.bookmarks.publicItems.removeWhere((items) {
+      return items.value == value;
+    });
+    saveBookmarks();
+  }
+
+  void saveBookmarks() {
+    var content = "";
+    if (this.bookmarks.privateItems.isNotEmpty) {
+      List<List> list = [];
+      for (var item in this.bookmarks.privateItems) {
+        list.add(item.toJson());
+      }
+
+      var agreement = NIP04.getAgreement(nostr.privateKey);
+      var jsonText = jsonEncode(list);
+      content = NIP04.encrypt(jsonText, agreement, nostr.publicKey);
+    }
+
+    List<List<String>> tags = [];
+    for (var item in this.bookmarks.publicItems) {
+      tags.add(item.toJson());
+    }
+
+    var resultEvent = nostr.sendList(EventKind.BOOKMARKS_LIST, tags, content);
+    this.latest = resultEvent;
+
     notifyListeners();
   }
 
-  Event? getEmojiEvent() {
-    return _holder[emojiKey];
+  bool checkPublicBookmark(BookmarkItem item) {
+    for (var bi in bookmarks.publicItems) {
+      if (bi.value == item.value) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
-  String get emojiKey {
-    return "${EventKind.EMOJIS_LIST}:${nostr!.publicKey}";
+  bool checkPrivateBookmark(BookmarkItem item) {
+    for (var bi in bookmarks.privateItems) {
+      if (bi.value == item.value) {
+        return true;
+      }
+    }
+
+    return false;
   }
+}
+
+class EmojiProvider extends ListProvider {
+  EmojiProvider() : super(EventKind.EMOJIS_LIST);
+
+  Bookmarks bookmarks = Bookmarks();
+
+  @override
+  processEvent() {}
 
   List<MapEntry<String, List<CustomEmoji>>> emojis(Event? emojiEvent) {
     List<MapEntry<String, List<CustomEmoji>>> result = [];
@@ -136,31 +214,6 @@ class ListProvider extends ChangeNotifier {
       }
     }
     result.insert(0, MapEntry("Custom", list));
-    // for (var testAId in testAIds) {
-    //   var listSetEvent = listSetProvider.getByAId(testAId);
-    //   if (listSetEvent != null) {
-    //     // find the listSet
-    //     var aId = AId.fromString(testAId);
-    //     String title = "unknow";
-    //     if (aId != null) {
-    //       title = aId.title;
-    //     }
-
-    //     List<CustomEmoji> subList = [];
-    //     for (var tag in listSetEvent.tags) {
-    //       if (tag is List && tag.length > 2) {
-    //         var tagKey = tag[0];
-    //         var k = tag[1];
-    //         var v = tag[2];
-    //         if (tagKey == "emoji") {
-    //           subList.add(CustomEmoji(name: k, filepath: v));
-    //         }
-    //       }
-    //     }
-
-    //     result.add(MapEntry(title, subList));
-    //   }
-    // }
 
     return result;
   }
@@ -171,152 +224,15 @@ class ListProvider extends ChangeNotifier {
     try {
       List<List<String>> tags = [];
 
-      var emojiEvent = getEmojiEvent();
+      var emojiEvent = this.latest;
       if (emojiEvent != null) {
         tags.addAll(emojiEvent.tags);
       }
       tags.add(["emoji", emoji.name, emoji.filepath]);
-      var changedEvent =
-          Event.finalize(nostr!.privateKey, EventKind.EMOJIS_LIST, tags, "");
-      var result = nostr!.broadcast(changedEvent);
-      _holder[emojiKey] = result;
+      this.latest = nostr.sendList(EventKind.EMOJIS_LIST, tags, "");
       notifyListeners();
     } finally {
       cancelFunc.call();
     }
-  }
-
-  Bookmarks _bookmarks = Bookmarks();
-
-  Bookmarks getBookmarks() {
-    return _bookmarks;
-  }
-
-  String get bookmarksKey {
-    return "${EventKind.BOOKMARKS_LIST}:${nostr!.publicKey}";
-  }
-
-  Event? getBookmarksEvent() {
-    return _holder[bookmarksKey];
-  }
-
-  Bookmarks parseBookmarks() {
-    var bookmarks = Bookmarks();
-    var bookmarksEvent = getBookmarksEvent();
-    if (bookmarksEvent == null) {
-      return bookmarks;
-    }
-
-    var content = bookmarksEvent.content;
-    if (StringUtil.isNotBlank(content)) {
-      var agreement = NIP04.getAgreement(nostr!.privateKey);
-      var plainContent = NIP04.decrypt(content, agreement, nostr!.publicKey);
-
-      var jsonObj = jsonDecode(plainContent);
-      if (jsonObj is List) {
-        List<BookmarkItem> privateItems = [];
-        for (var jsonObjItem in jsonObj) {
-          if (jsonObjItem is List && jsonObjItem.length > 1) {
-            var key = jsonObjItem[0];
-            var value = jsonObjItem[1];
-            if (key is String && value is String) {
-              privateItems.add(BookmarkItem(key: key, value: value));
-            }
-          }
-        }
-
-        bookmarks.privateItems = privateItems;
-      }
-    }
-
-    List<BookmarkItem> publicItems = [];
-    for (var jsonObjItem in bookmarksEvent.tags) {
-      if (jsonObjItem.length > 1) {
-        var key = jsonObjItem[0];
-        var value = jsonObjItem[1];
-        publicItems.add(BookmarkItem(key: key, value: value));
-      }
-    }
-    bookmarks.publicItems = publicItems;
-
-    return bookmarks;
-  }
-
-  void addPrivateBookmark(BookmarkItem bookmarkItem) {
-    var bookmarks = getBookmarks();
-    bookmarks.privateItems.add(bookmarkItem);
-    saveBookmarks(bookmarks);
-  }
-
-  void addPublicBookmark(BookmarkItem bookmarkItem) {
-    var bookmarks = getBookmarks();
-    bookmarks.publicItems.add(bookmarkItem);
-    saveBookmarks(bookmarks);
-  }
-
-  void removePrivateBookmark(String value) {
-    var bookmarks = getBookmarks();
-    bookmarks.privateItems.removeWhere((items) {
-      return items.value == value;
-    });
-    saveBookmarks(bookmarks);
-  }
-
-  void removePublicBookmark(String value) {
-    var bookmarks = getBookmarks();
-    bookmarks.publicItems.removeWhere((items) {
-      return items.value == value;
-    });
-    saveBookmarks(bookmarks);
-  }
-
-  void saveBookmarks(Bookmarks bookmarks) {
-    var content = "";
-    if (bookmarks.privateItems.isNotEmpty) {
-      List<List> list = [];
-      for (var item in bookmarks.privateItems) {
-        list.add(item.toJson());
-      }
-
-      var agreement = NIP04.getAgreement(nostr!.privateKey);
-      var jsonText = jsonEncode(list);
-      content = NIP04.encrypt(jsonText, agreement, nostr!.publicKey);
-    }
-
-    List<List<String>> tags = [];
-    for (var item in bookmarks.publicItems) {
-      tags.add(item.toJson());
-    }
-
-    var event = Event.finalize(
-        nostr!.privateKey, EventKind.BOOKMARKS_LIST, tags, content);
-    var resultEvent = nostr!.broadcast(event);
-    _holder[bookmarksKey] = resultEvent;
-
-    notifyListeners();
-  }
-
-  bool checkPublicBookmark(BookmarkItem item) {
-    for (var bi in _bookmarks.publicItems) {
-      if (bi.value == item.value) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  bool checkPrivateBookmark(BookmarkItem item) {
-    for (var bi in _bookmarks.privateItems) {
-      if (bi.value == item.value) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  void clear() {
-    _holder.clear();
   }
 }

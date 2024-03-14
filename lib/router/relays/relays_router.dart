@@ -1,15 +1,12 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:nostrmo/util/when_stop_function.dart';
-import 'package:nostrmo/client/relay/relay.dart';
 
 import '../../component/cust_state.dart';
 import '../../consts/base.dart';
 import '../../util/router_util.dart';
 import '../../util/string_util.dart';
-import 'relays_item_component.dart';
 
 class RelaysRouter extends StatefulWidget {
   const RelaysRouter({super.key});
@@ -24,9 +21,6 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
   TextEditingController controller = TextEditingController();
   @override
   Widget doBuild(BuildContext context) {
-    var relayProvider = Provider.of<RelayProvider>(context);
-    var relayAddrs = relayProvider.relayAddrs;
-    var relayStatusMap = relayProvider.relayStatusMap;
     var themeData = Theme.of(context);
     // var color = themeData.textTheme.bodyLarge!.color;
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
@@ -43,7 +37,7 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
           ),
         ),
         title: Text(
-          "Relays",
+          "[relays]",
           style: TextStyle(
             fontSize: titleFontSize,
             fontWeight: FontWeight.bold,
@@ -56,19 +50,20 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
             margin: const EdgeInsets.only(
               top: Base.BASE_PADDING,
             ),
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                var addr = relayAddrs[index];
-                var relayStatus = relayStatusMap[addr];
-                relayStatus ??= RelayStatus(addr);
+            child: const Text("[relay status should go here]"),
+            // child: ListView.builder(
+            //   itemBuilder: (context, index) {
+            //     var addr = relayAddrs[index];
+            //     var relayStatus = relayStatusMap[addr];
+            //     relayStatus ??= RelayStatus(addr);
 
-                return RelaysItemComponent(
-                  addr: addr,
-                  relayStatus: relayStatus,
-                );
-              },
-              itemCount: relayAddrs.length,
-            ),
+            //     return RelaysItemComponent(
+            //       addr: addr,
+            //       relayStatus: relayStatus,
+            //     );
+            //   },
+            //   itemCount: relayAddrs.length,
+            // ),
           ),
         ),
         TextField(
@@ -94,7 +89,7 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
       return;
     }
 
-    relayProvider.addRelay(addr);
+    // relayProvider.addRelay(addr);
     controller.clear();
     FocusScope.of(context).unfocus();
   }

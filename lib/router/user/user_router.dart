@@ -111,7 +111,7 @@ class _UserRouter extends CustState<UserRouter>
     showAppbarBGHeight = showTitleHeight + 100;
 
     var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
+    // var cardColor = themeData.cardColor;
 
     return Selector<MetadataProvider, Metadata?>(
       shouldRebuild: (previous, next) {

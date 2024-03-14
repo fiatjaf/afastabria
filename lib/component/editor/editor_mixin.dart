@@ -740,9 +740,9 @@ mixin EditorMixin {
       height: 260,
       padding: const EdgeInsets.only(left: Base.BASE_PADDING_HALF),
       width: double.infinity,
-      child: Selector<ListProvider, Event?>(
+      child: Selector<EmojiProvider, Event?>(
         builder: (context, emojiEvent, child) {
-          var emojiLists = listProvider.emojis(emojiEvent);
+          var emojiLists = emojiProvider.emojis(emojiEvent);
 
           List<Widget> tabBarList = [];
           List<Widget> tabBarViewList = [];

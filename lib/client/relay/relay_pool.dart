@@ -1,9 +1,8 @@
-import 'dart:developer';
+import 'dart:async';
 import 'dart:js_interop_unsafe';
 
 import 'package:nostrmo/consts/relay_mode.dart';
 import 'package:nostrmo/util/platform_util.dart';
-import 'package:nostrmo/util/string_util.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/client/filter.dart';
 import 'package:nostrmo/client/event.dart';
@@ -20,6 +19,16 @@ class RelayPool {
   RelayPool();
 
   Relay ensureRelay(String url) {
+    url = RelayUtil.normalizeURL(url);
+    var relay = this._relays[url];
+    if (relay != null) {
+      if (relay.relayStatus.connected == ConnState.UN_CONNECT) {
+        this._relays.delete(url);
+      } else {
+        return relay;
+      }
+    }
+
     Event mae(List<List<String>> tags) {
       return Event.finalize(
           nostr.privateKey, EventKind.AUTHENTICATION, tags, "");
@@ -33,20 +42,24 @@ class RelayPool {
 
     if (PlatformUtil.isWeb()) {
       // dart:isolate is not supported on dart4web
-      return RelayBase(url, relayStatus, assumeValid: true, makeAuthEvent: mae);
+      relay =
+          RelayBase(url, relayStatus, assumeValid: true, makeAuthEvent: mae);
     } else {
       if (settingProvider.relayMode == RelayMode.BASE_MODE) {
-        return RelayBase(url, relayStatus,
-            assumeValid: true, makeAuthEvent: mae);
+        relay =
+            RelayBase(url, relayStatus, assumeValid: true, makeAuthEvent: mae);
       } else {
-        return RelayIsolate(url, relayStatus,
+        relay = RelayIsolate(url, relayStatus,
             assumeValid: true, makeAuthEvent: mae);
       }
     }
+
+    this._relays[url] = relay;
+    return relay;
   }
 
   ManySubscriptionHandler subscribeMany(
-    List<String> relays,
+    Iterable<String> relays,
     List<Filter> filters, {
     Function(Event)? onEvent,
     Function()? onEose,
@@ -56,6 +69,7 @@ class RelayPool {
     onEvent ??= (Event evt) {
       print("received unhandled event $evt");
     };
+
     relays = relays.map((String url) => RelayUtil.normalizeURL(url)).toList();
     var eosesMissing = relays.toSet();
     var closesMissing = relays.toSet();
@@ -102,65 +116,61 @@ class RelayPool {
     }));
   }
 
-  // different relay use different filter
-  String queryByFilters(
-      Map<String, List<Filter>> filtersMap, Function(Event) onEvent,
-      {String? id, Function? onComplete}) {
-    if (filtersMap.isEmpty) {
-      throw ArgumentError("No filters given", "filters");
-    }
-    id ??= StringUtil.rndNameStr(16);
-    if (onComplete != null) {
-      _queryCompleteCallbacks[id] = onComplete;
-    }
-    var entries = filtersMap.entries;
-    for (var entry in entries) {
-      var url = entry.key;
-      var filters = entry.value;
+  ManySubscriptionHandler subscribeManyEose(
+    Iterable<String> relays,
+    List<Filter> filters, {
+    Function(Event)? onEvent,
+    Function()? onClose,
+    String? id,
+  }) {
+    ManySubscriptionHandler? closeHandle;
+    closeHandle =
+        this.subscribeMany(relays, filters, onEvent: onEvent, onEose: () {
+      closeHandle!.close();
+    }, onClose: onClose, id: id);
+    return closeHandle;
+  }
 
-      var relay = _relays[url];
-      if (relay != null) {
-        Subscription subscription = Subscription(filters, onEvent, id);
-        relayDoQuery(relay, subscription);
+  Future<Set<Event>> querySync(Iterable<String> relays, Filter filter) async {
+    final completer = Completer<Set<Event>>();
+    final results = <Event>{};
+    this.subscribeManyEose(relays, [filter], onEvent: (Event evt) {
+      results.add(evt);
+    }, onClose: () {
+      completer.complete(results);
+    });
+    return completer.future;
+  }
+
+  Future<Event> querySingle(Iterable<String> relays, Filter filter) async {
+    final completer = Completer<Event>();
+    final results = <Event>{};
+    this.subscribeManyEose(relays, [filter], onEvent: (Event evt) {
+      results.add(evt);
+    }, onClose: () {
+      if (results.length > 0) {
+        completer.complete(
+            results.reduce((a, b) => a.createdAt > b.createdAt ? a : b));
+      } else {
+        completer.completeError(
+            FormatException("no events found for $filter on $relays"));
       }
-    }
-    return id;
+    });
+    return completer.future;
   }
 
-  /// query should be a one time filter search.
-  /// like: query metadata, query old event.
-  /// query info will hold in relay and close in relay when EOSE message be received.
-  String query(List<Map<String, dynamic>> filters, Function(Event) onEvent,
-      {String? id, Function? onComplete}) {
-    if (filters.isEmpty) {
-      throw ArgumentError("No filters given", "filters");
-    }
-    Subscription subscription = Subscription(filters, onEvent, id);
-    if (onComplete != null) {
-      _queryCompleteCallbacks[subscription.id] = onComplete;
-    }
-    for (Relay relay in _relays.values) {
-      relayDoQuery(relay, subscription);
-    }
-    return subscription.id;
-  }
-
-  bool send(List<String> relays, List<dynamic> message) {
-    bool hadSubmitSend = false;
-
-    for (Relay relay in _relays.values) {
+  Future<ManyPublishResult> publish(
+      Iterable<String> relays, Event event) async {
+    var oks = await Future.wait(relays.map((String url) async {
+      var relay = this.ensureRelay(url);
       try {
-        var result = relay.send(message);
-        if (result) {
-          hadSubmitSend = true;
-        }
+        var ok = await relay.publish(event);
+        return ok;
       } catch (err) {
-        log(err.toString());
-        relay.relayStatus.error++;
+        return OK(false, err.toString());
       }
-    }
-
-    return hadSubmitSend;
+    }));
+    return ManyPublishResult(oks);
   }
 }
 
@@ -171,7 +181,27 @@ class ManySubscriptionHandler {
 
   void close() {
     for (var sub in this._subscriptions) {
-      sub.close();
+      sub.close("close initiated by client");
     }
+  }
+}
+
+class ManyPublishResult {
+  final List<OK> oks;
+
+  ManyPublishResult(this.oks);
+
+  bool get success {
+    return this.oks.any((OK ok) => ok.ok);
+  }
+
+  bool get failure {
+    return !this.success;
+  }
+
+  String get successCount {
+    var total = this.oks.length;
+    var successes = this.oks.where((OK ok) => ok.ok).length;
+    return "$successes/$total";
   }
 }

@@ -1,4 +1,3 @@
-
 import '../client/event.dart';
 import '../client/relay/relay.dart';
 import '../util/find_event_interface.dart';
@@ -107,8 +106,8 @@ class EventMemBox implements FindEventInterface {
     var oldEvent = _idMap[event.id];
     if (oldEvent != null) {
       if (event.sources.isNotEmpty &&
-          !oldEvent.sources.contains(event.sources[0])) {
-        oldEvent.sources.add(event.sources[0]);
+          !oldEvent.sources.contains(event.sources.first)) {
+        oldEvent.sources.add(event.sources.first);
       }
       return false;
     }
@@ -131,8 +130,8 @@ class EventMemBox implements FindEventInterface {
         added = true;
       } else {
         if (event.sources.isNotEmpty &&
-            !oldEvent.sources.contains(event.sources[0])) {
-          oldEvent.sources.add(event.sources[0]);
+            !oldEvent.sources.contains(event.sources.first)) {
+          oldEvent.sources.add(event.sources.first);
         }
       }
     }

@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:nostrmo/component/editor/text_input_dialog.dart';
 import 'package:nostrmo/component/name_component.dart';
 import 'package:nostrmo/component/point_component.dart';
@@ -9,7 +11,7 @@ import 'package:nostrmo/data/metadata.dart';
 import 'package:nostrmo/provider/metadata_provider.dart';
 import 'package:nostrmo/provider/setting_provider.dart';
 import 'package:nostrmo/util/router_util.dart';
-import 'package:provider/provider.dart';
+import 'package:nostrmo/client/nostr.dart';
 
 import '../../client/client_utils/keys.dart';
 import '../../client/nip19/nip19.dart';
@@ -127,7 +129,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
         if (oldIndex != newIndex) {
           clearCurrentMemInfo();
           doLogin();
-          // ignore: invalid_use_of_protected_member id_use_of_visible_for_testing_member
+          // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
           settingProvider.notifyListeners();
           RouterUtil.back(context);
         }
@@ -154,14 +156,12 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
   }
 
   void doLogin() {
-    nostr = relayProvider.genNostr(settingProvider.privateKey!);
+    nostr = Nostr(settingProvider.privateKey!);
   }
 
   void onLoginTap(int index) {
     if (settingProvider.privateKeyIndex != index) {
       clearCurrentMemInfo();
-      nostr!.close();
-      nostr = null;
 
       settingProvider.privateKeyIndex = index;
 
@@ -169,6 +169,8 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
       if (settingProvider.privateKey != null) {
         // use next privateKey to login
         doLogin();
+
+        // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
         settingProvider.notifyListeners();
         RouterUtil.back(context);
       }
@@ -182,16 +184,15 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
 
     if (oldIndex == index) {
       clearCurrentMemInfo();
-      nostr!.close();
-      nostr = null;
 
       // signOut complete
       if (settingProvider.privateKey != null) {
         // use next privateKey to login
-        nostr = relayProvider.genNostr(settingProvider.privateKey!);
+        nostr = Nostr(settingProvider.privateKey!);
       }
     }
 
+    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     settingProvider.notifyListeners();
     if (routerBack && context != null) {
       RouterUtil.back(context);
@@ -209,8 +210,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
 
     eventReactionsProvider.clear();
     linkPreviewDataProvider.clear();
-    relayProvider.clear();
-    listProvider.clear();
+    bookmarkProvider.clear();
   }
 
   static void clearLocalData(int index) {

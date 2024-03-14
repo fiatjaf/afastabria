@@ -73,7 +73,7 @@ abstract class Relay {
     final sub = this.subscribe(filters,
         id: id,
         onEvent: onEvent,
-        onEose: () => internalSub!.close(),
+        onEose: () => internalSub!.close("automatically closing on eose"),
         onClose: onClose);
     internalSub = sub;
     return sub;
@@ -94,6 +94,12 @@ abstract class Relay {
       switch (message[0]) {
         case 'OK':
           final id = message[1] as String;
+
+          nostr.eventIndex.update(id, (Event evt) {
+            evt.sources.add(this.url);
+            return evt;
+          });
+
           final completer = this._published[id];
           if (completer != null) {
             this._published.delete(id);
@@ -137,7 +143,7 @@ abstract class Relay {
           final subId = message[1] as String;
           var sub = this._subscriptions[subId];
           if (sub != null) {
-            sub.onEose();
+            sub.eose();
           }
           break;
         case 'NOTICE':
@@ -147,11 +153,12 @@ abstract class Relay {
           final subId = message[1] as String;
           var sub = this._subscriptions[subId];
           if (sub != null) {
-            sub.close();
             final reason = message[2] as String;
             if (reason.startsWith("auth-required: ") &&
                 this.challenge != null &&
-                this.makeAuthEvent != null) {
+                this.makeAuthEvent != null &&
+                sub.hasAuthed == false) {
+              // relay is requesting auth for this subscription, so perform auth and try again
               this.send([
                 "AUTH",
                 this
@@ -161,6 +168,12 @@ abstract class Relay {
                     ])
                     .toJson()
               ]);
+              sub.hasAuthed =
+                  true; // mark this so we don't auth infinite times in case the relay is buggy
+              sub.fire(); // try again
+            } else {
+              // nothing to do, so call close()
+              sub.close(reason);
             }
           }
           break;
@@ -247,6 +260,9 @@ class Subscription {
   final Function(String) onClose;
   final bool Function(String?)? intercept;
 
+  bool hasEosed = false;
+  bool hasAuthed = false;
+
   Subscription(this._relay, this.id, this.filters, this.onEvent, this.onEose,
       this.onClose, this.intercept);
 
@@ -258,8 +274,17 @@ class Subscription {
     this._relay.send(json);
   }
 
-  void close() {
+  void eose() {
+    if (!this.hasEosed) {
+      this.onEose();
+      this.hasEosed = true;
+    }
+  }
+
+  void close(String reason) {
     this._relay.send(["CLOSE", this.id]);
+    this.eose();
+    this.onClose(reason);
   }
 }
 

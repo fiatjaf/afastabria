@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/client/relay/relay.dart';
-import 'package:provider/provider.dart';
+
+import 'package:flutter/material.dart';
 
 import '../../client/relay/relay_metadata.dart';
 import '../../consts/base.dart';
@@ -68,7 +68,7 @@ class _UserRelayRouter extends State<UserRelayRouter> {
         margin: const EdgeInsets.only(
           top: Base.BASE_PADDING,
         ),
-        child: const Text("[relay status should go here]");
+        child: const Text("[relay status should go here]"),
         // child: ListView.builder(
         //   itemBuilder: (context, index) {
         //     var relayMetadata = relays![index];
@@ -109,7 +109,7 @@ class RelayMetadataComponent extends StatelessWidget {
     if (addAble) {
       rightBtn = GestureDetector(
         onTap: () {
-          relayProvider.addRelay(relayMetadata.addr);
+          nostr.addRelay(relayMetadata.addr);
         },
         child: const Icon(
           Icons.add,

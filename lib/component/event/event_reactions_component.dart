@@ -261,7 +261,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                       child: Text("Share", style: popFontStyle),
                     ));
                     list.add(const PopupMenuDivider());
-                    if (listProvider.checkPrivateBookmark(bookmarkItem)) {
+                    if (bookmarkProvider.checkPrivateBookmark(bookmarkItem)) {
                       list.add(PopupMenuItem(
                         value: "removeFromPrivateBookmark",
                         child: Text("Remove from private bookmark",
@@ -274,7 +274,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                             style: popFontStyle),
                       ));
                     }
-                    if (listProvider.checkPublicBookmark(bookmarkItem)) {
+                    if (bookmarkProvider.checkPublicBookmark(bookmarkItem)) {
                       list.add(PopupMenuItem(
                         value: "removeFromPublicBookmark",
                         child: Text("Remove from public bookmark",
@@ -301,7 +301,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                       child: Text("Block", style: popFontStyle),
                     ));
 
-                    if (widget.event.pubKey == nostr!.publicKey) {
+                    if (widget.event.pubKey == nostr.publicKey) {
                       list.add(const PopupMenuDivider());
                       list.add(PopupMenuItem(
                         value: "delete",
@@ -364,18 +364,18 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
       onShareTap();
     } else if (value == "addToPrivateBookmark") {
       var item = BookmarkItem.getFromEventReactions(widget.eventRelation);
-      listProvider.addPrivateBookmark(item);
+      bookmarkProvider.addPrivateBookmark(item);
     } else if (value == "addToPublicBookmark") {
       var item = BookmarkItem.getFromEventReactions(widget.eventRelation);
-      listProvider.addPublicBookmark(item);
+      bookmarkProvider.addPublicBookmark(item);
     } else if (value == "removeFromPrivateBookmark") {
       var item = BookmarkItem.getFromEventReactions(widget.eventRelation);
-      listProvider.removePrivateBookmark(item.value);
+      bookmarkProvider.removePrivateBookmark(item.value);
     } else if (value == "removeFromPublicBookmark") {
       var item = BookmarkItem.getFromEventReactions(widget.eventRelation);
-      listProvider.removePublicBookmark(item.value);
-    } else if (value == "broadcase") {
-      nostr!.broadcast(widget.event);
+      bookmarkProvider.removePublicBookmark(item.value);
+    } else if (value == "broadcast") {
+      bookmarkProvider.saveBookmarks();
     } else if (value == "source") {
       List<EnumObj> list = [];
       for (var source in widget.event.sources) {
@@ -385,7 +385,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
     } else if (value == "block") {
       filterProvider.addBlock(widget.event.pubKey);
     } else if (value == "delete") {
-      nostr!.deleteEvent(widget.event.id);
+      nostr.deleteEvent(widget.event.id);
       followEventProvider.deleteEvent(widget.event.id);
       mentionMeProvider.deleteEvent(widget.event.id);
       var deleteCallback = EventDeleteCallback.of(context);
@@ -415,7 +415,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
     List<List<String>> tagsAddedWhenSend = [];
     String relayAddr = "";
     if (widget.event.sources.isNotEmpty) {
-      relayAddr = widget.event.sources[0];
+      relayAddr = widget.event.sources.first;
     }
     String directMarked = "reply";
     if (StringUtil.isBlank(er.rootId)) {
@@ -451,18 +451,8 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
 
   Future<void> onRepostTap(String value) async {
     if (value == "boost") {
-      String? relayAddr;
-      if (widget.event.sources.isNotEmpty) {
-        relayAddr = widget.event.sources[0];
-      }
-      var content = jsonEncode(widget.event.toJson());
-      nostr!
-          .sendRepost(widget.event.id, relayAddr: relayAddr, content: content);
+      nostr.sendRepost(widget.event.id);
       eventReactionsProvider.addRepost(widget.event.id);
-
-      if (settingProvider.broadcaseWhenBoost == OpenStatus.OPEN) {
-        nostr!.broadcast(widget.event);
-      }
     } else if (value == "quote") {
       var event = await EditorRouter.open(context, initEmbeds: [
         quill.CustomBlockEmbed(CustEmbedTypes.mention_event, widget.event.id)
@@ -474,14 +464,14 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
   void onLikeTap() {
     if (myLikeEvents == null || myLikeEvents!.isEmpty) {
       // like
-      var likeEvent = nostr!.sendLike(widget.event.id);
+      var likeEvent = nostr.sendLike(widget.event.id);
       if (likeEvent != null) {
         eventReactionsProvider.addLike(widget.event.id, likeEvent);
       }
     } else {
       // delete like
       for (var event in myLikeEvents!) {
-        nostr!.deleteEvent(event.id);
+        nostr.deleteEvent(event.id);
       }
       eventReactionsProvider.deleteLike(widget.event.id);
     }

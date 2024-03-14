@@ -44,11 +44,9 @@ import 'provider/list_set_provider.dart';
 import 'provider/mention_me_provider.dart';
 import 'provider/metadata_provider.dart';
 import 'provider/pc_router_fake_provider.dart';
-import 'provider/relay_provider.dart';
 import 'provider/notice_provider.dart';
 import 'provider/replaceable_event_provider.dart';
 import 'provider/setting_provider.dart';
-import 'provider/single_event_provider.dart';
 import 'provider/webview_provider.dart';
 import 'router/bookmark/bookmark_router.dart';
 import 'router/community/community_detail_router.dart';
@@ -99,7 +97,8 @@ late WebViewProvider webViewProvider;
 late CommunityApprovedProvider communityApprovedProvider;
 late CommunityInfoProvider communityInfoProvider;
 late ReplaceableEventProvider replaceableEventProvider;
-late ListProvider listProvider;
+late BookmarkProvider bookmarkProvider;
+late EmojiProvider emojiProvider;
 late ListSetProvider listSetProvider;
 late BadgeProvider badgeProvider;
 
@@ -175,7 +174,7 @@ Future<void> main() async {
   communityApprovedProvider = CommunityApprovedProvider();
   communityInfoProvider = CommunityInfoProvider();
   replaceableEventProvider = ReplaceableEventProvider();
-  listProvider = ListProvider();
+  bookmarkProvider = BookmarkProvider();
   listSetProvider = ListSetProvider();
   badgeProvider = BadgeProvider();
 
@@ -316,8 +315,11 @@ class _MyApp extends State<MyApp> {
         ListenableProvider<ReplaceableEventProvider>.value(
           value: replaceableEventProvider,
         ),
-        ListenableProvider<ListProvider>.value(
-          value: listProvider,
+        ListenableProvider<BookmarkProvider>.value(
+          value: bookmarkProvider,
+        ),
+        ListenableProvider<EmojiProvider>.value(
+          value: emojiProvider,
         ),
         ListenableProvider<ListSetProvider>.value(
           value: listSetProvider,

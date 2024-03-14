@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import '../../component/content/content_link_pre_component.dart';
 import '../../component/cust_state.dart';
 import '../../component/event/event_quote_component.dart';
-import '../../provider/setting_provider.dart';
 import '../../util/platform_util.dart';
 import '../../util/router_util.dart';
 import '../index/index_app_bar.dart';
@@ -24,7 +23,6 @@ class BookmarkRouter extends StatefulWidget {
 class _BookmarkRouter extends CustState<BookmarkRouter> {
   @override
   Widget doBuild(BuildContext context) {
-    var settingProvider = Provider.of<SettingProvider>(context);
     var themeData = Theme.of(context);
     var titleTextColor = themeData.appBarTheme.titleTextStyle!.color;
     var titleTextStyle = TextStyle(
@@ -35,19 +33,17 @@ class _BookmarkRouter extends CustState<BookmarkRouter> {
     if (PlatformUtil.isTableMode()) {
       indicatorColor = themeData.primaryColor;
     }
-    
-    var main =
-        Selector<ListProvider, Bookmarks>(builder: (context, bookmarks, child) {
-      return Container(
-        child: TabBarView(
-          children: [
-            buildBookmarkItems(bookmarks.privateItems),
-            buildBookmarkItems(bookmarks.publicItems),
-          ],
-        ),
+
+    var main = Selector<BookmarkProvider, Bookmarks>(
+        builder: (context, bookmarks, child) {
+      return TabBarView(
+        children: [
+          buildBookmarkItems(bookmarks.privateItems),
+          buildBookmarkItems(bookmarks.publicItems),
+        ],
       );
     }, selector: (context, provider) {
-      return provider.getBookmarks();
+      return provider.bookmarks;
     });
 
     return DefaultTabController(
@@ -95,27 +91,21 @@ class _BookmarkRouter extends CustState<BookmarkRouter> {
   Future<void> onReady(BuildContext context) async {}
 
   Widget buildBookmarkItems(List<BookmarkItem> items) {
-    return Container(
-      child: ListView.builder(
-        itemBuilder: (context, index) {
-          var item = items[items.length - index - 1];
-          if (item.key == "r") {
-            return Container(
-              child: ContentLinkPreComponent(
-                link: item.value,
-              ),
-            );
-          } else {
-            return Container(
-              child: EventQuoteComponent(
-                id: item.key == "e" ? item.value : null,
-                aId: item.key == "a" ? AId.fromString(item.value) : null,
-              ),
-            );
-          }
-        },
-        itemCount: items.length,
-      ),
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        var item = items[items.length - index - 1];
+        if (item.key == "r") {
+          return ContentLinkPreComponent(
+            link: item.value,
+          );
+        } else {
+          return EventQuoteComponent(
+            id: item.key == "e" ? item.value : null,
+            aId: item.key == "a" ? AId.fromString(item.value) : null,
+          );
+        }
+      },
+      itemCount: items.length,
     );
   }
 }
