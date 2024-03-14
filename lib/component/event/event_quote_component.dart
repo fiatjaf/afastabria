@@ -4,13 +4,13 @@ import 'package:nostrmo/provider/replaceable_event_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 
-import '../../client/event.dart';
-import '../../consts/base.dart';
-import '../../consts/router_path.dart';
-import '../../provider/single_event_provider.dart';
-import '../../util/router_util.dart';
-import '../cust_state.dart';
-import 'event_main_component.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/consts/router_path.dart';
+import 'package:nostrmo/provider/single_event_provider.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/component/cust_state.dart';
+import 'package:nostrmo/component/event/event_main_component.dart';
 
 // ignore: must_be_immutable
 class EventQuoteComponent extends StatefulWidget {

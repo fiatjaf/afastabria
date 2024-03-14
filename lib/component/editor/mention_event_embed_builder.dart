@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
-import '../event/event_quote_component.dart';
-import 'cust_embed_types.dart';
+import 'package:nostrmo/component/event/event_quote_component.dart';
+import 'package:nostrmo/component/editor/cust_embed_types.dart';
 
 class MentionEventEmbedBuilder extends EmbedBuilder {
   @override

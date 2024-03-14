@@ -1,4 +1,4 @@
-import 'contact.dart';
+import 'package:nostrmo/client/nip02/contact.dart';
 
 class CustContactList {
   final Map<String, Contact> _contacts;

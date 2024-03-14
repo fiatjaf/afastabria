@@ -5,7 +5,7 @@ import 'package:nostrmo/component/pc_router_fake.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/util/platform_util.dart';
 
-import '../provider/pc_router_fake_provider.dart';
+import 'package:nostrmo/provider/pc_router_fake_provider.dart';
 
 class RouterUtil {
   static Future<T?> router<T>(BuildContext context, String pageName,

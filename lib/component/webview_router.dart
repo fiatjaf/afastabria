@@ -19,10 +19,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../client/event.dart';
-import '../client/nip04/nip04.dart';
-import '../client/nip07/nip07_methods.dart';
-import '../main.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/nip04/nip04.dart';
+import 'package:nostrmo/client/nip07/nip07_methods.dart';
+import 'package:nostrmo/main.dart';
 
 // ignore: must_be_immutable
 class WebViewRouter extends StatefulWidget {
@@ -390,7 +390,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
         var confirmResult =
             await NIP07Dialog.show(context, NIP07Methods.getPublicKey);
         if (confirmResult == true) {
-          var pubkey = nostr!.publicKey;
+          var pubkey = nostr.publicKey;
           var script = "window.nostr.callback(\"$resultId\", \"$pubkey\");";
           controller.evaluateJavascript(source: script);
         } else {
@@ -415,7 +415,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
           try {
             var eventObj = jsonDecode(content);
             var tags = eventObj["tags"];
-            Event event = Event.finalize(nostr!.privateKey, eventObj["kind"], tags ?? [],
+            Event event = Event.finalize(nostr.privateKey, eventObj["kind"], tags ?? [],
                 eventObj["content"]);
 
             var eventResultStr = jsonEncode(event.toJson());
@@ -474,7 +474,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
               context, NIP07Methods.nip04_encrypt,
               content: plaintext);
           if (confirmResult == true) {
-            var agreement = NIP04.getAgreement(nostr!.privateKey);
+            var agreement = NIP04.getAgreement(nostr.privateKey);
             var resultStr = NIP04.encrypt(plaintext, agreement, pubkey);
             var script =
                 "window.nostr.callback(\"$resultId\", \"$resultStr\");";
@@ -501,7 +501,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
               context, NIP07Methods.nip04_decrypt,
               content: ciphertext);
           if (confirmResult == true) {
-            var agreement = NIP04.getAgreement(nostr!.privateKey);
+            var agreement = NIP04.getAgreement(nostr.privateKey);
             var resultStr = NIP04.decrypt(ciphertext, agreement, pubkey);
             var script =
                 "window.nostr.callback(\"$resultId\", \"$resultStr\");";

@@ -2,10 +2,10 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../main.dart';
-import '../../util/lightning_util.dart';
-import '../../util/string_util.dart';
-import 'zap.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/lightning_util.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/client/zap/zap.dart';
 
 class ZapAction {
   static Future<void> handleZap(BuildContext context, int sats, String pubkey,
@@ -85,7 +85,7 @@ class ZapAction {
       lud16Link: lud16Link!,
       sats: sats,
       recipientPubkey: pubkey,
-      targetNostr: nostr!,
+      targetNostr: nostr,
       relays: relays,
       eventId: eventId,
       pollOption: pollOption,

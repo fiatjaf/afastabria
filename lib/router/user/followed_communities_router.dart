@@ -4,10 +4,10 @@ import 'package:nostrmo/consts/router_path.dart';
 import 'package:nostrmo/provider/contact_list_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/nip02/cust_contact_list.dart';
-import '../../consts/base.dart';
-import '../../main.dart';
-import '../../util/router_util.dart';
+import 'package:nostrmo/client/nip02/cust_contact_list.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/router_util.dart';
 
 class FollowedCommunitiesRouter extends StatefulWidget {
   const FollowedCommunitiesRouter({super.key});

@@ -8,10 +8,10 @@ import 'package:nostrmo/client/filter.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/util/string_util.dart';
 
-import '../client/event_kind.dart';
-import '../client/nip04/nip04.dart';
-import '../client/nip51/bookmarks.dart';
-import '../data/custom_emoji.dart';
+import 'package:nostrmo/client/event_kind.dart';
+import 'package:nostrmo/client/nip04/nip04.dart';
+import 'package:nostrmo/client/nip51/bookmarks.dart';
+import 'package:nostrmo/data/custom_emoji.dart';
 
 /// Standard list provider.
 /// These list usually publish by user himself and the provider will hold the newest one.

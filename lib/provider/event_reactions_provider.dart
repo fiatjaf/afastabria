@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../client/event.dart';
-import '../client/filter.dart';
-import '../data/event_reactions.dart';
-import '../main.dart';
-import '../util/later_function.dart';
-import '../util/when_stop_function.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/data/event_reactions.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/later_function.dart';
+import 'package:nostrmo/util/when_stop_function.dart';
 
 class EventReactionsProvider extends ChangeNotifier
     with LaterFunction, WhenStopFunction {
@@ -110,7 +110,7 @@ class EventReactionsProvider extends ChangeNotifier
 
     var filter = Filter(e: _penddingIds.keys.toList());
     _penddingIds.clear();
-    nostr!.query([filter.toJson()], onEvent);
+    nostr.query([filter.toJson()], onEvent);
   }
 
   void addEventAndHandle(Event event) {
@@ -134,9 +134,9 @@ class EventReactionsProvider extends ChangeNotifier
     for (var event in _penddingEvents) {
       for (var tag in event.tags) {
         if (tag.length > 1) {
-          var tagType = tag[0] as String;
+          var tagType = tag[0];
           if (tagType == "e") {
-            var id = tag[1] as String;
+            var id = tag[1];
             var er = _eventReactionsMap[id];
             if (er == null) {
               er = EventReactions(id);

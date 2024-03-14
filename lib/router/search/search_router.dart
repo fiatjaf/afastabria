@@ -9,24 +9,24 @@ import 'package:nostrmo/router/search/search_actions.dart';
 import 'package:nostrmo/util/when_stop_function.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/client_utils/keys.dart';
-import '../../client/event.dart';
-import '../../client/nip19/nip19.dart';
-import '../../component/cust_state.dart';
-import '../../client/event_kind.dart' as kind;
-import '../../client/filter.dart';
-import '../../component/event/event_list_component.dart';
-import '../../component/event_delete_callback.dart';
-import '../../consts/base_consts.dart';
-import '../../consts/router_path.dart';
-import '../../data/event_mem_box.dart';
-import '../../main.dart';
-import '../../provider/setting_provider.dart';
-import '../../util/load_more_event.dart';
-import '../../util/peddingevents_later_function.dart';
-import '../../util/platform_util.dart';
-import '../../util/router_util.dart';
-import '../../util/string_util.dart';
+import 'package:nostrmo/client/client_utils/keys.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/nip19/nip19.dart';
+import 'package:nostrmo/component/cust_state.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/component/event/event_list_component.dart';
+import 'package:nostrmo/component/event_delete_callback.dart';
+import 'package:nostrmo/consts/base_consts.dart';
+import 'package:nostrmo/consts/router_path.dart';
+import 'package:nostrmo/data/event_mem_box.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/provider/setting_provider.dart';
+import 'package:nostrmo/util/load_more_event.dart';
+import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/platform_util.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 class SearchRouter extends StatefulWidget {
   const SearchRouter({super.key});
@@ -230,7 +230,7 @@ class _SearchRouter extends CustState<SearchRouter>
     subscribeId = generatePrivateKey();
 
     if (!eventMemBox.isEmpty()) {
-      var activeRelays = nostr!.activeRelays();
+      var activeRelays = nostr.activeRelays();
       var oldestCreatedAts = eventMemBox.oldestCreatedAtByRelay(activeRelays);
       Map<String, List<Map<String, dynamic>>> filtersMap = {};
       for (var relay in activeRelays) {
@@ -244,12 +244,12 @@ class _SearchRouter extends CustState<SearchRouter>
         }
         filtersMap[relay.url] = [fm];
       }
-      nostr!.queryByFilters(filtersMap, onQueryEvent, id: subscribeId);
+      nostr.queryByFilters(filtersMap, onQueryEvent, id: subscribeId);
     } else {
       if (until != null) {
         filterMap!["until"] = until;
       }
-      nostr!.query([filterMap!], onQueryEvent, id: subscribeId);
+      nostr.query([filterMap!], onQueryEvent, id: subscribeId);
     }
   }
 
@@ -263,7 +263,7 @@ class _SearchRouter extends CustState<SearchRouter>
   }
 
   void unSubscribe() {
-    nostr!.unsubscribe(subscribeId!);
+    nostr.unsubscribe(subscribeId!);
     subscribeId = null;
   }
 

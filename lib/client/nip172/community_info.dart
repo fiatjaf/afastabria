@@ -2,7 +2,7 @@ import 'package:nostrmo/client/aid.dart';
 import 'package:nostrmo/client/event.dart';
 import 'package:nostrmo/util/string_util.dart';
 
-import '../../client/event_kind.dart' as kind;
+import 'package:nostrmo/client/event_kind.dart' as kind;
 
 class CommunityInfo {
   int createdAt;

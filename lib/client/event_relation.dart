@@ -2,7 +2,7 @@ import 'package:nostrmo/client/aid.dart';
 import 'package:nostrmo/client/nip19/nip19.dart';
 import 'package:nostrmo/client/nip19/nip19_tlv.dart';
 
-import 'event.dart';
+import 'package:nostrmo/client/event.dart';
 
 /// This class is designed for get the relation from event, but it seam to used for get tagInfo from event before event_main display.
 class EventRelation {

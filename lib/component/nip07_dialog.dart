@@ -6,8 +6,8 @@ import 'package:nostrmo/client/nip07/nip07_methods.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/util/string_util.dart';
 
-import '../consts/base.dart';
-import '../util/router_util.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/util/router_util.dart';
 
 // ignore: must_be_immutable
 class NIP07Dialog extends StatefulWidget {

@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:http_parser/src/media_type.dart';
 
-import '../../consts/base64.dart';
-import 'nostr_build_uploader.dart';
-import 'uploader.dart';
+import 'package:nostrmo/consts/base64.dart';
+import 'package:nostrmo/client/upload/nostr_build_uploader.dart';
+import 'package:nostrmo/client/upload/uploader.dart';
 
 class NostrimgComUploader {
   static const String UPLOAD_ACTION = "https://nostrimg.com/api/upload";

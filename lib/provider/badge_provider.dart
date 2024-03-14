@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nostrmo/client/event.dart';
 
-import '../../client/event_kind.dart' as kind;
-import '../client/filter.dart';
-import '../client/nostr.dart';
-import '../main.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/client/nostr.dart';
+import 'package:nostrmo/main.dart';
 
 class BadgeProvider extends ChangeNotifier {
   Event? badgeEvent;
@@ -30,9 +30,9 @@ class BadgeProvider extends ChangeNotifier {
     tags.add(eList);
 
     var newEvent = Event.finalize(
-        nostr!.privateKey, kind.EventKind.BADGE_ACCEPT, tags, content);
+        nostr.privateKey, kind.EventKind.BADGE_ACCEPT, tags, content);
 
-    var result = nostr!.broadcast(newEvent);
+    var result = nostr.broadcast(newEvent);
     badgeEvent = result;
     _parseProfileBadge();
     notifyListeners();
@@ -42,9 +42,7 @@ class BadgeProvider extends ChangeNotifier {
     targetNostr ??= nostr;
 
     String? pubkey;
-    if (targetNostr != null) {
-      pubkey = targetNostr.publicKey;
-    }
+    pubkey = targetNostr.publicKey;
 
     if (pubkey == null) {
       return;
@@ -53,9 +51,9 @@ class BadgeProvider extends ChangeNotifier {
     var filter =
         Filter(authors: [pubkey], kinds: [kind.EventKind.BADGE_ACCEPT]);
     if (initQuery) {
-      targetNostr!.addInitQuery([filter], onEvent);
+      targetNostr.addInitQuery([filter], onEvent);
     } else {
-      targetNostr!.query([filter.toJson()], onEvent);
+      targetNostr.query([filter.toJson()], onEvent);
     }
   }
 

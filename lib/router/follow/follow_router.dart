@@ -6,14 +6,14 @@ import 'package:nostrmo/provider/follow_event_provider.dart';
 import 'package:nostrmo/util/platform_util.dart';
 import 'package:provider/provider.dart';
 
-import '../../component/event/event_list_component.dart';
-import '../../component/new_notes_updated_component.dart';
-import '../../component/placeholder/event_list_placeholder.dart';
-import '../../consts/base.dart';
-import '../../consts/base_consts.dart';
-import '../../provider/follow_new_event_provider.dart';
-import '../../provider/setting_provider.dart';
-import '../../util/load_more_event.dart';
+import 'package:nostrmo/component/event/event_list_component.dart';
+import 'package:nostrmo/component/new_notes_updated_component.dart';
+import 'package:nostrmo/component/placeholder/event_list_placeholder.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/consts/base_consts.dart';
+import 'package:nostrmo/provider/follow_new_event_provider.dart';
+import 'package:nostrmo/provider/setting_provider.dart';
+import 'package:nostrmo/util/load_more_event.dart';
 
 class FollowRouter extends StatefulWidget {
   const FollowRouter({super.key});

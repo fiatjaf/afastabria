@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_placeholder_textlines/placeholder_lines.dart';
 
-import '../../consts/base.dart';
-import 'metadata_top_placeholder.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/component/placeholder/metadata_top_placeholder.dart';
 
 class MetadataPlaceholder extends StatelessWidget {
   const MetadataPlaceholder({super.key});

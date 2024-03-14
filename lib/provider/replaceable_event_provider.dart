@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/client/aid.dart';
 import 'package:nostrmo/client/event.dart';
 
-import '../client/filter.dart';
-import '../main.dart';
-import '../util/later_function.dart';
-import '../util/string_util.dart';
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/later_function.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 class ReplaceableEventProvider extends ChangeNotifier with LaterFunction {
   final Map<String, Event> _eventsMap = {};
@@ -44,9 +44,9 @@ class ReplaceableEventProvider extends ChangeNotifier with LaterFunction {
       var tag = event.tags[i];
 
       var tagLength = tag.length;
-      if (tagLength > 1 && tag[1] is String) {
+      if (tagLength > 1) {
         var tagKey = tag[0];
-        var value = tag[1] as String;
+        var value = tag[1];
         if (tagKey == "d") {
           aIdString = "${event.kind}:${event.pubKey}:$value";
           break;
@@ -89,7 +89,7 @@ class ReplaceableEventProvider extends ChangeNotifier with LaterFunction {
       filters.add(filterMap);
     }
     var subscriptId = StringUtil.rndNameStr(16);
-    nostr!.query(filters, _onEvent, id: subscriptId, onComplete: () {
+    nostr.query(filters, _onEvent, id: subscriptId, onComplete: () {
       // log("singleEventProvider onComplete $tempIds");
       for (var id in tempIds) {
         _handingIds.remove(id);

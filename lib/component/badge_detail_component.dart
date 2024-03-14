@@ -7,7 +7,7 @@ import 'package:nostrmo/consts/router_path.dart';
 import 'package:nostrmo/util/router_util.dart';
 import 'package:nostrmo/util/string_util.dart';
 
-import '../client/nip58/badge_definition.dart';
+import 'package:nostrmo/client/nip58/badge_definition.dart';
 
 class BadgeDetailComponent extends StatefulWidget {
   BadgeDefinition badgeDefinition;

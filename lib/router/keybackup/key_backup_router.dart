@@ -5,7 +5,7 @@ import 'package:nostrmo/client/nip19/nip19.dart';
 import 'package:nostrmo/consts/base.dart';
 import 'package:nostrmo/main.dart';
 
-import '../../component/appbar4stack.dart';
+import 'package:nostrmo/component/appbar4stack.dart';
 
 class KeyBackupRouter extends StatefulWidget {
   const KeyBackupRouter({super.key});
@@ -185,7 +185,7 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
       return;
     }
 
-    doCopy(nostr!.privateKey!);
+    doCopy(nostr.privateKey);
   }
 
   void copyKey() {
@@ -193,8 +193,8 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
       return;
     }
 
-    var pk = nostr!.privateKey;
-    var nip19Key = Nip19.encodePrivateKey(pk!);
+    var pk = nostr.privateKey;
+    var nip19Key = Nip19.encodePrivateKey(pk);
     doCopy(nip19Key);
   }
 

@@ -3,8 +3,8 @@ import 'package:nostrmo/data/metadata.dart';
 import 'package:nostrmo/provider/metadata_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../component/simple_name_component.dart';
-import '../../consts/base.dart';
+import 'package:nostrmo/component/simple_name_component.dart';
+import 'package:nostrmo/consts/base.dart';
 
 class EditorNotifyItem {
   String pubkey;

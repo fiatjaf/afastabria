@@ -7,7 +7,7 @@ import 'package:nostrmo/consts/router_path.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/util/router_util.dart';
 
-import '../../consts/base.dart';
+import 'package:nostrmo/consts/base.dart';
 
 // ignore: must_be_immutable
 class RelaysItemComponent extends StatelessWidget {
@@ -29,7 +29,7 @@ class RelaysItemComponent extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        var relay = nostr!.getRelay(addr);
+        var relay = nostr.getRelay(addr);
         if (relay != null && relay.info != null) {
           RouterUtil.router(context, RouterPath.RELAY_INFO, relay);
         }

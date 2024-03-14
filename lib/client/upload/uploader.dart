@@ -7,12 +7,12 @@ import 'package:nostrmo/util/platform_util.dart';
 import 'package:nostrmo/util/string_util.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
-import '../../consts/base64.dart';
-import '../../consts/image_services.dart';
-import 'nostr_build_uploader.dart';
-import 'nostrfiles_dev_uploader.dart';
-import 'nostrimg_com_uploader.dart';
-import 'pomf2_lain_la.dart';
+import 'package:nostrmo/consts/base64.dart';
+import 'package:nostrmo/consts/image_services.dart';
+import 'package:nostrmo/client/upload/nostr_build_uploader.dart';
+import 'package:nostrmo/client/upload/nostrfiles_dev_uploader.dart';
+import 'package:nostrmo/client/upload/nostrimg_com_uploader.dart';
+import 'package:nostrmo/client/upload/pomf2_lain_la.dart';
 
 class Uploader {
   // static Future<String?> pickAndUpload(BuildContext context) async {

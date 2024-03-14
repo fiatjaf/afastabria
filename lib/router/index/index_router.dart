@@ -12,18 +12,18 @@ import 'package:nostrmo/util/platform_util.dart';
 import 'package:nostrmo/util/string_util.dart';
 import 'package:provider/provider.dart';
 
-import '../../main.dart';
-import '../../provider/index_provider.dart';
-import '../../util/auth_util.dart';
-import '../dm/dm_router.dart';
-import '../edit/editor_router.dart';
-import '../follow/follow_index_router.dart';
-import '../globals/globals_index_router.dart';
-import '../login/login_router.dart';
-import '../search/search_router.dart';
-import 'index_app_bar.dart';
-import 'index_bottom_bar.dart';
-import 'index_drawer_content.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/provider/index_provider.dart';
+import 'package:nostrmo/util/auth_util.dart';
+import 'package:nostrmo/router/dm/dm_router.dart';
+import 'package:nostrmo/router/edit/editor_router.dart';
+import 'package:nostrmo/router/follow/follow_index_router.dart';
+import 'package:nostrmo/router/globals/globals_index_router.dart';
+import 'package:nostrmo/router/login/login_router.dart';
+import 'package:nostrmo/router/search/search_router.dart';
+import 'package:nostrmo/router/index/index_app_bar.dart';
+import 'package:nostrmo/router/index/index_bottom_bar.dart';
+import 'package:nostrmo/router/index/index_drawer_content.dart';
 
 // ignore: must_be_immutable
 class IndexRouter extends StatefulWidget {

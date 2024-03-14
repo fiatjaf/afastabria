@@ -6,8 +6,8 @@ import 'package:nostrmo/util/router_util.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 
-import '../../../client/event.dart';
-import '../../../consts/base.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/consts/base.dart';
 
 @deprecated
 class GlobalEventItemComponent extends StatefulWidget {

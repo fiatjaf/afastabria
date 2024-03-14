@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
-import '../content/content_mention_user_component.dart';
-import 'cust_embed_types.dart';
+import 'package:nostrmo/component/content/content_mention_user_component.dart';
+import 'package:nostrmo/component/editor/cust_embed_types.dart';
 
 class MentionUserEmbedBuilder extends EmbedBuilder {
   @override

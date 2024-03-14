@@ -1,18 +1,18 @@
 
 import 'package:flutter/material.dart';
 
-import '../../client/event_kind.dart' as kind;
-import '../client/event.dart';
-import '../client/nip02/contact.dart';
-import '../client/nip02/cust_contact_list.dart';
-import '../client/filter.dart';
-import '../client/nostr.dart';
-import '../data/event_mem_box.dart';
-import '../main.dart';
-import '../router/tag/topic_map.dart';
-import '../util/find_event_interface.dart';
-import '../util/peddingevents_later_function.dart';
-import '../util/string_util.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/nip02/contact.dart';
+import 'package:nostrmo/client/nip02/cust_contact_list.dart';
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/client/nostr.dart';
+import 'package:nostrmo/data/event_mem_box.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/router/tag/topic_map.dart';
+import 'package:nostrmo/util/find_event_interface.dart';
+import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 class FollowEventProvider extends ChangeNotifier
     with PenddingEventsLaterFunction
@@ -75,7 +75,7 @@ class FollowEventProvider extends ChangeNotifier
       until: until ?? _initTime,
       limit: 20,
     );
-    targetNostr ??= nostr!;
+    targetNostr ??= nostr;
     bool queriedTags = false;
 
     doUnscribe(targetNostr);
@@ -289,7 +289,7 @@ class FollowEventProvider extends ChangeNotifier
     eventBox.clear();
     postsBox.clear();
 
-    doUnscribe(nostr!);
+    doUnscribe(nostr);
 
     notifyListeners();
   }

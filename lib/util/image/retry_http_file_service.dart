@@ -8,8 +8,8 @@ import 'package:nostrmo/consts/base.dart';
 import 'package:nostrmo/util/hash_util.dart';
 import 'package:nostrmo/util/string_util.dart';
 
-import '../../consts/base64.dart';
-import '../platform_util.dart';
+import 'package:nostrmo/consts/base64.dart';
+import 'package:nostrmo/util/platform_util.dart';
 
 class RetryHttpFileServcie extends FileService {
   final http.Client _httpClient;

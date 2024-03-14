@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/component/content/content_component.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/event.dart';
-import '../../client/nip69/poll_info.dart';
-import '../../client/zap/zap_action.dart';
-import '../../client/zap/zap_num_util.dart';
-import '../../consts/base.dart';
-import '../../data/event_reactions.dart';
-import '../../main.dart';
-import '../../provider/event_reactions_provider.dart';
-import '../../util/number_format_util.dart';
-import '../../util/spider_util.dart';
-import '../../util/string_util.dart';
-import '../editor/text_input_dialog.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/nip69/poll_info.dart';
+import 'package:nostrmo/client/zap/zap_action.dart';
+import 'package:nostrmo/client/zap/zap_num_util.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/data/event_reactions.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/provider/event_reactions_provider.dart';
+import 'package:nostrmo/util/number_format_util.dart';
+import 'package:nostrmo/util/spider_util.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/component/editor/text_input_dialog.dart';
 
 // ignore: must_be_immutable
 class EventPollComponent extends StatefulWidget {
@@ -54,9 +54,9 @@ class _EventPollComponent extends State<EventPollComponent> {
 
             for (var tag in zapEvent.tags) {
               if (tag.length > 1) {
-                var tagType = tag[0] as String;
+                var tagType = tag[0];
                 if (tagType == "bolt11") {
-                  var zapStr = tag[1] as String;
+                  var zapStr = tag[1];
                   num = ZapNumUtil.getNumFromStr(zapStr);
                 } else if (tagType == "description") {
                   var text = tag[1];
@@ -71,7 +71,7 @@ class _EventPollComponent extends State<EventPollComponent> {
             if (num > 0 && StringUtil.isNotBlank(selectKey)) {
               total += num;
 
-              if (senderPubkey == nostr!.publicKey) {
+              if (senderPubkey == nostr.publicKey) {
                 myNum += num;
               }
 

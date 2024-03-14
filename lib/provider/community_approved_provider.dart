@@ -3,7 +3,7 @@ import 'package:nostrmo/client/aid.dart';
 import 'package:nostrmo/client/event.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/util/later_function.dart';
-import '../client/event_kind.dart' as kind;
+import 'package:nostrmo/client/event_kind.dart' as kind;
 
 class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
   final Map<String, int> _approvedMap = {};
@@ -18,7 +18,7 @@ class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
     }
 
     if (contactListProvider.getContact(pubkey) != null ||
-        pubkey == nostr!.publicKey) {
+        pubkey == nostr.publicKey) {
       return true;
     }
 
@@ -38,7 +38,7 @@ class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
       ids.addAll(eids);
       filter["#e"] = ids;
       eids.clear();
-      nostr!.query([filter], onEvent);
+      nostr.query([filter], onEvent);
     }
 
     if (penddingEvents.isNotEmpty) {
@@ -76,7 +76,7 @@ class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
         var value = tag[1];
 
         if (key == "e") {
-          return value as String;
+          return value;
         }
       }
     }

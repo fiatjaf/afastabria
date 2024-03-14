@@ -4,27 +4,27 @@ import 'package:nostrmo/provider/single_event_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:widget_size/widget_size.dart';
 
-import '../../client/aid.dart';
-import '../../client/event.dart';
-import '../../client/event_relation.dart';
-import '../../client/filter.dart';
-import '../../component/cust_state.dart';
-import '../../component/event/event_list_component.dart';
-import '../../component/event/event_load_list_component.dart';
-import '../../component/event_reply_callback.dart';
-import '../../component/simple_name_component.dart';
-import '../../consts/base.dart';
-import '../../data/event_mem_box.dart';
-import '../../main.dart';
-import '../../util/peddingevents_later_function.dart';
-import '../../util/platform_util.dart';
-import '../../util/router_util.dart';
-import '../../client/event_kind.dart' as kind;
-import '../../util/string_util.dart';
-import '../../util/when_stop_function.dart';
-import 'thread_detail_event.dart';
-import 'thread_detail_event_main_component.dart';
-import 'thread_detail_item_component.dart';
+import 'package:nostrmo/client/aid.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/event_relation.dart';
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/component/cust_state.dart';
+import 'package:nostrmo/component/event/event_list_component.dart';
+import 'package:nostrmo/component/event/event_load_list_component.dart';
+import 'package:nostrmo/component/event_reply_callback.dart';
+import 'package:nostrmo/component/simple_name_component.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/data/event_mem_box.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/platform_util.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/util/when_stop_function.dart';
+import 'package:nostrmo/router/thread/thread_detail_event.dart';
+import 'package:nostrmo/router/thread/thread_detail_event_main_component.dart';
+import 'package:nostrmo/router/thread/thread_detail_item_component.dart';
 
 class ThreadDetailRouter extends StatefulWidget {
   const ThreadDetailRouter({super.key});
@@ -374,7 +374,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
 
       // print(filters);
 
-      nostr!.query(filters, onEvent);
+      nostr.query(filters, onEvent);
     }
   }
 

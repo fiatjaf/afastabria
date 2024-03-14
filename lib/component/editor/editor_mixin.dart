@@ -16,28 +16,28 @@ import 'package:nostrmo/sendbox/sendbox.dart';
 import 'package:pointycastle/ecc/api.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/event.dart';
-import '../../client/event_kind.dart' as kind;
-import '../../client/nip04/nip04.dart';
-import '../../client/nip19/nip19.dart';
-import '../../client/nip19/nip19_tlv.dart';
-import '../../client/upload/uploader.dart';
-import '../../consts/base.dart';
-import '../../data/custom_emoji.dart';
-import '../../main.dart';
-import '../../router/index/index_app_bar.dart';
-import '../../util/platform_util.dart';
-import '../../util/string_util.dart';
-import '../content/content_decoder.dart';
-import '../image_component.dart';
-import 'cust_embed_types.dart';
-import 'custom_emoji_add_dialog.dart';
-import 'gen_lnbc_component.dart';
-import 'poll_input_component.dart';
-import 'search_mention_event_component.dart';
-import 'search_mention_user_component.dart';
-import 'text_input_and_search_dialog.dart';
-import 'text_input_dialog.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/client/nip04/nip04.dart';
+import 'package:nostrmo/client/nip19/nip19.dart';
+import 'package:nostrmo/client/nip19/nip19_tlv.dart';
+import 'package:nostrmo/client/upload/uploader.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/data/custom_emoji.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/router/index/index_app_bar.dart';
+import 'package:nostrmo/util/platform_util.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/component/content/content_decoder.dart';
+import 'package:nostrmo/component/image_component.dart';
+import 'package:nostrmo/component/editor/cust_embed_types.dart';
+import 'package:nostrmo/component/editor/custom_emoji_add_dialog.dart';
+import 'package:nostrmo/component/editor/gen_lnbc_component.dart';
+import 'package:nostrmo/component/editor/poll_input_component.dart';
+import 'package:nostrmo/component/editor/search_mention_event_component.dart';
+import 'package:nostrmo/component/editor/search_mention_user_component.dart';
+import 'package:nostrmo/component/editor/text_input_and_search_dialog.dart';
+import 'package:nostrmo/component/editor/text_input_dialog.dart';
 
 mixin EditorMixin {
   quill.QuillController editorController = quill.QuillController.basic();
@@ -602,7 +602,7 @@ mixin EditorMixin {
       // dm message
       result = NIP04.encrypt(result, agreement, pubkey!);
       event = Event.finalize(
-          nostr!.privateKey, kind.EventKind.DIRECT_MESSAGE, allTags, result,
+          nostr.privateKey, kind.EventKind.DIRECT_MESSAGE, allTags, result,
           publishAt: publishAt);
     } else if (inputPoll) {
       // poll event
@@ -610,19 +610,19 @@ mixin EditorMixin {
       var pollTags = pollInputController.getTags();
       allTags.addAll(pollTags);
       event = Event.finalize(
-          nostr!.privateKey, kind.EventKind.POLL, allTags, result,
+          nostr.privateKey, kind.EventKind.POLL, allTags, result,
           publishAt: publishAt);
     } else if (inputZapGoal) {
       // zap goal event
       var extralTags = zapGoalInputController.getTags();
       allTags.addAll(extralTags);
       event = Event.finalize(
-          nostr!.privateKey, kind.EventKind.ZAP_GOALS, allTags, result,
+          nostr.privateKey, kind.EventKind.ZAP_GOALS, allTags, result,
           publishAt: publishAt);
     } else {
       // text note
       event = Event.finalize(
-          nostr!.privateKey, kind.EventKind.TEXT_NOTE, allTags, result,
+          nostr.privateKey, kind.EventKind.TEXT_NOTE, allTags, result,
           publishAt: publishAt);
     }
 
@@ -630,7 +630,7 @@ mixin EditorMixin {
       await SendBox.submit(event, relayProvider.relayAddrs);
       return event;
     } else {
-      var e = nostr!.broadcast(event);
+      var e = nostr.broadcast(event);
       log(jsonEncode(event.toJson()));
 
       return e;

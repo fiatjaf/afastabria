@@ -8,13 +8,13 @@ import 'package:nostrmo/util/platform_util.dart';
 import 'package:nostrmo/util/router_util.dart';
 import 'package:nostrmo/util/string_util.dart';
 
-import '../../client/event.dart';
-import '../../client/event_kind.dart' as kind;
-import '../../client/filter.dart';
-import '../../component/appbar4stack.dart';
-import '../../component/cust_state.dart';
-import '../../consts/base.dart';
-import '../../main.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/component/appbar4stack.dart';
+import 'package:nostrmo/component/cust_state.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/main.dart';
 
 class ProfileEditorRouter extends StatefulWidget {
   const ProfileEditorRouter({super.key});
@@ -293,9 +293,9 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       tags = profileEvent!.tags;
     }
 
-    var updateEvent = Event.finalize(nostr!.privateKey, kind.EventKind.METADATA,
+    var updateEvent = Event.finalize(nostr.privateKey, kind.EventKind.METADATA,
         tags, jsonEncode(metadataMap));
-    nostr!.broadcast(updateEvent);
+    nostr.broadcast(updateEvent);
 
     RouterUtil.back(context);
   }
@@ -306,9 +306,9 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
   Future<void> onReady(BuildContext context) async {
     var filter = Filter(
         kinds: [kind.EventKind.METADATA],
-        authors: [nostr!.publicKey],
+        authors: [nostr.publicKey],
         limit: 1);
-    nostr!.query([filter.toJson()], (event) {
+    nostr.query([filter.toJson()], (event) {
       if (profileEvent == null) {
         profileEvent = event;
       } else if (event.createdAt > profileEvent!.createdAt) {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nostrmo/client/nip58/badge_definition.dart';
 
-import '../consts/base.dart';
-import '../util/router_util.dart';
-import 'badge_detail_component.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/component/badge_detail_component.dart';
 
 class BadgeDetailDialog extends StatefulWidget {
   BadgeDefinition badgeDefinition;

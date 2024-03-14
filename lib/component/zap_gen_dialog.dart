@@ -1,9 +1,9 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 
-import '../client/zap/zap_action.dart';
-import '../consts/base.dart';
-import '../util/router_util.dart';
+import 'package:nostrmo/client/zap/zap_action.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/util/router_util.dart';
 
 // ignore: must_be_immutable
 class ZapGenDialog extends StatefulWidget {
@@ -115,9 +115,9 @@ class _ZapGenDialog extends State<ZapGenDialog> {
             color: mainColor,
             height: 40,
             alignment: Alignment.center,
-            child: Text(
+            child: const Text(
               "Confirm",
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),

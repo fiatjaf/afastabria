@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'event_placeholder.dart';
+import 'package:nostrmo/component/placeholder/event_placeholder.dart';
 
 class EventListPlaceholder extends StatelessWidget {
   Function? onRefresh;

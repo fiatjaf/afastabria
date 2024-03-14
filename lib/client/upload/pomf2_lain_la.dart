@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:nostrmo/consts/base64.dart';
 import 'package:http_parser/src/media_type.dart';
 
-import 'nostr_build_uploader.dart';
-import 'uploader.dart';
+import 'package:nostrmo/client/upload/nostr_build_uploader.dart';
+import 'package:nostrmo/client/upload/uploader.dart';
 
 class Pomf2LainLa {
   static const String UPLOAD_ACTION = "https://pomf2.lain.la/upload.php";

@@ -1,7 +1,7 @@
 import 'package:nostrmo/data/metadata.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'db.dart';
+import 'package:nostrmo/data/db.dart';
 
 class MetadataDB {
   static Future<List<Metadata>> all({DatabaseExecutor? db}) async {

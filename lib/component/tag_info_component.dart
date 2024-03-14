@@ -5,7 +5,7 @@ import 'package:nostrmo/provider/contact_list_provider.dart';
 import 'package:nostrmo/util/router_util.dart';
 import 'package:provider/provider.dart';
 
-import '../consts/base.dart';
+import 'package:nostrmo/consts/base.dart';
 
 class TagInfoComponent extends StatefulWidget {
   final String tag;

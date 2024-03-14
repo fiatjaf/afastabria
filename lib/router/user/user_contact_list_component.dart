@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/nip02/contact.dart';
-import '../../client/nip02/cust_contact_list.dart';
-import '../../component/user/metadata_component.dart';
-import '../../consts/base.dart';
-import '../../consts/router_path.dart';
-import '../../data/metadata.dart';
-import '../../provider/metadata_provider.dart';
-import '../../util/platform_util.dart';
-import '../../util/router_util.dart';
+import 'package:nostrmo/client/nip02/contact.dart';
+import 'package:nostrmo/client/nip02/cust_contact_list.dart';
+import 'package:nostrmo/component/user/metadata_component.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/consts/router_path.dart';
+import 'package:nostrmo/data/metadata.dart';
+import 'package:nostrmo/provider/metadata_provider.dart';
+import 'package:nostrmo/util/platform_util.dart';
+import 'package:nostrmo/util/router_util.dart';
 
 class UserContactListComponent extends StatefulWidget {
   CustContactList contactList;

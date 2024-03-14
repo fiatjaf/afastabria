@@ -10,12 +10,12 @@ import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../consts/base.dart';
-import '../provider/metadata_provider.dart';
-import '../util/router_util.dart';
-import '../util/store_util.dart';
-import '../util/string_util.dart';
-import 'image_component.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/provider/metadata_provider.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/util/store_util.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/component/image_component.dart';
 
 // ignore: must_be_immutable
 class QrcodeDialog extends StatefulWidget {

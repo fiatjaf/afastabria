@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/util/platform_util.dart';
 
-import '../../consts/base.dart';
-import '../../router/index/index_app_bar.dart';
-import '../../util/router_util.dart';
-import '../../util/string_util.dart';
-import 'text_input_dialog_inner_component.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/router/index/index_app_bar.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/component/editor/text_input_dialog_inner_component.dart';
 
 class TextInputAndSearchDialog extends StatefulWidget {
   String searchTabName;

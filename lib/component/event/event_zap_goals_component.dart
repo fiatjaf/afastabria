@@ -4,12 +4,12 @@ import 'package:nostrmo/client/nip75/zap_goals_info.dart';
 import 'package:nostrmo/util/string_util.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/event.dart';
-import '../../consts/base.dart';
-import '../../data/event_reactions.dart';
-import '../../provider/event_reactions_provider.dart';
-import '../../util/number_format_util.dart';
-import 'event_quote_component.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/data/event_reactions.dart';
+import 'package:nostrmo/provider/event_reactions_provider.dart';
+import 'package:nostrmo/util/number_format_util.dart';
+import 'package:nostrmo/component/event/event_quote_component.dart';
 
 class EventZapGoalsComponent extends StatefulWidget {
   Event event;

@@ -1,4 +1,4 @@
-import '../client_utils/keys.dart';
+import 'package:nostrmo/client/client_utils/keys.dart';
 
 /// A single contact for use with [ContactList]
 class Contact {

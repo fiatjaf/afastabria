@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:nostrmo/util/lightning_util.dart';
 
-import '../../client/zap/zap_num_util.dart';
-import '../../consts/base.dart';
+import 'package:nostrmo/client/zap/zap_num_util.dart';
+import 'package:nostrmo/consts/base.dart';
 
 class ContentLnbcComponent extends StatelessWidget {
   String lnbc;

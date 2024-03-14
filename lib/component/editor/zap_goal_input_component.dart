@@ -2,7 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:nostrmo/util/string_util.dart';
 
-import '../../consts/base.dart';
+import 'package:nostrmo/consts/base.dart';
 
 class ZapGoalInputController {
   TextEditingController goalAmountController = TextEditingController();

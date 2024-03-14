@@ -15,15 +15,15 @@ import 'package:nostrmo/util/platform_util.dart';
 import 'package:nostrmo/util/router_util.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/nip02/contact.dart';
-import '../../client/nip19/nip19.dart';
-import '../../client/zap/zap_action.dart';
-import '../../consts/base.dart';
-import '../../data/metadata.dart';
-import '../../util/string_util.dart';
-import '../confirm_dialog.dart';
-import '../image_component.dart';
-import '../image_preview_dialog.dart';
+import 'package:nostrmo/client/nip02/contact.dart';
+import 'package:nostrmo/client/nip19/nip19.dart';
+import 'package:nostrmo/client/zap/zap_action.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/data/metadata.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/component/confirm_dialog.dart';
+import 'package:nostrmo/component/image_component.dart';
+import 'package:nostrmo/component/image_preview_dialog.dart';
 
 // ignore: must_be_immutable
 class MetadataTopComponent extends StatefulWidget {
@@ -135,7 +135,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
       )
     ];
 
-    if (!PlatformUtil.isTableMode() && widget.pubkey == nostr!.publicKey) {
+    if (!PlatformUtil.isTableMode() && widget.pubkey == nostr.publicKey) {
       // is phont and local
       topBtnList.add(wrapBtn(MetadataIconBtn(
         iconData: Icons.qr_code_scanner,

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nostrmo/component/confirm_dialog.dart';
 import 'package:nostrmo/client/relay/relay.dart';
-import 'package:nostrmo/main.dart';
 import 'package:nostrmo/provider/relay_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../consts/base.dart';
+import 'package:nostrmo/consts/base.dart';
 
 // ignore: must_be_immutable
 class ContentRelayComponent extends StatelessWidget {

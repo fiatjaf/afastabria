@@ -1,4 +1,4 @@
-import '../../client/event.dart';
+import 'package:nostrmo/client/event.dart';
 
 class ThreadDetailEvent {
   Event event;

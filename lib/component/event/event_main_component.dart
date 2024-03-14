@@ -10,39 +10,39 @@ import 'package:nostrmo/util/platform_util.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 
-import '../../client/event.dart';
-import '../../client/event_kind.dart' as kind;
-import '../../client/event_relation.dart';
-import '../../client/nip23/long_form_info.dart';
-import '../../client/nip19/nip19.dart';
-import '../../client/nip19/nip19_tlv.dart';
-import '../../consts/base.dart';
-import '../../consts/base_consts.dart';
-import '../../consts/router_path.dart';
-import '../../data/metadata.dart';
-import '../../main.dart';
-import '../../provider/metadata_provider.dart';
-import '../../provider/setting_provider.dart';
-import '../../util/router_util.dart';
-import '../../util/string_util.dart';
-import '../confirm_dialog.dart';
-import '../content/content_component.dart';
-import '../content/content_decoder.dart';
-import '../content/content_image_component.dart';
-import '../content/content_link_component.dart';
-import '../content/content_tag_component.dart';
-import '../content/markdown/markdown_mention_event_inline_syntax.dart';
-import '../content/markdown/markdown_mention_user_element_builder.dart';
-import '../content/markdown/markdown_mention_user_inline_syntax.dart';
-import '../content/markdown/markdown_nevent_inline_syntax.dart';
-import '../content/markdown/markdown_nprofile_inline_syntax.dart';
-import '../content/markdown/markdown_nrelay_element_builder.dart';
-import '../content/markdown/markdown_nrelay_inline_syntax copy.dart';
-import 'event_poll_component.dart';
-import '../webview_router.dart';
-import 'event_quote_component.dart';
-import 'event_reactions_component.dart';
-import 'event_top_component.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/client/event_relation.dart';
+import 'package:nostrmo/client/nip23/long_form_info.dart';
+import 'package:nostrmo/client/nip19/nip19.dart';
+import 'package:nostrmo/client/nip19/nip19_tlv.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/consts/base_consts.dart';
+import 'package:nostrmo/consts/router_path.dart';
+import 'package:nostrmo/data/metadata.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/provider/metadata_provider.dart';
+import 'package:nostrmo/provider/setting_provider.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/component/confirm_dialog.dart';
+import 'package:nostrmo/component/content/content_component.dart';
+import 'package:nostrmo/component/content/content_decoder.dart';
+import 'package:nostrmo/component/content/content_image_component.dart';
+import 'package:nostrmo/component/content/content_link_component.dart';
+import 'package:nostrmo/component/content/content_tag_component.dart';
+import 'package:nostrmo/component/content/markdown/markdown_mention_event_inline_syntax.dart';
+import 'package:nostrmo/component/content/markdown/markdown_mention_user_element_builder.dart';
+import 'package:nostrmo/component/content/markdown/markdown_mention_user_inline_syntax.dart';
+import 'package:nostrmo/component/content/markdown/markdown_nevent_inline_syntax.dart';
+import 'package:nostrmo/component/content/markdown/markdown_nprofile_inline_syntax.dart';
+import 'package:nostrmo/component/content/markdown/markdown_nrelay_element_builder.dart';
+import 'package:nostrmo/component/content/markdown/markdown_nrelay_inline_syntax%20copy.dart';
+import 'package:nostrmo/component/event/event_poll_component.dart';
+import 'package:nostrmo/component/webview_router.dart';
+import 'package:nostrmo/component/event/event_quote_component.dart';
+import 'package:nostrmo/component/event/event_reactions_component.dart';
+import 'package:nostrmo/component/event/event_top_component.dart';
 
 // ignore: must_be_immutable
 class EventMainComponent extends StatefulWidget {
@@ -527,7 +527,7 @@ class _EventMainComponent extends State<EventMainComponent> {
       var tag = widget.event.tags[i];
       String? link;
 
-      if (tag is List && tag.length > 1) {
+      if (tag.length > 1) {
         var key = tag[0];
         var value = tag[1];
         if (key == "e") {

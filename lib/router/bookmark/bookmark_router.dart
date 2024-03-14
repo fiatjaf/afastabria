@@ -4,12 +4,12 @@ import 'package:nostrmo/client/nip51/bookmarks.dart';
 import 'package:nostrmo/provider/list_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../component/content/content_link_pre_component.dart';
-import '../../component/cust_state.dart';
-import '../../component/event/event_quote_component.dart';
-import '../../util/platform_util.dart';
-import '../../util/router_util.dart';
-import '../index/index_app_bar.dart';
+import 'package:nostrmo/component/content/content_link_pre_component.dart';
+import 'package:nostrmo/component/cust_state.dart';
+import 'package:nostrmo/component/event/event_quote_component.dart';
+import 'package:nostrmo/util/platform_util.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/router/index/index_app_bar.dart';
 
 class BookmarkRouter extends StatefulWidget {
   const BookmarkRouter({super.key});

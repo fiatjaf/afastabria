@@ -1,4 +1,4 @@
-import '../event_relation.dart';
+import 'package:nostrmo/client/event_relation.dart';
 
 class Bookmarks {
   List<BookmarkItem> privateItems = [];

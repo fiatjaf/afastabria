@@ -3,15 +3,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:nostrmo/router/tag/topic_map.dart';
 
-import '../../client/event_kind.dart' as kind;
-import '../client/event.dart';
-import '../client/nip02/contact.dart';
-import '../client/nip02/cust_contact_list.dart';
-import '../client/filter.dart';
-import '../client/nostr.dart';
-import '../main.dart';
-import '../util/string_util.dart';
-import 'data_util.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/nip02/contact.dart';
+import 'package:nostrmo/client/nip02/cust_contact_list.dart';
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/client/nostr.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/provider/data_util.dart';
 
 class ContactListProvider extends ChangeNotifier {
   static ContactListProvider? _contactListProvider;
@@ -28,9 +28,7 @@ class ContactListProvider extends ChangeNotifier {
     targetNostr ??= nostr;
 
     String? pubkey;
-    if (targetNostr != null) {
-      pubkey = targetNostr.publicKey;
-    }
+    pubkey = targetNostr.publicKey;
 
     var str = sharedPreferences.getString(DataKey.CONTACT_LISTS);
     print("str $str");
@@ -61,7 +59,7 @@ class ContactListProvider extends ChangeNotifier {
   }
 
   void clearCurrentContactList() {
-    var pubkey = nostr!.publicKey;
+    var pubkey = nostr.publicKey;
     var str = sharedPreferences.getString(DataKey.CONTACT_LISTS);
     if (StringUtil.isNotBlank(str)) {
       var jsonMap = jsonDecode(str!);
@@ -82,7 +80,7 @@ class ContactListProvider extends ChangeNotifier {
     var filter = Filter(
         kinds: [kind.EventKind.CONTACT_LIST],
         limit: 1,
-        authors: [targetNostr!.publicKey]);
+        authors: [targetNostr.publicKey]);
     targetNostr.addInitQuery([filter], _onEvent, id: subscriptId);
   }
 
@@ -103,7 +101,7 @@ class ContactListProvider extends ChangeNotifier {
     var eventJsonMap = _event!.toJson();
     var eventJsonStr = jsonEncode(eventJsonMap);
 
-    var pubkey = nostr!.publicKey;
+    var pubkey = nostr.publicKey;
     Map<String, dynamic>? allJsonMap;
 
     var str = sharedPreferences.getString(DataKey.CONTACT_LISTS);
@@ -129,21 +127,21 @@ class ContactListProvider extends ChangeNotifier {
 
   void addContact(Contact contact) {
     _contactList!.add(contact);
-    _event = nostr!.sendContactList(_contactList!, content);
+    _event = nostr.sendContactList(_contactList!, content);
 
     _saveAndNotify();
   }
 
   void removeContact(String pubKey) {
     _contactList!.remove(pubKey);
-    _event = nostr!.sendContactList(_contactList!, content);
+    _event = nostr.sendContactList(_contactList!, content);
 
     _saveAndNotify();
   }
 
   void updateContacts(CustContactList contactList) {
     _contactList = contactList;
-    _event = nostr!.sendContactList(contactList, content);
+    _event = nostr.sendContactList(contactList, content);
 
     _saveAndNotify();
   }
@@ -184,14 +182,14 @@ class ContactListProvider extends ChangeNotifier {
 
   void addTag(String tag) {
     _contactList!.addTag(tag);
-    _event = nostr!.sendContactList(_contactList!, content);
+    _event = nostr.sendContactList(_contactList!, content);
 
     _saveAndNotify();
   }
 
   void removeTag(String tag) {
     _contactList!.removeTag(tag);
-    _event = nostr!.sendContactList(_contactList!, content);
+    _event = nostr.sendContactList(_contactList!, content);
 
     _saveAndNotify();
   }
@@ -210,14 +208,14 @@ class ContactListProvider extends ChangeNotifier {
 
   void addCommunity(String tag) {
     _contactList!.addCommunity(tag);
-    _event = nostr!.sendContactList(_contactList!, content);
+    _event = nostr.sendContactList(_contactList!, content);
 
     _saveAndNotify();
   }
 
   void removeCommunity(String tag) {
     _contactList!.removeCommunity(tag);
-    _event = nostr!.sendContactList(_contactList!, content);
+    _event = nostr.sendContactList(_contactList!, content);
 
     _saveAndNotify();
   }
@@ -232,7 +230,7 @@ class ContactListProvider extends ChangeNotifier {
 
   void updateRelaysContent(String relaysContent) {
     content = relaysContent;
-    _event = nostr!.sendContactList(_contactList!, content);
+    _event = nostr.sendContactList(_contactList!, content);
 
     _saveAndNotify(notify: false);
   }

@@ -1,4 +1,4 @@
-import '../client/event.dart';
+import 'package:nostrmo/client/event.dart';
 
 mixin PenddingEventsLaterFunction {
   int laterTimeMS = 200;

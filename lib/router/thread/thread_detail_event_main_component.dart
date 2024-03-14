@@ -4,7 +4,7 @@ import 'package:nostrmo/main.dart';
 import 'package:nostrmo/router/thread/thread_detail_event.dart';
 import 'package:screenshot/screenshot.dart';
 
-import '../../consts/base.dart';
+import 'package:nostrmo/consts/base.dart';
 
 class ThreadDetailItemMainComponent extends StatefulWidget {
   static double BORDER_LEFT_WIDTH = 2;

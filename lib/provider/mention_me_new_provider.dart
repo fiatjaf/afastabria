@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../client/event.dart';
-import '../client/filter.dart';
-import '../data/event_mem_box.dart';
-import '../main.dart';
-import '../util/peddingevents_later_function.dart';
-import '../util/string_util.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/data/event_mem_box.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 class MentionMeNewProvider extends ChangeNotifier
     with PenddingEventsLaterFunction {
@@ -18,7 +18,7 @@ class MentionMeNewProvider extends ChangeNotifier
   void queryNew() {
     if (subscribeId != null) {
       try {
-        nostr!.unsubscribe(subscribeId!);
+        nostr.unsubscribe(subscribeId!);
       } catch (e) {}
     }
 
@@ -31,9 +31,9 @@ class MentionMeNewProvider extends ChangeNotifier
     var filter = Filter(
       since: _localSince! + 1,
       kinds: mentionMeProvider.queryEventKinds(),
-      p: [nostr!.publicKey],
+      p: [nostr.publicKey],
     );
-    nostr!.query([filter.toJson()], (event) {
+    nostr.query([filter.toJson()], (event) {
       later(event, handleEvents, null);
     }, id: subscribeId);
   }

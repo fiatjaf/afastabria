@@ -10,11 +10,11 @@ import 'package:nostrmo/util/router_util.dart';
 import 'package:nostrmo/util/string_util.dart';
 import 'package:provider/provider.dart';
 
-import '../../data/metadata.dart';
-import '../../main.dart';
-import '../../provider/metadata_provider.dart';
-import '../edit/editor_router.dart';
-import 'account_manager_component.dart';
+import 'package:nostrmo/data/metadata.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/provider/metadata_provider.dart';
+import 'package:nostrmo/router/edit/editor_router.dart';
+import 'package:nostrmo/router/index/account_manager_component.dart';
 
 class IndexDrawerContnetComponnent extends StatefulWidget {
   const IndexDrawerContnetComponnent({super.key});
@@ -35,7 +35,7 @@ class _IndexDrawerContnetComponnent
   Widget build(BuildContext context) {
     var indexProvider = Provider.of<IndexProvider>(context);
 
-        var pubkey = nostr!.publicKey;
+        var pubkey = nostr.publicKey;
     var paddingTop = mediaDataCache.padding.top;
     var themeData = Theme.of(context);
     var mainColor = themeData.primaryColor;
@@ -267,7 +267,7 @@ class _IndexDrawerContnetComponnent
   }
 
   void jumpToProfileEdit() {
-    var metadata = metadataProvider.getMetadata(nostr!.publicKey);
+    var metadata = metadataProvider.getMetadata(nostr.publicKey);
     RouterUtil.router(context, RouterPath.PROFILE_EDITOR, metadata);
   }
 

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../client/event_kind.dart' as kind;
-import '../client/event.dart';
-import '../client/filter.dart';
-import '../client/nostr.dart';
-import '../data/event_mem_box.dart';
-import '../main.dart';
-import '../util/peddingevents_later_function.dart';
-import '../util/string_util.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/client/nostr.dart';
+import 'package:nostrmo/data/event_mem_box.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 class MentionMeProvider extends ChangeNotifier
     with PenddingEventsLaterFunction {
@@ -55,7 +55,7 @@ class MentionMeProvider extends ChangeNotifier
   String? subscribeId;
 
   void doQuery({Nostr? targetNostr, bool initQuery = false, int? until}) {
-    targetNostr ??= nostr!;
+    targetNostr ??= nostr;
     var filter = Filter(
       kinds: queryEventKinds(),
       until: until ?? _initTime,

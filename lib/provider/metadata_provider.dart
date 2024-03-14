@@ -5,14 +5,14 @@ import 'package:nostrmo/client/nip05/nip05_validor.dart';
 import 'package:nostrmo/consts/nip05status.dart';
 import 'package:nostrmo/util/platform_util.dart';
 
-import '../client/event.dart';
-import '../client/event_kind.dart' as kind;
-import '../client/filter.dart';
-import '../data/metadata.dart';
-import '../data/metadata_db.dart';
-import '../main.dart';
-import '../util/later_function.dart';
-import '../util/string_util.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/data/metadata.dart';
+import 'package:nostrmo/data/metadata_db.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/later_function.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 class MetadataProvider extends ChangeNotifier with LaterFunction {
   final Map<String, Metadata> _metadataCache = {};
@@ -186,12 +186,12 @@ class MetadataProvider extends ChangeNotifier with LaterFunction {
           Filter(kinds: [kind.EventKind.METADATA], authors: [pubkey], limit: 1);
       filters.add(filter.toJson());
       if (filters.length > 11) {
-        nostr!.query(filters, _onEvent);
+        nostr.query(filters, _onEvent);
         filters.clear();
       }
     }
     if (filters.isNotEmpty) {
-      nostr!.query(filters, _onEvent);
+      nostr.query(filters, _onEvent);
     }
 
     for (var pubkey in _needUpdatePubKeys) {

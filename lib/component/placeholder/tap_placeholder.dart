@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../consts/base.dart';
+import 'package:nostrmo/consts/base.dart';
 
 class TapPlaceholder extends StatelessWidget {
   Color color;

@@ -3,8 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../consts/base.dart';
-import '../util/router_util.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/util/router_util.dart';
 
 // ignore: must_be_immutable
 class DatetimePickerComponent extends StatefulWidget {

@@ -4,15 +4,15 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/zap/zap_action.dart';
-import '../../consts/base.dart';
-import '../../consts/router_path.dart';
-import '../../data/metadata.dart';
-import '../../main.dart';
-import '../../provider/metadata_provider.dart';
-import '../../util/router_util.dart';
-import '../../util/string_util.dart';
-import '../content/content_str_link_component.dart';
+import 'package:nostrmo/client/zap/zap_action.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/consts/router_path.dart';
+import 'package:nostrmo/data/metadata.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/provider/metadata_provider.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/component/content/content_str_link_component.dart';
 
 class GenLnbcComponent extends StatefulWidget {
   const GenLnbcComponent({super.key});
@@ -62,7 +62,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
                     onTap: () async {
                       await RouterUtil.router(
                           context, RouterPath.PROFILE_EDITOR, metadata);
-                      metadataProvider.update(nostr!.publicKey);
+                      metadataProvider.update(nostr.publicKey);
                     },
                   ),
                 )
@@ -156,7 +156,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
         return main;
       },
       selector: (context, provider) {
-        return provider.getMetadata(nostr!.publicKey);
+        return provider.getMetadata(nostr.publicKey);
       },
     );
   }

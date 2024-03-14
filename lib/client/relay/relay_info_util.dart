@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'relay_info.dart';
+import 'package:nostrmo/client/relay/relay_info.dart';
 
 class RelayInfoUtil {
   static Future<RelayInfo> get(String url) async {

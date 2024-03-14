@@ -4,11 +4,11 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:nostrmo/component/webview_router.dart';
 import 'package:nostrmo/util/platform_util.dart';
 
-import '../../client/client_utils/keys.dart';
-import '../../client/nip19/nip19.dart';
-import '../../consts/base.dart';
-import '../../main.dart';
-import '../../util/string_util.dart';
+import 'package:nostrmo/client/client_utils/keys.dart';
+import 'package:nostrmo/client/nip19/nip19.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 class LoginRouter extends StatefulWidget {
   const LoginRouter({super.key});

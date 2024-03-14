@@ -1,7 +1,7 @@
 
 import 'package:dio/dio.dart';
 
-import '../../consts/base64.dart';
+import 'package:nostrmo/consts/base64.dart';
 
 class NostrfilesDevUploader {
   static var dio = Dio();

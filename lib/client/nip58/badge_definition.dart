@@ -1,6 +1,6 @@
-import '../../util/string_util.dart';
-import '../event.dart';
-import '../event_kind.dart' as kind;
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
 
 class BadgeDefinition {
   final String pubkey;

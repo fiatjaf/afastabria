@@ -8,22 +8,22 @@ import 'package:pointycastle/ecc/api.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 
-import '../../client/nip04/nip04.dart';
-import '../../component/editor/custom_emoji_embed_builder.dart';
-import '../../component/editor/lnbc_embed_builder.dart';
-import '../../component/editor/mention_event_embed_builder.dart';
-import '../../component/editor/mention_user_embed_builder.dart';
-import '../../component/editor/pic_embed_builder.dart';
-import '../../component/editor/tag_embed_builder.dart';
-import '../../component/editor/video_embed_builder.dart';
-import '../../component/name_component.dart';
-import '../../consts/base.dart';
-import '../../data/metadata.dart';
-import '../../main.dart';
-import '../../provider/dm_provider.dart';
-import '../../provider/metadata_provider.dart';
-import '../../util/router_util.dart';
-import 'dm_detail_item_component.dart';
+import 'package:nostrmo/client/nip04/nip04.dart';
+import 'package:nostrmo/component/editor/custom_emoji_embed_builder.dart';
+import 'package:nostrmo/component/editor/lnbc_embed_builder.dart';
+import 'package:nostrmo/component/editor/mention_event_embed_builder.dart';
+import 'package:nostrmo/component/editor/mention_user_embed_builder.dart';
+import 'package:nostrmo/component/editor/pic_embed_builder.dart';
+import 'package:nostrmo/component/editor/tag_embed_builder.dart';
+import 'package:nostrmo/component/editor/video_embed_builder.dart';
+import 'package:nostrmo/component/name_component.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/data/metadata.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/provider/dm_provider.dart';
+import 'package:nostrmo/provider/metadata_provider.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/router/dm/dm_detail_item_component.dart';
 
 class DMDetailRouter extends StatefulWidget {
   const DMDetailRouter({super.key});
@@ -72,8 +72,8 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
       },
     );
 
-    var localPubkey = nostr!.publicKey;
-    agreement = NIP04.getAgreement(nostr!.privateKey);
+    var localPubkey = nostr.publicKey;
+    agreement = NIP04.getAgreement(nostr.privateKey);
 
     List<Widget> list = [];
 

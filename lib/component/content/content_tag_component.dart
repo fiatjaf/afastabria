@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/consts/router_path.dart';
 import 'package:nostrmo/util/router_util.dart';
 
-import 'content_str_link_component.dart';
+import 'package:nostrmo/component/content/content_str_link_component.dart';
 
 class ContentTagComponent extends StatelessWidget {
   String tag;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../consts/nip05status.dart';
-import '../provider/metadata_provider.dart';
+import 'package:nostrmo/consts/nip05status.dart';
+import 'package:nostrmo/provider/metadata_provider.dart';
 
 class Nip05ValidComponent extends StatefulWidget {
   String pubkey;

@@ -2,9 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 
-import '../../consts/base.dart';
-import '../image_component.dart';
-import '../image_preview_dialog.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/component/image_component.dart';
+import 'package:nostrmo/component/image_preview_dialog.dart';
 
 class ContentImageComponent extends StatelessWidget {
   String imageUrl;

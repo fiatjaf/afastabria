@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nostrmo/component/webview_router.dart';
 
-import '../../consts/base.dart';
+import 'package:nostrmo/consts/base.dart';
 
 class WebUtilItemComponent extends StatelessWidget {
   String link;

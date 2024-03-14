@@ -6,21 +6,21 @@ import 'package:nostrmo/provider/community_info_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:widget_size/widget_size.dart';
 
-import '../../client/event.dart';
-import '../../client/filter.dart';
-import '../../client/nip172/community_info.dart';
-import '../../component/cust_state.dart';
-import '../../component/event/event_list_component.dart';
-import '../../component/event_delete_callback.dart';
-import '../../consts/base_consts.dart';
-import '../../data/event_mem_box.dart';
-import '../../main.dart';
-import '../../provider/setting_provider.dart';
-import '../../util/peddingevents_later_function.dart';
-import '../../util/router_util.dart';
-import '../../client/event_kind.dart' as kind;
-import '../../util/string_util.dart';
-import '../edit/editor_router.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/client/nip172/community_info.dart';
+import 'package:nostrmo/component/cust_state.dart';
+import 'package:nostrmo/component/event/event_list_component.dart';
+import 'package:nostrmo/component/event_delete_callback.dart';
+import 'package:nostrmo/consts/base_consts.dart';
+import 'package:nostrmo/data/event_mem_box.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/provider/setting_provider.dart';
+import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/router/edit/editor_router.dart';
 
 class CommunityDetailRouter extends StatefulWidget {
   const CommunityDetailRouter({super.key});
@@ -192,7 +192,7 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
     var filter = Filter(kinds: kind.EventKind.SUPPORTED_EVENTS, limit: 100);
     var queryArg = filter.toJson();
     queryArg["#a"] = [aId!.toAString()];
-    nostr!.query([queryArg], onEvent, id: subscribeId);
+    nostr.query([queryArg], onEvent, id: subscribeId);
   }
 
   void onEvent(Event event) {
@@ -208,7 +208,7 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
     disposeLater();
 
     try {
-      nostr!.unsubscribe(subscribeId);
+      nostr.unsubscribe(subscribeId);
     } catch (e) {}
   }
 

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nostrmo/util/platform_util.dart';
 
-import '../../component/user_pic_component.dart';
-import '../../consts/base.dart';
-import '../../consts/router_path.dart';
-import '../../main.dart';
-import '../../util/router_util.dart';
+import 'package:nostrmo/component/user_pic_component.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/consts/router_path.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/router_util.dart';
 
 class IndexAppBar extends StatefulWidget {
   static const double height = 56;
@@ -36,7 +36,7 @@ class _IndexAppBar extends State<IndexAppBar> {
           Scaffold.of(context).openDrawer();
         },
         child: UserPicComponent(
-          pubkey: nostr!.publicKey,
+          pubkey: nostr.publicKey,
           width: picHeight,
         ),
       );

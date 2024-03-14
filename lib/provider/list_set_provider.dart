@@ -3,8 +3,8 @@ import 'package:nostrmo/client/aid.dart';
 import 'package:nostrmo/client/filter.dart';
 import 'package:nostrmo/main.dart';
 
-import '../client/event.dart';
-import '../util/later_function.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/util/later_function.dart';
 
 class ListSetProvider extends ChangeNotifier with LaterFunction {
   // holder, hold the events.
@@ -49,7 +49,7 @@ class ListSetProvider extends ChangeNotifier with LaterFunction {
       _penddingAIdStrs.clear();
 
       if (filters.isNotEmpty) {
-        nostr!.query(filters, onEvent, onComplete: () {
+        nostr.query(filters, onEvent, onComplete: () {
           _handingAIds.clear();
         });
       }
@@ -59,7 +59,7 @@ class ListSetProvider extends ChangeNotifier with LaterFunction {
   String getEventKey(Event event) {
     String dTag = "";
     for (var tag in event.tags) {
-      if (tag is List && tag.length > 1) {
+      if (tag.length > 1) {
         var k = tag[0];
         var v = tag[1];
         if (k == "d") {

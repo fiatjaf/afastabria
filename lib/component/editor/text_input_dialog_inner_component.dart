@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../consts/base.dart';
-import '../../util/router_util.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/util/router_util.dart';
 
 class TextInputDialogInnerComponent extends StatefulWidget {
   String title;

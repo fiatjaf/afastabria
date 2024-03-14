@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../client/event.dart';
-import '../../consts/base.dart';
-import '../../consts/router_path.dart';
-import '../../util/router_util.dart';
-import 'zap_event_main_component.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/consts/router_path.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/component/event/zap_event_main_component.dart';
 
 class ZapEventListComponent extends StatefulWidget {
   Event event;

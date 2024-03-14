@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nostrmo/client/aid.dart';
-import '../client/event.dart';
-import '../client/event_kind.dart' as kind;
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
 import 'package:nostrmo/client/nip172/community_info.dart';
 
-import '../client/filter.dart';
-import '../main.dart';
-import '../util/later_function.dart';
-import '../util/string_util.dart';
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/later_function.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 class CommunityInfoProvider extends ChangeNotifier with LaterFunction {
   final Map<String, CommunityInfo> _cache = {};
@@ -58,7 +58,7 @@ class CommunityInfoProvider extends ChangeNotifier with LaterFunction {
       filters.add(queryArg);
     }
     var subscriptId = StringUtil.rndNameStr(16);
-    nostr!.query(filters, _onEvent, id: subscriptId);
+    nostr.query(filters, _onEvent, id: subscriptId);
 
     for (var pubkey in _needPullIds) {
       _handingIds[pubkey] = 1;

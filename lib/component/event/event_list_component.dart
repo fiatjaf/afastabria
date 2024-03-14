@@ -1,20 +1,19 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:nostrmo/main.dart';
 import 'package:nostrmo/provider/community_approved_provider.dart';
 import 'package:nostrmo/util/string_util.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 
-import '../../client/event_kind.dart' as kind;
-import '../../client/event.dart';
-import '../../client/event_relation.dart';
-import '../../consts/base.dart';
-import '../../consts/router_path.dart';
-import '../../util/router_util.dart';
-import 'event_bitcion_icon_component.dart';
-import 'event_main_component.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/event_relation.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/consts/router_path.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/component/event/event_bitcion_icon_component.dart';
+import 'package:nostrmo/component/event/event_main_component.dart';
 
 class EventListComponent extends StatefulWidget {
   Event event;

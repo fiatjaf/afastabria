@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/notice_provider.dart';
-import '../edit/editor_router.dart';
-import 'notice_list_item_component.dart';
+import 'package:nostrmo/provider/notice_provider.dart';
+import 'package:nostrmo/router/edit/editor_router.dart';
+import 'package:nostrmo/router/notice/notice_list_item_component.dart';
 
 class NoticeRouter extends StatefulWidget {
   const NoticeRouter({super.key});

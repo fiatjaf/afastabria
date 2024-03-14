@@ -4,8 +4,8 @@ import 'package:nostrmo/main.dart';
 import 'package:nostrmo/provider/filter_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../consts/base.dart';
-import '../../util/string_util.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 class FilterDirtywordComponent extends StatefulWidget {
   const FilterDirtywordComponent({super.key});

@@ -4,12 +4,12 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:nostrmo/data/custom_emoji.dart';
 
-import '../../client/upload/uploader.dart';
-import '../../consts/base.dart';
-import '../../main.dart';
-import '../../util/router_util.dart';
-import '../../util/string_util.dart';
-import '../content/content_custom_emoji_component.dart';
+import 'package:nostrmo/client/upload/uploader.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/component/content/content_custom_emoji_component.dart';
 
 class CustomEmojiAddDialog extends StatefulWidget {
   const CustomEmojiAddDialog({super.key});

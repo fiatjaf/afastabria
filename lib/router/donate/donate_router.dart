@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
 
-import '../../component/appbar4stack.dart';
-import '../../component/cust_state.dart';
-import '../../consts/base.dart';
-import '../../consts/coffee_ids.dart';
-import '../../main.dart';
-import '../../util/string_util.dart';
+import 'package:nostrmo/component/appbar4stack.dart';
+import 'package:nostrmo/component/cust_state.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/consts/coffee_ids.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 class DonateRouter extends StatefulWidget {
   const DonateRouter({super.key});

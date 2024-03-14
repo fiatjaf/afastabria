@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../client/nip02/cust_contact_list.dart';
-import '../../util/router_util.dart';
-import 'user_contact_list_component.dart';
+import 'package:nostrmo/client/nip02/cust_contact_list.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/router/user/user_contact_list_component.dart';
 
 class UserContactListRouter extends StatefulWidget {
   const UserContactListRouter({super.key});

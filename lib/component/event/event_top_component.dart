@@ -9,11 +9,11 @@ import 'package:nostrmo/util/router_util.dart';
 import 'package:nostrmo/util/string_util.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/event.dart';
-import '../../consts/base.dart';
-import '../../data/metadata.dart';
-import '../../provider/metadata_provider.dart';
-import '../image_component.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/data/metadata.dart';
+import 'package:nostrmo/provider/metadata_provider.dart';
+import 'package:nostrmo/component/image_component.dart';
 
 class EventTopComponent extends StatefulWidget {
   Event event;

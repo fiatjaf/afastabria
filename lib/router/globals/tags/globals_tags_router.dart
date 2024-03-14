@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/consts/router_path.dart';
 import 'package:nostrmo/util/router_util.dart';
 
-import '../../../component/keep_alive_cust_state.dart';
-import '../../../component/placeholder/tap_list_placeholder.dart';
-import '../../../consts/base.dart';
-import '../../../util/dio_util.dart';
-import '../../../util/string_util.dart';
+import 'package:nostrmo/component/keep_alive_cust_state.dart';
+import 'package:nostrmo/component/placeholder/tap_list_placeholder.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/util/dio_util.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 class GlobalsTagsRouter extends StatefulWidget {
   const GlobalsTagsRouter({super.key});

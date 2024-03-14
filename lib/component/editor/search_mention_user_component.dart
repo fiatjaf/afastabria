@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../../client/nip19/nip19.dart';
-import '../../consts/base.dart';
-import '../../data/metadata.dart';
-import '../../main.dart';
-import '../../util/router_util.dart';
-import '../../util/string_util.dart';
-import '../../util/when_stop_function.dart';
-import '../image_component.dart';
-import 'search_mention_component.dart';
+import 'package:nostrmo/client/nip19/nip19.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/data/metadata.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/util/when_stop_function.dart';
+import 'package:nostrmo/component/image_component.dart';
+import 'package:nostrmo/component/editor/search_mention_component.dart';
 
 class SearchMentionUserComponent extends StatefulWidget {
   const SearchMentionUserComponent({super.key});

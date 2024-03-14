@@ -8,8 +8,8 @@ import 'package:dio/dio.dart';
 import 'package:nostrmo/client/upload/uploader.dart';
 import 'package:nostrmo/util/string_util.dart';
 
-import '../../consts/base64.dart';
-import 'nostr_build_uploader.dart';
+import 'package:nostrmo/consts/base64.dart';
+import 'package:nostrmo/client/upload/nostr_build_uploader.dart';
 
 class VoidCatUploader {
   static const String UPLOAD_ACTION = "https://void.cat/upload?cli=true";

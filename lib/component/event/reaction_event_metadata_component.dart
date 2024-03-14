@@ -3,11 +3,11 @@ import 'package:nostrmo/consts/router_path.dart';
 import 'package:nostrmo/util/router_util.dart';
 import 'package:provider/provider.dart';
 
-import '../../data/metadata.dart';
-import '../../provider/metadata_provider.dart';
-import '../../util/string_util.dart';
-import '../image_component.dart';
-import '../simple_name_component.dart';
+import 'package:nostrmo/data/metadata.dart';
+import 'package:nostrmo/provider/metadata_provider.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/component/image_component.dart';
+import 'package:nostrmo/component/simple_name_component.dart';
 
 class ReactionEventMetadataComponent extends StatefulWidget {
   String pubkey;

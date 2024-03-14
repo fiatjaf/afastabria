@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../../client/event_kind.dart' as kind;
-import '../client/event.dart';
-import '../client/filter.dart';
-import '../client/nip04/dm_session.dart';
-import '../client/nostr.dart';
-import '../data/dm_session_info.dart';
-import '../data/dm_session_info_db.dart';
-import '../data/event_db.dart';
-import '../main.dart';
-import '../util/peddingevents_later_function.dart';
-import '../util/string_util.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/client/nip04/dm_session.dart';
+import 'package:nostrmo/client/nostr.dart';
+import 'package:nostrmo/data/dm_session_info.dart';
+import 'package:nostrmo/data/dm_session_info_db.dart';
+import 'package:nostrmo/data/event_db.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 class DMProvider extends ChangeNotifier with PenddingEventsLaterFunction {
   static DMProvider? _dmProvider;
@@ -173,7 +173,7 @@ class DMProvider extends ChangeNotifier with PenddingEventsLaterFunction {
 
     for (var tag in event.tags) {
       if (tag[0] == "p") {
-        return tag[1] as String;
+        return tag[1];
       }
     }
 
@@ -205,7 +205,7 @@ class DMProvider extends ChangeNotifier with PenddingEventsLaterFunction {
     targetNostr ??= nostr;
     var filter0 = Filter(
       kinds: [kind.EventKind.DIRECT_MESSAGE],
-      authors: [targetNostr!.publicKey],
+      authors: [targetNostr.publicKey],
       since: _initSince + 1,
     );
     var filter1 = Filter(

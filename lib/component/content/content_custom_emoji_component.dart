@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../image_component.dart';
+import 'package:nostrmo/component/image_component.dart';
 
 class ContentCustomEmojiComponent extends StatelessWidget {
   final String imagePath;

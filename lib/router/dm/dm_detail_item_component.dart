@@ -7,11 +7,11 @@ import 'package:nostrmo/util/router_util.dart';
 import 'package:pointycastle/export.dart' as pointycastle;
 import 'package:provider/provider.dart';
 
-import '../../client/event.dart';
-import '../../component/user_pic_component.dart';
-import '../../consts/base.dart';
-import '../../consts/base_consts.dart';
-import '../../provider/setting_provider.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/component/user_pic_component.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/consts/base_consts.dart';
+import 'package:nostrmo/provider/setting_provider.dart';
 
 class DMDetailItemComponent extends StatefulWidget {
   String sessionPubkey;

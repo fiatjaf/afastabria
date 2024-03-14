@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../util/router_util.dart';
+import 'package:nostrmo/util/router_util.dart';
 
 class Appbar4Stack extends StatefulWidget {
   Widget? title;

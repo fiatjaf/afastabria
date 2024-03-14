@@ -3,13 +3,13 @@ import 'dart:developer';
 
 import 'package:bech32/bech32.dart';
 
-import '../event.dart';
-import '../event_kind.dart' as kind;
-import '../../util/dio_util.dart';
-import '../../util/string_util.dart';
-import '../nip19/nip19.dart';
-import '../nostr.dart';
-import 'lnurl_response.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/util/dio_util.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/client/nip19/nip19.dart';
+import 'package:nostrmo/client/nostr.dart';
+import 'package:nostrmo/client/zap/lnurl_response.dart';
 
 class Zap {
   static String decodeLud06Link(String lud06) {

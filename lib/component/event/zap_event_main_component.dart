@@ -3,12 +3,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
-import '../../client/event.dart';
-import '../../client/zap/zap_num_util.dart';
-import '../../util/number_format_util.dart';
-import '../../util/spider_util.dart';
-import '../../util/string_util.dart';
-import 'reaction_event_item_component.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/zap/zap_num_util.dart';
+import 'package:nostrmo/util/number_format_util.dart';
+import 'package:nostrmo/util/spider_util.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/component/event/reaction_event_item_component.dart';
 
 // ignore: must_be_immutable
 class ZapEventMainComponent extends StatefulWidget {

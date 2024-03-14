@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/client/cashu/cashu_tokens.dart';
 import 'package:nostrmo/util/colors_util.dart';
 
-import '../../consts/base.dart';
-import '../../util/cashu_util.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/util/cashu_util.dart';
 
 class ContentCashuComponent extends StatelessWidget {
   String cashuStr;

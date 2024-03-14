@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:nostrmo/component/simple_name_component.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/event_kind.dart' as kind;
-import '../../client/filter.dart';
-import '../../component/appbar4stack.dart';
-import '../../component/cust_state.dart';
-import '../../component/event/event_list_component.dart';
-import '../../component/user/metadata_component.dart';
-import '../../consts/base_consts.dart';
-import '../../data/event_mem_box.dart';
-import '../../data/metadata.dart';
-import '../../main.dart';
-import '../../provider/metadata_provider.dart';
-import '../../provider/setting_provider.dart';
-import '../../util/load_more_event.dart';
-import '../../util/peddingevents_later_function.dart';
-import '../../util/router_util.dart';
-import '../../util/string_util.dart';
-import 'user_statistics_component.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/component/appbar4stack.dart';
+import 'package:nostrmo/component/cust_state.dart';
+import 'package:nostrmo/component/event/event_list_component.dart';
+import 'package:nostrmo/component/user/metadata_component.dart';
+import 'package:nostrmo/consts/base_consts.dart';
+import 'package:nostrmo/data/event_mem_box.dart';
+import 'package:nostrmo/data/metadata.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/provider/metadata_provider.dart';
+import 'package:nostrmo/provider/setting_provider.dart';
+import 'package:nostrmo/util/load_more_event.dart';
+import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/router/user/user_statistics_component.dart';
 
 class UserRouter extends StatefulWidget {
   const UserRouter({super.key});
@@ -238,13 +238,13 @@ class _UserRouter extends CustState<UserRouter>
 
     if (StringUtil.isNotBlank(subscribeId)) {
       try {
-        nostr!.unsubscribe(subscribeId!);
+        nostr.unsubscribe(subscribeId!);
       } catch (e) {}
     }
   }
 
   void unSubscribe() {
-    nostr!.unsubscribe(subscribeId!);
+    nostr.unsubscribe(subscribeId!);
     subscribeId = null;
   }
 
@@ -265,7 +265,7 @@ class _UserRouter extends CustState<UserRouter>
     subscribeId = StringUtil.rndNameStr(16);
 
     if (!box.isEmpty()) {
-      var activeRelays = nostr!.activeRelays();
+      var activeRelays = nostr.activeRelays();
       var oldestCreatedAts = box.oldestCreatedAtByRelay(
         activeRelays,
       );
@@ -275,9 +275,9 @@ class _UserRouter extends CustState<UserRouter>
         filter.until = oldestCreatedAt;
         filtersMap[relay.url] = [filter.toJson()];
       }
-      nostr!.queryByFilters(filtersMap, onEvent, id: subscribeId);
+      nostr.queryByFilters(filtersMap, onEvent, id: subscribeId);
     } else {
-      nostr!.query([filter.toJson()], onEvent, id: subscribeId);
+      nostr.query([filter.toJson()], onEvent, id: subscribeId);
     }
   }
 

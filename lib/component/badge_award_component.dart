@@ -7,7 +7,7 @@ import 'package:nostrmo/provider/badge_definition_provider.dart';
 import 'package:nostrmo/provider/badge_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'badge_detail_component.dart';
+import 'package:nostrmo/component/badge_detail_component.dart';
 
 // ignore: must_be_immutable
 class BadgeAwardComponent extends StatefulWidget {
@@ -35,7 +35,7 @@ class _BadgeAwardComponent extends State<BadgeAwardComponent> {
     var theme = Theme.of(context);
     var badgeId = "";
     for (var tag in widget.event.tags) {
-      if (tag is List && tag[0] == "a") {
+      if (tag[0] == "a") {
         badgeId = tag[1];
       }
     }

@@ -1,24 +1,21 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/enum_selector_component.dart';
-import 'package:nostrmo/consts/base_consts.dart';
 import 'package:nostrmo/provider/contact_list_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/event.dart';
-import '../../client/event_kind.dart' as kind;
-import '../../client/nip02/cust_contact_list.dart';
-import '../../client/filter.dart';
-import '../../client/zap/zap_num_util.dart';
-import '../../component/cust_state.dart';
-import '../../consts/base.dart';
-import '../../consts/router_path.dart';
-import '../../data/event_mem_box.dart';
-import '../../main.dart';
-import '../../util/number_format_util.dart';
-import '../../util/router_util.dart';
-import '../../util/string_util.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/client/nip02/cust_contact_list.dart';
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/client/zap/zap_num_util.dart';
+import 'package:nostrmo/component/cust_state.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/consts/router_path.dart';
+import 'package:nostrmo/data/event_mem_box.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/number_format_util.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 // ignore: must_be_immutable
 class UserStatisticsComponent extends StatefulWidget {
@@ -217,7 +214,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
           authors: [widget.pubkey],
           limit: 1,
           kinds: [kind.EventKind.CONTACT_LIST]);
-      nostr!.query([filter.toJson()], (event) {
+      nostr.query([filter.toJson()], (event) {
         if (((contactListEvent != null &&
                     event.createdAt > contactListEvent!.createdAt) ||
                 contactListEvent == null) &&
@@ -236,7 +233,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
           authors: [widget.pubkey],
           limit: 1,
           kinds: [kind.EventKind.RELAY_LIST_METADATA]);
-      nostr!.query([filter.toJson()], (event) {
+      nostr.query([filter.toJson()], (event) {
         if (((relaysEvent != null &&
                     event.createdAt > relaysEvent!.createdAt) ||
                 relaysEvent == null) &&
@@ -283,7 +280,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
       filter["kinds"] = [kind.EventKind.CONTACT_LIST];
       filter["#p"] = [widget.pubkey];
       followedSubscribeId = StringUtil.rndNameStr(12);
-      nostr!.query([filter], (e) {
+      nostr.query([filter], (e) {
         var oldEvent = followedMap![e.pubKey];
         if (oldEvent == null || e.createdAt > oldEvent.createdAt) {
           followedMap![e.pubKey] = e;
@@ -319,7 +316,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
       var filter = Filter(kinds: [kind.EventKind.ZAP], p: [widget.pubkey]);
       zapSubscribeId = StringUtil.rndNameStr(12);
       // print(filter);
-      nostr!.query([filter.toJson()], onZapEvent, id: zapSubscribeId);
+      nostr.query([filter.toJson()], onZapEvent, id: zapSubscribeId);
 
       zapNum = 0;
     } else {
@@ -352,7 +349,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
   void checkAndUnsubscribe(String queryId) {
     if (StringUtil.isNotBlank(queryId)) {
       try {
-        nostr!.unsubscribe(queryId);
+        nostr.unsubscribe(queryId);
       } catch (e) {}
     }
   }

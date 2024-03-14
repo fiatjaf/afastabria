@@ -6,11 +6,11 @@ import 'package:nostrmo/util/encrypt_util.dart';
 import 'package:nostrmo/util/platform_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../consts/base.dart';
-import '../consts/base_consts.dart';
-import '../consts/theme_style.dart';
-import '../util/string_util.dart';
-import 'data_util.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/consts/base_consts.dart';
+import 'package:nostrmo/consts/theme_style.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/provider/data_util.dart';
 
 class SettingProvider extends ChangeNotifier {
   static SettingProvider? _settingProvider;

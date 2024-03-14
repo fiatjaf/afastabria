@@ -7,9 +7,9 @@ import 'package:nostrmo/main.dart';
 import 'package:nostrmo/client/event.dart';
 import 'package:nostrmo/client/filter.dart';
 
-import 'util.dart';
-import 'relay_info.dart';
-import 'relay_info_util.dart';
+import 'package:nostrmo/client/relay/util.dart';
+import 'package:nostrmo/client/relay/relay_info.dart';
+import 'package:nostrmo/client/relay/relay_info_util.dart';
 
 abstract class Relay {
   late String url;

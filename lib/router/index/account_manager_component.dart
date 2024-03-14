@@ -13,16 +13,16 @@ import 'package:nostrmo/provider/setting_provider.dart';
 import 'package:nostrmo/util/router_util.dart';
 import 'package:nostrmo/client/nostr.dart';
 
-import '../../client/client_utils/keys.dart';
-import '../../client/nip19/nip19.dart';
-import '../../component/confirm_dialog.dart';
-import '../../component/image_component.dart';
-import '../../consts/base.dart';
-import '../../data/dm_session_info_db.dart';
-import '../../data/event_db.dart';
-import '../../main.dart';
-import '../../util/string_util.dart';
-import 'index_drawer_content.dart';
+import 'package:nostrmo/client/client_utils/keys.dart';
+import 'package:nostrmo/client/nip19/nip19.dart';
+import 'package:nostrmo/component/confirm_dialog.dart';
+import 'package:nostrmo/component/image_component.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/data/dm_session_info_db.dart';
+import 'package:nostrmo/data/event_db.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/router/index/index_drawer_content.dart';
 
 class AccountManagerComponent extends StatefulWidget {
   const AccountManagerComponent({super.key});

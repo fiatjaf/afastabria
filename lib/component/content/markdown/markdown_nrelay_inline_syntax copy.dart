@@ -1,7 +1,7 @@
 
 import 'package:markdown/markdown.dart' as md;
 
-import 'markdown_nrelay_element_builder.dart';
+import 'package:nostrmo/component/content/markdown/markdown_nrelay_element_builder.dart';
 
 class MarkdownNrelayInlineSyntax extends md.InlineSyntax {
   MarkdownNrelayInlineSyntax() : super('nostr:nrelay[a-zA-Z0-9]+');

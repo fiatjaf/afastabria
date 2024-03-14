@@ -15,26 +15,26 @@ import 'package:nostrmo/util/router_util.dart';
 import 'package:nostrmo/util/when_stop_function.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/event.dart';
-import '../../client/event_kind.dart' as kind;
-import '../../component/colors_selector_component.dart';
-import '../../component/confirm_dialog.dart';
-import '../../component/editor/text_input_dialog.dart';
-import '../../component/enum_multi_selector_component.dart';
-import '../../component/enum_selector_component.dart';
-import '../../component/translate/translate_model_manager.dart';
-import '../../consts/base.dart';
-import '../../consts/base_consts.dart';
-import '../../consts/image_services.dart';
-import '../../consts/relay_mode.dart';
-import '../../consts/theme_style.dart';
-import '../../data/metadata.dart';
-import '../../main.dart';
-import '../../provider/setting_provider.dart';
-import '../../util/auth_util.dart';
-import '../../util/string_util.dart';
-import 'setting_group_item_component.dart';
-import 'setting_group_title_component.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/component/colors_selector_component.dart';
+import 'package:nostrmo/component/confirm_dialog.dart';
+import 'package:nostrmo/component/editor/text_input_dialog.dart';
+import 'package:nostrmo/component/enum_multi_selector_component.dart';
+import 'package:nostrmo/component/enum_selector_component.dart';
+import 'package:nostrmo/component/translate/translate_model_manager.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/consts/base_consts.dart';
+import 'package:nostrmo/consts/image_services.dart';
+import 'package:nostrmo/consts/relay_mode.dart';
+import 'package:nostrmo/consts/theme_style.dart';
+import 'package:nostrmo/data/metadata.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/provider/setting_provider.dart';
+import 'package:nostrmo/util/auth_util.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/router/setting/setting_group_item_component.dart';
+import 'package:nostrmo/router/setting/setting_group_title_component.dart';
 
 // ignore: must_be_immutable
 class SettingRouter extends StatefulWidget {
@@ -669,22 +669,22 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
 
         // use a blank metadata to update it
         var blankMetadata = Metadata();
-        var updateEvent = Event.finalize(nostr!.privateKey,
+        var updateEvent = Event.finalize(nostr.privateKey,
             kind.EventKind.METADATA, [], jsonEncode(blankMetadata));
-        nostr!.broadcast(updateEvent);
+        nostr.broadcast(updateEvent);
 
         // use a blank contact list to update it
         var blankContactList = CustContactList();
-        nostr!.sendContactList(blankContactList, "");
+        nostr.sendContactList(blankContactList, "");
 
         var filter = Filter(authors: [
-          nostr!.publicKey
+          nostr.publicKey
         ], kinds: [
           kind.EventKind.TEXT_NOTE,
           kind.EventKind.REPOST,
           kind.EventKind.GENERIC_REPOST,
         ]);
-        nostr!.query([filter.toJson()], onDeletedEventReceive);
+        nostr.query([filter.toJson()], onDeletedEventReceive);
       } catch (e) {
         log("delete account error ${e.toString()}");
       }
@@ -705,13 +705,13 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
         ids.add(event.id);
 
         if (ids.length > 20) {
-          nostr!.deleteEvents(ids);
+          nostr.deleteEvents(ids);
           ids.clear();
         }
       }
 
       if (ids.isNotEmpty) {
-        nostr!.deleteEvents(ids);
+        nostr.deleteEvents(ids);
       }
     } finally {
       var index = settingProvider.privateKeyIndex;

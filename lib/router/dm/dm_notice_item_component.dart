@@ -3,11 +3,11 @@ import 'package:get_time_ago/get_time_ago.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/provider/notice_provider.dart';
 
-import '../../component/point_component.dart';
-import '../../consts/base.dart';
-import '../../consts/router_path.dart';
-import '../../util/router_util.dart';
-import '../../util/string_util.dart';
+import 'package:nostrmo/component/point_component.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/consts/router_path.dart';
+import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 class DMNoticeItemComponent extends StatelessWidget {
   static const double IMAGE_WIDTH = 34;

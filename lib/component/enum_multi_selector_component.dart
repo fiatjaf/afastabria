@@ -3,7 +3,7 @@ import 'package:nostrmo/component/enum_selector_component.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/util/router_util.dart';
 
-import '../consts/base_consts.dart';
+import 'package:nostrmo/consts/base_consts.dart';
 
 class EnumMultiSelectorComponent extends StatefulWidget {
   final List<EnumObj> list;

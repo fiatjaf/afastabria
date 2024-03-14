@@ -6,10 +6,10 @@ import 'package:nostrmo/data/metadata.dart';
 import 'package:nostrmo/provider/metadata_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../client/relay/relay.dart';
-import '../../component/image_component.dart';
-import '../../component/webview_router.dart';
-import '../../util/router_util.dart';
+import 'package:nostrmo/client/relay/relay.dart';
+import 'package:nostrmo/component/image_component.dart';
+import 'package:nostrmo/component/webview_router.dart';
+import 'package:nostrmo/util/router_util.dart';
 
 class RelayInfoRouter extends StatefulWidget {
   const RelayInfoRouter({super.key});

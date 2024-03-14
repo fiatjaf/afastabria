@@ -5,8 +5,8 @@ import 'dart:isolate';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/client/event.dart';
 
-import 'relay.dart';
-import 'relay_isolate_worker.dart';
+import 'package:nostrmo/client/relay/relay.dart';
+import 'package:nostrmo/client/relay/relay_isolate_worker.dart';
 
 // The real relay, which is run in other isolate.
 // It can move jsonDecode and event id check and sign check from main Isolate

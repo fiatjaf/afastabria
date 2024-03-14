@@ -1,4 +1,4 @@
-import '../event.dart';
+import 'package:nostrmo/client/event.dart';
 
 class LongFormInfo {
   String? title;
@@ -18,8 +18,8 @@ class LongFormInfo {
     for (var i = 0; i < length; i++) {
       var tag = event.tags[i];
       var tagLength = tag.length;
-      if (tagLength > 1 && tag[1] is String) {
-        var value = tag[1] as String;
+      if (tagLength > 1) {
+        var value = tag[1];
         if (tag[0] == "title") {
           title = value;
         } else if (tag[0] == "summary") {

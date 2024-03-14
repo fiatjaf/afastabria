@@ -5,8 +5,8 @@ import 'package:hex/hex.dart';
 import 'package:nostrmo/client/nip19/nip19.dart';
 import 'package:nostrmo/client/nip19/tlv_util.dart';
 
-import '../../component/content/content_decoder.dart';
-import 'hrps.dart';
+import 'package:nostrmo/component/content/content_decoder.dart';
+import 'package:nostrmo/client/nip19/hrps.dart';
 
 class NIP19Tlv {
   static bool isNprofile(String text) {

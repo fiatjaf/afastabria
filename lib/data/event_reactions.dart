@@ -1,10 +1,10 @@
 import 'package:nostrmo/util/string_util.dart';
 
-import '../../client/event_kind.dart' as kind;
-import '../client/event.dart';
-import '../client/zap/zap_num_util.dart';
-import '../main.dart';
-import '../util/find_event_interface.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/zap/zap_num_util.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/find_event_interface.dart';
 
 class EventReactions implements FindEventInterface {
   String id;
@@ -90,7 +90,7 @@ class EventReactions implements FindEventInterface {
         } else {
           likeNum++;
           likes.add(event);
-          if (event.pubKey == nostr!.publicKey) {
+          if (event.pubKey == nostr.publicKey) {
             myLikeEvents ??= [];
             myLikeEvents!.add(event);
           }

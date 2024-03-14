@@ -5,20 +5,20 @@ import 'package:nostrmo/component/event_delete_callback.dart';
 import 'package:nostrmo/component/keep_alive_cust_state.dart';
 import 'package:provider/provider.dart';
 
-import '../../../client/event.dart';
-import '../../../client/event_kind.dart' as kind;
-import '../../../client/filter.dart';
-import '../../../component/event/event_list_component.dart';
-import '../../../component/placeholder/event_list_placeholder.dart';
-import '../../../consts/base.dart';
-import '../../../consts/base_consts.dart';
-import '../../../data/event_mem_box.dart';
-import '../../../main.dart';
-import '../../../provider/setting_provider.dart';
-import '../../../util/dio_util.dart';
-import '../../../util/peddingevents_later_function.dart';
-import '../../../util/platform_util.dart';
-import '../../../util/string_util.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/component/event/event_list_component.dart';
+import 'package:nostrmo/component/placeholder/event_list_placeholder.dart';
+import 'package:nostrmo/consts/base.dart';
+import 'package:nostrmo/consts/base_consts.dart';
+import 'package:nostrmo/data/event_mem_box.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/provider/setting_provider.dart';
+import 'package:nostrmo/util/dio_util.dart';
+import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/platform_util.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 class GlobalsEventsRouter extends StatefulWidget {
   const GlobalsEventsRouter({super.key});
@@ -100,7 +100,7 @@ class _GlobalsEventsRouter extends KeepAliveCustState<GlobalsEventsRouter>
     }
 
     var filter = Filter(ids: ids, kinds: [kind.EventKind.TEXT_NOTE]);
-    nostr!.subscribe([filter.toJson()], (event) {
+    nostr.subscribe([filter.toJson()], (event) {
       if (eventBox.isEmpty()) {
         laterTimeMS = 200;
       } else {
@@ -116,7 +116,7 @@ class _GlobalsEventsRouter extends KeepAliveCustState<GlobalsEventsRouter>
 
   void unsubscribe() {
     try {
-      nostr!.unsubscribe(subscribeId);
+      nostr.unsubscribe(subscribeId);
     } catch (e) {}
   }
 

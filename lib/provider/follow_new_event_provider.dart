@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../client/event.dart';
-import '../client/filter.dart';
-import '../client/nip02/contact.dart';
-import '../data/event_mem_box.dart';
-import '../main.dart';
-import '../util/peddingevents_later_function.dart';
-import '../util/string_util.dart';
-import 'follow_event_provider.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/filter.dart';
+import 'package:nostrmo/client/nip02/contact.dart';
+import 'package:nostrmo/data/event_mem_box.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/provider/follow_event_provider.dart';
 
 class FollowNewEventProvider extends ChangeNotifier
     with PenddingEventsLaterFunction {
@@ -22,7 +22,7 @@ class FollowNewEventProvider extends ChangeNotifier
     if (_subscribeIds.isNotEmpty) {
       for (var subscribeId in _subscribeIds) {
         try {
-          nostr!.unsubscribe(subscribeId);
+          nostr.unsubscribe(subscribeId);
         } catch (e) {}
       }
       _subscribeIds.clear();
@@ -64,7 +64,7 @@ class FollowNewEventProvider extends ChangeNotifier
 
   String _doQueryFunc(Filter filter, {bool queriyTags = false}) {
     var subscribeId = StringUtil.rndNameStr(12);
-    nostr!.query(
+    nostr.query(
         FollowEventProvider.addTagCommunityFilter(
             [filter.toJson()], queriyTags), (event) {
       later(event, handleEvents, null);

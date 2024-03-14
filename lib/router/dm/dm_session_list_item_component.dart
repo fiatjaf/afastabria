@@ -13,7 +13,7 @@ import 'package:nostrmo/util/router_util.dart';
 import 'package:provider/provider.dart';
 import 'package:pointycastle/export.dart' as pointycastle;
 
-import '../../util/string_util.dart';
+import 'package:nostrmo/util/string_util.dart';
 
 class DMSessionListItemComponent extends StatefulWidget {
   DMSessionDetail detail;

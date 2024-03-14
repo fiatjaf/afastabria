@@ -16,14 +16,14 @@ import 'package:nostrmo/router/index/index_app_bar.dart';
 import 'package:nostrmo/util/router_util.dart';
 import 'package:pointycastle/ecc/api.dart';
 
-import '../../client/event.dart';
-import '../../client/event_kind.dart' as kind;
-import '../../component/cust_state.dart';
-import '../../component/editor/custom_emoji_embed_builder.dart';
-import '../../component/editor/editor_mixin.dart';
-import '../../component/editor/poll_input_component.dart';
-import '../../util/string_util.dart';
-import 'editor_notify_item_component.dart';
+import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/event_kind.dart' as kind;
+import 'package:nostrmo/component/cust_state.dart';
+import 'package:nostrmo/component/editor/custom_emoji_embed_builder.dart';
+import 'package:nostrmo/component/editor/editor_mixin.dart';
+import 'package:nostrmo/component/editor/poll_input_component.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/router/edit/editor_notify_item_component.dart';
 
 // ignore: must_be_immutable
 class EditorRouter extends StatefulWidget {

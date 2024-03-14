@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../main.dart';
-import '../util/platform_util.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/util/platform_util.dart';
 
 class ImageComponent extends StatelessWidget {
   String imageUrl;

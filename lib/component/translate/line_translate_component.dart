@@ -3,11 +3,11 @@ import 'package:google_mlkit_language_id/google_mlkit_language_id.dart';
 import 'package:google_mlkit_translation/google_mlkit_translation.dart';
 import 'package:provider/provider.dart';
 
-import '../../consts/base_consts.dart';
-import '../../main.dart';
-import '../../provider/setting_provider.dart';
-import '../../util/string_util.dart';
-import '../cust_state.dart';
+import 'package:nostrmo/consts/base_consts.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/provider/setting_provider.dart';
+import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/component/cust_state.dart';
 
 class LineTranslateComponent extends StatefulWidget {
   List<dynamic> inlines;

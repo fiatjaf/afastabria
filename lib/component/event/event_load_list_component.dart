@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../consts/base.dart';
+import 'package:nostrmo/consts/base.dart';
 
 class EventLoadListComponent extends StatelessWidget {
   const EventLoadListComponent({super.key});
