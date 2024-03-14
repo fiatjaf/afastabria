@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:nostrmo/client/aid.dart';
 import 'package:nostrmo/provider/replaceable_event_provider.dart';
@@ -13,6 +12,7 @@ import '../../util/router_util.dart';
 import '../cust_state.dart';
 import 'event_main_component.dart';
 
+// ignore: must_be_immutable
 class EventQuoteComponent extends StatefulWidget {
   Event? event;
 
@@ -22,7 +22,8 @@ class EventQuoteComponent extends StatefulWidget {
 
   bool showVideo;
 
-  EventQuoteComponent({super.key, 
+  EventQuoteComponent({
+    super.key,
     this.event,
     this.id,
     this.aId,
@@ -120,7 +121,7 @@ class _EventQuoteComponent extends CustState<EventQuoteComponent> {
       margin: const EdgeInsets.all(Base.BASE_PADDING),
       height: 60,
       decoration: boxDecoration,
-      child: Center(child: Text("Note_loading")),
+      child: const Center(child: Text("Note loading")),
     );
   }
 

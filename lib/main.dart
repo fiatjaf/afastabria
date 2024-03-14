@@ -87,8 +87,6 @@ late DMProvider dmProvider;
 late IndexProvider indexProvider;
 late EventReactionsProvider eventReactionsProvider;
 late NoticeProvider noticeProvider;
-late SingleEventProvider singleEventProvider;
-late RelayProvider relayProvider;
 late FilterProvider filterProvider;
 late LinkPreviewDataProvider linkPreviewDataProvider;
 late BadgeDefinitionProvider badgeDefinitionProvider;
@@ -105,7 +103,7 @@ late ListProvider listProvider;
 late ListSetProvider listSetProvider;
 late BadgeProvider badgeProvider;
 
-Nostr? nostr;
+late Nostr nostr;
 
 bool firstLogin = false;
 
@@ -166,8 +164,6 @@ Future<void> main() async {
   );
   eventReactionsProvider = EventReactionsProvider();
   noticeProvider = NoticeProvider();
-  singleEventProvider = SingleEventProvider();
-  relayProvider = RelayProvider.getInstance();
   filterProvider = FilterProvider.getInstance();
   linkPreviewDataProvider = LinkPreviewDataProvider();
   badgeDefinitionProvider = BadgeDefinitionProvider();
@@ -187,10 +183,6 @@ Future<void> main() async {
     var network = settingProvider.network;
     network = network!.trim();
     SocksProxy.initProxy(proxy: network);
-  }
-
-  if (StringUtil.isNotBlank(settingProvider.privateKey)) {
-    nostr = relayProvider.genNostr(settingProvider.privateKey!);
   }
 
   FlutterNativeSplash.remove();
@@ -296,12 +288,6 @@ class _MyApp extends State<MyApp> {
         ),
         ListenableProvider<NoticeProvider>.value(
           value: noticeProvider,
-        ),
-        ListenableProvider<SingleEventProvider>.value(
-          value: singleEventProvider,
-        ),
-        ListenableProvider<RelayProvider>.value(
-          value: relayProvider,
         ),
         ListenableProvider<FilterProvider>.value(
           value: filterProvider,

@@ -39,9 +39,7 @@ class IndexRouter extends StatefulWidget {
 
 class _IndexRouter extends CustState<IndexRouter>
     with TickerProviderStateMixin, WidgetsBindingObserver {
-  // ignore: non_constant_identifier_names
   static double PC_MAX_COLUMN_0 = 200;
-  // ignore: non_constant_identifier_names
   static double PC_MAX_COLUMN_1 = 550;
 
   late TabController followTabController;

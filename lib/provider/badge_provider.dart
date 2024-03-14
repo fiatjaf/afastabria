@@ -53,7 +53,7 @@ class BadgeProvider extends ChangeNotifier {
     var filter =
         Filter(authors: [pubkey], kinds: [kind.EventKind.BADGE_ACCEPT]);
     if (initQuery) {
-      targetNostr!.addInitQuery([filter.toJson()], onEvent);
+      targetNostr!.addInitQuery([filter], onEvent);
     } else {
       targetNostr!.query([filter.toJson()], onEvent);
     }

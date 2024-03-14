@@ -1,16 +1,18 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import '../../consts/client_connected.dart';
-import '../../data/relay_status.dart';
+import 'package:nostrmo/client/event.dart';
+
 import 'relay.dart';
 
 class RelayBase extends Relay {
-  RelayBase(String url, RelayStatus relayStatus,
-      {WriteAccess access = WriteAccess.readWrite})
-      : super(url, relayStatus, access: access);
+  RelayBase(
+    String url,
+    RelayStatus relayStatus, {
+    bool assumeValid = true,
+    Event Function(List<List<String>>)? makeAuthEvent,
+  }) : super(url, relayStatus, assumeValid, makeAuthEvent);
 
   WebSocketChannel? _wsChannel;
 
@@ -22,26 +24,22 @@ class RelayBase extends Relay {
     }
 
     try {
-      relayStatus.connected = ClientConneccted.CONNECTING;
+      relayStatus.connected = ConnState.CONNECTING;
       getRelayInfo(url);
 
       final wsUrl = Uri.parse(url);
-      log("Connect begin: $url");
       _wsChannel = WebSocketChannel.connect(wsUrl);
-      // await _wsChannel!.ready;
-      log("Connect complete: $url");
+      await _wsChannel!.ready;
+
       _wsChannel!.stream.listen((message) {
-        if (onMessage != null) {
-          final List<dynamic> json = jsonDecode(message);
-          onMessage!(this, json);
-        }
+        onMessage(jsonDecode(message));
       }, onError: (error) async {
         print(error);
         onError("Websocket error $url", reconnect: true);
       }, onDone: () {
         onError("Websocket stream closed by remote: $url", reconnect: true);
       });
-      relayStatus.connected = ClientConneccted.CONNECTED;
+      relayStatus.connected = ConnState.CONNECTED;
       if (relayStatusCallback != null) {
         relayStatusCallback!();
       }
@@ -53,24 +51,21 @@ class RelayBase extends Relay {
   }
 
   @override
-  bool send(List<dynamic> message) {
-    if (_wsChannel != null &&
-        relayStatus.connected == ClientConneccted.CONNECTED) {
+  send(List<dynamic> message) {
+    if (_wsChannel != null && relayStatus.connected == ConnState.CONNECTED) {
       try {
         final encoded = jsonEncode(message);
         _wsChannel!.sink.add(encoded);
-        return true;
       } catch (e) {
         onError(e.toString(), reconnect: true);
       }
     }
-    return false;
   }
 
   @override
   Future<void> disconnect() async {
     try {
-      relayStatus.connected = ClientConneccted.UN_CONNECT;
+      relayStatus.connected = ConnState.UN_CONNECT;
       if (_wsChannel != null) {
         await _wsChannel!.sink.close();
       }

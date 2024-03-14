@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nostrmo/component/confirm_dialog.dart';
-import 'package:nostrmo/data/relay_status.dart';
+import 'package:nostrmo/client/relay/relay.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/provider/relay_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../consts/base.dart';
 
+// ignore: must_be_immutable
 class ContentRelayComponent extends StatelessWidget {
   String addr;
 
@@ -63,8 +64,8 @@ class ContentRelayComponent extends StatelessWidget {
       if (relayStatus == null) {
         main = GestureDetector(
           onTap: () async {
-            var result = await ConfirmDialog.show(
-                context, "Add_this_relay_to_local");
+            var result =
+                await ConfirmDialog.show(context, "Add_this_relay_to_local");
             if (result == true) {
               relayProvider.addRelay(addr);
             }

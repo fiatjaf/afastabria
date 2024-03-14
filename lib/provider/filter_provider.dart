@@ -8,7 +8,6 @@ class FilterProvider extends ChangeNotifier {
   static FilterProvider? _instance;
 
   Map<String, int> blocks = {};
-
   List<String> dirtywordList = [];
 
   late TrieTree trieTree;

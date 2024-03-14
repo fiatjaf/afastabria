@@ -5,6 +5,7 @@ import '../../main.dart';
 import 'dm_known_list_router.dart';
 import 'dm_unknown_list_router.dart';
 
+// ignore: must_be_immutable
 class DMRouter extends StatefulWidget {
   TabController tabController;
 
@@ -20,7 +21,7 @@ class _DMRouter extends State<DMRouter> {
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
-    var agreement = NIP04.getAgreement(nostr!.privateKey!);
+    var agreement = NIP04.getAgreement(nostr!.privateKey);
 
     return Container(
       color: themeData.scaffoldBackgroundColor,

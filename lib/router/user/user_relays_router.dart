@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/data/relay_status.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/relay_provider.dart';
+import 'package:nostrmo/client/relay/relay.dart';
 import 'package:provider/provider.dart';
 
 import '../../client/relay/relay_metadata.dart';
@@ -70,21 +68,22 @@ class _UserRelayRouter extends State<UserRelayRouter> {
         margin: const EdgeInsets.only(
           top: Base.BASE_PADDING,
         ),
-        child: ListView.builder(
-          itemBuilder: (context, index) {
-            var relayMetadata = relays![index];
-            return Selector<RelayProvider, RelayStatus?>(
-                builder: (context, relayStatus, child) {
-              return RelayMetadataComponent(
-                relayMetadata: relayMetadata,
-                addAble: relayStatus == null,
-              );
-            }, selector: (context, provider) {
-              return provider.getRelayStatus(relayMetadata.addr);
-            });
-          },
-          itemCount: relays!.length,
-        ),
+        child: const Text("[relay status should go here]");
+        // child: ListView.builder(
+        //   itemBuilder: (context, index) {
+        //     var relayMetadata = relays![index];
+        //     return Selector<RelayProvider, RelayStatus?>(
+        //         builder: (context, relayStatus, child) {
+        //       return RelayMetadataComponent(
+        //         relayMetadata: relayMetadata,
+        //         addAble: relayStatus == null,
+        //       );
+        //     }, selector: (context, provider) {
+        //       return provider.getRelayStatus(relayMetadata.addr);
+        //     });
+        //   },
+        //   itemCount: relays!.length,
+        // ),
       ),
     );
   }

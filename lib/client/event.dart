@@ -18,7 +18,7 @@ class Event {
   final List<List<String>> tags;
   final String content;
 
-  List<String> sources = [];
+  Set<String> sources = {};
 
   Event(this.id, this.pubKey, this.createdAt, this.kind, this.tags,
       this.content, this.sig);
@@ -84,10 +84,6 @@ class Event {
     if (this.id != getId()) {
       return false;
     }
-    return true;
-  }
-
-  bool get isSigned {
     if (!schnorr.verify(this.pubKey, this.id, this.sig)) {
       return false;
     }

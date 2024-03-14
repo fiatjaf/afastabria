@@ -1,29 +1,50 @@
 import 'package:nostrmo/util/string_util.dart';
+import 'package:nostrmo/client/event_kind.dart';
+import 'package:nostrmo/main.dart';
 
 import 'client_utils/keys.dart';
 import 'event.dart';
-import 'event_kind.dart';
-import 'nip02/cust_contact_list.dart';
-import 'relay/relay.dart';
 import 'relay/relay_pool.dart';
+import 'nip02/cust_contact_list.dart';
 
 class Nostr {
   late String _privateKey;
   late String _publicKey;
-  late RelayPool _pool;
+  late RelayPool pool;
 
-  Nostr(String privateKey, {bool eventVerification = false}) {
+  final eventIndex = <String, Event>{};
+
+  Nostr(String privateKey) {
     if (keyIsValid(privateKey)) {
       _privateKey = privateKey;
       _publicKey = getPublicKey(privateKey);
     } else {
       throw const FormatException("invalid key");
     }
-    _pool = RelayPool(this, eventVerification);
+    this.pool = RelayPool();
   }
 
   String get privateKey => _privateKey;
   String get publicKey => _publicKey;
+
+  void init(String secretKey) {
+    var nostr = Nostr(secretKey);
+
+    // add initQuery
+    var dmInitFuture = dmProvider.initDMSessions(nostr.publicKey);
+    contactListProvider.reload(targetNostr: nostr);
+    contactListProvider.query(targetNostr: nostr);
+    followEventProvider.doQuery(targetNostr: nostr, initQuery: true);
+    mentionMeProvider.doQuery(targetNostr: nostr, initQuery: true);
+    dmInitFuture.then((_) {
+      dmProvider.query(targetNostr: nostr, initQuery: true);
+    });
+
+    listProvider.load(
+        nostr.publicKey, [EventKind.BOOKMARKS_LIST, EventKind.EMOJIS_LIST],
+        targetNostr: nostr, initQuery: true);
+    badgeProvider.reload(targetNostr: nostr, initQuery: true);
+  }
 
   Event? sendLike(String id) {
     Event event = Event.finalize(
@@ -76,61 +97,10 @@ class Nostr {
     final tags = contacts.toTags();
     final event =
         Event.finalize(_privateKey, EventKind.CONTACT_LIST, tags, content);
-    return this.broadcast(event);
+    this.pool.send([], ["EVENT", event.toJson()]);
   }
 
   Event broadcast(Event event) {
-    _pool.send(["EVENT", event.toJson()]);
     return event;
-  }
-
-  void close() {
-    _pool.removeAll();
-  }
-
-  void addInitQuery(List<Map<String, dynamic>> filters, Function(Event) onEvent,
-      {String? id, Function? onComplete}) {
-    _pool.addInitQuery(filters, onEvent, id: id, onComplete: onComplete);
-  }
-
-  String subscribe(List<Map<String, dynamic>> filters, Function(Event) onEvent,
-      {String? id}) {
-    return _pool.subscribe(filters, onEvent, id: id);
-  }
-
-  void unsubscribe(String id) {
-    _pool.unsubscribe(id);
-  }
-
-  String query(List<Map<String, dynamic>> filters, Function(Event) onEvent,
-      {String? id, Function? onComplete}) {
-    return _pool.query(filters, onEvent, id: id, onComplete: onComplete);
-  }
-
-  String queryByFilters(Map<String, List<Map<String, dynamic>>> filtersMap,
-      Function(Event) onEvent,
-      {String? id, Function? onComplete}) {
-    return _pool.queryByFilters(filtersMap, onEvent,
-        id: id, onComplete: onComplete);
-  }
-
-  Future<bool> addRelay(
-    Relay relay, {
-    bool autoSubscribe = false,
-    bool init = false,
-  }) async {
-    return await _pool.add(relay, autoSubscribe: autoSubscribe, init: init);
-  }
-
-  void removeRelay(String url) {
-    _pool.remove(url);
-  }
-
-  List<Relay> activeRelays() {
-    return _pool.activeRelays();
-  }
-
-  Relay? getRelay(String url) {
-    return _pool.getRelay(url);
   }
 }

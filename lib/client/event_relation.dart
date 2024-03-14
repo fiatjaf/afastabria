@@ -15,13 +15,9 @@ class EventRelation {
   List<String> tagEList = [];
 
   String? rootId;
-
   String? rootRelayAddr;
-
   String? replyId;
-
   String? replyRelayAddr;
-
   String? subject;
 
   bool warning = false;
@@ -47,9 +43,9 @@ class EventRelation {
       }
 
       var tagLength = tag.length;
-      if (tagLength > 1 && tag[1] is String) {
+      if (tagLength > 1) {
         var tagKey = tag[0];
-        var value = tag[1] as String;
+        var value = tag[1];
         if (tagKey == "p") {
           // check if is Text Note References
           var nip19Str = "nostr:${Nip19.encodePubKey(value)}";

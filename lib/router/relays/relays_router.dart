@@ -1,13 +1,12 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:nostrmo/util/when_stop_function.dart';
 import 'package:provider/provider.dart';
+
+import 'package:nostrmo/util/when_stop_function.dart';
+import 'package:nostrmo/client/relay/relay.dart';
 
 import '../../component/cust_state.dart';
 import '../../consts/base.dart';
-import '../../data/relay_status.dart';
-import '../../main.dart';
-import '../../provider/relay_provider.dart';
 import '../../util/router_util.dart';
 import '../../util/string_util.dart';
 import 'relays_item_component.dart';

@@ -9,7 +9,6 @@ class DataUtil {
   }
 }
 
-// ignore_for_file: constant_identifier_names
 class DataKey {
   static const String SETTING = "setting";
   static const String CONTACT_LISTS = "contactLists";

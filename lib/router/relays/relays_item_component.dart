@@ -1,21 +1,18 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nostrmo/client/relay/relay.dart';
 import 'package:nostrmo/client/nip19/nip19_tlv.dart';
 import 'package:nostrmo/consts/router_path.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/util/router_util.dart';
 
 import '../../consts/base.dart';
-import '../../consts/client_connected.dart';
-import '../../data/relay_status.dart';
 
 // ignore: must_be_immutable
 class RelaysItemComponent extends StatelessWidget {
   String addr;
-
   RelayStatus relayStatus;
-
   RelaysItemComponent(
       {super.key, required this.addr, required this.relayStatus});
 
@@ -24,9 +21,9 @@ class RelaysItemComponent extends StatelessWidget {
     var themeData = Theme.of(context);
     var cardColor = themeData.cardColor;
     Color borderLeftColor = Colors.green;
-    if (relayStatus.connected == ClientConneccted.UN_CONNECT) {
+    if (relayStatus.connected == ConnState.UN_CONNECT) {
       borderLeftColor = Colors.red;
-    } else if (relayStatus.connected == ClientConneccted.CONNECTING) {
+    } else if (relayStatus.connected == ConnState.CONNECTING) {
       borderLeftColor = Colors.yellow;
     }
 

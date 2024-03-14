@@ -2,20 +2,21 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:isolate';
 
-import 'package:nostrmo/consts/base_consts.dart';
 import 'package:nostrmo/main.dart';
+import 'package:nostrmo/client/event.dart';
 
-import '../../consts/client_connected.dart';
-import '../../data/relay_status.dart';
 import 'relay.dart';
 import 'relay_isolate_worker.dart';
 
-// The real relay, whick is run in other isolate.
+// The real relay, which is run in other isolate.
 // It can move jsonDecode and event id check and sign check from main Isolate
 class RelayIsolate extends Relay {
-  RelayIsolate(String url, RelayStatus relayStatus,
-      {WriteAccess access = WriteAccess.readWrite})
-      : super(url, relayStatus, access: access);
+  RelayIsolate(
+    String url,
+    RelayStatus relayStatus, {
+    bool assumeValid = true,
+    Event Function(List<List<String>>)? makeAuthEvent,
+  }) : super(url, relayStatus, assumeValid, makeAuthEvent);
 
   Isolate? isolate;
   ReceivePort? subToMainReceivePort;
@@ -25,7 +26,7 @@ class RelayIsolate extends Relay {
   @override
   Future<bool> doConnect() async {
     if (subToMainReceivePort == null) {
-      relayStatus.connected = ClientConneccted.CONNECTING;
+      relayStatus.connected = ConnState.CONNECTING;
       getRelayInfo(url);
 
       // never run isolate, begin to run
@@ -38,7 +39,6 @@ class RelayIsolate extends Relay {
         RelayIsolateConfig(
           url: url,
           subToMainSendPort: subToMainReceivePort!.sendPort,
-          eventCheck: settingProvider.eventSignCheck == OpenStatus.OPEN,
           network: settingProvider.network,
         ),
       );
@@ -46,7 +46,7 @@ class RelayIsolate extends Relay {
       return relayConnectResultComplete!.future;
     } else {
       // the isolate had bean run
-      if (relayStatus.connected == ClientConneccted.CONNECTED) {
+      if (relayStatus.connected == ConnState.CONNECTED) {
         // relay has bean connected, return true, but also send a connect message.
         mainToSubSendPort!.send(RelayIsolateMsgs.CONNECT);
         return true;
@@ -57,7 +57,7 @@ class RelayIsolate extends Relay {
         } else {
           // this maybe relay had disconnect after connected, try to connected again.
           if (mainToSubSendPort != null) {
-            relayStatus.connected = ClientConneccted.CONNECTING;
+            relayStatus.connected = ConnState.CONNECTING;
             // send connect msg
             mainToSubSendPort!.send(RelayIsolateMsgs.CONNECT);
             // wait connected msg.
@@ -73,8 +73,8 @@ class RelayIsolate extends Relay {
 
   @override
   Future<void> disconnect() async {
-    if (relayStatus.connected != ClientConneccted.UN_CONNECT) {
-      relayStatus.connected = ClientConneccted.UN_CONNECT;
+    if (relayStatus.connected != ConnState.UN_CONNECT) {
+      relayStatus.connected = ConnState.UN_CONNECT;
       if (mainToSubSendPort != null) {
         mainToSubSendPort!.send(RelayIsolateMsgs.DIS_CONNECT);
       }
@@ -82,16 +82,13 @@ class RelayIsolate extends Relay {
   }
 
   @override
-  bool send(List message) {
+  send(List message) {
     if (mainToSubSendPort != null &&
-        relayStatus.connected == ClientConneccted.CONNECTED) {
+        relayStatus.connected == ConnState.CONNECTED) {
       final encoded = jsonEncode(message);
       // print(encoded);
       mainToSubSendPort!.send(encoded);
-      return true;
     }
-
-    return false;
   }
 
   void subToMainListener(ReceivePort receivePort) {
@@ -101,15 +98,15 @@ class RelayIsolate extends Relay {
         // print("msg is $message $url");
         if (message == RelayIsolateMsgs.CONNECTED) {
           // print("$url receive connected status!");
-          relayStatus.connected = ClientConneccted.CONNECTED;
+          relayStatus.connected = ConnState.CONNECTED;
           relayStatusCallback!();
           _relayConnectComplete(true);
         } else if (message == RelayIsolateMsgs.DIS_CONNECTED) {
           onError("Websocket error $url", reconnect: true);
           _relayConnectComplete(false);
         }
-      } else if (message is List && onMessage != null) {
-        onMessage!(this, message);
+      } else if (message is String) {
+        onMessage(jsonDecode(message));
       } else if (message is SendPort) {
         mainToSubSendPort = message;
       }
@@ -134,23 +131,18 @@ class RelayIsolate extends Relay {
 class RelayIsolateConfig {
   final String url;
   final SendPort subToMainSendPort;
-  final bool eventCheck;
   String? network;
 
   RelayIsolateConfig({
     required this.url,
     required this.subToMainSendPort,
-    required this.eventCheck,
     this.network,
   });
 }
 
 class RelayIsolateMsgs {
   static const int CONNECT = 1;
-
   static const int DIS_CONNECT = 2;
-
   static const int CONNECTED = 101;
-
   static const int DIS_CONNECTED = 102;
 }

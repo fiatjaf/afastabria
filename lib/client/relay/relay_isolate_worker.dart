@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:flutter_socks_proxy/socks_proxy.dart';
-import 'package:nostrmo/client/event.dart';
 import 'package:nostrmo/util/string_util.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -10,7 +8,6 @@ import 'relay_isolate.dart';
 
 class RelayIsolateWorker {
   RelayIsolateConfig config;
-
   WebSocketChannel? wsChannel;
 
   RelayIsolateWorker({
@@ -75,21 +72,7 @@ class RelayIsolateWorker {
       print("Begin to connect ${config.url}");
       wsChannel = WebSocketChannel.connect(wsUrl);
       wsChannel!.stream.listen((message) {
-        List<dynamic> json = jsonDecode(message);
-        if (json.length > 2) {
-          final messageType = json[0];
-          if (messageType == 'EVENT') {
-            final event = Event.fromJson(json[2]);
-            if (config.eventCheck) {
-              // event need to check
-              if (!event.isValid || !event.isSigned) {
-                // check false
-                return;
-              }
-            }
-          }
-        }
-        subToMainSendPort.send(json);
+        subToMainSendPort.send(message);
       }, onError: (error) async {
         _closeWS(wsChannel);
         wsChannel = null;

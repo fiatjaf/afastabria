@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:nostrmo/util/platform_util.dart';
-import 'package:provider/provider.dart';
 
 import '../../component/user_pic_component.dart';
 import '../../consts/base.dart';
 import '../../consts/router_path.dart';
 import '../../main.dart';
-import '../../provider/relay_provider.dart';
 import '../../util/router_util.dart';
 
 class IndexAppBar extends StatefulWidget {
   static const double height = 56;
 
   Widget? center;
-
   IndexAppBar({super.key, this.center});
 
   @override
@@ -52,16 +49,6 @@ class _IndexAppBar extends State<IndexAppBar> {
     var center = widget.center;
     center ??= Container();
 
-    var rightWidget =
-        Selector<RelayProvider, String>(builder: (context, relayNum, child) {
-      return Text(
-        relayNum,
-        style: TextStyle(color: textColor),
-      );
-    }, selector: (context, provider) {
-      return provider.relayNumStr();
-    });
-
     return Container(
       padding: EdgeInsets.only(
         top: paddingTop,
@@ -87,7 +74,7 @@ class _IndexAppBar extends State<IndexAppBar> {
           onTap: () {
             RouterUtil.router(context, RouterPath.RELAYS);
           },
-          child: rightWidget,
+          child: Text("relays", style: TextStyle(color: textColor)),
         ),
       ]),
     );

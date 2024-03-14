@@ -14,11 +14,8 @@ import 'data_util.dart';
 
 class SettingProvider extends ChangeNotifier {
   static SettingProvider? _settingProvider;
-
   SharedPreferences? _sharedPreferences;
-
   SettingData? _settingData;
-
   final Map<String, String> _privateKeyMap = {};
 
   static Future<SettingProvider> getInstance() async {

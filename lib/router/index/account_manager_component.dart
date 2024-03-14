@@ -34,7 +34,7 @@ class AccountManagerComponent extends StatefulWidget {
 class AccountManagerComponentState extends State<AccountManagerComponent> {
   @override
   Widget build(BuildContext context) {
-        var settingProvider = Provider.of<SettingProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
     var privateKeyMap = settingProvider.privateKeyMap;
 
     var themeData = Theme.of(context);
@@ -104,13 +104,10 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
       ),
     ));
 
-    return Container(
-      // height: 200,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: list,
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: list,
     );
   }
 
@@ -119,8 +116,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
         context, "Input_account_private_key",
         valueCheck: addAccountCheck);
     if (StringUtil.isNotBlank(privateKey)) {
-      var result = await ConfirmDialog.show(
-          context, "Add_account_and_login");
+      var result = await ConfirmDialog.show(context, "Add_account_and_login");
       if (result == true) {
         if (Nip19.isPrivateKey(privateKey!)) {
           privateKey = Nip19.decode(privateKey);
@@ -131,6 +127,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
         if (oldIndex != newIndex) {
           clearCurrentMemInfo();
           doLogin();
+          // ignore: invalid_use_of_protected_member id_use_of_visible_for_testing_member
           settingProvider.notifyListeners();
           RouterUtil.back(context);
         }
@@ -226,6 +223,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
   }
 }
 
+// ignore: must_be_immutable
 class AccountManagerItemComponent extends StatefulWidget {
   bool isCurrent;
 
@@ -237,7 +235,8 @@ class AccountManagerItemComponent extends StatefulWidget {
 
   Function(int)? onLogoutTap;
 
-  AccountManagerItemComponent({super.key, 
+  AccountManagerItemComponent({
+    super.key,
     required this.isCurrent,
     required this.index,
     required this.privateKey,
@@ -267,7 +266,7 @@ class _AccountManagerItemComponent extends State<AccountManagerItemComponent> {
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
+    // var hintColor = themeData.hintColor;
     Color? cardColor = themeData.cardColor;
     if (cardColor == Colors.white) {
       cardColor = Colors.grey[300];
