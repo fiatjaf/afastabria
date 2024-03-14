@@ -2,9 +2,7 @@ import 'contact.dart';
 
 class CustContactList {
   final Map<String, Contact> _contacts;
-
   final Map<String, int> _followedTags;
-
   final Map<String, int> _followedCommunitys;
 
   CustContactList()
@@ -12,11 +10,11 @@ class CustContactList {
         _followedTags = {},
         _followedCommunitys = {};
 
-  factory CustContactList.fromJson(List<dynamic> tags) {
+  factory CustContactList.fromJson(List<List<String>> tags) {
     Map<String, Contact> contacts = {};
     Map<String, int> followedTags = {};
     Map<String, int> followedCommunitys = {};
-    for (List<dynamic> tag in tags) {
+    for (var tag in tags) {
       var length = tag.length;
       if (length == 0) {
         continue;
@@ -48,8 +46,8 @@ class CustContactList {
   CustContactList._(
       this._contacts, this._followedTags, this._followedCommunitys);
 
-  List<dynamic> toJson() {
-    List<dynamic> result = [];
+  List<List<String>> toTags() {
+    List<List<String>> result = [];
     for (Contact contact in _contacts.values) {
       result.add(["p", contact.publicKey, contact.url, contact.petname]);
     }

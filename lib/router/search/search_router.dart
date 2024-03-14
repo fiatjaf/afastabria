@@ -121,59 +121,51 @@ class _SearchRouter extends CustState<SearchRouter>
     } else {
       if (searchAction == SearchActions.searchMetadataFromCache) {
         loadable = false;
-        body = Container(
-          child: ListView.builder(
-            controller: scrollController,
-            itemBuilder: (BuildContext context, int index) {
-              var metadata = metadatas[index];
+        body = ListView.builder(
+          controller: scrollController,
+          itemBuilder: (BuildContext context, int index) {
+            var metadata = metadatas[index];
 
-              return GestureDetector(
-                onTap: () {
-                  RouterUtil.router(context, RouterPath.USER, metadata.pubKey);
-                },
-                child: MetadataTopComponent(
-                  pubkey: metadata.pubKey!,
-                  metadata: metadata,
-                ),
-              );
-            },
-            itemCount: metadatas.length,
-          ),
+            return GestureDetector(
+              onTap: () {
+                RouterUtil.router(context, RouterPath.USER, metadata.pubKey);
+              },
+              child: MetadataTopComponent(
+                pubkey: metadata.pubKey!,
+                metadata: metadata,
+              ),
+            );
+          },
+          itemCount: metadatas.length,
         );
       } else if (searchAction == SearchActions.searchEventFromCache) {
         loadable = false;
-        body = Container(
-          child: ListView.builder(
-            controller: scrollController,
-            itemBuilder: (BuildContext context, int index) {
-              var event = events[index];
+        body = ListView.builder(
+          controller: scrollController,
+          itemBuilder: (BuildContext context, int index) {
+            var event = events[index];
 
-              return EventListComponent(
-                event: event,
-                showVideo:
-                    settingProvider.videoPreviewInList == OpenStatus.OPEN,
-              );
-            },
-            itemCount: events.length,
-          ),
+            return EventListComponent(
+              event: event,
+              showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
+            );
+          },
+          itemCount: events.length,
         );
       } else if (searchAction == SearchActions.searchPubkeyEvent) {
         loadable = true;
         var events = eventMemBox.all();
-        body = Container(
-          child: ListView.builder(
-            controller: loadableScrollController,
-            itemBuilder: (BuildContext context, int index) {
-              var event = events[index];
+        body = ListView.builder(
+          controller: loadableScrollController,
+          itemBuilder: (BuildContext context, int index) {
+            var event = events[index];
 
-              return EventListComponent(
-                event: event,
-                showVideo:
-                    settingProvider.videoPreviewInList == OpenStatus.OPEN,
-              );
-            },
-            itemCount: itemLength,
-          ),
+            return EventListComponent(
+              event: event,
+              showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
+            );
+          },
+          itemCount: itemLength,
         );
       }
     }
@@ -201,24 +193,20 @@ class _SearchRouter extends CustState<SearchRouter>
       resizeToAvoidBottomInset: false,
       body: EventDeleteCallback(
         onDeleteCallback: onDeletedCallback,
-        child: Container(
-          child: Column(children: [
-            Container(
-              child: TextField(
-                controller: controller,
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                  hintText: "Please input search content",
-                  suffixIcon: suffixWidget,
-                ),
-                onEditingComplete: onEditingComplete,
-              ),
+        child: Column(children: [
+          TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
+              hintText: "Please input search content",
+              suffixIcon: suffixWidget,
             ),
-            Expanded(
-              child: body,
-            ),
-          ]),
-        ),
+            onEditingComplete: onEditingComplete,
+          ),
+          Expanded(
+            child: body,
+          ),
+        ]),
       ),
     );
   }
@@ -296,7 +284,6 @@ class _SearchRouter extends CustState<SearchRouter>
         authors = [result];
       } catch (e) {
         log(e.toString());
-        // TODO handle error
         return;
       }
     } else {

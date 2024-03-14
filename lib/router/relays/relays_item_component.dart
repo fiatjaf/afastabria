@@ -1,4 +1,3 @@
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,12 +10,14 @@ import '../../consts/base.dart';
 import '../../consts/client_connected.dart';
 import '../../data/relay_status.dart';
 
+// ignore: must_be_immutable
 class RelaysItemComponent extends StatelessWidget {
   String addr;
 
   RelayStatus relayStatus;
 
-  RelaysItemComponent({super.key, required this.addr, required this.relayStatus});
+  RelaysItemComponent(
+      {super.key, required this.addr, required this.relayStatus});
 
   @override
   Widget build(BuildContext context) {
@@ -77,18 +78,17 @@ class RelaysItemComponent extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          margin: const EdgeInsets.only(right: Base.BASE_PADDING),
+                          margin:
+                              const EdgeInsets.only(right: Base.BASE_PADDING),
                           child: RelaysItemNumComponent(
                             iconData: Icons.mail,
                             num: relayStatus.noteReceived,
                           ),
                         ),
-                        Container(
-                          child: RelaysItemNumComponent(
-                            iconColor: Colors.red,
-                            iconData: Icons.error,
-                            num: relayStatus.error,
-                          ),
+                        RelaysItemNumComponent(
+                          iconColor: Colors.red,
+                          iconData: Icons.error,
+                          num: relayStatus.error,
                         ),
                       ],
                     ),
@@ -113,11 +113,9 @@ class RelaysItemComponent extends StatelessWidget {
                 onTap: () {
                   removeRelay(addr);
                 },
-                child: Container(
-                  child: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  ),
+                child: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
                 ),
               ),
             ],
@@ -132,14 +130,14 @@ class RelaysItemComponent extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class RelaysItemNumComponent extends StatelessWidget {
   Color? iconColor;
-
   IconData iconData;
-
   int num;
 
-  RelaysItemNumComponent({super.key, 
+  RelaysItemNumComponent({
+    super.key,
     this.iconColor,
     required this.iconData,
     required this.num,
@@ -150,26 +148,24 @@ class RelaysItemNumComponent extends StatelessWidget {
     var themeData = Theme.of(context);
     var smallFontSize = themeData.textTheme.bodySmall!.fontSize;
 
-    return Container(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
-            child: Icon(
-              iconData,
-              color: iconColor,
-              size: smallFontSize,
-            ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
+          child: Icon(
+            iconData,
+            color: iconColor,
+            size: smallFontSize,
           ),
-          Text(
-            num.toString(),
-            style: TextStyle(
-              fontSize: smallFontSize,
-            ),
+        ),
+        Text(
+          num.toString(),
+          style: TextStyle(
+            fontSize: smallFontSize,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -44,7 +44,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
 
   @override
   Widget doBuild(BuildContext context) {
-        if (metadata == null) {
+    if (metadata == null) {
       var arg = RouterUtil.routerArgs(context);
       if (arg != null && arg is Metadata) {
         metadata = arg;
@@ -64,7 +64,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
 
     var themeData = Theme.of(context);
     var cardColor = themeData.cardColor;
-    var mainColor = themeData.primaryColor;
+    // var mainColor = themeData.primaryColor;
     var textColor = themeData.textTheme.bodyMedium!.color;
 
     var submitBtn = TextButton(
@@ -252,7 +252,6 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
 
   Future<String?> pickImageAndUpload() async {
     if (PlatformUtil.isWeb()) {
-      // TODO ban image update at web temp
       return null;
     }
 
@@ -289,14 +288,14 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
     metadataMap["lud16"] = lud16Controller.text;
     metadataMap["lud06"] = lud06Controller.text;
 
-    List<dynamic> tags = [];
+    List<List<String>> tags = [];
     if (profileEvent != null) {
       tags = profileEvent!.tags;
     }
 
-    var updateEvent = Event(nostr!.publicKey, kind.EventKind.METADATA, tags,
-        jsonEncode(metadataMap));
-    nostr!.sendEvent(updateEvent);
+    var updateEvent = Event.finalize(nostr!.privateKey, kind.EventKind.METADATA,
+        tags, jsonEncode(metadataMap));
+    nostr!.broadcast(updateEvent);
 
     RouterUtil.back(context);
   }

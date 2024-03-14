@@ -1,8 +1,8 @@
 class CustomEmoji {
-  String? name;
-  String? filepath;
+  late String name;
+  late String filepath;
 
-  CustomEmoji({this.name, this.filepath});
+  CustomEmoji(this.name, this.filepath);
 
   CustomEmoji.fromJson(Map<String, dynamic> json) {
     name = json['name'];

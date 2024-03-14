@@ -292,7 +292,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
   }
 
   Widget getMoreWidget(Widget icon) {
-    var themeData = Theme.of(context);
+    // var themeData = Theme.of(context);
     // var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
 
     return PopupMenuButton<String>(
@@ -415,9 +415,8 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
           try {
             var eventObj = jsonDecode(content);
             var tags = eventObj["tags"];
-            Event event = Event(nostr!.publicKey, eventObj["kind"], tags ?? [],
+            Event event = Event.finalize(nostr!.privateKey, eventObj["kind"], tags ?? [],
                 eventObj["content"]);
-            event.sign(nostr!.privateKey!);
 
             var eventResultStr = jsonEncode(event.toJson());
             // TODO this method to handle " may be error
@@ -475,7 +474,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
               context, NIP07Methods.nip04_encrypt,
               content: plaintext);
           if (confirmResult == true) {
-            var agreement = NIP04.getAgreement(nostr!.privateKey!);
+            var agreement = NIP04.getAgreement(nostr!.privateKey);
             var resultStr = NIP04.encrypt(plaintext, agreement, pubkey);
             var script =
                 "window.nostr.callback(\"$resultId\", \"$resultStr\");";
@@ -502,7 +501,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
               context, NIP07Methods.nip04_decrypt,
               content: ciphertext);
           if (confirmResult == true) {
-            var agreement = NIP04.getAgreement(nostr!.privateKey!);
+            var agreement = NIP04.getAgreement(nostr!.privateKey);
             var resultStr = NIP04.decrypt(ciphertext, agreement, pubkey);
             var script =
                 "window.nostr.callback(\"$resultId\", \"$resultStr\");";

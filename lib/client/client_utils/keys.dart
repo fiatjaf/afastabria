@@ -11,9 +11,6 @@ String generatePrivateKey() => getRandomHexString();
 ///
 /// An [ArgumentError] is thrown if [privateKey] is invalid.
 String getPublicKey(String privateKey) {
-  if (!keyIsValid(privateKey)) {
-    throw ArgumentError.value(privateKey, 'privateKey', 'Invalid key');
-  }
   return schnorr.getPublicKey(privateKey);
 }
 

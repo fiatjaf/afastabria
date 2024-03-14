@@ -7,7 +7,7 @@ class ContentEventTagInfos {
 
   ContentEventTagInfos.fromEvent(Event event) {
     for (var tag in event.tags) {
-      if (tag is List<dynamic> && tag.length > 1) {
+      if (tag.length > 1) {
         var key = tag[0];
         var value = tag[1];
         if (key == "emoji" && tag.length > 2) {

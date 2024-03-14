@@ -29,7 +29,7 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
     var relayAddrs = relayProvider.relayAddrs;
     var relayStatusMap = relayProvider.relayStatusMap;
     var themeData = Theme.of(context);
-    var color = themeData.textTheme.bodyLarge!.color;
+    // var color = themeData.textTheme.bodyLarge!.color;
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
     return Scaffold(
@@ -72,16 +72,14 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
             ),
           ),
         ),
-        Container(
-          child: TextField(
-            controller: controller,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.cloud),
-              hintText: "Input relay address.",
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: addRelay,
-              ),
+        TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            prefixIcon: const Icon(Icons.cloud),
+            hintText: "Input relay address.",
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: addRelay,
             ),
           ),
         ),

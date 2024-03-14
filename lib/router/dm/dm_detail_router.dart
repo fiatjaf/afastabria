@@ -73,7 +73,7 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
     );
 
     var localPubkey = nostr!.publicKey;
-    agreement = NIP04.getAgreement(nostr!.privateKey!);
+    agreement = NIP04.getAgreement(nostr!.privateKey);
 
     List<Widget> list = [];
 
@@ -275,7 +275,7 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
 
   // Future<void> jumpToWriteMessage() async {
   //   var pubkey = detail!.dmSession.pubkey;
-  //   List<dynamic> tags = [
+  //   List<List<String>> tags = [
   //     ["p", pubkey]
   //   ];
   //   var event = await EditorRouter.open(
@@ -307,16 +307,16 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
   }
 
   @override
-  List getTags() {
+  List<List<String>> getTags() {
     var pubkey = detail!.dmSession.pubkey;
-    List<dynamic> tags = [
+    List<List<String>> tags = [
       ["p", pubkey]
     ];
     return tags;
   }
 
   @override
-  List getTagsAddedWhenSend() {
+  List<List<String>> getTagsAddedWhenSend() {
     return [];
   }
 

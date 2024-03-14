@@ -11,8 +11,8 @@ class ZapGoalInputController {
     goalAmountController.clear();
   }
 
-  List<List<dynamic>> getTags() {
-    List<List<dynamic>> tags = [];
+  List<List<String>> getTags() {
+    List<List<String>> tags = [];
     if (StringUtil.isNotBlank(goalAmountController.text)) {
       tags.add(["amount", goalAmountController.text]);
     }
@@ -22,7 +22,7 @@ class ZapGoalInputController {
 
   bool checkInput(BuildContext context) {
     print("goal input call");
-        if (StringUtil.isBlank(goalAmountController.text)) {
+    if (StringUtil.isBlank(goalAmountController.text)) {
       print("checked is blank!");
       BotToast.showText(text: "Input can not be null");
       return false;
@@ -39,6 +39,7 @@ class ZapGoalInputController {
   }
 }
 
+// ignore: must_be_immutable
 class ZapGoalInputComponent extends StatefulWidget {
   ZapGoalInputController zapGoalInputController;
 
@@ -58,8 +59,8 @@ class _ZapGoalInputComponent extends State<ZapGoalInputComponent> {
 
   @override
   Widget build(BuildContext context) {
-        var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
+    // var themeData = Theme.of(context);
+    // var mainColor = themeData.primaryColor;
     List<Widget> list = [];
 
     Widget inputWidget = TextField(

@@ -44,7 +44,7 @@ dependencies:
   emoji_picker_flutter: ^1.6.3
   widget_size: ^1.0.0
   # webview_flutter: ^4.4.2
-  flutter_inappwebview: ^6.0.0-rc.3
+  flutter_inappwebview: ^6.0.0
   screenshot: ^2.1.0
   share_plus: ^7.2.1
   video_player: ^2.8.2
@@ -80,6 +80,7 @@ dependencies:
   intl: ^0.18.1
   device_info_plus: ^9.1.0
   flutter_cache_manager: ^3.3.1
+  clock: ^1.1.1
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
@@ -158,6 +159,3 @@ flutter_native_splash:
   color: "#f6f3f3"
   image: assets/imgs/logo/logo512.png
   fullscreen: true
-
-flutter_intl:
-  enabled: true

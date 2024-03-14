@@ -10,9 +10,9 @@ import '../../util/spider_util.dart';
 import '../../util/string_util.dart';
 import 'reaction_event_item_component.dart';
 
+// ignore: must_be_immutable
 class ZapEventMainComponent extends StatefulWidget {
   Event event;
-
   ZapEventMainComponent({super.key, required this.event});
 
   @override
@@ -23,7 +23,6 @@ class ZapEventMainComponent extends StatefulWidget {
 
 class _ZapEventMainComponent extends State<ZapEventMainComponent> {
   String? senderPubkey;
-
   late String eventId;
 
   @override
@@ -37,7 +36,7 @@ class _ZapEventMainComponent extends State<ZapEventMainComponent> {
   void parseSenderPubkey() {
     String? zapRequestEventStr;
     for (var tag in widget.event.tags) {
-      if (tag is List<dynamic> && tag.length > 1) {
+      if (tag.length > 1) {
         var key = tag[0];
         if (key == "description") {
           zapRequestEventStr = tag[1];

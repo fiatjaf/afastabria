@@ -8,112 +8,78 @@ import 'relay/relay.dart';
 import 'relay/relay_pool.dart';
 
 class Nostr {
-  String? _privateKey;
-
+  late String _privateKey;
   late String _publicKey;
-
   late RelayPool _pool;
 
-  Nostr({
-    String? privateKey,
-    String? publicKey,
-    bool eventVerification = false,
-  }) {
-    if (StringUtil.isNotBlank(privateKey)) {
-      _privateKey = privateKey!;
+  Nostr(String privateKey, {bool eventVerification = false}) {
+    if (keyIsValid(privateKey)) {
+      _privateKey = privateKey;
       _publicKey = getPublicKey(privateKey);
     } else {
-      assert(publicKey != null);
-
-      _privateKey = privateKey;
-      _publicKey = publicKey!;
+      throw const FormatException("invalid key");
     }
     _pool = RelayPool(this, eventVerification);
   }
 
-  String? get privateKey => _privateKey;
-
+  String get privateKey => _privateKey;
   String get publicKey => _publicKey;
 
   Event? sendLike(String id) {
-    Event event = Event(
-        _publicKey,
+    Event event = Event.finalize(
+        this._privateKey,
         EventKind.REACTION,
         [
           ["e", id]
         ],
         "+");
-    return sendEvent(event);
+    return this.broadcast(event);
   }
 
   Event? deleteEvent(String eventId) {
-    Event event = Event(
-        _publicKey,
+    Event event = Event.finalize(
+        this._privateKey,
         EventKind.EVENT_DELETION,
         [
           ["e", eventId]
         ],
         "delete");
-    return sendEvent(event);
+    return this.broadcast(event);
   }
 
-  Event? deleteEvents(List<String> eventIds) {
-    List<List<dynamic>> tags = [];
+  void deleteEvents(List<String> eventIds) {
+    List<List<String>> tags = [];
     for (var eventId in eventIds) {
       tags.add(["e", eventId]);
     }
 
-    Event event = Event(_publicKey, EventKind.EVENT_DELETION, tags, "delete");
-    return sendEvent(event);
+    Event event =
+        Event.finalize(_privateKey, EventKind.EVENT_DELETION, tags, "delete");
+    this.broadcast(event);
   }
 
-  Event? sendRepost(String id, {String? relayAddr, String content = ""}) {
-    List<dynamic> tag = ["e", id];
+  Event sendRepost(String id, {String? relayAddr, String content = ""}) {
+    List<String> tag = ["e", id];
     if (StringUtil.isNotBlank(relayAddr)) {
-      tag.add(relayAddr);
+      tag.add(relayAddr!);
     }
-    Event event = Event(_publicKey, EventKind.REPOST, [tag], content);
-    return sendEvent(event);
+    Event event = Event.finalize(_privateKey, EventKind.REPOST, [tag], content);
+    return this.broadcast(event);
   }
 
-  Event? sendTextNote(String text, [List<dynamic> tags = const []]) {
-    Event event = Event(_publicKey, EventKind.TEXT_NOTE, tags, text);
-    return sendEvent(event);
+  Event sendTextNote(String text, [List<List<String>> tags = const []]) {
+    Event event = Event.finalize(_privateKey, EventKind.TEXT_NOTE, tags, text);
+    return this.broadcast(event);
   }
 
-  Event? recommendServer(String url) {
-    if (!url.contains(RegExp(
-        r'^(wss?:\/\/)([0-9]{1,3}(?:\.[0-9]{1,3}){3}|[^:]+):?([0-9]{1,5})?$'))) {
-      throw ArgumentError.value(url, 'url', 'Not a valid relay URL');
-    }
-    final event = Event(_publicKey, EventKind.RECOMMEND_SERVER, [], url);
-    return sendEvent(event);
+  Event sendContactList(CustContactList contacts, String content) {
+    final tags = contacts.toTags();
+    final event =
+        Event.finalize(_privateKey, EventKind.CONTACT_LIST, tags, content);
+    return this.broadcast(event);
   }
 
-  Event? sendContactList(CustContactList contacts, String content) {
-    final tags = contacts.toJson();
-    final event = Event(_publicKey, EventKind.CONTACT_LIST, tags, content);
-    return sendEvent(event);
-  }
-
-  Event? sendEvent(Event event) {
-    if (StringUtil.isBlank(_privateKey)) {
-      // TODO to show Notice
-      throw StateError("Private key is missing. Message can't be signed.");
-    }
-    signEvent(event);
-    var result = _pool.send(["EVENT", event.toJson()]);
-    if (result) {
-      return event;
-    }
-    return null;
-  }
-
-  void signEvent(Event event) {
-    event.sign(_privateKey!);
-  }
-
-  Event broadcase(Event event) {
+  Event broadcast(Event event) {
     _pool.send(["EVENT", event.toJson()]);
     return event;
   }
@@ -166,10 +132,5 @@ class Nostr {
 
   Relay? getRelay(String url) {
     return _pool.getRelay(url);
-  }
-
-  void reconnect() {
-    print("nostr reconnect");
-    _pool.reconnect();
   }
 }

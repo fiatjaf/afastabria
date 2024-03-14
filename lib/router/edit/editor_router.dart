@@ -1,4 +1,3 @@
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
@@ -26,6 +25,7 @@ import '../../component/editor/poll_input_component.dart';
 import '../../util/string_util.dart';
 import 'editor_notify_item_component.dart';
 
+// ignore: must_be_immutable
 class EditorRouter extends StatefulWidget {
   static double appbarHeight = 56;
 
@@ -34,16 +34,13 @@ class EditorRouter extends StatefulWidget {
 
   // dm arg
   String? pubkey;
-
-  List<dynamic> tags = [];
-
-  List<dynamic> tagsAddedWhenSend = [];
-
-  List<dynamic> tagPs = [];
-
+  List<List<String>> tags = [];
+  List<List<String>> tagsAddedWhenSend = [];
+  List<List<String>> tagPs = [];
   List<quill.BlockEmbed>? initEmbeds;
 
-  EditorRouter({super.key, 
+  EditorRouter({
+    super.key,
     required this.tags,
     required this.tagsAddedWhenSend,
     required this.tagPs,
@@ -54,9 +51,9 @@ class EditorRouter extends StatefulWidget {
 
   static Future<Event?> open(
     BuildContext context, {
-    List<dynamic>? tags,
-    List<dynamic>? tagsAddedWhenSend,
-    List<dynamic>? tagPs,
+    List<List<String>>? tags,
+    List<List<String>>? tagsAddedWhenSend,
+    List<List<String>>? tagPs,
     ECDHBasicAgreement? agreement,
     String? pubkey,
     List<quill.BlockEmbed>? initEmbeds,
@@ -104,15 +101,15 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
     if (notifyItems == null) {
       notifyItems = [];
       for (var tagP in widget.tagPs) {
-        if (tagP is List<dynamic> && tagP.length > 1) {
+        if (tagP.length > 1) {
           notifyItems!.add(EditorNotifyItem(pubkey: tagP[1]));
         }
       }
     }
 
-        var themeData = Theme.of(context);
+    var themeData = Theme.of(context);
     var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
-    var mainColor = themeData.primaryColor;
+    // var mainColor = themeData.primaryColor;
     var hintColor = themeData.hintColor;
     var textColor = themeData.textTheme.bodyMedium!.color;
     var fontSize = themeData.textTheme.bodyMedium!.fontSize;
@@ -179,8 +176,8 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
         }
       }
       list.add(Container(
-        padding:
-            const EdgeInsets.only(left: Base.BASE_PADDING, right: Base.BASE_PADDING),
+        padding: const EdgeInsets.only(
+            left: Base.BASE_PADDING, right: Base.BASE_PADDING),
         margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
         width: double.maxFinite,
         child: Wrap(
@@ -203,7 +200,8 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
         onTap: selectedTime,
         behavior: HitTestBehavior.translucent,
         child: Container(
-          margin: const EdgeInsets.only(left: 10, bottom: Base.BASE_PADDING_HALF),
+          margin:
+              const EdgeInsets.only(left: 10, bottom: Base.BASE_PADDING_HALF),
           child: Row(
             children: [
               const Icon(Icons.timer_outlined),
@@ -307,25 +305,21 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
           ),
         ),
         actions: [
-          Container(
-            child: TextButton(
-              onPressed: documentSave,
-              style: const ButtonStyle(),
-              child: Text(
-                "Send",
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: fontSize,
-                ),
+          TextButton(
+            onPressed: documentSave,
+            style: const ButtonStyle(),
+            child: Text(
+              "Send",
+              style: TextStyle(
+                color: textColor,
+                fontSize: fontSize,
               ),
             ),
           ),
         ],
       ),
-      body: Container(
-        child: Column(
-          children: list,
-        ),
+      body: Column(
+        children: list,
       ),
     );
   }
@@ -432,18 +426,18 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
   }
 
   @override
-  List getTags() {
+  List<List<String>> getTags() {
     return widget.tags;
   }
 
   @override
-  List getTagsAddedWhenSend() {
+  List<List<String>> getTagsAddedWhenSend() {
     if ((notifyItems == null || notifyItems!.isEmpty) &&
         editorNotifyItems.isEmpty) {
       return widget.tagsAddedWhenSend;
     }
 
-    List<dynamic> list = [];
+    List<List<String>> list = [];
     list.addAll(widget.tagsAddedWhenSend);
     for (var item in notifyItems!) {
       if (item.selected) {

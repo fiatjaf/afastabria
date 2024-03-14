@@ -23,7 +23,7 @@ class _UserRelayRouter extends State<UserRelayRouter> {
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
 
-        if (relays == null) {
+    if (relays == null) {
       relays = [];
       var arg = RouterUtil.routerArgs(context);
       if (arg != null && arg is List<dynamic>) {
@@ -90,16 +90,18 @@ class _UserRelayRouter extends State<UserRelayRouter> {
   }
 }
 
+// ignore: must_be_immutable
 class RelayMetadataComponent extends StatelessWidget {
   RelayMetadata relayMetadata;
 
   bool addAble;
 
-  RelayMetadataComponent({super.key, required this.relayMetadata, this.addAble = true});
+  RelayMetadataComponent(
+      {super.key, required this.relayMetadata, this.addAble = true});
 
   @override
   Widget build(BuildContext context) {
-        var themeData = Theme.of(context);
+    var themeData = Theme.of(context);
     var cardColor = themeData.cardColor;
     var hintColor = themeData.hintColor;
     var bodySmallFontSize = themeData.textTheme.bodySmall!.fontSize;
@@ -110,10 +112,8 @@ class RelayMetadataComponent extends StatelessWidget {
         onTap: () {
           relayProvider.addRelay(relayMetadata.addr);
         },
-        child: Container(
-          child: const Icon(
-            Icons.add,
-          ),
+        child: const Icon(
+          Icons.add,
         ),
       );
     }

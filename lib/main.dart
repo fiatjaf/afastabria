@@ -76,61 +76,33 @@ import 'util/media_data_cache.dart';
 import 'util/string_util.dart';
 
 late SharedPreferences sharedPreferences;
-
 late SettingProvider settingProvider;
-
 late MetadataProvider metadataProvider;
-
 late ContactListProvider contactListProvider;
-
 late FollowEventProvider followEventProvider;
-
 late FollowNewEventProvider followNewEventProvider;
-
 late MentionMeProvider mentionMeProvider;
-
 late MentionMeNewProvider mentionMeNewProvider;
-
 late DMProvider dmProvider;
-
 late IndexProvider indexProvider;
-
 late EventReactionsProvider eventReactionsProvider;
-
 late NoticeProvider noticeProvider;
-
 late SingleEventProvider singleEventProvider;
-
 late RelayProvider relayProvider;
-
 late FilterProvider filterProvider;
-
 late LinkPreviewDataProvider linkPreviewDataProvider;
-
 late BadgeDefinitionProvider badgeDefinitionProvider;
-
 late MediaDataCache mediaDataCache;
-
 late CacheManager localCacheManager;
-
 late PcRouterFakeProvider pcRouterFakeProvider;
-
 late Map<String, WidgetBuilder> routes;
-
 late WebViewProvider webViewProvider;
-
 // late CustomEmojiProvider customEmojiProvider;
-
 late CommunityApprovedProvider communityApprovedProvider;
-
 late CommunityInfoProvider communityInfoProvider;
-
 late ReplaceableEventProvider replaceableEventProvider;
-
 late ListProvider listProvider;
-
 late ListSetProvider listSetProvider;
-
 late BadgeProvider badgeProvider;
 
 Nostr? nostr;
@@ -273,7 +245,7 @@ class _MyApp extends State<MyApp> {
       RouterPath.EVENT_DETAIL: (context) => const EventDetailRouter(),
       RouterPath.TAG_DETAIL: (context) => const TagDetailRouter(),
       RouterPath.NOTICES: (context) => const NoticeRouter(),
-      RouterPath.KEY_BACKUP: (context) => KeyBackupRouter(),
+      RouterPath.KEY_BACKUP: (context) => const KeyBackupRouter(),
       RouterPath.RELAYS: (context) => const RelaysRouter(),
       RouterPath.FILTER: (context) => const FilterRouter(),
       RouterPath.PROFILE_EDITOR: (context) => const ProfileEditorRouter(),

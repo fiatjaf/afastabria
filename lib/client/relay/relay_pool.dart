@@ -173,7 +173,6 @@ class RelayPool {
         return;
       }
 
-      // notice save, TODO maybe should change code
       noticeProvider.onNotice(relay.url, json[1] as String);
     } else if (messageType == "AUTH") {
       // auth needed
@@ -191,9 +190,8 @@ class RelayPool {
         ["relay", relay.relayStatus.addr],
         ["challenge", challenge]
       ];
-      var event =
-          Event(localNostr.publicKey, EventKind.AUTHENTICATION, tags, "");
-      event.sign(localNostr.privateKey!);
+      var event = Event.finalize(
+          localNostr.privateKey, EventKind.AUTHENTICATION, tags, "");
       relay.send(["AUTH", event.toJson()]);
     }
   }

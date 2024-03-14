@@ -8,7 +8,6 @@ import 'package:screenshot/screenshot.dart';
 
 import '../../../client/event.dart';
 import '../../../consts/base.dart';
-import '../../../generated/l10n.dart';
 
 @deprecated
 class GlobalEventItemComponent extends StatefulWidget {
@@ -29,7 +28,7 @@ class _GlobalEventItemComponent extends State<GlobalEventItemComponent> {
 
   @override
   Widget build(BuildContext context) {
-        var themeData = Theme.of(context);
+    var themeData = Theme.of(context);
     var cardColor = themeData.cardColor;
     var hintColor = themeData.hintColor;
 

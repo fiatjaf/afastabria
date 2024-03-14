@@ -7,7 +7,6 @@ class Bookmarks {
 
 class BookmarkItem {
   String key;
-
   String value;
 
   BookmarkItem({
@@ -15,8 +14,8 @@ class BookmarkItem {
     required this.value,
   });
 
-  List<dynamic> toJson() {
-    List<dynamic> list = [];
+  List<String> toJson() {
+    List<String> list = [];
     list.add(key);
     list.add(value);
     return list;

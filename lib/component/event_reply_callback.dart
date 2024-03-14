@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../client/event.dart';
 
+// ignore: must_be_immutable
 class EventReplyCallback extends InheritedWidget {
   Function(Event) onReplyCallback;
 

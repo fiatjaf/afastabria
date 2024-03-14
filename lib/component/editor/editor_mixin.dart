@@ -57,14 +57,10 @@ mixin EditorMixin {
 
   // dm arg
   String? getPubkey();
-
   BuildContext getContext();
-
   void updateUI();
-
-  List<dynamic> getTags();
-
-  List<dynamic> getTagsAddedWhenSend();
+  List<List<String>> getTags();
+  List<List<String>> getTagsAddedWhenSend();
 
   void handleFocusInit() {
     focusNode.addListener(() {
@@ -395,9 +391,9 @@ mixin EditorMixin {
     var context = getContext();
     var value = await TextInputAndSearchDialog.show(
       context,
-      "Input_Sats_num",
-      "Please_input_lnbc_text",
-      GenLnbcComponent(),
+      "Input Sats num",
+      "Please input lnbc text",
+      const GenLnbcComponent(),
       hintText: "lnbc...",
     );
     if (StringUtil.isNotBlank(value)) {
@@ -573,7 +569,7 @@ mixin EditorMixin {
             result += ":${value.name}: ";
 
             if (customEmojiMap[value.name] == null) {
-              customEmojiMap[value.name!] = 1;
+              customEmojiMap[value.name] = 1;
               tags.add(["emoji", value.name, value.filepath]);
             }
             continue;
@@ -588,7 +584,7 @@ mixin EditorMixin {
     // print(tags);
     // print(tagsAddWhenSend);
 
-    List<dynamic> allTags = [];
+    List<List<String>> allTags = [];
     allTags.addAll(tags);
     allTags.addAll(tagsAddedWhenSend);
 
@@ -605,34 +601,36 @@ mixin EditorMixin {
     if (agreement != null && StringUtil.isNotBlank(pubkey)) {
       // dm message
       result = NIP04.encrypt(result, agreement, pubkey!);
-      event = Event(
-          nostr!.publicKey, kind.EventKind.DIRECT_MESSAGE, allTags, result,
+      event = Event.finalize(
+          nostr!.privateKey, kind.EventKind.DIRECT_MESSAGE, allTags, result,
           publishAt: publishAt);
     } else if (inputPoll) {
       // poll event
       // get poll tag from PollInputComponentn
       var pollTags = pollInputController.getTags();
       allTags.addAll(pollTags);
-      event = Event(nostr!.publicKey, kind.EventKind.POLL, allTags, result,
+      event = Event.finalize(
+          nostr!.privateKey, kind.EventKind.POLL, allTags, result,
           publishAt: publishAt);
     } else if (inputZapGoal) {
       // zap goal event
       var extralTags = zapGoalInputController.getTags();
       allTags.addAll(extralTags);
-      event = Event(nostr!.publicKey, kind.EventKind.ZAP_GOALS, allTags, result,
+      event = Event.finalize(
+          nostr!.privateKey, kind.EventKind.ZAP_GOALS, allTags, result,
           publishAt: publishAt);
     } else {
       // text note
-      event = Event(nostr!.publicKey, kind.EventKind.TEXT_NOTE, allTags, result,
+      event = Event.finalize(
+          nostr!.privateKey, kind.EventKind.TEXT_NOTE, allTags, result,
           publishAt: publishAt);
     }
 
     if (publishAt != null) {
-      nostr!.signEvent(event);
       await SendBox.submit(event, relayProvider.relayAddrs);
       return event;
     } else {
-      var e = nostr!.sendEvent(event);
+      var e = nostr!.broadcast(event);
       log(jsonEncode(event.toJson()));
 
       return e;
@@ -844,7 +842,7 @@ mixin EditorMixin {
           height: emojiBtnWidth,
           alignment: Alignment.center,
           child: ImageComponent(
-            imageUrl: emoji.filepath!,
+            imageUrl: emoji.filepath,
             placeholder: (context, url) => Container(),
           ),
         ),

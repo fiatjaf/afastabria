@@ -669,9 +669,9 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
 
         // use a blank metadata to update it
         var blankMetadata = Metadata();
-        var updateEvent = Event(nostr!.publicKey, kind.EventKind.METADATA, [],
-            jsonEncode(blankMetadata));
-        nostr!.sendEvent(updateEvent);
+        var updateEvent = Event.finalize(nostr!.privateKey,
+            kind.EventKind.METADATA, [], jsonEncode(blankMetadata));
+        nostr!.broadcast(updateEvent);
 
         // use a blank contact list to update it
         var blankContactList = CustContactList();

@@ -68,7 +68,7 @@ class ListProvider extends ChangeNotifier {
     if (event.kind == EventKind.EMOJIS_LIST) {
       // This is a emoji list, try to handle some listSet
       for (var tag in event.tags) {
-        if (tag is List && tag.length > 1) {
+        if (tag.length > 1) {
           var k = tag[0];
           var v = tag[1];
           if (k == "a") {
@@ -98,13 +98,13 @@ class ListProvider extends ChangeNotifier {
 
     if (emojiEvent != null) {
       for (var tag in emojiEvent.tags) {
-        if (tag is List && tag.isNotEmpty) {
+        if (tag.isNotEmpty) {
           var tagKey = tag[0];
           if (tagKey == "emoji" && tag.length > 2) {
             // emoji config config inside.
             var k = tag[1];
             var v = tag[2];
-            list.add(CustomEmoji(name: k, filepath: v));
+            list.add(CustomEmoji(k, v));
           } else if (tagKey == "a" && tag.length > 1) {
             // emoji config by other listSet
             var aIdStr = tag[1];
@@ -119,12 +119,12 @@ class ListProvider extends ChangeNotifier {
 
               List<CustomEmoji> subList = [];
               for (var tag in listSetEvent.tags) {
-                if (tag is List && tag.length > 2) {
+                if (tag.length > 2) {
                   var tagKey = tag[0];
                   var k = tag[1];
                   var v = tag[2];
                   if (tagKey == "emoji") {
-                    subList.add(CustomEmoji(name: k, filepath: v));
+                    subList.add(CustomEmoji(k, v));
                   }
                 }
               }
@@ -169,7 +169,7 @@ class ListProvider extends ChangeNotifier {
     var cancelFunc = BotToast.showLoading();
 
     try {
-      List<dynamic> tags = [];
+      List<List<String>> tags = [];
 
       var emojiEvent = getEmojiEvent();
       if (emojiEvent != null) {
@@ -177,13 +177,10 @@ class ListProvider extends ChangeNotifier {
       }
       tags.add(["emoji", emoji.name, emoji.filepath]);
       var changedEvent =
-          Event(nostr!.publicKey, EventKind.EMOJIS_LIST, tags, "");
-      var result = nostr!.sendEvent(changedEvent);
-
-      if (result != null) {
-        _holder[emojiKey] = result;
-        notifyListeners();
-      }
+          Event.finalize(nostr!.privateKey, EventKind.EMOJIS_LIST, tags, "");
+      var result = nostr!.broadcast(changedEvent);
+      _holder[emojiKey] = result;
+      notifyListeners();
     } finally {
       cancelFunc.call();
     }
@@ -212,7 +209,7 @@ class ListProvider extends ChangeNotifier {
 
     var content = bookmarksEvent.content;
     if (StringUtil.isNotBlank(content)) {
-      var agreement = NIP04.getAgreement(nostr!.privateKey!);
+      var agreement = NIP04.getAgreement(nostr!.privateKey);
       var plainContent = NIP04.decrypt(content, agreement, nostr!.publicKey);
 
       var jsonObj = jsonDecode(plainContent);
@@ -234,12 +231,10 @@ class ListProvider extends ChangeNotifier {
 
     List<BookmarkItem> publicItems = [];
     for (var jsonObjItem in bookmarksEvent.tags) {
-      if (jsonObjItem is List && jsonObjItem.length > 1) {
+      if (jsonObjItem.length > 1) {
         var key = jsonObjItem[0];
         var value = jsonObjItem[1];
-        if (key is String && value is String) {
-          publicItems.add(BookmarkItem(key: key, value: value));
-        }
+        publicItems.add(BookmarkItem(key: key, value: value));
       }
     }
     bookmarks.publicItems = publicItems;
@@ -283,22 +278,20 @@ class ListProvider extends ChangeNotifier {
         list.add(item.toJson());
       }
 
-      var agreement = NIP04.getAgreement(nostr!.privateKey!);
+      var agreement = NIP04.getAgreement(nostr!.privateKey);
       var jsonText = jsonEncode(list);
       content = NIP04.encrypt(jsonText, agreement, nostr!.publicKey);
     }
 
-    List tags = [];
+    List<List<String>> tags = [];
     for (var item in bookmarks.publicItems) {
       tags.add(item.toJson());
     }
 
-    var event =
-        Event(nostr!.publicKey, EventKind.BOOKMARKS_LIST, tags, content);
-    var resultEvent = nostr!.sendEvent(event);
-    if (resultEvent != null) {
-      _holder[bookmarksKey] = resultEvent;
-    }
+    var event = Event.finalize(
+        nostr!.privateKey, EventKind.BOOKMARKS_LIST, tags, content);
+    var resultEvent = nostr!.broadcast(event);
+    _holder[bookmarksKey] = resultEvent;
 
     notifyListeners();
   }

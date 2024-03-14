@@ -40,7 +40,7 @@ class _CustomEmojiAddDialog extends State<CustomEmojiAddDialog> {
 
   @override
   Widget build(BuildContext context) {
-        var themeData = Theme.of(context);
+    var themeData = Theme.of(context);
     Color cardColor = themeData.cardColor;
     var mainColor = themeData.primaryColor;
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
@@ -103,9 +103,9 @@ class _CustomEmojiAddDialog extends State<CustomEmojiAddDialog> {
             color: mainColor,
             height: 40,
             alignment: Alignment.center,
-            child: Text(
+            child: const Text(
               "Confirm",
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
@@ -164,7 +164,7 @@ class _CustomEmojiAddDialog extends State<CustomEmojiAddDialog> {
   String? filepath;
 
   Future<void> _onConfirm() async {
-        var text = controller.text;
+    var text = controller.text;
     if (StringUtil.isBlank(text)) {
       BotToast.showText(text: "Input can not be null");
       return;
@@ -193,6 +193,8 @@ class _CustomEmojiAddDialog extends State<CustomEmojiAddDialog> {
       cancel.call();
     }
 
-    RouterUtil.back(context, CustomEmoji(name: text, filepath: filepath));
+    if (filepath != null) {
+      RouterUtil.back(context, CustomEmoji(text, filepath!));
+    }
   }
 }

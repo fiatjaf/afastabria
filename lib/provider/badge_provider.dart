@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:nostrmo/client/event.dart';
 
@@ -12,7 +11,7 @@ class BadgeProvider extends ChangeNotifier {
 
   void wear(String badgeId, String eventId, {String? relayAddr}) {
     String content = "";
-    List<dynamic> tags = [];
+    List<List<String>> tags = [];
 
     if (badgeEvent != null) {
       content = badgeEvent!.content;
@@ -30,15 +29,13 @@ class BadgeProvider extends ChangeNotifier {
     }
     tags.add(eList);
 
-    var newEvent =
-        Event(nostr!.publicKey, kind.EventKind.BADGE_ACCEPT, tags, content);
+    var newEvent = Event.finalize(
+        nostr!.privateKey, kind.EventKind.BADGE_ACCEPT, tags, content);
 
-    var result = nostr!.sendEvent(newEvent);
-    if (result != null) {
-      badgeEvent = result;
-      _parseProfileBadge();
-      notifyListeners();
-    }
+    var result = nostr!.broadcast(newEvent);
+    badgeEvent = result;
+    _parseProfileBadge();
+    notifyListeners();
   }
 
   void reload({bool initQuery = false, Nostr? targetNostr}) {

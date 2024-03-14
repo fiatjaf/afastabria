@@ -103,9 +103,8 @@ class Zap {
     if (StringUtil.isNotBlank(pollOption)) {
       tags.add(["poll_option", pollOption!]);
     }
-    var event = Event(
-        targetNostr.publicKey, kind.EventKind.ZAP_REQUEST, tags, eventContent);
-    event.sign(targetNostr.privateKey!);
+    var event = Event.finalize(
+        targetNostr.privateKey, kind.EventKind.ZAP_REQUEST, tags, eventContent);
     log(jsonEncode(event));
     var eventStr = Uri.encodeQueryComponent(jsonEncode(event));
     callback += "&nostr=$eventStr";

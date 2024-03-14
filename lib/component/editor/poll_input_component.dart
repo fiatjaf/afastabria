@@ -15,8 +15,8 @@ class PollInputController {
     pollOptionControllers = [];
   }
 
-  List<List<dynamic>> getTags() {
-    List<List<dynamic>> tags = [];
+  List<List<String>> getTags() {
+    List<List<String>> tags = [];
     var length = pollOptionControllers.length;
     for (var i = 0; i < length; i++) {
       var pollPotion = pollOptionControllers[i];
@@ -33,7 +33,7 @@ class PollInputController {
   }
 
   bool checkInput(BuildContext context) {
-        if (StringUtil.isNotBlank(maxValueController.text)) {
+    if (StringUtil.isNotBlank(maxValueController.text)) {
       var num = int.tryParse(maxValueController.text);
       if (num == null) {
         BotToast.showText(text: "Number parse error");
@@ -59,6 +59,7 @@ class PollInputController {
   }
 }
 
+// ignore: must_be_immutable
 class PollInputComponent extends StatefulWidget {
   PollInputController pollInputController;
 
@@ -83,7 +84,7 @@ class _PollInputComponent extends State<PollInputComponent> {
 
   @override
   Widget build(BuildContext context) {
-        var themeData = Theme.of(context);
+    var themeData = Theme.of(context);
     var mainColor = themeData.primaryColor;
     List<Widget> list = [];
 

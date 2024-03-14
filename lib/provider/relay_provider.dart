@@ -82,7 +82,7 @@ class RelayProvider extends ChangeNotifier {
   }
 
   Nostr genNostr(String pk) {
-    var nostr = Nostr(privateKey: pk);
+    var nostr = Nostr(pk);
     log("nostr init over");
 
     // add initQuery

@@ -29,6 +29,7 @@ import '../editor/cust_embed_types.dart';
 import '../event_delete_callback.dart';
 import '../event_reply_callback.dart';
 
+// ignore: must_be_immutable
 class EventReactionsComponent extends StatefulWidget {
   ScreenshotController screenshotController;
 
@@ -38,7 +39,8 @@ class EventReactionsComponent extends StatefulWidget {
 
   bool showDetailBtn;
 
-  EventReactionsComponent({super.key, 
+  EventReactionsComponent({
+    super.key,
     required this.screenshotController,
     required this.event,
     required this.eventRelation,
@@ -373,7 +375,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
       var item = BookmarkItem.getFromEventReactions(widget.eventRelation);
       listProvider.removePublicBookmark(item.value);
     } else if (value == "broadcase") {
-      nostr!.broadcase(widget.event);
+      nostr!.broadcast(widget.event);
     } else if (value == "source") {
       List<EnumObj> list = [];
       for (var source in widget.event.sources) {
@@ -409,8 +411,8 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
 
   Future<void> onCommmentTap() async {
     var er = widget.eventRelation;
-    List<dynamic> tags = [];
-    List<dynamic> tagsAddedWhenSend = [];
+    List<List<String>> tags = [];
+    List<List<String>> tagsAddedWhenSend = [];
     String relayAddr = "";
     if (widget.event.sources.isNotEmpty) {
       relayAddr = widget.event.sources[0];
@@ -421,7 +423,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
     }
     tagsAddedWhenSend.add(["e", widget.event.id, relayAddr, directMarked]);
 
-    List<dynamic> tagPs = [];
+    List<List<String>> tagPs = [];
     tagPs.add(["p", widget.event.pubKey]);
     if (er.tagPList.isNotEmpty) {
       for (var p in er.tagPList) {
@@ -433,10 +435,9 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
       if (StringUtil.isNotBlank(er.rootRelayAddr)) {
         relayAddr = er.rootRelayAddr!;
       }
-      tags.add(["e", er.rootId, relayAddr, "root"]);
+      tags.add(["e", er.rootId ?? "", relayAddr, "root"]);
     }
 
-    // TODO reply maybe change the placeholder in editor router.
     var event = await EditorRouter.open(context,
         tags: tags, tagsAddedWhenSend: tagsAddedWhenSend, tagPs: tagPs);
     if (event != null) {
@@ -460,12 +461,13 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
       eventReactionsProvider.addRepost(widget.event.id);
 
       if (settingProvider.broadcaseWhenBoost == OpenStatus.OPEN) {
-        nostr!.broadcase(widget.event);
+        nostr!.broadcast(widget.event);
       }
     } else if (value == "quote") {
       var event = await EditorRouter.open(context, initEmbeds: [
         quill.CustomBlockEmbed(CustEmbedTypes.mention_event, widget.event.id)
       ]);
+      print(event);
     }
   }
 
@@ -513,6 +515,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
   }
 }
 
+// ignore: must_be_immutable
 class EventReactionNumComponent extends StatelessWidget {
   IconData iconData;
 
@@ -526,7 +529,8 @@ class EventReactionNumComponent extends StatelessWidget {
 
   double fontSize;
 
-  EventReactionNumComponent({super.key, 
+  EventReactionNumComponent({
+    super.key,
     required this.iconData,
     required this.num,
     this.onTap,

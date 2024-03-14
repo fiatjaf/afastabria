@@ -14,7 +14,6 @@ import 'package:provider/provider.dart';
 
 import '../../main.dart';
 import '../../provider/index_provider.dart';
-import '../../provider/setting_provider.dart';
 import '../../util/auth_util.dart';
 import '../dm/dm_router.dart';
 import '../edit/editor_router.dart';
@@ -26,6 +25,7 @@ import 'index_app_bar.dart';
 import 'index_bottom_bar.dart';
 import 'index_drawer_content.dart';
 
+// ignore: must_be_immutable
 class IndexRouter extends StatefulWidget {
   Function reload;
 
@@ -39,14 +39,13 @@ class IndexRouter extends StatefulWidget {
 
 class _IndexRouter extends CustState<IndexRouter>
     with TickerProviderStateMixin, WidgetsBindingObserver {
+  // ignore: non_constant_identifier_names
   static double PC_MAX_COLUMN_0 = 200;
-
+  // ignore: non_constant_identifier_names
   static double PC_MAX_COLUMN_1 = 550;
 
   late TabController followTabController;
-
   late TabController globalsTabController;
-
   late TabController dmTabController;
 
   @override
@@ -86,7 +85,6 @@ class _IndexRouter extends CustState<IndexRouter>
     switch (state) {
       case AppLifecycleState.resumed:
         print("AppLifecycleState.resumed");
-        nostr!.reconnect();
         break;
       case AppLifecycleState.inactive:
         print("AppLifecycleState.inactive");
@@ -119,8 +117,7 @@ class _IndexRouter extends CustState<IndexRouter>
   @override
   Widget doBuild(BuildContext context) {
     mediaDataCache.update(context);
-    
-    var settingProvider = Provider.of<SettingProvider>(context);
+
     if (nostr == null) {
       return const LoginRouter();
     }
@@ -320,51 +317,47 @@ class _IndexRouter extends CustState<IndexRouter>
             child: mainIndex,
           ),
           Expanded(
-            child: Container(
-              child: Selector<PcRouterFakeProvider, List<RouterFakeInfo>>(
-                builder: (context, infos, child) {
-                  if (infos.isEmpty) {
-                    return Container(
-                      child: const Center(
-                        child: Text("There should be a universe here."),
-                      ),
-                    );
-                  }
+            child: Selector<PcRouterFakeProvider, List<RouterFakeInfo>>(
+              builder: (context, infos, child) {
+                if (infos.isEmpty) {
+                  return const Center(
+                    child: Text("There should be a universe here."),
+                  );
+                }
 
-                  List<Widget> pages = [];
-                  for (var info in infos) {
-                    if (StringUtil.isNotBlank(info.routerPath) &&
-                        routes[info.routerPath] != null) {
-                      var builder = routes[info.routerPath];
-                      if (builder != null) {
-                        pages.add(PcRouterFake(
-                          info: info,
-                          child: builder(context),
-                        ));
-                      }
-                    } else if (info.buildContent != null) {
+                List<Widget> pages = [];
+                for (var info in infos) {
+                  if (StringUtil.isNotBlank(info.routerPath) &&
+                      routes[info.routerPath] != null) {
+                    var builder = routes[info.routerPath];
+                    if (builder != null) {
                       pages.add(PcRouterFake(
                         info: info,
-                        child: info.buildContent!(context),
+                        child: builder(context),
                       ));
                     }
+                  } else if (info.buildContent != null) {
+                    pages.add(PcRouterFake(
+                      info: info,
+                      child: info.buildContent!(context),
+                    ));
                   }
+                }
 
-                  return IndexedStack(
-                    index: pages.length - 1,
-                    children: pages,
-                  );
-                },
-                selector: (context, provider) {
-                  return provider.routerFakeInfos;
-                },
-                shouldRebuild: (previous, next) {
-                  if (previous != next) {
-                    return true;
-                  }
-                  return false;
-                },
-              ),
+                return IndexedStack(
+                  index: pages.length - 1,
+                  children: pages,
+                );
+              },
+              selector: (context, provider) {
+                return provider.routerFakeInfos;
+              },
+              shouldRebuild: (previous, next) {
+                if (previous != next) {
+                  return true;
+                }
+                return false;
+              },
             ),
           )
         ]),

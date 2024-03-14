@@ -15,11 +15,8 @@ import 'data_util.dart';
 
 class ContactListProvider extends ChangeNotifier {
   static ContactListProvider? _contactListProvider;
-
   Event? _event;
-
   String content = "";
-
   CustContactList? _contactList;
 
   static ContactListProvider getInstance() {
@@ -36,6 +33,7 @@ class ContactListProvider extends ChangeNotifier {
     }
 
     var str = sharedPreferences.getString(DataKey.CONTACT_LISTS);
+    print("str $str");
     if (StringUtil.isNotBlank(str)) {
       var jsonMap = jsonDecode(str!);
 
