@@ -406,7 +406,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
   void dispose() {
     super.dispose();
     var id = widget.event.id;
-    eventReactionsProvider.removePendding(id);
+    eventReactionsProvider.removePending(id);
   }
 
   Future<void> onCommmentTap() async {

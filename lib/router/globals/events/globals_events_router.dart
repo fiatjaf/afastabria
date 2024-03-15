@@ -26,7 +26,7 @@ class GlobalsEventsRouter extends StatefulWidget {
 }
 
 class _GlobalsEventsRouter extends KeepAliveCustState<GlobalsEventsRouter>
-    with PenddingEventsLaterFunction {
+    with PendingEventsLaterFunction {
   ScrollController scrollController = ScrollController();
 
   ManySubscriptionHandler? subHandle;

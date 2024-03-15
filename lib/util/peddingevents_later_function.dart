@@ -1,6 +1,6 @@
 import 'package:nostrmo/client/event.dart';
 
-mixin PenddingEventsLaterFunction {
+mixin PendingEventsLaterFunction {
   int laterTimeMS = 200;
   bool latering = false;
   List<Event> pendingEvents = [];

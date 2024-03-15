@@ -28,7 +28,7 @@ class TagDetailRouter extends StatefulWidget {
 }
 
 class _TagDetailRouter extends CustState<TagDetailRouter>
-    with PenddingEventsLaterFunction {
+    with PendingEventsLaterFunction {
   EventMemBox box = EventMemBox();
 
   final ScrollController _controller = ScrollController();

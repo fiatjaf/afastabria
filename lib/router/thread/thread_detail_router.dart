@@ -65,7 +65,7 @@ class ThreadDetailRouter extends StatefulWidget {
 }
 
 class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
-    with PenddingEventsLaterFunction, WhenStopFunction {
+    with PendingEventsLaterFunction, WhenStopFunction {
   EventMemBox box = EventMemBox();
 
   Event? sourceEvent;

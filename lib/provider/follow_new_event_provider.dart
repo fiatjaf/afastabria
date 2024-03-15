@@ -10,7 +10,7 @@ import 'package:nostrmo/util/string_util.dart';
 import 'package:nostrmo/provider/follow_event_provider.dart';
 
 class FollowNewEventProvider extends ChangeNotifier
-    with PenddingEventsLaterFunction {
+    with PendingEventsLaterFunction {
   EventMemBox eventPostMemBox = EventMemBox(sortAfterAdd: false);
   EventMemBox eventMemBox = EventMemBox();
 

@@ -8,7 +8,7 @@ import 'package:nostrmo/util/peddingevents_later_function.dart';
 import 'package:nostrmo/util/string_util.dart';
 
 class MentionMeNewProvider extends ChangeNotifier
-    with PenddingEventsLaterFunction {
+    with PendingEventsLaterFunction {
   EventMemBox eventMemBox = EventMemBox();
 
   int? _localSince;

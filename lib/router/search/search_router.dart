@@ -38,7 +38,7 @@ class SearchRouter extends StatefulWidget {
 }
 
 class _SearchRouter extends CustState<SearchRouter>
-    with PenddingEventsLaterFunction, LoadMoreEvent, WhenStopFunction {
+    with PendingEventsLaterFunction, LoadMoreEvent, WhenStopFunction {
   TextEditingController controller = TextEditingController();
 
   ScrollController loadableScrollController = ScrollController();

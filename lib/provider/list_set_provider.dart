@@ -11,7 +11,7 @@ class ListSetProvider extends ChangeNotifier with LaterFunction {
   // key - “kind:pubkey:dTag”, value - event
   final Map<String, Event> _holder = {};
 
-  final List<String> _penddingAIdStrs = [];
+  final List<String> _pendingAIdStrs = [];
 
   final Map<String, int> _handingAIds = {};
 
@@ -21,8 +21,8 @@ class ListSetProvider extends ChangeNotifier with LaterFunction {
       return event;
     }
 
-    if (!_penddingAIdStrs.contains(aIdStr) && _handingAIds[aIdStr] == null) {
-      _penddingAIdStrs.add(aIdStr);
+    if (!_pendingAIdStrs.contains(aIdStr) && _handingAIds[aIdStr] == null) {
+      _pendingAIdStrs.add(aIdStr);
     }
 
     later(_laterCallback, null);
@@ -30,9 +30,9 @@ class ListSetProvider extends ChangeNotifier with LaterFunction {
   }
 
   void _laterCallback() {
-    if (_penddingAIdStrs.isNotEmpty) {
+    if (_pendingAIdStrs.isNotEmpty) {
       List<Map<String, dynamic>> filters = [];
-      for (var aIdStr in _penddingAIdStrs) {
+      for (var aIdStr in _pendingAIdStrs) {
         var aId = AId.fromString(aIdStr);
         if (aId != null) {
           var filter = Filter();
@@ -46,7 +46,7 @@ class ListSetProvider extends ChangeNotifier with LaterFunction {
         }
       }
 
-      _penddingAIdStrs.clear();
+      _pendingAIdStrs.clear();
 
       if (filters.isNotEmpty) {
         nostr.query(filters, onEvent, onComplete: () {

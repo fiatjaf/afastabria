@@ -63,8 +63,8 @@ class MetadataProvider extends ChangeNotifier with LaterFunction {
       _laterSearch();
     }
 
-    if (_penddingEvents.isNotEmpty) {
-      _handlePenddingEvents();
+    if (_pendingEvents.isNotEmpty) {
+      _handlePendingEvents();
     }
   }
 
@@ -134,10 +134,10 @@ class MetadataProvider extends ChangeNotifier with LaterFunction {
     return Nip05Status.NIP05_NOT_FOUND;
   }
 
-  final List<Event> _penddingEvents = [];
+  final List<Event> _pendingEvents = [];
 
-  void _handlePenddingEvents() {
-    for (var event in _penddingEvents) {
+  void _handlePendingEvents() {
+    for (var event in _pendingEvents) {
       if (StringUtil.isBlank(event.content)) {
         continue;
       }
@@ -165,13 +165,13 @@ class MetadataProvider extends ChangeNotifier with LaterFunction {
         // refresh
       }
     }
-    _penddingEvents.clear;
+    _pendingEvents.clear;
 
     notifyListeners();
   }
 
   void _onEvent(Event event) {
-    _penddingEvents.add(event);
+    _pendingEvents.add(event);
     later(_laterCallback, null);
   }
 

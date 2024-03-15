@@ -32,7 +32,7 @@ class CommunityDetailRouter extends StatefulWidget {
 }
 
 class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
-    with PenddingEventsLaterFunction {
+    with PendingEventsLaterFunction {
   EventMemBox box = EventMemBox();
 
   AId? aId;

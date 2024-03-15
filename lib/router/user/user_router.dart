@@ -30,7 +30,7 @@ class UserRouter extends StatefulWidget {
 }
 
 class _UserRouter extends CustState<UserRouter>
-    with PenddingEventsLaterFunction, LoadMoreEvent {
+    with PendingEventsLaterFunction, LoadMoreEvent {
   final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
 
   final ScrollController _controller = ScrollController();

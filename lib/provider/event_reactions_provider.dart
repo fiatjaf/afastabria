@@ -161,7 +161,7 @@ class EventReactionsProvider extends ChangeNotifier
     }
   }
 
-  void removePendding(String id) {
+  void removePending(String id) {
     _pendingIds.remove(id);
   }
 
