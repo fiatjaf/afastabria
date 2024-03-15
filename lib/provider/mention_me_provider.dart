@@ -6,7 +6,7 @@ import 'package:nostrmo/client/filter.dart';
 import 'package:nostrmo/client/nostr.dart';
 import 'package:nostrmo/data/event_mem_box.dart';
 import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/pendingevents_later_function.dart';
 import 'package:nostrmo/util/string_util.dart';
 
 class MentionMeProvider extends ChangeNotifier

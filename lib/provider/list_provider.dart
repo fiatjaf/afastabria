@@ -185,30 +185,30 @@ class EmojiProvider extends ListProvider {
             list.add(CustomEmoji(k, v));
           } else if (tagKey == "a" && tag.length > 1) {
             // emoji config by other listSet
-            var aIdStr = tag[1];
-            var listSetEvent = listSetProvider.getByAId(aIdStr);
-            if (listSetEvent != null) {
-              // find the listSet
-              var aId = AId.fromString(aIdStr);
-              String title = "unknow";
-              if (aId != null) {
-                title = aId.title;
-              }
+            // var aIdStr = tag[1];
+            // var listSetEvent = listSetProvider.getByAId(aIdStr);
+            // if (listSetEvent != null) {
+            //   // find the listSet
+            //   var aId = AId.fromString(aIdStr);
+            //   String title = "unknow";
+            //   if (aId != null) {
+            //     title = aId.title;
+            //   }
 
-              List<CustomEmoji> subList = [];
-              for (var tag in listSetEvent.tags) {
-                if (tag.length > 2) {
-                  var tagKey = tag[0];
-                  var k = tag[1];
-                  var v = tag[2];
-                  if (tagKey == "emoji") {
-                    subList.add(CustomEmoji(k, v));
-                  }
-                }
-              }
+            //   List<CustomEmoji> subList = [];
+            //   for (var tag in listSetEvent.tags) {
+            //     if (tag.length > 2) {
+            //       var tagKey = tag[0];
+            //       var k = tag[1];
+            //       var v = tag[2];
+            //       if (tagKey == "emoji") {
+            //         subList.add(CustomEmoji(k, v));
+            //       }
+            //     }
+            //   }
 
-              result.add(MapEntry(title, subList));
-            }
+            //   result.add(MapEntry(title, subList));
+            // }
           }
         }
       }

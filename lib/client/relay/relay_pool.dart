@@ -68,13 +68,14 @@ class RelayPool extends RelayProvider {
     return relay;
   }
 
-  ManySubscriptionHandler subscribeMany(
+  ManySubscriptionHandle subscribeMany(
     Iterable<String> relays,
     List<Filter> filters, {
     Function(Event)? onEvent,
     Function()? onEose,
     Function()? onClose,
     String? id,
+    List<Filter> Function(String, List<Filter>)? filterModifier,
   }) {
     onEvent ??= (Event evt) {
       print("received unhandled event $evt");
@@ -85,8 +86,13 @@ class RelayPool extends RelayProvider {
     var closesMissing = relays.toSet();
     var idsReceived = <String>{};
 
-    return ManySubscriptionHandler(relays.map((String url) {
+    return ManySubscriptionHandle(relays.map((String url) {
       var relay = this.ensureRelay(url);
+
+      if (filterModifier != null) {
+        filterModifier(url, filters);
+      }
+
       return relay.subscribe(
         filters,
         onEvent: (Event evt) {
@@ -126,46 +132,53 @@ class RelayPool extends RelayProvider {
     }));
   }
 
-  ManySubscriptionHandler subscribeManyEose(
+  ManySubscriptionHandle subscribeManyEose(
     Iterable<String> relays,
     List<Filter> filters, {
     Function(Event)? onEvent,
     Function()? onClose,
     String? id,
+    Function(String, List<Filter>)? filterModifier,
   }) {
-    ManySubscriptionHandler? closeHandle;
+    ManySubscriptionHandle? closeHandle;
     closeHandle =
         this.subscribeMany(relays, filters, onEvent: onEvent, onEose: () {
       closeHandle!.close();
-    }, onClose: onClose, id: id);
+    }, onClose: onClose, id: id, filterModifier: filterModifier);
     return closeHandle;
   }
 
-  Future<Set<Event>> querySync(Iterable<String> relays, Filter filter) async {
+  Future<Set<Event>> querySync(
+    Iterable<String> relays,
+    Filter filter, {
+    String? id,
+    Function(String, List<Filter>)? filterModifier,
+  }) async {
     final completer = Completer<Set<Event>>();
     final results = <Event>{};
     this.subscribeManyEose(relays, [filter], onEvent: (Event evt) {
       results.add(evt);
     }, onClose: () {
       completer.complete(results);
-    });
+    }, id: id, filterModifier: filterModifier);
     return completer.future;
   }
 
-  Future<Event?> querySingle(Iterable<String> relays, Filter filter) async {
+  Future<Event?> querySingle(
+    Iterable<String> relays,
+    Filter filter, {
+    String? id,
+    Function(String, List<Filter>)? filterModifier,
+  }) async {
     final completer = Completer<Event>();
-    final results = <Event>{};
+    Event? result;
     this.subscribeManyEose(relays, [filter], onEvent: (Event evt) {
-      results.add(evt);
-    }, onClose: () {
-      if (results.length > 0) {
-        completer.complete(
-            results.reduce((a, b) => a.createdAt > b.createdAt ? a : b));
-      } else {
-        completer.completeError(
-            FormatException("no events found for $filter on $relays"));
+      if (result == null || evt.createdAt > result!.createdAt) {
+        result = evt;
       }
-    });
+    }, onClose: () {
+      completer.complete(result);
+    }, id: id, filterModifier: filterModifier);
     return completer.future;
   }
 
@@ -184,10 +197,10 @@ class RelayPool extends RelayProvider {
   }
 }
 
-class ManySubscriptionHandler {
+class ManySubscriptionHandle {
   final Iterable<Subscription> _subscriptions;
 
-  ManySubscriptionHandler(this._subscriptions);
+  ManySubscriptionHandle(this._subscriptions);
 
   void close() {
     for (var sub in this._subscriptions) {

@@ -9,7 +9,6 @@ import 'package:nostrmo/client/filter.dart';
 
 import 'package:nostrmo/client/relay/util.dart';
 import 'package:nostrmo/client/relay/relay_info.dart';
-import 'package:nostrmo/client/relay/relay_info_util.dart';
 
 abstract class Relay {
   late String url;
@@ -187,10 +186,6 @@ abstract class Relay {
   }
 
   Future<bool> doConnect();
-
-  Future<void> getRelayInfo(url) async {
-    info ??= await RelayInfoUtil.get(url);
-  }
 
   Future<OK> publish(Event event) async {
     final completer = Completer<OK>();

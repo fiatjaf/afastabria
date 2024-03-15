@@ -24,57 +24,71 @@ class Filter {
   /// maximum number of events to be returned in the initial query
   int? limit;
 
+  // NIP-50 optional fulltext search
+  String? search;
+
   /// Default constructor
-  Filter(
-      {this.ids,
-      this.authors,
-      this.kinds,
-      this.e,
-      this.p,
-      this.since,
-      this.until,
-      this.limit});
+  Filter({
+    this.ids,
+    this.authors,
+    this.kinds,
+    this.e,
+    this.p,
+    this.since,
+    this.until,
+    this.limit,
+    this.search,
+  });
 
   /// Deserialize a filter from a JSON
   Filter.fromJson(Map<String, dynamic> json) {
-    ids = json['ids'] == null ? null : List<String>.from(json['ids']);
-    authors =
+    this.ids = json['ids'] == null ? null : List<String>.from(json['ids']);
+    this.authors =
         json['authors'] == null ? null : List<String>.from(json['authors']);
-    kinds = json['kinds'] == null ? null : List<int>.from(json['kinds']);
-    e = json['#e'] == null ? null : List<String>.from(json['#e']);
-    p = json['#p'] == null ? null : List<String>.from(json['#p']);
-    since = json['since'];
-    until = json['until'];
-    limit = json['limit'];
+    this.kinds = json['kinds'] == null ? null : List<int>.from(json['kinds']);
+    this.e = json['#e'] == null ? null : List<String>.from(json['#e']);
+    this.p = json['#p'] == null ? null : List<String>.from(json['#p']);
+    this.since = json['since'];
+    this.until = json['until'];
+    this.limit = json['limit'];
+    this.search = json['search'];
   }
 
   /// Serialize a filter in JSON
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (ids != null) {
-      data['ids'] = ids;
+    if (this.ids != null) {
+      data['ids'] = this.ids;
     }
-    if (authors != null) {
-      data['authors'] = authors;
+    if (this.authors != null) {
+      data['authors'] = this.authors;
     }
-    if (kinds != null) {
-      data['kinds'] = kinds;
+    if (this.kinds != null) {
+      data['kinds'] = this.kinds;
     }
-    if (e != null) {
-      data['#e'] = e;
+    if (this.e != null) {
+      data['#e'] = this.e;
     }
-    if (p != null) {
-      data['#p'] = p;
+    if (this.p != null) {
+      data['#p'] = this.p;
     }
-    if (since != null) {
-      data['since'] = since;
+    if (this.since != null) {
+      data['since'] = this.since;
     }
-    if (until != null) {
-      data['until'] = until;
+    if (this.until != null) {
+      data['until'] = this.until;
     }
-    if (limit != null) {
-      data['limit'] = limit;
+    if (this.limit != null) {
+      data['limit'] = this.limit;
+    }
+    if (this.search != null) {
+      data['search'] = this.search;
     }
     return data;
+  }
+
+  Filter clone() {
+    return Filter(this.ids, this.authors, this.kinds, this.e, this.p,
+        this.since, this.until, this.limit, this.search);
   }
 }

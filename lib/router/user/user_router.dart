@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nostrmo/client/relay/relay_pool.dart';
 import 'package:nostrmo/component/simple_name_component.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +16,7 @@ import 'package:nostrmo/main.dart';
 import 'package:nostrmo/provider/metadata_provider.dart';
 import 'package:nostrmo/provider/setting_provider.dart';
 import 'package:nostrmo/util/load_more_event.dart';
-import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/pendingevents_later_function.dart';
 import 'package:nostrmo/util/router_util.dart';
 import 'package:nostrmo/util/string_util.dart';
 import 'package:nostrmo/router/user/user_statistics_component.dart';
@@ -208,7 +209,7 @@ class _UserRouter extends CustState<UserRouter>
     );
   }
 
-  String? subscribeId;
+  ManySubscriptionHandle? subHandle;
 
   @override
   Future<void> onReady(BuildContext context) async {
@@ -236,24 +237,14 @@ class _UserRouter extends CustState<UserRouter>
     super.dispose();
     disposeLater();
 
-    if (StringUtil.isNotBlank(subscribeId)) {
-      try {
-        nostr.unsubscribe(subscribeId!);
-      } catch (e) {}
+    if (this.subHandle != null) {
+      this.subHandle!.close();
     }
-  }
-
-  void unSubscribe() {
-    nostr.unsubscribe(subscribeId!);
-    subscribeId = null;
   }
 
   @override
   void doQuery() {
     preQuery();
-    if (StringUtil.isNotBlank(subscribeId)) {
-      unSubscribe();
-    }
 
     // load event from relay
     var filter = Filter(
@@ -262,7 +253,6 @@ class _UserRouter extends CustState<UserRouter>
       authors: [pubkey!],
       limit: queryLimit,
     );
-    subscribeId = StringUtil.rndNameStr(16);
 
     if (!box.isEmpty()) {
       var activeRelays = nostr.activeRelays();

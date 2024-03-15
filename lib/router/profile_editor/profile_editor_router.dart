@@ -293,10 +293,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       tags = profileEvent!.tags;
     }
 
-    var updateEvent = Event.finalize(nostr.privateKey, kind.EventKind.METADATA,
-        tags, jsonEncode(metadataMap));
-    nostr.broadcast(updateEvent);
-
+    nostr.sendMetadata(tags, metadataMap);
     RouterUtil.back(context);
   }
 
@@ -305,13 +302,13 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
   @override
   Future<void> onReady(BuildContext context) async {
     var filter = Filter(
-        kinds: [kind.EventKind.METADATA],
-        authors: [nostr.publicKey],
-        limit: 1);
-    nostr.query([filter.toJson()], (event) {
+        kinds: [kind.EventKind.METADATA], authors: [nostr.publicKey], limit: 1);
+
+    nostr.pool.querySingle([...nostr.relayList.read, ...nostr.METADATA_RELAYS],
+        filter).then((event) {
       if (profileEvent == null) {
         profileEvent = event;
-      } else if (event.createdAt > profileEvent!.createdAt) {
+      } else if (event!.createdAt > profileEvent!.createdAt) {
         profileEvent = event;
       }
     });

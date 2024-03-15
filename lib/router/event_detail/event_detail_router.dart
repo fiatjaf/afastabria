@@ -83,7 +83,7 @@ class _EventDetailRouter extends State<EventDetailRouter> {
             return ThreadDetailRouter.detailAppBarTitle(
                 snapshot.data!, themeData);
           } else {
-            return null;
+            return Container();
           }
         },
       );
@@ -125,7 +125,7 @@ class _EventDetailRouter extends State<EventDetailRouter> {
           itemBuilder: (context, index) {
             if (index == 0) {
               return WidgetSize(
-                child: mainEventWidget!,
+                child: mainEventWidget,
                 onChange: (size) {
                   rootEventHeight = size.height;
                 },
@@ -162,7 +162,7 @@ class _EventDetailRouter extends State<EventDetailRouter> {
         return main;
       },
       selector: (context, provider) {
-        return provider.get(eventId!);
+        return provider.get(eventId);
       },
       shouldRebuild: (previous, next) {
         if ((previous == null && next != null) ||

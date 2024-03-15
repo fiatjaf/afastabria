@@ -11,7 +11,7 @@ import 'package:nostrmo/data/event_mem_box.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/router/tag/topic_map.dart';
 import 'package:nostrmo/util/find_event_interface.dart';
-import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/pendingevents_later_function.dart';
 import 'package:nostrmo/util/string_util.dart';
 
 class FollowEventProvider extends ChangeNotifier

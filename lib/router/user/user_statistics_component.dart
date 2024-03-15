@@ -1,5 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:nostrmo/client/relay/relay_pool.dart';
 import 'package:nostrmo/provider/contact_list_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -99,11 +100,11 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     }
 
     if (isLocal) {
-      list.add(Selector<RelayPool, int>(builder: (context, num, child) {
+      list.add(Selector<RelayPool, int>(builder: (context, num_, child) {
         return UserStatisticsItemComponent(
-            num: num, name: "Relays", onTap: onRelaysTap);
+            num: num_, name: "Relays", onTap: onRelaysTap);
       }, selector: (context, provider) {
-        return provider.total();
+        return provider.relayStatusMap.length;
       }));
     } else {
       if (relaysTags != null) {
@@ -210,43 +211,43 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
   }
 
   void doQuery() {
-    {
-      queryId = StringUtil.rndNameStr(16);
-      var filter = Filter(
-          authors: [widget.pubkey],
-          limit: 1,
-          kinds: [kind.EventKind.CONTACT_LIST]);
-      nostr.query([filter.toJson()], (event) {
-        if (((contactListEvent != null &&
-                    event.createdAt > contactListEvent!.createdAt) ||
-                contactListEvent == null) &&
-            !_disposed) {
-          setState(() {
-            contactListEvent = event;
-            contactList = CustContactList.fromJson(event.tags);
-          });
-        }
-      }, id: queryId);
-    }
+    // {
+    //   queryId = StringUtil.rndNameStr(16);
+    //   var filter = Filter(
+    //       authors: [widget.pubkey],
+    //       limit: 1,
+    //       kinds: [kind.EventKind.CONTACT_LIST]);
+    //   nostr.query([filter.toJson()], (event) {
+    //     if (((contactListEvent != null &&
+    //                 event.createdAt > contactListEvent!.createdAt) ||
+    //             contactListEvent == null) &&
+    //         !_disposed) {
+    //       setState(() {
+    //         contactListEvent = event;
+    //         contactList = CustContactList.fromJson(event.tags);
+    //       });
+    //     }
+    //   }, id: queryId);
+    // }
 
-    {
-      queryId2 = StringUtil.rndNameStr(16);
-      var filter = Filter(
-          authors: [widget.pubkey],
-          limit: 1,
-          kinds: [kind.EventKind.RELAY_LIST_METADATA]);
-      nostr.query([filter.toJson()], (event) {
-        if (((relaysEvent != null &&
-                    event.createdAt > relaysEvent!.createdAt) ||
-                relaysEvent == null) &&
-            !_disposed) {
-          setState(() {
-            relaysEvent = event;
-            relaysTags = event.tags;
-          });
-        }
-      }, id: queryId2);
-    }
+    // {
+    //   queryId2 = StringUtil.rndNameStr(16);
+    //   var filter = Filter(
+    //       authors: [widget.pubkey],
+    //       limit: 1,
+    //       kinds: [kind.EventKind.RELAY_LIST_METADATA]);
+    //   nostr.query(filter, (event) {
+    //     if (((relaysEvent != null &&
+    //                 event.createdAt > relaysEvent!.createdAt) ||
+    //             relaysEvent == null) &&
+    //         !_disposed) {
+    //       setState(() {
+    //         relaysEvent = event;
+    //         relaysTags = event.tags;
+    //       });
+    //     }
+    //   }, id: queryId2);
+    // }
   }
 
   onFollowingTap() {
@@ -274,31 +275,31 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
   String followedSubscribeId = "";
 
   onFollowedTap() {
-    if (followedMap == null) {
-      // load data
-      followedMap = {};
-      // pull zap event
-      Map<String, dynamic> filter = {};
-      filter["kinds"] = [kind.EventKind.CONTACT_LIST];
-      filter["#p"] = [widget.pubkey];
-      followedSubscribeId = StringUtil.rndNameStr(12);
-      nostr.query([filter], (e) {
-        var oldEvent = followedMap![e.pubKey];
-        if (oldEvent == null || e.createdAt > oldEvent.createdAt) {
-          followedMap![e.pubKey] = e;
+    // if (followedMap == null) {
+    //   // load data
+    //   followedMap = {};
+    //   // pull zap event
+    //   Map<String, dynamic> filter = {};
+    //   filter["kinds"] = [kind.EventKind.CONTACT_LIST];
+    //   filter["#p"] = [widget.pubkey];
+    //   followedSubscribeId = StringUtil.rndNameStr(12);
+    //   nostr.query([filter], (e) {
+    //     var oldEvent = followedMap![e.pubKey];
+    //     if (oldEvent == null || e.createdAt > oldEvent.createdAt) {
+    //       followedMap![e.pubKey] = e;
 
-          setState(() {
-            followedNum = followedMap!.length;
-          });
-        }
-      }, id: followedSubscribeId);
+    //       setState(() {
+    //         followedNum = followedMap!.length;
+    //       });
+    //     }
+    //   }, id: followedSubscribeId);
 
-      followedNum = 0;
-    } else {
-      // jump to see
-      var pubkeys = followedMap!.keys.toList();
-      RouterUtil.router(context, RouterPath.FOLLOWED, pubkeys);
-    }
+    //   followedNum = 0;
+    // } else {
+    //   // jump to see
+    //   var pubkeys = followedMap!.keys.toList();
+    //   RouterUtil.router(context, RouterPath.FOLLOWED, pubkeys);
+    // }
   }
 
   onRelaysTap() {
@@ -370,15 +371,12 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
   }
 }
 
+// ignore: must_be_immutable
 class UserStatisticsItemComponent extends StatelessWidget {
   int? num;
-
   String name;
-
   Function onTap;
-
   bool formatNum;
-
   Function(LongPressStartDetails)? onLongPressStart;
 
   UserStatisticsItemComponent({

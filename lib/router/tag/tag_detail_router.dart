@@ -12,7 +12,7 @@ import 'package:nostrmo/consts/base_consts.dart';
 import 'package:nostrmo/data/event_mem_box.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/provider/setting_provider.dart';
-import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/pendingevents_later_function.dart';
 import 'package:nostrmo/util/platform_util.dart';
 import 'package:nostrmo/util/router_util.dart';
 import 'package:nostrmo/client/event_kind.dart' as kind;

@@ -100,7 +100,6 @@ late CommunityInfoProvider communityInfoProvider;
 late ReplaceableEventProvider replaceableEventProvider;
 late BookmarkProvider bookmarkProvider;
 late EmojiProvider emojiProvider;
-late ListSetProvider listSetProvider;
 late BadgeProvider badgeProvider;
 
 late Nostr nostr;
@@ -176,7 +175,6 @@ Future<void> main() async {
   communityInfoProvider = CommunityInfoProvider();
   replaceableEventProvider = ReplaceableEventProvider();
   bookmarkProvider = BookmarkProvider();
-  listSetProvider = ListSetProvider();
   badgeProvider = BadgeProvider();
 
   if (StringUtil.isNotBlank(settingProvider.network)) {
@@ -324,9 +322,6 @@ class _MyApp extends State<MyApp> {
         ),
         ListenableProvider<EmojiProvider>.value(
           value: emojiProvider,
-        ),
-        ListenableProvider<ListSetProvider>.value(
-          value: listSetProvider,
         ),
         ListenableProvider<BadgeProvider>.value(
           value: badgeProvider,

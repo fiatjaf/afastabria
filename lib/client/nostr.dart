@@ -81,12 +81,12 @@ class Nostr {
   final List<String> ID_RELAYS = [
     "wss://cache2.primal.net/v1",
     "wss://relay.nostr.band",
-    "wss://relay.noswhere.com"
-        "wss://relay.damus.io",
+    "wss://relay.noswhere.com",
+    "wss://relay.damus.io",
   ];
   final List<String> CONTACT_RELAYS = [
     "wss://purplepag.es",
-    "wss://relay.damus.io",
+    "wss://relay.nostr.band",
     "wss://relay.nos.social"
   ];
   final List<String> RELAYLIST_RELAYS = [
@@ -94,6 +94,18 @@ class Nostr {
     "wss://purplepag.es",
     "wss://relay.snort.social",
     "wss://nos.lol"
+  ];
+  final List<String> SEARCH_RELAYS = [
+    "wss://relay.noswhere.com",
+    "wss://relay.nostr.band",
+    "wss://nostr.wine",
+    "wss://search.nos.today"
+  ];
+  final List<String> RANDOM_RELAYS = [
+    "wss://relay.primal.net",
+    "wss://relay.damus.io",
+    "wss://nostr.mom",
+    "wss://offchain.pub",
   ];
   final List<String> BLASTR = ["wss://nostr.mutinywallet.com"];
 
@@ -177,6 +189,13 @@ class Nostr {
     Event event =
         Event.finalize(this.privateKey, EventKind.TEXT_NOTE, tags, text);
     this.pool.publish(this.relayList.write, event);
+    return event;
+  }
+
+  Event sendMetadata(List<List<String>> tags, Map<String, dynamic> metadata) {
+    final event = Event.finalize(
+        this.privateKey, EventKind.METADATA, tags, jsonEncode(metadata));
+    this.pool.publish([...this.relayList.write, ...METADATA_RELAYS], event);
     return event;
   }
 

@@ -1,5 +1,4 @@
 import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/relay/relay.dart';
 import 'package:nostrmo/util/find_event_interface.dart';
 
 /// a memory event box
@@ -40,33 +39,30 @@ class EventMemBox implements FindEventInterface {
   }
 
   // find event oldest createdAt by relay
-  OldestCreatedAtByRelayResult oldestCreatedAtByRelay(List<Relay> relays,
+  OldestCreatedAtByRelayResult oldestCreatedAtByRelay(List<String> relayURLs,
       [int? initTime]) {
     OldestCreatedAtByRelayResult result = OldestCreatedAtByRelayResult();
-    Map<String, Relay> relayMap = {};
-    for (var relay in relays) {
-      relayMap[relay.url] = relay;
-    }
 
     var length = _eventList.length;
     for (var index = length - 1; index > -1; index--) {
       var event = _eventList[index];
       for (var source in event.sources) {
-        if (relayMap[source] != null) {
+        var idx = relayURLs.indexOf(source);
+        if (idx != -1) {
           // log("$source findCreatedAt $length $index ${length - index}");
           result.createdAtMap[source] = event.createdAt;
-          relayMap.remove(source);
+          relayURLs.removeAt(idx);
         }
       }
 
-      if (relayMap.isEmpty) {
+      if (relayURLs.length == 0) {
         break;
       }
     }
 
-    if (relayMap.isNotEmpty && initTime != null) {
-      for (var relay in relayMap.values) {
-        result.createdAtMap[relay.url] = initTime;
+    if (relayURLs.length > 0 && initTime != null) {
+      for (var url in relayURLs) {
+        result.createdAtMap[url] = initTime;
       }
     }
 

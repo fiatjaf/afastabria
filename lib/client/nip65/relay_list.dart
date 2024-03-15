@@ -69,6 +69,7 @@ class RelayList {
   }
 
   void add(String relay, bool read, bool write) {
+    relay = RelayUtil.normalizeURL(relay);
     if (read) {
       this.read.add(relay);
     }
@@ -78,6 +79,7 @@ class RelayList {
   }
 
   void remove(String relay) {
+    relay = RelayUtil.normalizeURL(relay);
     this.read.remove(relay);
     this.write.remove(relay);
   }

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:nostrmo/client/relay/relay.dart';
 import 'package:nostrmo/client/nip19/nip19_tlv.dart';
 import 'package:nostrmo/consts/router_path.dart';
+import 'package:nostrmo/main.dart';
 import 'package:nostrmo/util/router_util.dart';
 import 'package:nostrmo/consts/base.dart';
 
@@ -119,7 +120,7 @@ class RelaysItemComponent extends StatelessWidget {
   }
 
   void removeRelay(String addr) {
-    relayProvider.removeRelay(addr);
+    nostr.relayList.remove(addr);
   }
 }
 

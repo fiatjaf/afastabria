@@ -5,11 +5,9 @@ import 'package:nostrmo/component/user/metadata_top_component.dart';
 import 'package:nostrmo/data/event_find_util.dart';
 import 'package:nostrmo/data/metadata.dart';
 import 'package:nostrmo/router/search/search_action_item_component.dart';
-import 'package:nostrmo/router/search/search_actions.dart';
 import 'package:nostrmo/util/when_stop_function.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/client/client_utils/keys.dart';
 import 'package:nostrmo/client/event.dart';
 import 'package:nostrmo/client/nip19/nip19.dart';
 import 'package:nostrmo/component/cust_state.dart';
@@ -23,7 +21,7 @@ import 'package:nostrmo/data/event_mem_box.dart';
 import 'package:nostrmo/main.dart';
 import 'package:nostrmo/provider/setting_provider.dart';
 import 'package:nostrmo/util/load_more_event.dart';
-import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/pendingevents_later_function.dart';
 import 'package:nostrmo/util/platform_util.dart';
 import 'package:nostrmo/util/router_util.dart';
 import 'package:nostrmo/util/string_util.dart';
@@ -207,45 +205,26 @@ class _SearchRouter extends CustState<SearchRouter>
   }
 
   List<int> searchEventKinds = kind.EventKind.SUPPORTED_EVENTS;
-
-  String? subscribeId;
-
   EventMemBox eventMemBox = EventMemBox();
 
-  // Filter? filter;
-  Map<String, dynamic>? filterMap;
+  Filter? filter;
 
   @override
   void doQuery() {
     preQuery();
 
-    if (subscribeId != null) {
-      unSubscribe();
-    }
-    subscribeId = generatePrivateKey();
+    var relays = [...nostr.SEARCH_RELAYS];
+    List<Filter> Function(String, List<Filter>)? filterModifier;
 
     if (!eventMemBox.isEmpty()) {
-      var activeRelays = nostr.activeRelays();
-      var oldestCreatedAts = eventMemBox.oldestCreatedAtByRelay(activeRelays);
-      Map<String, List<Map<String, dynamic>>> filtersMap = {};
-      for (var relay in activeRelays) {
-        var oldestCreatedAt = oldestCreatedAts.createdAtMap[relay.url];
-        if (oldestCreatedAt != null) {
-          filterMap!["until"] = oldestCreatedAt;
-        }
-        Map<String, dynamic> fm = {};
-        for (var entry in filterMap!.entries) {
-          fm[entry.key] = entry.value;
-        }
-        filtersMap[relay.url] = [fm];
-      }
-      nostr.queryByFilters(filtersMap, onQueryEvent, id: subscribeId);
-    } else {
-      if (until != null) {
-        filterMap!["until"] = until;
-      }
-      nostr.query([filterMap!], onQueryEvent, id: subscribeId);
+      var oldestCreatedAts = eventMemBox.oldestCreatedAtByRelay(relays);
+      filterModifier = (url, filters) {
+        filters[0].until = oldestCreatedAts.createdAtMap[url] ?? until;
+        return filters;
+      };
     }
+
+    nostr.pool.querySync(relays, this.filter!, filterModifier: filterModifier);
   }
 
   void onQueryEvent(Event event) {
@@ -255,11 +234,6 @@ class _SearchRouter extends CustState<SearchRouter>
         setState(() {});
       }
     }, null);
-  }
-
-  void unSubscribe() {
-    nostr.unsubscribe(subscribeId!);
-    subscribeId = null;
   }
 
   void onEditingComplete() {
@@ -289,10 +263,8 @@ class _SearchRouter extends CustState<SearchRouter>
 
     eventMemBox = EventMemBox();
     until = null;
-    filterMap =
-        Filter(kinds: searchEventKinds, authors: authors, limit: queryLimit)
-            .toJson();
-    filterMap!.remove("search");
+    this.filter =
+        Filter(kinds: searchEventKinds, authors: authors, limit: queryLimit);
     pendingEvents.clear;
     doQuery();
   }
@@ -426,10 +398,18 @@ class _SearchRouter extends CustState<SearchRouter>
 
     eventMemBox = EventMemBox();
     until = null;
-    filterMap = Filter(kinds: searchEventKinds, limit: queryLimit).toJson();
-    filterMap!.remove("authors");
-    filterMap!["search"] = value;
+    this.filter =
+        Filter(kinds: searchEventKinds, limit: queryLimit, search: value);
     pendingEvents.clear;
     doQuery();
   }
+}
+
+class SearchActions {
+  static const String openPubkey = "openPubkey";
+  static const String openNoteId = "openNoteId";
+  static const String searchMetadataFromCache = "searchMetadataFromCache";
+  static const String searchEventFromCache = "searchEventFromCache";
+  static const String searchPubkeyEvent = "searchPubkeyEvent";
+  static const String searchNoteContent = "searchNoteContent";
 }

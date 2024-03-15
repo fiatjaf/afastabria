@@ -9,7 +9,7 @@ import 'package:nostrmo/data/dm_session_info.dart';
 import 'package:nostrmo/data/dm_session_info_db.dart';
 import 'package:nostrmo/data/event_db.dart';
 import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/peddingevents_later_function.dart';
+import 'package:nostrmo/util/pendingevents_later_function.dart';
 import 'package:nostrmo/util/string_util.dart';
 
 class DMProvider extends ChangeNotifier with PendingEventsLaterFunction {
