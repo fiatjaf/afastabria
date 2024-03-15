@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/provider/contact_list_provider.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/provider/contact_list_provider.dart';
+import 'package:loure/util/string_util.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/client/nip172/community_info.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/component/content/content_component.dart';
-import 'package:nostrmo/component/image_component.dart';
+import 'package:loure/client/nip172/community_info.dart';
+import 'package:loure/main.dart';
+import 'package:loure/component/content/content_component.dart';
+import 'package:loure/component/image_component.dart';
 
 class CommunityInfoComponent extends StatefulWidget {
   CommunityInfo info;

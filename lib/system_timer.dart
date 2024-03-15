@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:nostrmo/main.dart';
+import 'package:loure/main.dart';
 
 class SystemTimer {
   static int counter = 0;

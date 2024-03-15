@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:sqflite/sqflite.dart';
 
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/data/db.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/data/db.dart';
 
 class EventDB {
   static Future<List<Event>> list(int keyIndex, int kind, int skip, limit,

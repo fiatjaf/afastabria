@@ -6,7 +6,7 @@ import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:nostrmo/util/image_tool.dart';
+import 'package:loure/util/image_tool.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 const _defaultBackgroundColor = Colors.black;

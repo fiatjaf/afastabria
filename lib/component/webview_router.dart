@@ -6,23 +6,23 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:nostrmo/component/cust_state.dart';
-import 'package:nostrmo/component/nip07_dialog.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/consts/base_consts.dart';
-import 'package:nostrmo/provider/setting_provider.dart';
-import 'package:nostrmo/provider/webview_provider.dart';
-import 'package:nostrmo/util/lightning_util.dart';
-import 'package:nostrmo/util/platform_util.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/component/cust_state.dart';
+import 'package:loure/component/nip07_dialog.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/consts/base_consts.dart';
+import 'package:loure/provider/setting_provider.dart';
+import 'package:loure/provider/webview_provider.dart';
+import 'package:loure/util/lightning_util.dart';
+import 'package:loure/util/platform_util.dart';
+import 'package:loure/util/string_util.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/nip04/nip04.dart';
-import 'package:nostrmo/client/nip07/nip07_methods.dart';
-import 'package:nostrmo/main.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/nip04/nip04.dart';
+import 'package:loure/client/nip07/nip07_methods.dart';
+import 'package:loure/main.dart';
 
 // ignore: must_be_immutable
 class WebViewRouter extends StatefulWidget {
@@ -380,10 +380,10 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
 
   void initJSHandle(InAppWebViewController controller) {
     controller.addJavaScriptHandler(
-      handlerName: "Nostrmo_JS_getPublicKey",
+      handlerName: "Loure_JS_getPublicKey",
       callback: (jsMsgs) async {
         var jsMsg = jsMsgs[0];
-        // print("Nostrmo_JS_getPublicKey $jsMsg");
+        // print("Loure_JS_getPublicKey $jsMsg");
         var jsonObj = jsonDecode(jsMsg);
         var resultId = jsonObj["resultId"];
 
@@ -399,10 +399,10 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
       },
     );
     controller.addJavaScriptHandler(
-      handlerName: "Nostrmo_JS_signEvent",
+      handlerName: "Loure_JS_signEvent",
       callback: (jsMsgs) async {
         var jsMsg = jsMsgs[0];
-        // print("Nostrmo_JS_signEvent $jsMsg");
+        // print("Loure_JS_signEvent $jsMsg");
         var jsonObj = jsonDecode(jsMsg);
         var resultId = jsonObj["resultId"];
         var content = jsonObj["msg"];
@@ -415,8 +415,8 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
           try {
             var eventObj = jsonDecode(content);
             var tags = eventObj["tags"];
-            Event event = Event.finalize(nostr.privateKey, eventObj["kind"], tags ?? [],
-                eventObj["content"]);
+            Event event = Event.finalize(nostr.privateKey, eventObj["kind"],
+                tags ?? [], eventObj["content"]);
 
             var eventResultStr = jsonEncode(event.toJson());
             // TODO this method to handle " may be error
@@ -433,10 +433,10 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
       },
     );
     controller.addJavaScriptHandler(
-      handlerName: "Nostrmo_JS_getRelays",
+      handlerName: "Loure_JS_getRelays",
       callback: (jsMsgs) async {
         var jsMsg = jsMsgs[0];
-        // print("Nostrmo_JS_getRelays $jsMsg");
+        // print("Loure_JS_getRelays $jsMsg");
         var jsonObj = jsonDecode(jsMsg);
         var resultId = jsonObj["resultId"];
 
@@ -459,10 +459,10 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
       },
     );
     controller.addJavaScriptHandler(
-      handlerName: "Nostrmo_JS_nip04_encrypt",
+      handlerName: "Loure_JS_nip04_encrypt",
       callback: (jsMsgs) async {
         var jsMsg = jsMsgs[0];
-        // print("Nostrmo_JS_nip04_encrypt $jsMsg");
+        // print("Loure_JS_nip04_encrypt $jsMsg");
         var jsonObj = jsonDecode(jsMsg);
         var resultId = jsonObj["resultId"];
         var msg = jsonObj["msg"];
@@ -486,10 +486,10 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
       },
     );
     controller.addJavaScriptHandler(
-      handlerName: "Nostrmo_JS_nip04_decrypt",
+      handlerName: "Loure_JS_nip04_decrypt",
       callback: (jsMsgs) async {
         var jsMsg = jsMsgs[0];
-        // print("Nostrmo_JS_nip04_decrypt $jsMsg");
+        // print("Loure_JS_nip04_decrypt $jsMsg");
         var jsonObj = jsonDecode(jsMsg.message);
         var resultId = jsonObj["resultId"];
         var msg = jsonObj["msg"];
@@ -538,20 +538,20 @@ reject(resultId, message) {
     window.nostr._requests[resultId].reject(message);
 },
 async getPublicKey() {
-    return window.nostr._call("Nostrmo_JS_getPublicKey");
+    return window.nostr._call("Loure_JS_getPublicKey");
 },
 async signEvent(event) {
-    return window.nostr._call("Nostrmo_JS_signEvent", JSON.stringify(event));
+    return window.nostr._call("Loure_JS_signEvent", JSON.stringify(event));
 },
 async getRelays() {
-    return window.nostr._call("Nostrmo_JS_getRelays");
+    return window.nostr._call("Loure_JS_getRelays");
 },
 nip04: {
   async encrypt(pubkey, plaintext) {
-    return window.nostr._call("Nostrmo_JS_nip04_encrypt", {"pubkey": pubkey, "plaintext": plaintext});
+    return window.nostr._call("Loure_JS_nip04_encrypt", {"pubkey": pubkey, "plaintext": plaintext});
   },
   async decrypt(pubkey, ciphertext) {
-      return window.nostr._call("Nostrmo_JS_nip04_decrypt", {"pubkey": pubkey, "ciphertext": ciphertext});
+      return window.nostr._call("Loure_JS_nip04_decrypt", {"pubkey": pubkey, "ciphertext": ciphertext});
   },
 },
 };
@@ -576,7 +576,7 @@ nip04: {
 //   super.initState();
 //   _controller.setJavaScriptMode(JavaScriptMode.unrestricted);
 //   _controller.addJavaScriptChannel(
-//     "Nostrmo_JS_getPublicKey",
+//     "Loure_JS_getPublicKey",
 //     onMessageReceived: (jsMsg) async {
 //       var jsonObj = jsonDecode(jsMsg.message);
 //       var resultId = jsonObj["resultId"];
@@ -593,7 +593,7 @@ nip04: {
 //     },
 //   );
 //   _controller.addJavaScriptChannel(
-//     "Nostrmo_JS_signEvent",
+//     "Loure_JS_signEvent",
 //     onMessageReceived: (jsMsg) async {
 //       var jsonObj = jsonDecode(jsMsg.message);
 //       var resultId = jsonObj["resultId"];
@@ -626,7 +626,7 @@ nip04: {
 //     },
 //   );
 //   _controller.addJavaScriptChannel(
-//     "Nostrmo_JS_getRelays",
+//     "Loure_JS_getRelays",
 //     onMessageReceived: (jsMsg) async {
 //       var jsonObj = jsonDecode(jsMsg.message);
 //       var resultId = jsonObj["resultId"];
@@ -650,7 +650,7 @@ nip04: {
 //     },
 //   );
 //   _controller.addJavaScriptChannel(
-//     "Nostrmo_JS_nip04_encrypt",
+//     "Loure_JS_nip04_encrypt",
 //     onMessageReceived: (jsMsg) async {
 //       var jsonObj = jsonDecode(jsMsg.message);
 //       var resultId = jsonObj["resultId"];
@@ -674,7 +674,7 @@ nip04: {
 //     },
 //   );
 //   _controller.addJavaScriptChannel(
-//     "Nostrmo_JS_nip04_decrypt",
+//     "Loure_JS_nip04_decrypt",
 //     onMessageReceived: (jsMsg) async {
 //       var jsonObj = jsonDecode(jsMsg.message);
 //       var resultId = jsonObj["resultId"];
@@ -724,20 +724,20 @@ nip04: {
 //     window.nostr._requests[resultId].reject(message);
 // },
 // async getPublicKey() {
-//     return window.nostr._call(Nostrmo_JS_getPublicKey);
+//     return window.nostr._call(Loure_JS_getPublicKey);
 // },
 // async signEvent(event) {
-//     return window.nostr._call(Nostrmo_JS_signEvent, JSON.stringify(event));
+//     return window.nostr._call(Loure_JS_signEvent, JSON.stringify(event));
 // },
 // async getRelays() {
-//     return window.nostr._call(Nostrmo_JS_getRelays);
+//     return window.nostr._call(Loure_JS_getRelays);
 // },
 // nip04: {
 //   async encrypt(pubkey, plaintext) {
-//     return window.nostr._call(Nostrmo_JS_nip04_encrypt, {"pubkey": pubkey, "plaintext": plaintext});
+//     return window.nostr._call(Loure_JS_nip04_encrypt, {"pubkey": pubkey, "plaintext": plaintext});
 //   },
 //   async decrypt(pubkey, ciphertext) {
-//       return window.nostr._call(Nostrmo_JS_nip04_decrypt, {"pubkey": pubkey, "ciphertext": ciphertext});
+//       return window.nostr._call(Loure_JS_nip04_decrypt, {"pubkey": pubkey, "ciphertext": ciphertext});
 //   },
 // },
 // };

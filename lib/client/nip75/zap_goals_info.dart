@@ -1,4 +1,4 @@
-import 'package:nostrmo/client/event.dart';
+import 'package:loure/client/event.dart';
 
 class ZapGoalsInfo {
   int? amount;

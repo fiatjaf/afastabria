@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/consts/base.dart';
+import 'package:loure/consts/base.dart';
 
 // ignore: must_be_immutable
 class NewNotesUpdatedComponent extends StatelessWidget {

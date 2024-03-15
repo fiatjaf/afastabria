@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/client/aid.dart';
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/event_kind.dart' as kind;
-import 'package:nostrmo/client/nip172/community_info.dart';
+import 'package:loure/client/aid.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/nip172/community_info.dart';
 
-import 'package:nostrmo/client/filter.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/later_function.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/client/filter.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/later_function.dart';
+import 'package:loure/util/string_util.dart';
 
 class CommunityInfoProvider extends ChangeNotifier with LaterFunction {
   final Map<String, CommunityInfo> _cache = {};

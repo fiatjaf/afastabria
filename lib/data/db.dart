@@ -1,11 +1,10 @@
-import 'package:nostrmo/util/platform_util.dart';
+import 'package:loure/util/platform_util.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DB {
   static const _VERSION = 1;
-
-  static const _dbName = "nostrmo.db";
+  static const _dbName = "loure.db";
 
   static Database? _database;
 

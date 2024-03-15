@@ -1,10 +1,10 @@
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/util/string_util.dart';
 
-import 'package:nostrmo/client/event_kind.dart' as kind;
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/zap/zap_num_util.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/find_event_interface.dart';
+import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/event.dart';
+import 'package:loure/client/zap/zap_num_util.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/find_event_interface.dart';
 
 class EventReactions implements FindEventInterface {
   String id;

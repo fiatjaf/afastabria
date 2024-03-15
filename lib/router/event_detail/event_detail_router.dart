@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/main.dart';
+import 'package:loure/main.dart';
 import 'package:provider/provider.dart';
 import 'package:widget_size/widget_size.dart';
 
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/filter.dart';
-import 'package:nostrmo/client/event_kind.dart' as kind;
-import 'package:nostrmo/component/event/event_list_component.dart';
-import 'package:nostrmo/component/event/event_load_list_component.dart';
-import 'package:nostrmo/component/event/reaction_event_list_component.dart';
-import 'package:nostrmo/component/event/zap_event_list_component.dart';
-import 'package:nostrmo/data/event_reactions.dart';
-import 'package:nostrmo/provider/event_reactions_provider.dart';
-import 'package:nostrmo/util/platform_util.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/router/thread/thread_detail_router.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/filter.dart';
+import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/component/event/event_list_component.dart';
+import 'package:loure/component/event/event_load_list_component.dart';
+import 'package:loure/component/event/reaction_event_list_component.dart';
+import 'package:loure/component/event/zap_event_list_component.dart';
+import 'package:loure/data/event_reactions.dart';
+import 'package:loure/provider/event_reactions_provider.dart';
+import 'package:loure/util/platform_util.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/router/thread/thread_detail_router.dart';
 
 class EventDetailRouter extends StatefulWidget {
   const EventDetailRouter({super.key});

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_placeholder_textlines/placeholder_lines.dart';
 
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/platform_util.dart';
-import 'package:nostrmo/component/user/metadata_top_component.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/platform_util.dart';
+import 'package:loure/component/user/metadata_top_component.dart';
 
 class MetadataTopPlaceholder extends StatelessWidget {
   static const double IMAGE_BORDER = 4;

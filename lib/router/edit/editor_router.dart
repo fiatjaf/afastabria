@@ -2,28 +2,28 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:intl/intl.dart';
-import 'package:nostrmo/client/aid.dart';
-import 'package:nostrmo/component/editor/lnbc_embed_builder.dart';
-import 'package:nostrmo/component/editor/mention_event_embed_builder.dart';
-import 'package:nostrmo/component/editor/mention_user_embed_builder.dart';
-import 'package:nostrmo/component/editor/pic_embed_builder.dart';
-import 'package:nostrmo/component/editor/tag_embed_builder.dart';
-import 'package:nostrmo/component/editor/video_embed_builder.dart';
-import 'package:nostrmo/component/editor/zap_goal_input_component.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/router/index/index_app_bar.dart';
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/client/aid.dart';
+import 'package:loure/component/editor/lnbc_embed_builder.dart';
+import 'package:loure/component/editor/mention_event_embed_builder.dart';
+import 'package:loure/component/editor/mention_user_embed_builder.dart';
+import 'package:loure/component/editor/pic_embed_builder.dart';
+import 'package:loure/component/editor/tag_embed_builder.dart';
+import 'package:loure/component/editor/video_embed_builder.dart';
+import 'package:loure/component/editor/zap_goal_input_component.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/main.dart';
+import 'package:loure/router/index/index_app_bar.dart';
+import 'package:loure/util/router_util.dart';
 import 'package:pointycastle/ecc/api.dart';
 
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/event_kind.dart' as kind;
-import 'package:nostrmo/component/cust_state.dart';
-import 'package:nostrmo/component/editor/custom_emoji_embed_builder.dart';
-import 'package:nostrmo/component/editor/editor_mixin.dart';
-import 'package:nostrmo/component/editor/poll_input_component.dart';
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/router/edit/editor_notify_item_component.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/component/cust_state.dart';
+import 'package:loure/component/editor/custom_emoji_embed_builder.dart';
+import 'package:loure/component/editor/editor_mixin.dart';
+import 'package:loure/component/editor/poll_input_component.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/router/edit/editor_notify_item_component.dart';
 
 // ignore: must_be_immutable
 class EditorRouter extends StatefulWidget {

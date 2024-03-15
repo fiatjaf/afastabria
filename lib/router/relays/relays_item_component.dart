@@ -2,12 +2,12 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:nostrmo/client/relay/relay.dart';
-import 'package:nostrmo/client/nip19/nip19_tlv.dart';
-import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/consts/base.dart';
+import 'package:loure/client/relay/relay.dart';
+import 'package:loure/client/nip19/nip19_tlv.dart';
+import 'package:loure/consts/router_path.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/consts/base.dart';
 
 // ignore: must_be_immutable
 class RelaysItemComponent extends StatelessWidget {

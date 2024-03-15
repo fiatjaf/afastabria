@@ -1,8 +1,8 @@
-import 'package:nostrmo/main.dart';
+import 'package:loure/main.dart';
 
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/util/find_event_interface.dart';
-import 'package:nostrmo/data/event_mem_box.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/util/find_event_interface.dart';
+import 'package:loure/data/event_mem_box.dart';
 
 class EventFindUtil {
   static List<Event> findEvent(String str, {int? limit = 5}) {

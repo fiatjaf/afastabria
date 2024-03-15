@@ -1,4 +1,4 @@
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/util/string_util.dart';
 
 class KindDescriptions {
   static String getDes(int kind) {

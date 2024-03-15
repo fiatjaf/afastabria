@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/util/router_util.dart';
 
 class QRScannerRouter extends StatefulWidget {
   const QRScannerRouter({super.key});

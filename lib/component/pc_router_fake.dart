@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/provider/pc_router_fake_provider.dart';
+import 'package:loure/provider/pc_router_fake_provider.dart';
 
 class PcRouterFake extends InheritedWidget {
   RouterFakeInfo info;

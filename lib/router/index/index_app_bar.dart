@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/util/platform_util.dart';
+import 'package:loure/util/platform_util.dart';
 
-import 'package:nostrmo/component/user_pic_component.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/component/user_pic_component.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/consts/router_path.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/router_util.dart';
 
 class IndexAppBar extends StatefulWidget {
   static const double height = 56;

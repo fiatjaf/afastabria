@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/util/router_util.dart';
 
 class ConfirmDialog {
   static Future<bool?> show(BuildContext context, String content) async {

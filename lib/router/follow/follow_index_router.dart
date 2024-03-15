@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/router/follow/mention_me_router.dart';
+import 'package:loure/router/follow/mention_me_router.dart';
 
-import 'package:nostrmo/router/follow/follow_posts_router.dart';
-import 'package:nostrmo/router/follow/follow_router.dart';
+import 'package:loure/router/follow/follow_posts_router.dart';
+import 'package:loure/router/follow/follow_router.dart';
 
 class FollowIndexRouter extends StatefulWidget {
   TabController tabController;

@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = nostrmo
+PRODUCT_NAME = loure
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.github.haorendashu.nostrmo
+PRODUCT_BUNDLE_IDENTIFIER = com.fiatjaf.loure
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2023 com.github.haorendashu. All rights reserved.

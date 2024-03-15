@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/client/relay/relay_pool.dart';
+import 'package:loure/client/relay/relay_pool.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/component/event_delete_callback.dart';
-import 'package:nostrmo/component/keep_alive_cust_state.dart';
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/event_kind.dart';
-import 'package:nostrmo/client/filter.dart';
-import 'package:nostrmo/component/event/event_list_component.dart';
-import 'package:nostrmo/component/placeholder/event_list_placeholder.dart';
-import 'package:nostrmo/consts/base_consts.dart';
-import 'package:nostrmo/data/event_mem_box.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/setting_provider.dart';
-import 'package:nostrmo/util/pendingevents_later_function.dart';
-import 'package:nostrmo/util/platform_util.dart';
+import 'package:loure/component/event_delete_callback.dart';
+import 'package:loure/component/keep_alive_cust_state.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/event_kind.dart';
+import 'package:loure/client/filter.dart';
+import 'package:loure/component/event/event_list_component.dart';
+import 'package:loure/component/placeholder/event_list_placeholder.dart';
+import 'package:loure/consts/base_consts.dart';
+import 'package:loure/data/event_mem_box.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/setting_provider.dart';
+import 'package:loure/util/pendingevents_later_function.dart';
+import 'package:loure/util/platform_util.dart';
 
 class GlobalsEventsRouter extends StatefulWidget {
   const GlobalsEventsRouter({super.key});

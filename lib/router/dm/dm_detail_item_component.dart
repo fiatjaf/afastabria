@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-import 'package:nostrmo/client/nip04/nip04.dart';
-import 'package:nostrmo/component/content/content_component.dart';
-import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/client/nip04/nip04.dart';
+import 'package:loure/component/content/content_component.dart';
+import 'package:loure/consts/router_path.dart';
+import 'package:loure/util/router_util.dart';
 import 'package:pointycastle/export.dart' as pointycastle;
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/component/user_pic_component.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/consts/base_consts.dart';
-import 'package:nostrmo/provider/setting_provider.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/component/user_pic_component.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/consts/base_consts.dart';
+import 'package:loure/provider/setting_provider.dart';
 
 class DMDetailItemComponent extends StatefulWidget {
   String sessionPubkey;

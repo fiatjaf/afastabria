@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import 'package:nostrmo/client/event_kind.dart';
-import 'package:nostrmo/client/filter.dart';
-import 'package:nostrmo/consts/base_consts.dart';
-import 'package:nostrmo/main.dart';
+import 'package:loure/client/event_kind.dart';
+import 'package:loure/client/filter.dart';
+import 'package:loure/consts/base_consts.dart';
+import 'package:loure/main.dart';
 
-import 'package:nostrmo/client/client_utils/keys.dart';
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/relay/relay_pool.dart';
-import 'package:nostrmo/client/nip02/cust_contact_list.dart';
-import 'package:nostrmo/client/nip65/relay_list.dart';
+import 'package:loure/client/client_utils/keys.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/relay/relay_pool.dart';
+import 'package:loure/client/nip02/cust_contact_list.dart';
+import 'package:loure/client/nip65/relay_list.dart';
 
 class Nostr {
   late String privateKey;

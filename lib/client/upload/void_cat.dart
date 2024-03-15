@@ -5,11 +5,11 @@ import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 
-import 'package:nostrmo/client/upload/uploader.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/client/upload/uploader.dart';
+import 'package:loure/util/string_util.dart';
 
-import 'package:nostrmo/consts/base64.dart';
-import 'package:nostrmo/client/upload/nostr_build_uploader.dart';
+import 'package:loure/consts/base64.dart';
+import 'package:loure/client/upload/nostr_build_uploader.dart';
 
 class VoidCatUploader {
   static const String UPLOAD_ACTION = "https://void.cat/upload?cli=true";

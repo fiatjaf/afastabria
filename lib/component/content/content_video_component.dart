@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import 'package:nostrmo/consts/base.dart';
+import 'package:loure/consts/base.dart';
 
 class ContentVideoComponent extends StatefulWidget {
   String url;

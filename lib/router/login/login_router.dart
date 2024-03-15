@@ -1,14 +1,14 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:nostrmo/component/webview_router.dart';
-import 'package:nostrmo/util/platform_util.dart';
+import 'package:loure/component/webview_router.dart';
+import 'package:loure/util/platform_util.dart';
 
-import 'package:nostrmo/client/client_utils/keys.dart';
-import 'package:nostrmo/client/nip19/nip19.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/client/client_utils/keys.dart';
+import 'package:loure/client/nip19/nip19.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/string_util.dart';
 
 class LoginRouter extends StatefulWidget {
   const LoginRouter({super.key});

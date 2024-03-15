@@ -1,11 +1,11 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/util/string_util.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/util/router_util.dart';
 
 // ignore: must_be_immutable
 class LightningQrcodeDialog extends StatefulWidget {

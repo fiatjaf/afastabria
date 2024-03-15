@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/consts/base_consts.dart';
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/consts/base_consts.dart';
+import 'package:loure/util/router_util.dart';
 
 class EnumSelectorComponent extends StatelessWidget {
   final List<EnumObj> list;

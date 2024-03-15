@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/keep_alive_cust_state.dart';
-import 'package:nostrmo/data/event_mem_box.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/mention_me_new_provider.dart';
-import 'package:nostrmo/provider/mention_me_provider.dart';
-import 'package:nostrmo/util/load_more_event.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/component/keep_alive_cust_state.dart';
+import 'package:loure/data/event_mem_box.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/mention_me_new_provider.dart';
+import 'package:loure/provider/mention_me_provider.dart';
+import 'package:loure/util/load_more_event.dart';
+import 'package:loure/util/string_util.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/client/event_kind.dart' as kind;
-import 'package:nostrmo/component/badge_award_component.dart';
-import 'package:nostrmo/component/event/event_list_component.dart';
-import 'package:nostrmo/component/event/zap_event_list_component.dart';
-import 'package:nostrmo/component/new_notes_updated_component.dart';
-import 'package:nostrmo/component/placeholder/event_list_placeholder.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/consts/base_consts.dart';
-import 'package:nostrmo/provider/setting_provider.dart';
-import 'package:nostrmo/util/platform_util.dart';
+import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/component/badge_award_component.dart';
+import 'package:loure/component/event/event_list_component.dart';
+import 'package:loure/component/event/zap_event_list_component.dart';
+import 'package:loure/component/new_notes_updated_component.dart';
+import 'package:loure/component/placeholder/event_list_placeholder.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/consts/base_consts.dart';
+import 'package:loure/provider/setting_provider.dart';
+import 'package:loure/util/platform_util.dart';
 
 class MentionMeRouter extends StatefulWidget {
   const MentionMeRouter({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/util/string_util.dart';
 
 class LinkPreviewDataProvider extends ChangeNotifier {
   static const CACHE_LENGTH = 100;

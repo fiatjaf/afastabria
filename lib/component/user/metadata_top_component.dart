@@ -3,27 +3,27 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nostrmo/client/nip19/nip19_tlv.dart';
-import 'package:nostrmo/component/nip05_valid_component.dart';
-import 'package:nostrmo/component/qrcode_dialog.dart';
-import 'package:nostrmo/component/webview_router.dart';
-import 'package:nostrmo/component/zap_gen_dialog.dart';
-import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/contact_list_provider.dart';
-import 'package:nostrmo/util/platform_util.dart';
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/client/nip19/nip19_tlv.dart';
+import 'package:loure/component/nip05_valid_component.dart';
+import 'package:loure/component/qrcode_dialog.dart';
+import 'package:loure/component/webview_router.dart';
+import 'package:loure/component/zap_gen_dialog.dart';
+import 'package:loure/consts/router_path.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/contact_list_provider.dart';
+import 'package:loure/util/platform_util.dart';
+import 'package:loure/util/router_util.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/client/nip02/contact.dart';
-import 'package:nostrmo/client/nip19/nip19.dart';
-import 'package:nostrmo/client/zap/zap_action.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/data/metadata.dart';
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/component/confirm_dialog.dart';
-import 'package:nostrmo/component/image_component.dart';
-import 'package:nostrmo/component/image_preview_dialog.dart';
+import 'package:loure/client/nip02/contact.dart';
+import 'package:loure/client/nip19/nip19.dart';
+import 'package:loure/client/zap/zap_action.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/data/metadata.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/component/confirm_dialog.dart';
+import 'package:loure/component/image_component.dart';
+import 'package:loure/component/image_preview_dialog.dart';
 
 // ignore: must_be_immutable
 class MetadataTopComponent extends StatefulWidget {

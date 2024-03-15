@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/filter.dart';
-import 'package:nostrmo/data/event_reactions.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/later_function.dart';
-import 'package:nostrmo/util/when_stop_function.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/filter.dart';
+import 'package:loure/data/event_reactions.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/later_function.dart';
+import 'package:loure/util/when_stop_function.dart';
 
 class EventReactionsProvider extends ChangeNotifier
     with LaterFunction, WhenStopFunction {

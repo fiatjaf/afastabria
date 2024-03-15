@@ -1,5 +1,5 @@
 // import 'package:flutter/material.dart';
-// import 'package:nostrmo/util/string_util.dart';
+// import 'package:loure/util/string_util.dart';
 // import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 // import 'content_link_pre_component.dart';

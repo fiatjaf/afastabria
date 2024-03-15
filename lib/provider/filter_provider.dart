@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/provider/data_util.dart';
+import 'package:loure/provider/data_util.dart';
 
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/dirtywords_util.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/dirtywords_util.dart';
 
 class FilterProvider extends ChangeNotifier {
   static FilterProvider? _instance;

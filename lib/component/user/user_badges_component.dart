@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/client/event_kind.dart' as kind;
-import 'package:nostrmo/client/filter.dart';
-import 'package:nostrmo/client/nip58/badge_definition.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/data/event_mem_box.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/badge_definition_provider.dart';
-import 'package:nostrmo/util/later_function.dart';
-import 'package:nostrmo/component/badge_component.dart';
-import 'package:nostrmo/component/badge_detail_dialog.dart';
-import 'package:nostrmo/component/cust_state.dart';
+import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/filter.dart';
+import 'package:loure/client/nip58/badge_definition.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/data/event_mem_box.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/badge_definition_provider.dart';
+import 'package:loure/util/later_function.dart';
+import 'package:loure/component/badge_component.dart';
+import 'package:loure/component/badge_detail_dialog.dart';
+import 'package:loure/component/cust_state.dart';
 
 // ignore: must_be_immutable
 class UserBadgesComponent extends StatefulWidget {

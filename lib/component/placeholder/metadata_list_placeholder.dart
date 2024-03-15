@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/placeholder/metadata_placeholder.dart';
+import 'package:loure/component/placeholder/metadata_placeholder.dart';
 
 class MetadataListPlaceholder extends StatelessWidget {
   Function? onRefresh;

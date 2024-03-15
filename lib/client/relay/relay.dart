@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'dart:async';
 import 'dart:js_interop_unsafe';
 
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/filter.dart';
+import 'package:loure/main.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/filter.dart';
 
-import 'package:nostrmo/client/relay/util.dart';
-import 'package:nostrmo/client/relay/relay_info.dart';
+import 'package:loure/client/relay/util.dart';
+import 'package:loure/client/relay/relay_info.dart';
 
 abstract class Relay {
   late String url;

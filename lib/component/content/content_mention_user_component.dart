@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/simple_name_component.dart';
+import 'package:loure/component/simple_name_component.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/data/metadata.dart';
-import 'package:nostrmo/provider/metadata_provider.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/component/content/content_str_link_component.dart';
+import 'package:loure/consts/router_path.dart';
+import 'package:loure/data/metadata.dart';
+import 'package:loure/provider/metadata_provider.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/component/content/content_str_link_component.dart';
 
 class ContentMentionUserComponent extends StatefulWidget {
   String pubkey;

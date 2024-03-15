@@ -1,8 +1,8 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/util/string_util.dart';
 
-import 'package:nostrmo/consts/base.dart';
+import 'package:loure/consts/base.dart';
 
 class PollInputController {
   TextEditingController minValueController = TextEditingController();

@@ -1,5 +1,5 @@
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/util/dio_util.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/util/dio_util.dart';
 
 class SendBox {
   static Future<void> submit(Event event, List<String> relays) async {

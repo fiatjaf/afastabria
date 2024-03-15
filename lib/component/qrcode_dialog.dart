@@ -1,21 +1,21 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nostrmo/client/nip19/nip19.dart';
-import 'package:nostrmo/component/name_component.dart';
-import 'package:nostrmo/component/user/metadata_top_component.dart';
-import 'package:nostrmo/data/metadata.dart';
+import 'package:loure/client/nip19/nip19.dart';
+import 'package:loure/component/name_component.dart';
+import 'package:loure/component/user/metadata_top_component.dart';
+import 'package:loure/data/metadata.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/provider/metadata_provider.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/util/store_util.dart';
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/component/image_component.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/provider/metadata_provider.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/util/store_util.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/component/image_component.dart';
 
 // ignore: must_be_immutable
 class QrcodeDialog extends StatefulWidget {

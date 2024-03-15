@@ -1,29 +1,29 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:nostrmo/client/nip04/dm_session.dart';
-import 'package:nostrmo/component/cust_state.dart';
-import 'package:nostrmo/component/editor/editor_mixin.dart';
+import 'package:loure/client/nip04/dm_session.dart';
+import 'package:loure/component/cust_state.dart';
+import 'package:loure/component/editor/editor_mixin.dart';
 import 'package:pointycastle/ecc/api.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 
-import 'package:nostrmo/client/nip04/nip04.dart';
-import 'package:nostrmo/component/editor/custom_emoji_embed_builder.dart';
-import 'package:nostrmo/component/editor/lnbc_embed_builder.dart';
-import 'package:nostrmo/component/editor/mention_event_embed_builder.dart';
-import 'package:nostrmo/component/editor/mention_user_embed_builder.dart';
-import 'package:nostrmo/component/editor/pic_embed_builder.dart';
-import 'package:nostrmo/component/editor/tag_embed_builder.dart';
-import 'package:nostrmo/component/editor/video_embed_builder.dart';
-import 'package:nostrmo/component/name_component.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/data/metadata.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/dm_provider.dart';
-import 'package:nostrmo/provider/metadata_provider.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/router/dm/dm_detail_item_component.dart';
+import 'package:loure/client/nip04/nip04.dart';
+import 'package:loure/component/editor/custom_emoji_embed_builder.dart';
+import 'package:loure/component/editor/lnbc_embed_builder.dart';
+import 'package:loure/component/editor/mention_event_embed_builder.dart';
+import 'package:loure/component/editor/mention_user_embed_builder.dart';
+import 'package:loure/component/editor/pic_embed_builder.dart';
+import 'package:loure/component/editor/tag_embed_builder.dart';
+import 'package:loure/component/editor/video_embed_builder.dart';
+import 'package:loure/component/name_component.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/data/metadata.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/dm_provider.dart';
+import 'package:loure/provider/metadata_provider.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/router/dm/dm_detail_item_component.dart';
 
 class DMDetailRouter extends StatefulWidget {
   const DMDetailRouter({super.key});

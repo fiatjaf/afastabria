@@ -1,7 +1,5 @@
-# Nostrmo
+# Loure
 
-A flutter nostr client.
+A fast and lean Nostr client with outbox model for kind1, NIP-17 chat and NIP-29 groups written with Flutter.
 
-## FAQ
-
-You can find more info from this [FAQ](https://github.com/haorendashu/nostrmo_faq)
+This is a fork of the awesome https://github.com/haorendashu/nostrmo.

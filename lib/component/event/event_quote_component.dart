@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 
-import 'package:nostrmo/client/aid.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/replaceable_event_provider.dart';
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/filter.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/component/event/event_main_component.dart';
+import 'package:loure/client/aid.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/replaceable_event_provider.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/filter.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/consts/router_path.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/component/event/event_main_component.dart';
 
 // ignore: must_be_immutable
 class EventQuoteComponent extends StatefulWidget {

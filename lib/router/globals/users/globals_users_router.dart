@@ -2,20 +2,20 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:nostrmo/util/platform_util.dart';
+import 'package:loure/util/platform_util.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/component/keep_alive_cust_state.dart';
-import 'package:nostrmo/component/placeholder/metadata_list_placeholder.dart';
-import 'package:nostrmo/component/user/metadata_component.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/data/metadata.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/metadata_provider.dart';
-import 'package:nostrmo/util/dio_util.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/component/keep_alive_cust_state.dart';
+import 'package:loure/component/placeholder/metadata_list_placeholder.dart';
+import 'package:loure/component/user/metadata_component.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/consts/router_path.dart';
+import 'package:loure/data/metadata.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/metadata_provider.dart';
+import 'package:loure/util/dio_util.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/util/string_util.dart';
 
 class GlobalsUsersRouter extends StatefulWidget {
   const GlobalsUsersRouter({super.key});

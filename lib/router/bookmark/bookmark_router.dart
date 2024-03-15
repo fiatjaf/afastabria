@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/client/aid.dart';
-import 'package:nostrmo/client/nip51/bookmarks.dart';
-import 'package:nostrmo/provider/list_provider.dart';
+import 'package:loure/client/aid.dart';
+import 'package:loure/client/nip51/bookmarks.dart';
+import 'package:loure/provider/list_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/component/content/content_link_pre_component.dart';
-import 'package:nostrmo/component/cust_state.dart';
-import 'package:nostrmo/component/event/event_quote_component.dart';
-import 'package:nostrmo/util/platform_util.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/router/index/index_app_bar.dart';
+import 'package:loure/component/content/content_link_pre_component.dart';
+import 'package:loure/component/cust_state.dart';
+import 'package:loure/component/event/event_quote_component.dart';
+import 'package:loure/util/platform_util.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/router/index/index_app_bar.dart';
 
 class BookmarkRouter extends StatefulWidget {
   const BookmarkRouter({super.key});

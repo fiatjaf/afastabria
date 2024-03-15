@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:nostrmo/client/nip19/nip19_tlv.dart';
-import 'package:nostrmo/component/content/content_relay_component.dart';
+import 'package:loure/client/nip19/nip19_tlv.dart';
+import 'package:loure/component/content/content_relay_component.dart';
 
 class MarkdownNrelayElementBuilder implements MarkdownElementBuilder {
   static const String TAG = "relay";

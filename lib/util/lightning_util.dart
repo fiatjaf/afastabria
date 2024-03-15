@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/lightning_qrcode_dialog.dart';
-import 'package:nostrmo/util/platform_util.dart';
+import 'package:loure/component/lightning_qrcode_dialog.dart';
+import 'package:loure/util/platform_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LightningUtil {

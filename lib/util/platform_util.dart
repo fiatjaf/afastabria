@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:nostrmo/consts/base_consts.dart';
-import 'package:nostrmo/main.dart';
+import 'package:loure/consts/base_consts.dart';
+import 'package:loure/main.dart';
 
 class PlatformUtil {
   static BaseDeviceInfo? deviceInfo;

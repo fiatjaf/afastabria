@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:nostrmo/component/content/content_lnbc_component.dart';
+import 'package:loure/component/content/content_lnbc_component.dart';
 
-import 'package:nostrmo/component/editor/cust_embed_types.dart';
+import 'package:loure/component/editor/cust_embed_types.dart';
 
 class LnbcEmbedBuilder extends EmbedBuilder {
   @override

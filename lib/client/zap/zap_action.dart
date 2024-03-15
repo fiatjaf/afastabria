@@ -1,10 +1,10 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/lightning_util.dart';
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/client/zap/zap.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/lightning_util.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/client/zap/zap.dart';
 
 class ZapAction {
   static Future<void> handleZap(BuildContext context, int sats, String pubkey,

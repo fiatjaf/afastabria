@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/user/metadata_top_component.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/provider/index_provider.dart';
-import 'package:nostrmo/provider/webview_provider.dart';
-import 'package:nostrmo/router/user/user_statistics_component.dart';
-import 'package:nostrmo/util/platform_util.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/component/user/metadata_top_component.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/consts/router_path.dart';
+import 'package:loure/provider/index_provider.dart';
+import 'package:loure/provider/webview_provider.dart';
+import 'package:loure/router/user/user_statistics_component.dart';
+import 'package:loure/util/platform_util.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/util/string_util.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/data/metadata.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/metadata_provider.dart';
-import 'package:nostrmo/router/edit/editor_router.dart';
-import 'package:nostrmo/router/index/account_manager_component.dart';
+import 'package:loure/data/metadata.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/metadata_provider.dart';
+import 'package:loure/router/edit/editor_router.dart';
+import 'package:loure/router/index/account_manager_component.dart';
 
 class IndexDrawerContnetComponnent extends StatefulWidget {
   const IndexDrawerContnetComponnent({super.key});

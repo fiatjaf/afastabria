@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/consts/index_taps.dart';
+import 'package:loure/consts/index_taps.dart';
 
 class IndexProvider extends ChangeNotifier {
   int _currentTap = IndexTaps.FOLLOW;

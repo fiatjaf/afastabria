@@ -2,18 +2,18 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-import 'package:nostrmo/client/event_kind.dart';
-import 'package:nostrmo/component/name_component.dart';
-import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/client/event_kind.dart';
+import 'package:loure/component/name_component.dart';
+import 'package:loure/consts/router_path.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/util/string_util.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/data/metadata.dart';
-import 'package:nostrmo/provider/metadata_provider.dart';
-import 'package:nostrmo/component/image_component.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/data/metadata.dart';
+import 'package:loure/provider/metadata_provider.dart';
+import 'package:loure/component/image_component.dart';
 
 class EventTopComponent extends StatefulWidget {
   Event event;

@@ -1,9 +1,9 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/client/zap/zap_action.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/client/zap/zap_action.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/util/router_util.dart';
 
 // ignore: must_be_immutable
 class ZapGenDialog extends StatefulWidget {

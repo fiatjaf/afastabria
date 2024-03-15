@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/content/content_component.dart';
+import 'package:loure/component/content/content_component.dart';
 
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/data/metadata.dart';
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/component/user/metadata_top_component.dart';
-import 'package:nostrmo/component/user/user_badges_component.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/data/metadata.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/component/user/metadata_top_component.dart';
+import 'package:loure/component/user/user_badges_component.dart';
 
 class MetadataComponent extends StatefulWidget {
   String pubKey;

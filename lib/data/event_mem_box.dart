@@ -1,5 +1,5 @@
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/util/find_event_interface.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/util/find_event_interface.dart';
 
 /// a memory event box
 /// use to hold event received from relay and offer event List to ui

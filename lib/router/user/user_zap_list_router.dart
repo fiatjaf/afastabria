@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/component/event/zap_event_list_component.dart';
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/component/event/zap_event_list_component.dart';
+import 'package:loure/util/router_util.dart';
 
 class UserZapListRouter extends StatefulWidget {
   const UserZapListRouter({super.key});

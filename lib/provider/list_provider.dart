@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:nostrmo/client/aid.dart';
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/filter.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/client/aid.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/filter.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/string_util.dart';
 
-import 'package:nostrmo/client/event_kind.dart';
-import 'package:nostrmo/client/nip04/nip04.dart';
-import 'package:nostrmo/client/nip51/bookmarks.dart';
-import 'package:nostrmo/data/custom_emoji.dart';
+import 'package:loure/client/event_kind.dart';
+import 'package:loure/client/nip04/nip04.dart';
+import 'package:loure/client/nip51/bookmarks.dart';
+import 'package:loure/data/custom_emoji.dart';
 
 /// Standard list provider.
 /// These list usually publish by user himself and the provider will hold the newest one.

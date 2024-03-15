@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/nip58/badge_definition.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/badge_definition_provider.dart';
-import 'package:nostrmo/provider/badge_provider.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/nip58/badge_definition.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/badge_definition_provider.dart';
+import 'package:loure/provider/badge_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/component/badge_detail_component.dart';
+import 'package:loure/component/badge_detail_component.dart';
 
 // ignore: must_be_immutable
 class BadgeAwardComponent extends StatefulWidget {

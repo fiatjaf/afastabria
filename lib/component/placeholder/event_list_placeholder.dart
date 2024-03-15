@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/component/placeholder/event_placeholder.dart';
+import 'package:loure/component/placeholder/event_placeholder.dart';
 
 // ignore: must_be_immutable
 class EventListPlaceholder extends StatelessWidget {

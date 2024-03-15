@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/tag_info_component.dart';
-import 'package:nostrmo/consts/base.dart';
+import 'package:loure/component/tag_info_component.dart';
+import 'package:loure/consts/base.dart';
 
-import 'package:nostrmo/client/nip02/cust_contact_list.dart';
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/client/nip02/cust_contact_list.dart';
+import 'package:loure/util/router_util.dart';
 
 class FollowedTagsListRouter extends StatefulWidget {
   const FollowedTagsListRouter({super.key});

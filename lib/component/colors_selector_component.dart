@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/consts/colors.dart';
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/consts/colors.dart';
+import 'package:loure/util/router_util.dart';
 
 class ColorSelectorComponent extends StatelessWidget {
   const ColorSelectorComponent({super.key});

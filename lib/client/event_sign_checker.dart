@@ -1,6 +1,6 @@
 import 'dart:isolate';
 
-import 'package:nostrmo/client/event.dart';
+import 'package:loure/client/event.dart';
 
 /// An event check isolate. There are some test code, it may be deleted by some reason.
 class EventSignChecker {

@@ -2,19 +2,19 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:nostrmo/client/upload/uploader.dart';
-import 'package:nostrmo/data/metadata.dart';
-import 'package:nostrmo/util/platform_util.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/client/upload/uploader.dart';
+import 'package:loure/data/metadata.dart';
+import 'package:loure/util/platform_util.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/util/string_util.dart';
 
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/event_kind.dart' as kind;
-import 'package:nostrmo/client/filter.dart';
-import 'package:nostrmo/component/appbar4stack.dart';
-import 'package:nostrmo/component/cust_state.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/main.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/filter.dart';
+import 'package:loure/component/appbar4stack.dart';
+import 'package:loure/component/cust_state.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/main.dart';
 
 class ProfileEditorRouter extends StatefulWidget {
   const ProfileEditorRouter({super.key});

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_language_id/google_mlkit_language_id.dart';
 import 'package:google_mlkit_translation/google_mlkit_translation.dart';
 import 'package:google_mlkit_translation/src/on_device_translator.dart';
-import 'package:nostrmo/consts/base_consts.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/setting_provider.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/consts/base_consts.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/setting_provider.dart';
+import 'package:loure/util/string_util.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/component/cust_state.dart';
+import 'package:loure/component/cust_state.dart';
 
 class TextTranslateComponent extends StatefulWidget {
   String text;

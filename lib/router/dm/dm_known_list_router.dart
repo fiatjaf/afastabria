@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/provider/notice_provider.dart';
+import 'package:loure/provider/notice_provider.dart';
 import 'package:pointycastle/ecc/api.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/provider/dm_provider.dart';
-import 'package:nostrmo/router/dm/dm_notice_item_component.dart';
-import 'package:nostrmo/router/dm/dm_session_list_item_component.dart';
+import 'package:loure/provider/dm_provider.dart';
+import 'package:loure/router/dm/dm_notice_item_component.dart';
+import 'package:loure/router/dm/dm_session_list_item_component.dart';
 
 class DMKnownListRouter extends StatefulWidget {
   ECDHBasicAgreement agreement;

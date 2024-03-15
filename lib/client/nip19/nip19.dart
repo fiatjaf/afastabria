@@ -1,6 +1,6 @@
 import 'package:bech32/bech32.dart';
 import 'package:hex/hex.dart';
-import 'package:nostrmo/client/nip19/hrps.dart';
+import 'package:loure/client/nip19/hrps.dart';
 
 class Nip19 {
   // static String encodePubKey(String pubKey) {

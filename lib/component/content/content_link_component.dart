@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/content/content_str_link_component.dart';
-import 'package:nostrmo/component/webview_router.dart';
+import 'package:loure/component/content/content_str_link_component.dart';
+import 'package:loure/component/webview_router.dart';
 
 class ContentLinkComponent extends StatelessWidget {
   String link;

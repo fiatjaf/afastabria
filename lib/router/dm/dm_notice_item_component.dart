@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/notice_provider.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/notice_provider.dart';
 
-import 'package:nostrmo/component/point_component.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/component/point_component.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/consts/router_path.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/util/string_util.dart';
 
 class DMNoticeItemComponent extends StatelessWidget {
   static const double IMAGE_WIDTH = 34;

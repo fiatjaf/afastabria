@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/client/nip58/badge_definition.dart';
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/component/image_component.dart';
+import 'package:loure/client/nip58/badge_definition.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/component/image_component.dart';
 
 class BedgeComponent extends StatelessWidget {
   static const double IMAGE_WIDTH = 28;

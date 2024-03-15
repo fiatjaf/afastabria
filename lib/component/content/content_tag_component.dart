@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/consts/router_path.dart';
+import 'package:loure/util/router_util.dart';
 
-import 'package:nostrmo/component/content/content_str_link_component.dart';
+import 'package:loure/component/content/content_str_link_component.dart';
 
 class ContentTagComponent extends StatelessWidget {
   String tag;

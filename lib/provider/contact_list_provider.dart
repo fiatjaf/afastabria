@@ -1,17 +1,17 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:nostrmo/router/tag/topic_map.dart';
+import 'package:loure/router/tag/topic_map.dart';
 
-import 'package:nostrmo/client/event_kind.dart' as kind;
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/nip02/contact.dart';
-import 'package:nostrmo/client/nip02/cust_contact_list.dart';
-import 'package:nostrmo/client/filter.dart';
-import 'package:nostrmo/client/nostr.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/provider/data_util.dart';
+import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/event.dart';
+import 'package:loure/client/nip02/contact.dart';
+import 'package:loure/client/nip02/cust_contact_list.dart';
+import 'package:loure/client/filter.dart';
+import 'package:loure/client/nostr.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/provider/data_util.dart';
 
 class ContactListProvider extends ChangeNotifier {
   static ContactListProvider? _contactListProvider;

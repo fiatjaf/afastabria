@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'package:nostrmo/client/event.dart';
+import 'package:loure/client/event.dart';
 
-import 'package:nostrmo/client/relay/relay.dart';
+import 'package:loure/client/relay/relay.dart';
 
 class RelayBase extends Relay {
   RelayBase(

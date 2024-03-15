@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/main.dart';
+import 'package:loure/main.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/client/relay/relay.dart';
-import 'package:nostrmo/client/relay/relay_metadata.dart';
-import 'package:nostrmo/client/relay/relay_pool.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/client/relay/relay.dart';
+import 'package:loure/client/relay/relay_metadata.dart';
+import 'package:loure/client/relay/relay_pool.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/util/router_util.dart';
 
 class UserRelayRouter extends StatefulWidget {
   const UserRelayRouter({super.key});

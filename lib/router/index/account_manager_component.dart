@@ -4,25 +4,25 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/component/editor/text_input_dialog.dart';
-import 'package:nostrmo/component/name_component.dart';
-import 'package:nostrmo/component/point_component.dart';
-import 'package:nostrmo/data/metadata.dart';
-import 'package:nostrmo/provider/metadata_provider.dart';
-import 'package:nostrmo/provider/setting_provider.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/client/nostr.dart';
+import 'package:loure/component/editor/text_input_dialog.dart';
+import 'package:loure/component/name_component.dart';
+import 'package:loure/component/point_component.dart';
+import 'package:loure/data/metadata.dart';
+import 'package:loure/provider/metadata_provider.dart';
+import 'package:loure/provider/setting_provider.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/client/nostr.dart';
 
-import 'package:nostrmo/client/client_utils/keys.dart';
-import 'package:nostrmo/client/nip19/nip19.dart';
-import 'package:nostrmo/component/confirm_dialog.dart';
-import 'package:nostrmo/component/image_component.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/data/dm_session_info_db.dart';
-import 'package:nostrmo/data/event_db.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/router/index/index_drawer_content.dart';
+import 'package:loure/client/client_utils/keys.dart';
+import 'package:loure/client/nip19/nip19.dart';
+import 'package:loure/component/confirm_dialog.dart';
+import 'package:loure/component/image_component.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/data/dm_session_info_db.dart';
+import 'package:loure/data/event_db.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/router/index/index_drawer_content.dart';
 
 class AccountManagerComponent extends StatefulWidget {
   const AccountManagerComponent({super.key});

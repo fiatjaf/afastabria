@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/component/event/reaction_event_metadata_component.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/component/event/reaction_event_metadata_component.dart';
 
 class ReactionEventItemComponent extends StatefulWidget {
   String pubkey;

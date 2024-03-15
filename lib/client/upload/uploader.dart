@@ -2,17 +2,17 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
-import 'package:nostrmo/client/upload/void_cat.dart';
-import 'package:nostrmo/util/platform_util.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/client/upload/void_cat.dart';
+import 'package:loure/util/platform_util.dart';
+import 'package:loure/util/string_util.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
-import 'package:nostrmo/consts/base64.dart';
-import 'package:nostrmo/consts/image_services.dart';
-import 'package:nostrmo/client/upload/nostr_build_uploader.dart';
-import 'package:nostrmo/client/upload/nostrfiles_dev_uploader.dart';
-import 'package:nostrmo/client/upload/nostrimg_com_uploader.dart';
-import 'package:nostrmo/client/upload/pomf2_lain_la.dart';
+import 'package:loure/consts/base64.dart';
+import 'package:loure/consts/image_services.dart';
+import 'package:loure/client/upload/nostr_build_uploader.dart';
+import 'package:loure/client/upload/nostrfiles_dev_uploader.dart';
+import 'package:loure/client/upload/nostrimg_com_uploader.dart';
+import 'package:loure/client/upload/pomf2_lain_la.dart';
 
 class Uploader {
   // static Future<String?> pickAndUpload(BuildContext context) async {

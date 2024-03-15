@@ -1,26 +1,26 @@
 
 import 'package:flutter/material.dart';
-import 'package:nostrmo/client/event_kind.dart';
-import 'package:nostrmo/component/content/content_event_tag_infos.dart';
+import 'package:loure/client/event_kind.dart';
+import 'package:loure/component/content/content_event_tag_infos.dart';
 
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/nip19/nip19.dart';
-import 'package:nostrmo/client/nip19/nip19_tlv.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/consts/base64.dart';
-import 'package:nostrmo/util/platform_util.dart';
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/component/event/event_quote_component.dart';
-import 'package:nostrmo/component/translate/line_translate_component.dart';
-import 'package:nostrmo/component/content/content_custom_emoji_component.dart';
-import 'package:nostrmo/component/content/content_image_component.dart';
-import 'package:nostrmo/component/content/content_link_component.dart';
-import 'package:nostrmo/component/content/content_link_pre_component.dart';
-import 'package:nostrmo/component/content/content_lnbc_component.dart';
-import 'package:nostrmo/component/content/content_mention_user_component.dart';
-import 'package:nostrmo/component/content/content_relay_component.dart';
-import 'package:nostrmo/component/content/content_tag_component.dart';
-import 'package:nostrmo/component/content/content_video_component.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/nip19/nip19.dart';
+import 'package:loure/client/nip19/nip19_tlv.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/consts/base64.dart';
+import 'package:loure/util/platform_util.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/component/event/event_quote_component.dart';
+import 'package:loure/component/translate/line_translate_component.dart';
+import 'package:loure/component/content/content_custom_emoji_component.dart';
+import 'package:loure/component/content/content_image_component.dart';
+import 'package:loure/component/content/content_link_component.dart';
+import 'package:loure/component/content/content_link_pre_component.dart';
+import 'package:loure/component/content/content_lnbc_component.dart';
+import 'package:loure/component/content/content_mention_user_component.dart';
+import 'package:loure/component/content/content_relay_component.dart';
+import 'package:loure/component/content/content_tag_component.dart';
+import 'package:loure/component/content/content_video_component.dart';
 
 class ContentDecoder {
   static const OTHER_LIGHTNING = "lightning=";

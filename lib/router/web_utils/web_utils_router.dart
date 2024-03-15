@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/component/cust_state.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/util/dio_util.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/router/web_utils/web_util_item_component.dart';
+import 'package:loure/component/cust_state.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/util/dio_util.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/router/web_utils/web_util_item_component.dart';
 
 class WebUtilsRouter extends StatefulWidget {
   const WebUtilsRouter({super.key});

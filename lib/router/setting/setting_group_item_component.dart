@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/util/string_util.dart';
 
 class SettingGroupItemComponent extends StatelessWidget {
   String name;

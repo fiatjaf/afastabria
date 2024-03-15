@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/client/aid.dart';
-import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/provider/contact_list_provider.dart';
+import 'package:loure/client/aid.dart';
+import 'package:loure/consts/router_path.dart';
+import 'package:loure/provider/contact_list_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/client/nip02/cust_contact_list.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/client/nip02/cust_contact_list.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/router_util.dart';
 
 class FollowedCommunitiesRouter extends StatefulWidget {
   const FollowedCommunitiesRouter({super.key});

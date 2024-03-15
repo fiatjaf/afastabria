@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/placeholder/tap_placeholder.dart';
+import 'package:loure/component/placeholder/tap_placeholder.dart';
 
 class TapListPlaceholder extends StatelessWidget {
   const TapListPlaceholder({super.key});

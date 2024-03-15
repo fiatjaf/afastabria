@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/webview_router.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/webview_provider.dart';
-import 'package:nostrmo/util/platform_util.dart';
+import 'package:loure/component/webview_router.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/webview_provider.dart';
+import 'package:loure/util/platform_util.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable

@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/client/aid.dart';
-import 'package:nostrmo/component/community_info_component.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/provider/community_info_provider.dart';
+import 'package:loure/client/aid.dart';
+import 'package:loure/component/community_info_component.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/provider/community_info_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:widget_size/widget_size.dart';
 
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/filter.dart';
-import 'package:nostrmo/client/nip172/community_info.dart';
-import 'package:nostrmo/component/cust_state.dart';
-import 'package:nostrmo/component/event/event_list_component.dart';
-import 'package:nostrmo/component/event_delete_callback.dart';
-import 'package:nostrmo/consts/base_consts.dart';
-import 'package:nostrmo/data/event_mem_box.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/setting_provider.dart';
-import 'package:nostrmo/util/pendingevents_later_function.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/client/event_kind.dart' as kind;
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/router/edit/editor_router.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/filter.dart';
+import 'package:loure/client/nip172/community_info.dart';
+import 'package:loure/component/cust_state.dart';
+import 'package:loure/component/event/event_list_component.dart';
+import 'package:loure/component/event_delete_callback.dart';
+import 'package:loure/consts/base_consts.dart';
+import 'package:loure/data/event_mem_box.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/setting_provider.dart';
+import 'package:loure/util/pendingevents_later_function.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/util/string_util.dart';
+import 'package:loure/router/edit/editor_router.dart';
 
 class CommunityDetailRouter extends StatefulWidget {
   const CommunityDetailRouter({super.key});

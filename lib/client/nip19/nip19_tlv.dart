@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:bech32/bech32.dart';
 import 'package:hex/hex.dart';
-import 'package:nostrmo/client/nip19/nip19.dart';
-import 'package:nostrmo/client/nip19/tlv_util.dart';
+import 'package:loure/client/nip19/nip19.dart';
+import 'package:loure/client/nip19/tlv_util.dart';
 
-import 'package:nostrmo/component/content/content_decoder.dart';
-import 'package:nostrmo/client/nip19/hrps.dart';
+import 'package:loure/component/content/content_decoder.dart';
+import 'package:loure/client/nip19/hrps.dart';
 
 class NIP19Tlv {
   static bool isNprofile(String text) {

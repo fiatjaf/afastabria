@@ -1,11 +1,11 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nostrmo/client/nip19/nip19.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/main.dart';
+import 'package:loure/client/nip19/nip19.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/main.dart';
 
-import 'package:nostrmo/component/appbar4stack.dart';
+import 'package:loure/component/appbar4stack.dart';
 
 class KeyBackupRouter extends StatefulWidget {
   const KeyBackupRouter({super.key});
@@ -29,7 +29,7 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
       checkboxItems!.add(CheckboxItem(
           "Please do not disclose or share the key to anyone.", false));
       checkboxItems!.add(CheckboxItem(
-          "Nostrmo developers will never require a key from you.", false));
+          "Loure developers will never require a key from you.", false));
       checkboxItems!.add(CheckboxItem(
           "Please keep the key properly for account recovery.", false));
     }

@@ -4,26 +4,26 @@ import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
-import 'package:nostrmo/component/cust_state.dart';
-import 'package:nostrmo/component/pc_router_fake.dart';
-import 'package:nostrmo/consts/base_consts.dart';
-import 'package:nostrmo/provider/pc_router_fake_provider.dart';
-import 'package:nostrmo/util/platform_util.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/component/cust_state.dart';
+import 'package:loure/component/pc_router_fake.dart';
+import 'package:loure/consts/base_consts.dart';
+import 'package:loure/provider/pc_router_fake_provider.dart';
+import 'package:loure/util/platform_util.dart';
+import 'package:loure/util/string_util.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/index_provider.dart';
-import 'package:nostrmo/util/auth_util.dart';
-import 'package:nostrmo/router/dm/dm_router.dart';
-import 'package:nostrmo/router/edit/editor_router.dart';
-import 'package:nostrmo/router/follow/follow_index_router.dart';
-import 'package:nostrmo/router/globals/globals_index_router.dart';
-import 'package:nostrmo/router/login/login_router.dart';
-import 'package:nostrmo/router/search/search_router.dart';
-import 'package:nostrmo/router/index/index_app_bar.dart';
-import 'package:nostrmo/router/index/index_bottom_bar.dart';
-import 'package:nostrmo/router/index/index_drawer_content.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/index_provider.dart';
+import 'package:loure/util/auth_util.dart';
+import 'package:loure/router/dm/dm_router.dart';
+import 'package:loure/router/edit/editor_router.dart';
+import 'package:loure/router/follow/follow_index_router.dart';
+import 'package:loure/router/globals/globals_index_router.dart';
+import 'package:loure/router/login/login_router.dart';
+import 'package:loure/router/search/search_router.dart';
+import 'package:loure/router/index/index_app_bar.dart';
+import 'package:loure/router/index/index_bottom_bar.dart';
+import 'package:loure/router/index/index_drawer_content.dart';
 
 // ignore: must_be_immutable
 class IndexRouter extends StatefulWidget {

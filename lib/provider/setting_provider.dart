@@ -2,15 +2,15 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:nostrmo/util/encrypt_util.dart';
-import 'package:nostrmo/util/platform_util.dart';
+import 'package:loure/util/encrypt_util.dart';
+import 'package:loure/util/platform_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/consts/base_consts.dart';
-import 'package:nostrmo/consts/theme_style.dart';
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/provider/data_util.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/consts/base_consts.dart';
+import 'package:loure/consts/theme_style.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/provider/data_util.dart';
 
 class SettingProvider extends ChangeNotifier {
   static SettingProvider? _settingProvider;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:nostrmo/client/nip19/nip19.dart';
-import 'package:nostrmo/client/nip19/nip19_tlv.dart';
-import 'package:nostrmo/component/event/event_quote_component.dart';
+import 'package:loure/client/nip19/nip19.dart';
+import 'package:loure/client/nip19/nip19_tlv.dart';
+import 'package:loure/component/event/event_quote_component.dart';
 
 class MarkdownMentionEventElementBuilder implements MarkdownElementBuilder {
   static const String TAG = "mentionEvent";

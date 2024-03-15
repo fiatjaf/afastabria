@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/data/metadata.dart';
-import 'package:nostrmo/provider/metadata_provider.dart';
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/component/image_component.dart';
+import 'package:loure/data/metadata.dart';
+import 'package:loure/provider/metadata_provider.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/component/image_component.dart';
 
 class UserPicComponent extends StatefulWidget {
   String pubkey;

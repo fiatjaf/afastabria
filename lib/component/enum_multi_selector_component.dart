@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/enum_selector_component.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/router_util.dart';
+import 'package:loure/component/enum_selector_component.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/router_util.dart';
 
-import 'package:nostrmo/consts/base_consts.dart';
+import 'package:loure/consts/base_consts.dart';
 
 class EnumMultiSelectorComponent extends StatefulWidget {
   final List<EnumObj> list;

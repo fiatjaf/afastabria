@@ -1,7 +1,7 @@
 
 import 'package:markdown/markdown.dart' as md;
 
-import 'package:nostrmo/component/content/markdown/markdown_mention_event_element_builder.dart';
+import 'package:loure/component/content/markdown/markdown_mention_event_element_builder.dart';
 
 class MarkdownMentionEventInlineSyntax extends md.InlineSyntax {
   MarkdownMentionEventInlineSyntax() : super('nostr:note[a-zA-Z0-9]+');

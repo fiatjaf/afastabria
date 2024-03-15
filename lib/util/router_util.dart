@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/pc_router_fake.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/platform_util.dart';
+import 'package:loure/component/pc_router_fake.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/platform_util.dart';
 
-import 'package:nostrmo/provider/pc_router_fake_provider.dart';
+import 'package:loure/provider/pc_router_fake_provider.dart';
 
 class RouterUtil {
   static Future<T?> router<T>(BuildContext context, String pageName,

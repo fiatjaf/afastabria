@@ -4,7 +4,7 @@ import 'package:clock/clock.dart';
 import 'package:bip340/bip340.dart' as schnorr;
 import 'package:hex/hex.dart';
 
-import 'package:nostrmo/client/client_utils/keys.dart';
+import 'package:loure/client/client_utils/keys.dart';
 
 /// A Nostr event
 class Event {

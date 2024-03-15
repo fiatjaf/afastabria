@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:nostrmo/client/nip05/nip05_validor.dart';
-import 'package:nostrmo/consts/nip05status.dart';
-import 'package:nostrmo/util/platform_util.dart';
+import 'package:loure/client/nip05/nip05_validor.dart';
+import 'package:loure/consts/nip05status.dart';
+import 'package:loure/util/platform_util.dart';
 
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/event_kind.dart' as kind;
-import 'package:nostrmo/client/filter.dart';
-import 'package:nostrmo/data/metadata.dart';
-import 'package:nostrmo/data/metadata_db.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/later_function.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/filter.dart';
+import 'package:loure/data/metadata.dart';
+import 'package:loure/data/metadata_db.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/later_function.dart';
+import 'package:loure/util/string_util.dart';
 
 class MetadataProvider extends ChangeNotifier with LaterFunction {
   final Map<String, Metadata> _metadataCache = {};

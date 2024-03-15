@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:nostrmo/consts/base64.dart';
+import 'package:loure/consts/base64.dart';
 
-import 'package:nostrmo/component/image_component.dart';
+import 'package:loure/component/image_component.dart';
 
 class PicEmbedBuilder extends EmbedBuilder {
   @override

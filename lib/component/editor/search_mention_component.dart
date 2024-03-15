@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/util/when_stop_function.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/util/when_stop_function.dart';
 
 typedef ResultBuildFunc = Widget Function();
 

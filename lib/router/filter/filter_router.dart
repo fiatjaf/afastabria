@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/router/filter/filter_block_component.dart';
-import 'package:nostrmo/router/filter/filter_dirtyword_component.dart';
+import 'package:loure/router/filter/filter_block_component.dart';
+import 'package:loure/router/filter/filter_dirtyword_component.dart';
 
-import 'package:nostrmo/util/platform_util.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/router/index/index_app_bar.dart';
+import 'package:loure/util/platform_util.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/router/index/index_app_bar.dart';
 
 class FilterRouter extends StatefulWidget {
   const FilterRouter({super.key});

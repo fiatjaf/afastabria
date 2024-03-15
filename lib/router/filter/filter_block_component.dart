@@ -1,12 +1,12 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nostrmo/client/nip19/nip19.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/filter_provider.dart';
+import 'package:loure/client/nip19/nip19.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/filter_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/consts/base.dart';
+import 'package:loure/consts/base.dart';
 
 class FilterBlockComponent extends StatefulWidget {
   const FilterBlockComponent({super.key});

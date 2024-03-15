@@ -2,8 +2,8 @@
 // import 'dart:developer';
 
 // import 'package:flutter/material.dart';
-// import 'package:nostrmo/provider/data_util.dart';
-// import 'package:nostrmo/util/string_util.dart';
+// import 'package:loure/provider/data_util.dart';
+// import 'package:loure/util/string_util.dart';
 
 // import '../data/custom_emoji.dart';
 // import '../main.dart';

@@ -1,7 +1,7 @@
 
 import 'package:markdown/markdown.dart' as md;
 
-import 'package:nostrmo/component/content/markdown/markdown_mention_user_element_builder.dart';
+import 'package:loure/component/content/markdown/markdown_mention_user_element_builder.dart';
 
 class MarkdownMentionUserInlineSyntax extends md.InlineSyntax {
   MarkdownMentionUserInlineSyntax() : super('nostr:npub1[a-zA-Z0-9]+');

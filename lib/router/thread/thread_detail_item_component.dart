@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/client/event_kind.dart' as kind;
-import 'package:nostrmo/component/event/event_bitcion_icon_component.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/router/thread/thread_detail_event.dart';
-import 'package:nostrmo/router/thread/thread_detail_event_main_component.dart';
+import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/component/event/event_bitcion_icon_component.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/router/thread/thread_detail_event.dart';
+import 'package:loure/router/thread/thread_detail_event_main_component.dart';
 
 class ThreadDetailItemComponent extends StatefulWidget {
   double totalMaxWidth;

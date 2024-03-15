@@ -1,5 +1,5 @@
-import 'package:nostrmo/data/event_mem_box.dart';
-import 'package:nostrmo/client/event.dart';
+import 'package:loure/data/event_mem_box.dart';
+import 'package:loure/client/event.dart';
 
 class DMSession {
   final String pubkey;

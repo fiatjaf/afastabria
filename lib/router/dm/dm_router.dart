@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/client/nip04/nip04.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/router/dm/dm_known_list_router.dart';
-import 'package:nostrmo/router/dm/dm_unknown_list_router.dart';
+import 'package:loure/client/nip04/nip04.dart';
+import 'package:loure/main.dart';
+import 'package:loure/router/dm/dm_known_list_router.dart';
+import 'package:loure/router/dm/dm_unknown_list_router.dart';
 
 // ignore: must_be_immutable
 class DMRouter extends StatefulWidget {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/event/event_main_component.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/router/thread/thread_detail_event.dart';
+import 'package:loure/component/event/event_main_component.dart';
+import 'package:loure/main.dart';
+import 'package:loure/router/thread/thread_detail_event.dart';
 import 'package:screenshot/screenshot.dart';
 
-import 'package:nostrmo/consts/base.dart';
+import 'package:loure/consts/base.dart';
 
 class ThreadDetailItemMainComponent extends StatefulWidget {
   static double BORDER_LEFT_WIDTH = 2;

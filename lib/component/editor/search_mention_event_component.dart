@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/data/event_find_util.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/util/when_stop_function.dart';
-import 'package:nostrmo/component/event/event_list_component.dart';
-import 'package:nostrmo/component/editor/search_mention_component.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/data/event_find_util.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/util/when_stop_function.dart';
+import 'package:loure/component/event/event_list_component.dart';
+import 'package:loure/component/editor/search_mention_component.dart';
 
 class SearchMentionEventComponent extends StatefulWidget {
   const SearchMentionEventComponent({super.key});

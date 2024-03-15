@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/filter.dart';
-import 'package:nostrmo/client/nip02/contact.dart';
-import 'package:nostrmo/data/event_mem_box.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/util/pendingevents_later_function.dart';
-import 'package:nostrmo/util/string_util.dart';
-import 'package:nostrmo/provider/follow_event_provider.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/filter.dart';
+import 'package:loure/client/nip02/contact.dart';
+import 'package:loure/data/event_mem_box.dart';
+import 'package:loure/main.dart';
+import 'package:loure/util/pendingevents_later_function.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/provider/follow_event_provider.dart';
 
 class FollowNewEventProvider extends ChangeNotifier
     with PendingEventsLaterFunction {

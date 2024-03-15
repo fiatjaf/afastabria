@@ -1,10 +1,10 @@
 import 'dart:isolate';
 
 import 'package:flutter_socks_proxy/socks_proxy.dart';
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/util/string_util.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'package:nostrmo/client/relay/relay_isolate.dart';
+import 'package:loure/client/relay/relay_isolate.dart';
 
 class RelayIsolateWorker {
   RelayIsolateConfig config;

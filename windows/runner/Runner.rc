@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.github.haorendashu" "\0"
-            VALUE "FileDescription", "nostrmo" "\0"
+            VALUE "FileDescription", "loure" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "nostrmo" "\0"
+            VALUE "InternalName", "loure" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.github.haorendashu. All rights reserved." "\0"
-            VALUE "OriginalFilename", "nostrmo.exe" "\0"
-            VALUE "ProductName", "nostrmo" "\0"
+            VALUE "OriginalFilename", "loure.exe" "\0"
+            VALUE "ProductName", "loure" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart';
-import 'package:nostrmo/component/webview_router.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/provider/link_preview_data_provider.dart';
+import 'package:loure/component/webview_router.dart';
+import 'package:loure/main.dart';
+import 'package:loure/provider/link_preview_data_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'package:nostrmo/consts/base.dart';
+import 'package:loure/consts/base.dart';
 
 class ContentLinkPreComponent extends StatefulWidget {
   String link;

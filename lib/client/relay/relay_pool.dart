@@ -3,16 +3,16 @@ import 'dart:js_interop_unsafe';
 
 import 'package:flutter/material.dart';
 
-import 'package:nostrmo/consts/relay_mode.dart';
-import 'package:nostrmo/util/platform_util.dart';
-import 'package:nostrmo/main.dart';
-import 'package:nostrmo/client/filter.dart';
-import 'package:nostrmo/client/event.dart';
-import 'package:nostrmo/client/event_kind.dart';
-import 'package:nostrmo/client/relay/relay.dart';
-import 'package:nostrmo/client/relay/util.dart';
-import 'package:nostrmo/client/relay/relay_base.dart';
-import 'package:nostrmo/client/relay/relay_isolate.dart';
+import 'package:loure/consts/relay_mode.dart';
+import 'package:loure/util/platform_util.dart';
+import 'package:loure/main.dart';
+import 'package:loure/client/filter.dart';
+import 'package:loure/client/event.dart';
+import 'package:loure/client/event_kind.dart';
+import 'package:loure/client/relay/relay.dart';
+import 'package:loure/client/relay/util.dart';
+import 'package:loure/client/relay/relay_base.dart';
+import 'package:loure/client/relay/relay_isolate.dart';
 
 class RelayProvider extends ChangeNotifier {
   final Map<String, RelayStatus> relayStatusMap = {};

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_placeholder_textlines/placeholder_lines.dart';
 
-import 'package:nostrmo/consts/base.dart';
+import 'package:loure/consts/base.dart';
 
 class EventTopPlaceholder extends StatelessWidget {
   static const double IMAGE_WIDTH = 34;

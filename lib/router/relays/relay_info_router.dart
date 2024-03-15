@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:nostrmo/component/name_component.dart';
-import 'package:nostrmo/consts/base.dart';
-import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/data/metadata.dart';
-import 'package:nostrmo/provider/metadata_provider.dart';
-import 'package:nostrmo/component/image_component.dart';
-import 'package:nostrmo/component/webview_router.dart';
-import 'package:nostrmo/util/router_util.dart';
-import 'package:nostrmo/client/relay/relay_info.dart';
+import 'package:loure/component/name_component.dart';
+import 'package:loure/consts/base.dart';
+import 'package:loure/consts/router_path.dart';
+import 'package:loure/data/metadata.dart';
+import 'package:loure/provider/metadata_provider.dart';
+import 'package:loure/component/image_component.dart';
+import 'package:loure/component/webview_router.dart';
+import 'package:loure/util/router_util.dart';
+import 'package:loure/client/relay/relay_info.dart';
 
 class RelayInfoRouter extends StatefulWidget {
   const RelayInfoRouter({super.key});

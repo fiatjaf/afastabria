@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:nostrmo/util/string_util.dart';
+import 'package:loure/util/string_util.dart';
 
 class StoreUtil {
   String? _basePath;

@@ -1,8 +1,8 @@
 
-import 'package:nostrmo/data/dm_session_info.dart';
+import 'package:loure/data/dm_session_info.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'package:nostrmo/data/db.dart';
+import 'package:loure/data/db.dart';
 
 class DMSessionInfoDB {
   static Future<List<DMSessionInfo>> all(int keyIndex,
