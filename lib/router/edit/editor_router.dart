@@ -163,7 +163,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
     if ((notifyItems != null && notifyItems!.isNotEmpty) ||
         (editorNotifyItems.isNotEmpty)) {
       List<Widget> tagPsWidgets = [];
-      tagPsWidgets.add(const Text("${"Notify"}:"));
+      tagPsWidgets.add(const Text("Notify:"));
       for (var item in notifyItems!) {
         tagPsWidgets.add(EditorNotifyItemComponent(item: item));
       }

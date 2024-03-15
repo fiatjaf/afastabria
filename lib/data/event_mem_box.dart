@@ -6,11 +6,8 @@ import 'package:nostrmo/util/find_event_interface.dart';
 /// use to hold event received from relay and offer event List to ui
 class EventMemBox implements FindEventInterface {
   final List<Event> _eventList = [];
-
   final Map<String, Event> _idMap = {};
-
   bool sortAfterAdd;
-
   EventMemBox({this.sortAfterAdd = true});
 
   @override

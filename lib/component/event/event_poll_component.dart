@@ -89,9 +89,9 @@ class _EventPollComponent extends State<EventPollComponent> {
 
         if (StringUtil.isNotBlank(pollInfo!.consensusThreshold) &&
             pollInfo!.consensusThreshold != "null") {
-          list.add(Container(
-            child: Text(pollInfo!.consensusThreshold!),
-          ));
+          list.add(
+            Text(pollInfo!.consensusThreshold!),
+          );
         }
 
         if (pollInfo!.closedAt != null) {
@@ -99,15 +99,15 @@ class _EventPollComponent extends State<EventPollComponent> {
               DateTime.fromMillisecondsSinceEpoch(pollInfo!.closedAt!);
           var format = FixedDateTimeFormatter("YYYY-MM-DD hh:mm:ss");
           list.add(Row(
-            children: [Text("${"Close at"} ${format.encode(closeAtDT)}")],
+            children: [Text("Close at ${format.encode(closeAtDT)}")],
           ));
         }
 
         if (myNum > 0) {
           var myNumStr = NumberFormatUtil.format(myNum);
-          list.add(Container(
-            child: Text("${"You had voted with"} $myNumStr sats."),
-          ));
+          list.add(
+            Text("${"You had voted with"} $myNumStr sats."),
+          );
         }
 
         List<Widget> pollList = [];
@@ -185,13 +185,13 @@ class _EventPollComponent extends State<EventPollComponent> {
             child: pollItemWidget,
           ));
         }
-        list.add(Container(
-          child: Column(
+        list.add(
+          Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: pollList,
           ),
-        ));
+        );
 
         if (pollInfo!.valueMinimum != null && pollInfo!.valueMaximum != null) {
           list.add(Container(

@@ -1,15 +1,17 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:nostrmo/component/name_component.dart';
 import 'package:nostrmo/consts/base.dart';
 import 'package:nostrmo/consts/router_path.dart';
 import 'package:nostrmo/data/metadata.dart';
 import 'package:nostrmo/provider/metadata_provider.dart';
-import 'package:provider/provider.dart';
-
-import 'package:nostrmo/client/relay/relay.dart';
 import 'package:nostrmo/component/image_component.dart';
 import 'package:nostrmo/component/webview_router.dart';
 import 'package:nostrmo/util/router_util.dart';
+import 'package:nostrmo/client/relay/relay_info.dart';
 
 class RelayInfoRouter extends StatefulWidget {
   const RelayInfoRouter({super.key});
@@ -22,21 +24,35 @@ class RelayInfoRouter extends StatefulWidget {
 
 class _RelayInfoRouter extends State<RelayInfoRouter> {
   double IMAGE_WIDTH = 45;
+  RelayInfo? info;
+  String? url;
+
+  @override
+  void initState() {
+    super.initState();
+
+    var url = RouterUtil.routerArgs(context);
+    if (url == null || url is! String) {
+      RouterUtil.back(context);
+      return;
+    }
+
+    http.get(Uri.parse(url).replace(scheme: 'https'),
+        headers: {'Accept': 'application/nostr+json'}).then((response) {
+      this.setState(() {
+        this.url = url;
+        this.info = RelayInfo.fromJson(jsonDecode(response.body) as Map);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (this.info == null) return Container();
+
     var themeData = Theme.of(context);
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
-    var mainColor = themeData.primaryColor;
-    
-    var relayItf = RouterUtil.routerArgs(context);
-    if (relayItf == null || relayItf is! Relay) {
-      RouterUtil.back(context);
-      return Container();
-    }
-
-    var relay = relayItf;
-    var relayInfo = relay.info!;
+    // var mainColor = themeData.primaryColor;
 
     List<Widget> list = [];
 
@@ -46,7 +62,7 @@ class _RelayInfoRouter extends State<RelayInfoRouter> {
         bottom: Base.BASE_PADDING,
       ),
       child: Text(
-        relayInfo.name,
+        this.info!.name,
         style: TextStyle(
           fontSize: titleFontSize,
           fontWeight: FontWeight.bold,
@@ -58,12 +74,12 @@ class _RelayInfoRouter extends State<RelayInfoRouter> {
       margin: const EdgeInsets.only(
         bottom: Base.BASE_PADDING,
       ),
-      child: Text(relayInfo.description),
+      child: Text(this.info!.description),
     ));
 
     list.add(RelayInfoItemComponent(
-      title: "Url",
-      child: SelectableText(relay.url),
+      title: "URL",
+      child: SelectableText(this.url!),
     ));
 
     list.add(RelayInfoItemComponent(
@@ -97,14 +113,14 @@ class _RelayInfoRouter extends State<RelayInfoRouter> {
           list.add(Container(
             margin: const EdgeInsets.only(left: Base.BASE_PADDING),
             child: NameComponnet(
-              pubkey: relayInfo.pubKey,
+              pubkey: this.info!.pubKey,
               metadata: metadata,
             ),
           ));
 
           return GestureDetector(
             onTap: () {
-              RouterUtil.router(context, RouterPath.USER, relayInfo.pubKey);
+              RouterUtil.router(context, RouterPath.USER, this.info!.pubKey);
             },
             child: Row(
               children: list,
@@ -112,28 +128,28 @@ class _RelayInfoRouter extends State<RelayInfoRouter> {
           );
         },
         selector: (context, provider) {
-          return provider.getMetadata(relayInfo.pubKey);
+          return provider.getMetadata(this.info!.pubKey);
         },
       ),
     ));
 
     list.add(RelayInfoItemComponent(
       title: "Contact",
-      child: SelectableText(relayInfo.contact),
+      child: SelectableText(this.info!.contact),
     ));
 
     list.add(RelayInfoItemComponent(
       title: "Soft",
-      child: SelectableText(relayInfo.software),
+      child: SelectableText(this.info!.software),
     ));
 
     list.add(RelayInfoItemComponent(
       title: "Version",
-      child: SelectableText(relayInfo.version),
+      child: SelectableText(this.info!.version),
     ));
 
     List<Widget> nipWidgets = [];
-    for (var nip in relayInfo.nips) {
+    for (var nip in this.info!.nips) {
       nipWidgets.add(NipComponent(nip: nip));
     }
     list.add(RelayInfoItemComponent(
@@ -177,12 +193,14 @@ class _RelayInfoRouter extends State<RelayInfoRouter> {
   }
 }
 
+// ignore: must_be_immutable
 class RelayInfoItemComponent extends StatelessWidget {
   String title;
 
   Widget child;
 
-  RelayInfoItemComponent({super.key, 
+  RelayInfoItemComponent({
+    super.key,
     required this.title,
     required this.child,
   });
@@ -191,14 +209,14 @@ class RelayInfoItemComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> list = [];
 
-    list.add(Container(
-      child: Text(
+    list.add(
+      Text(
         "$title :",
         style: const TextStyle(
           fontWeight: FontWeight.bold,
         ),
       ),
-    ));
+    );
 
     list.add(Container(
       padding: const EdgeInsets.only(
@@ -226,6 +244,7 @@ class RelayInfoItemComponent extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class NipComponent extends StatelessWidget {
   dynamic nip;
 

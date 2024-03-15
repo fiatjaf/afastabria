@@ -1,12 +1,11 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:nostrmo/client/relay/relay.dart';
 import 'package:nostrmo/client/nip19/nip19_tlv.dart';
 import 'package:nostrmo/consts/router_path.dart';
-import 'package:nostrmo/main.dart';
 import 'package:nostrmo/util/router_util.dart';
-
 import 'package:nostrmo/consts/base.dart';
 
 // ignore: must_be_immutable
@@ -29,10 +28,7 @@ class RelaysItemComponent extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        var relay = nostr.getRelay(addr);
-        if (relay != null && relay.info != null) {
-          RouterUtil.router(context, RouterPath.RELAY_INFO, relay);
-        }
+        RouterUtil.router(context, RouterPath.RELAY_INFO, addr);
       },
       child: Container(
         margin: const EdgeInsets.only(

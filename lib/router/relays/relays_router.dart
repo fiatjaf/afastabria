@@ -1,5 +1,8 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:nostrmo/client/relay/relay.dart';
+import 'package:nostrmo/main.dart';
+import 'package:nostrmo/router/relays/relays_item_component.dart';
 
 import 'package:nostrmo/util/when_stop_function.dart';
 
@@ -50,20 +53,18 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
             margin: const EdgeInsets.only(
               top: Base.BASE_PADDING,
             ),
-            child: const Text("[relay status should go here]"),
-            // child: ListView.builder(
-            //   itemBuilder: (context, index) {
-            //     var addr = relayAddrs[index];
-            //     var relayStatus = relayStatusMap[addr];
-            //     relayStatus ??= RelayStatus(addr);
-
-            //     return RelaysItemComponent(
-            //       addr: addr,
-            //       relayStatus: relayStatus,
-            //     );
-            //   },
-            //   itemCount: relayAddrs.length,
-            // ),
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                var addr = nostr.relayList.all[index];
+                var relayStatus = nostr.pool.getRelayStatus(addr);
+                relayStatus ??= RelayStatus(addr);
+                return RelaysItemComponent(
+                  addr: addr,
+                  relayStatus: relayStatus,
+                );
+              },
+              itemCount: nostr.relayList.all.length,
+            ),
           ),
         ),
         TextField(

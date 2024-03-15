@@ -6,6 +6,7 @@ import 'package:flutter_socks_proxy/socks_proxy.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nostrmo/client/nostr.dart';
+import 'package:nostrmo/client/relay/relay_pool.dart';
 import 'package:nostrmo/provider/badge_definition_provider.dart';
 import 'package:nostrmo/provider/community_info_provider.dart';
 import 'package:nostrmo/provider/follow_new_event_provider.dart';
@@ -257,6 +258,9 @@ class _MyApp extends State<MyApp> {
       providers: [
         ListenableProvider<SettingProvider>.value(
           value: settingProvider,
+        ),
+        ListenableProvider<RelayPool>.value(
+          value: nostr.pool,
         ),
         ListenableProvider<MetadataProvider>.value(
           value: metadataProvider,

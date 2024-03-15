@@ -4,6 +4,7 @@ import 'package:nostrmo/router/globals/events/globals_events_router.dart';
 import 'package:nostrmo/router/globals/tags/globals_tags_router.dart';
 import 'package:nostrmo/router/globals/users/globals_users_router.dart';
 
+// ignore: must_be_immutable
 class GlobalsIndexRouter extends StatefulWidget {
   TabController tabController;
 

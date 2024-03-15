@@ -1,4 +1,3 @@
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/widgets.dart';
 
@@ -10,7 +9,7 @@ import 'package:nostrmo/client/zap/zap.dart';
 class ZapAction {
   static Future<void> handleZap(BuildContext context, int sats, String pubkey,
       {String? eventId, String? pollOption, String? comment}) async {
-        var cancelFunc = BotToast.showLoading();
+    var cancelFunc = BotToast.showLoading();
     try {
       var invoiceCode = await _doGenInvoiceCode(context, sats, pubkey,
           eventId: eventId, pollOption: pollOption, comment: comment);
@@ -41,13 +40,11 @@ class ZapAction {
   static Future<String?> _doGenInvoiceCode(
       BuildContext context, int sats, String pubkey,
       {String? eventId, String? pollOption, String? comment}) async {
-        var metadata = metadataProvider.getMetadata(pubkey);
+    var metadata = metadataProvider.getMetadata(pubkey);
     if (metadata == null) {
       BotToast.showText(text: "Metadata can not be found.");
       return null;
     }
-
-    var relays = relayProvider.relayAddrs;
 
     // lud06 like: LNURL1DP68GURN8GHJ7MRW9E6XJURN9UH8WETVDSKKKMN0WAHZ7MRWW4EXCUP0XPURJCEKXVERVDEJXCMKYDFHV43KX2HK8GT
     // lud16 like: pavol@rusnak.io
@@ -86,7 +83,7 @@ class ZapAction {
       sats: sats,
       recipientPubkey: pubkey,
       targetNostr: nostr,
-      relays: relays,
+      relays: nostr.relayList.read,
       eventId: eventId,
       pollOption: pollOption,
       comment: comment,

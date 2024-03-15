@@ -106,17 +106,12 @@ class _SearchRouter extends CustState<SearchRouter>
               title: "Search pubkey event", onTap: onEditingComplete));
         } else if (action == SearchActions.searchNoteContent) {
           list.add(SearchActionItemComponent(
-              title: "${"Search note content"} NIP-50",
-              onTap: searchNoteContent));
+              title: "Search note content NIP-50", onTap: searchNoteContent));
         }
       }
-      body = Container(
-        // width: double.infinity,
-        // height: double.infinity,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: list,
-        ),
+      body = Column(
+        mainAxisSize: MainAxisSize.min,
+        children: list,
       );
     } else {
       if (searchAction == SearchActions.searchMetadataFromCache) {
@@ -298,7 +293,7 @@ class _SearchRouter extends CustState<SearchRouter>
         Filter(kinds: searchEventKinds, authors: authors, limit: queryLimit)
             .toJson();
     filterMap!.remove("search");
-    penddingEvents.clear;
+    pendingEvents.clear;
     doQuery();
   }
 
@@ -434,7 +429,7 @@ class _SearchRouter extends CustState<SearchRouter>
     filterMap = Filter(kinds: searchEventKinds, limit: queryLimit).toJson();
     filterMap!.remove("authors");
     filterMap!["search"] = value;
-    penddingEvents.clear;
+    pendingEvents.clear;
     doQuery();
   }
 }

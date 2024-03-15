@@ -290,9 +290,7 @@ class Subscription {
 
 class RelayStatus {
   String addr;
-
   RelayStatus(this.addr);
-
   int connected = ConnState.UN_CONNECT;
 
   // bool noteAble = true;

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:nostrmo/main.dart';
+import 'package:provider/provider.dart';
 
-
+import 'package:nostrmo/client/relay/relay.dart';
 import 'package:nostrmo/client/relay/relay_metadata.dart';
+import 'package:nostrmo/client/relay/relay_pool.dart';
 import 'package:nostrmo/consts/base.dart';
 import 'package:nostrmo/util/router_util.dart';
 
@@ -67,22 +70,21 @@ class _UserRelayRouter extends State<UserRelayRouter> {
         margin: const EdgeInsets.only(
           top: Base.BASE_PADDING,
         ),
-        child: const Text("[relay status should go here]"),
-        // child: ListView.builder(
-        //   itemBuilder: (context, index) {
-        //     var relayMetadata = relays![index];
-        //     return Selector<RelayProvider, RelayStatus?>(
-        //         builder: (context, relayStatus, child) {
-        //       return RelayMetadataComponent(
-        //         relayMetadata: relayMetadata,
-        //         addAble: relayStatus == null,
-        //       );
-        //     }, selector: (context, provider) {
-        //       return provider.getRelayStatus(relayMetadata.addr);
-        //     });
-        //   },
-        //   itemCount: relays!.length,
-        // ),
+        child: ListView.builder(
+          itemBuilder: (context, index) {
+            var relayMetadata = relays![index];
+            return Selector<RelayPool, RelayStatus?>(
+                builder: (context, relayStatus, child) {
+              return RelayMetadataComponent(
+                relayMetadata: relayMetadata,
+                addAble: relayStatus == null,
+              );
+            }, selector: (context, provider) {
+              return provider.getRelayStatus(relayMetadata.addr);
+            });
+          },
+          itemCount: relays!.length,
+        ),
       ),
     );
   }
@@ -108,7 +110,7 @@ class RelayMetadataComponent extends StatelessWidget {
     if (addAble) {
       rightBtn = GestureDetector(
         onTap: () {
-          nostr.addRelay(relayMetadata.addr);
+          nostr.relayList.add(relayMetadata.addr, true, true);
         },
         child: const Icon(
           Icons.add,

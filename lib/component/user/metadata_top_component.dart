@@ -452,9 +452,9 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
         var nrelay = NIP19Tlv.decodeNrelay(result);
         if (nrelay != null) {
           var result =
-              await ConfirmDialog.show(context, "Add_this_relay_to_local");
+              await ConfirmDialog.show(context, "Add this relay to local");
           if (result == true) {
-            relayProvider.addRelay(nrelay.addr);
+            nostr.relayList.add(nrelay.addr, true, true);
           }
         }
       } else if (result.indexOf("http") == 0) {

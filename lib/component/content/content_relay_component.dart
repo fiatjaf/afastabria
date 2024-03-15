@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nostrmo/component/confirm_dialog.dart';
-import 'package:nostrmo/client/relay/relay.dart';
-import 'package:nostrmo/provider/relay_provider.dart';
+import 'package:nostrmo/main.dart';
 import 'package:provider/provider.dart';
 
+import 'package:nostrmo/client/relay/relay_pool.dart';
+import 'package:nostrmo/component/confirm_dialog.dart';
+import 'package:nostrmo/client/relay/relay.dart';
 import 'package:nostrmo/consts/base.dart';
 
 // ignore: must_be_immutable
@@ -21,7 +22,7 @@ class ContentRelayComponent extends StatelessWidget {
     }
     var fontSize = themeData.textTheme.bodyMedium!.fontSize;
 
-    return Selector<RelayProvider, RelayStatus?>(
+    return Selector<RelayPool, RelayStatus?>(
         builder: (context, relayStatus, client) {
       List<Widget> list = [
         Icon(
@@ -64,9 +65,9 @@ class ContentRelayComponent extends StatelessWidget {
         main = GestureDetector(
           onTap: () async {
             var result =
-                await ConfirmDialog.show(context, "Add_this_relay_to_local");
+                await ConfirmDialog.show(context, "Add this relay to local");
             if (result == true) {
-              relayProvider.addRelay(addr);
+              nostr.relayList.add(addr, true, true);
             }
           },
           child: main,

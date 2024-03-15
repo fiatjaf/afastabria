@@ -59,7 +59,7 @@ class EventReactionsProvider extends ChangeNotifier
   }
 
   // void update(String id) {
-  //   _penddingIds[id] = 1;
+  //   _pendingIds[id] = 1;
   //   whenStop(laterFunc);
   // }
 
@@ -71,7 +71,7 @@ class EventReactionsProvider extends ChangeNotifier
       }
 
       // plan to pull
-      _penddingIds[id] = 1;
+      _pendingIds[id] = 1;
       // later(laterFunc, null);
       whenStop(laterFunc);
       // set a empty er to avoid pull many times
@@ -82,7 +82,7 @@ class EventReactionsProvider extends ChangeNotifier
       // check dataTime if need to update
       if (now.millisecondsSinceEpoch - er.dataTime.millisecondsSinceEpoch >
           update_time) {
-        _penddingIds[id] = 1;
+        _pendingIds[id] = 1;
         // later(laterFunc, null);
         whenStop(laterFunc);
       }
@@ -93,24 +93,25 @@ class EventReactionsProvider extends ChangeNotifier
   }
 
   void laterFunc() {
-    if (_penddingIds.isNotEmpty) {
+    if (_pendingIds.isNotEmpty) {
       _doPull();
     }
-    if (_penddingEvents.isNotEmpty) {
+    if (_pendingEvents.isNotEmpty) {
       _handleEvent();
     }
   }
 
-  final Map<String, int> _penddingIds = {};
+  final Map<String, int> _pendingIds = {};
 
   void _doPull() {
-    if (_penddingIds.isEmpty) {
+    if (_pendingIds.isEmpty) {
       return;
     }
 
-    var filter = Filter(e: _penddingIds.keys.toList());
-    _penddingIds.clear();
-    nostr.query([filter.toJson()], onEvent);
+    _pendingIds.clear();
+    nostr.pool
+        .querySync(nostr.relayList.read, Filter(e: _pendingIds.keys.toList()))
+        .then((evts) => onEvents(evts.toList()));
   }
 
   void addEventAndHandle(Event event) {
@@ -119,19 +120,19 @@ class EventReactionsProvider extends ChangeNotifier
   }
 
   void onEvent(Event event) {
-    _penddingEvents.add(event);
+    _pendingEvents.add(event);
   }
 
   void onEvents(List<Event> events) {
-    _penddingEvents.addAll(events);
+    _pendingEvents.addAll(events);
   }
 
-  final List<Event> _penddingEvents = [];
+  final List<Event> _pendingEvents = [];
 
   void _handleEvent() {
     bool updated = false;
 
-    for (var event in _penddingEvents) {
+    for (var event in _pendingEvents) {
       for (var tag in event.tags) {
         if (tag.length > 1) {
           var tagType = tag[0];
@@ -153,7 +154,7 @@ class EventReactionsProvider extends ChangeNotifier
         }
       }
     }
-    _penddingEvents.clear();
+    _pendingEvents.clear();
 
     if (updated) {
       notifyListeners();
@@ -161,7 +162,7 @@ class EventReactionsProvider extends ChangeNotifier
   }
 
   void removePendding(String id) {
-    _penddingIds.remove(id);
+    _pendingIds.remove(id);
   }
 
   void clear() {

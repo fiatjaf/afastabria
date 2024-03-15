@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:nostrmo/component/placeholder/event_placeholder.dart';
 
+// ignore: must_be_immutable
 class EventListPlaceholder extends StatelessWidget {
   Function? onRefresh;
 
@@ -9,18 +10,11 @@ class EventListPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        if (onRefresh != null) {
-          onRefresh!();
-        }
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) {
+        return const EventPlaceholder();
       },
-      child: ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          return const EventPlaceholder();
-        },
-        itemCount: 10,
-      ),
+      itemCount: 10,
     );
   }
 }

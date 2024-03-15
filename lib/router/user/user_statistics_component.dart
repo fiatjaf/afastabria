@@ -99,12 +99,12 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     }
 
     if (isLocal) {
-      // list.add(Selector<RelayProvider, int>(builder: (context, num, child) {
-      //   return UserStatisticsItemComponent(
-      //       num: num, name: "Relays", onTap: onRelaysTap);
-      // }, selector: (context, provider) {
-      //   return provider.total();
-      // }));
+      list.add(Selector<RelayPool, int>(builder: (context, num, child) {
+        return UserStatisticsItemComponent(
+            num: num, name: "Relays", onTap: onRelaysTap);
+      }, selector: (context, provider) {
+        return provider.total();
+      }));
     } else {
       if (relaysTags != null) {
         relaysNum = relaysTags!.length;
@@ -191,7 +191,9 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
             Filter(
                 authors: [widget.pubkey], kinds: [kind.EventKind.CONTACT_LIST]))
         .then((event) {
-      localContactBox!.add(event);
+      if (event != null) {
+        localContactBox!.add(event);
+      }
     });
     BotToast.showText(text: "Begin to load contact history");
   }

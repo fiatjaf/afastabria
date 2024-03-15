@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:nostrmo/main.dart';
 import 'package:provider/provider.dart';
 import 'package:widget_size/widget_size.dart';
 
 import 'package:nostrmo/client/event.dart';
+import 'package:nostrmo/client/filter.dart';
 import 'package:nostrmo/client/event_kind.dart' as kind;
 import 'package:nostrmo/component/event/event_list_component.dart';
 import 'package:nostrmo/component/event/event_load_list_component.dart';
@@ -10,7 +12,6 @@ import 'package:nostrmo/component/event/reaction_event_list_component.dart';
 import 'package:nostrmo/component/event/zap_event_list_component.dart';
 import 'package:nostrmo/data/event_reactions.dart';
 import 'package:nostrmo/provider/event_reactions_provider.dart';
-import 'package:nostrmo/provider/single_event_provider.dart';
 import 'package:nostrmo/util/platform_util.dart';
 import 'package:nostrmo/util/router_util.dart';
 import 'package:nostrmo/router/thread/thread_detail_router.dart';
@@ -25,19 +26,15 @@ class EventDetailRouter extends StatefulWidget {
 }
 
 class _EventDetailRouter extends State<EventDetailRouter> {
-  String? eventId;
-
-  Event? event;
-
   bool showTitle = false;
-
   final ScrollController _controller = ScrollController();
-
   double rootEventHeight = 120;
+  Future<Event?>? eventFuture;
 
   @override
   void initState() {
     super.initState();
+
     _controller.addListener(() {
       if (_controller.offset > rootEventHeight * 0.8 && !showTitle) {
         setState(() {
@@ -49,63 +46,69 @@ class _EventDetailRouter extends State<EventDetailRouter> {
         });
       }
     });
+
+    var arg = RouterUtil.routerArgs(context);
+    if (arg != null) {
+      if (arg is Event) {
+        this.eventFuture = Future.value(arg);
+      } else if (arg is String) {
+        var eventId = arg;
+        var evt = nostr.eventIndex[eventId];
+        if (evt != null) {
+          eventFuture = Future.value(evt);
+          return;
+        } else {
+          eventFuture =
+              nostr.pool.querySingle(nostr.ID_RELAYS, Filter(ids: [eventId]));
+          return;
+        }
+      }
+    }
+
+    RouterUtil.back(context);
+    return;
   }
 
   @override
   Widget build(BuildContext context) {
-    
-    var arg = RouterUtil.routerArgs(context);
-    if (arg != null) {
-      if (arg is Event) {
-        event = arg;
-        eventId = event!.id;
-      } else if (arg is String) {
-        event = null;
-        eventId = arg;
-      }
-    }
-    if (event == null && eventId == null) {
-      RouterUtil.back(context);
-      return Container();
-    }
     var themeData = Theme.of(context);
 
     Widget? appBarTitle;
-    if (showTitle && event != null) {
-      appBarTitle = ThreadDetailRouter.detailAppBarTitle(event!, themeData);
-    }
-
-    Widget? mainEventWidget;
-    if (event != null) {
-      mainEventWidget = EventListComponent(
-        event: event!,
-        showVideo: true,
-        showDetailBtn: false,
-      );
-    } else if (eventId != null) {
-      mainEventWidget = Selector<SingleEventProvider, Event?>(
-        builder: (context, event, child) {
-          if (event == null) {
-            return const EventLoadListComponent();
+    if (showTitle) {
+      appBarTitle = FutureBuilder(
+        future: this.eventFuture,
+        initialData: null,
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            return ThreadDetailRouter.detailAppBarTitle(
+                snapshot.data!, themeData);
           } else {
-            event = event;
-            return EventListComponent(
-              event: event,
-              showVideo: true,
-              showDetailBtn: false,
-            );
+            return null;
           }
         },
-        selector: (context, provider) {
-          return provider.getEvent(eventId!);
-        },
       );
     }
 
-    var mainWidget = Selector<EventReactionsProvider, EventReactions?>(
+    final mainEventWidget = FutureBuilder(
+      future: eventFuture,
+      initialData: null,
+      builder: (context, snapshot) {
+        if (snapshot.data == null) {
+          return const EventLoadListComponent();
+        } else {
+          return EventListComponent(
+            event: snapshot.data!,
+            showVideo: true,
+            showDetailBtn: false,
+          );
+        }
+      },
+    );
+
+    final mainWidget = Selector<EventReactionsProvider, EventReactions?>(
       builder: (context, eventReactions, child) {
         if (eventReactions == null) {
-          return mainEventWidget!;
+          return mainEventWidget;
         }
 
         List<Event> allEvent = [];

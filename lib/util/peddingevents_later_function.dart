@@ -2,15 +2,12 @@ import 'package:nostrmo/client/event.dart';
 
 mixin PenddingEventsLaterFunction {
   int laterTimeMS = 200;
-
   bool latering = false;
-
-  List<Event> penddingEvents = [];
-
+  List<Event> pendingEvents = [];
   bool _running = true;
 
   void later(Event event, Function(List<Event>) func, Function? completeFunc) {
-    penddingEvents.add(event);
+    pendingEvents.add(event);
     if (latering) {
       return;
     }
@@ -22,8 +19,8 @@ mixin PenddingEventsLaterFunction {
       }
 
       latering = false;
-      func(penddingEvents);
-      penddingEvents.clear();
+      func(pendingEvents);
+      pendingEvents.clear();
       if (completeFunc != null) {
         completeFunc();
       }

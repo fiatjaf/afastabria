@@ -252,7 +252,7 @@ class _EventMainComponent extends State<EventMainComponent> {
           widget.event.kind == kind.EventKind.GENERIC_REPOST) {
         list.add(Container(
           alignment: Alignment.centerLeft,
-          child: const Text("${"Boost"}:"),
+          child: const Text("Boost:"),
         ));
         if (repostEvent != null) {
           list.add(EventQuoteComponent(

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:js_interop_unsafe';
 
+import 'package:flutter/material.dart';
+
 import 'package:nostrmo/consts/relay_mode.dart';
 import 'package:nostrmo/util/platform_util.dart';
 import 'package:nostrmo/main.dart';
@@ -12,9 +14,17 @@ import 'package:nostrmo/client/relay/util.dart';
 import 'package:nostrmo/client/relay/relay_base.dart';
 import 'package:nostrmo/client/relay/relay_isolate.dart';
 
-class RelayPool {
-  final Map<String, Relay> _relays = {};
+class RelayProvider extends ChangeNotifier {
   final Map<String, RelayStatus> relayStatusMap = {};
+
+  RelayStatus? getRelayStatus(String url) {
+    url = RelayUtil.normalizeURL(url);
+    return this.relayStatusMap[url];
+  }
+}
+
+class RelayPool extends RelayProvider {
+  final Map<String, Relay> _relays = {};
 
   RelayPool();
 
@@ -34,7 +44,7 @@ class RelayPool {
           nostr.privateKey, EventKind.AUTHENTICATION, tags, "");
     }
 
-    var relayStatus = relayStatusMap[url];
+    var relayStatus = this.relayStatusMap[url];
     if (relayStatus == null) {
       relayStatus = RelayStatus(url);
       relayStatusMap[url] = relayStatus;
@@ -142,7 +152,7 @@ class RelayPool {
     return completer.future;
   }
 
-  Future<Event> querySingle(Iterable<String> relays, Filter filter) async {
+  Future<Event?> querySingle(Iterable<String> relays, Filter filter) async {
     final completer = Completer<Event>();
     final results = <Event>{};
     this.subscribeManyEose(relays, [filter], onEvent: (Event evt) {
