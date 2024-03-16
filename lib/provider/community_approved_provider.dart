@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:loure/client/aid.dart';
 import 'package:loure/client/event.dart';
+import 'package:loure/client/filter.dart';
 import 'package:loure/main.dart';
 import 'package:loure/util/later_function.dart';
-import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/event_kind.dart';
 
 class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
   final Map<String, int> _approvedMap = {};
@@ -31,14 +32,10 @@ class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
 
   void laterFunction() {
     if (eids.isNotEmpty) {
-      // load
-      Map<String, dynamic> filter = {};
-      filter["kinds"] = [kind.EventKind.COMMUNITY_APPROVED];
-      List<String> ids = [];
-      ids.addAll(eids);
-      filter["#e"] = ids;
+      final filter = Filter(kinds: [EventKind.COMMUNITY_APPROVED], e: eids);
       eids.clear();
-      nostr.pool.querySync(["wss://relay.nostr.band"], filter).then(onEvent);
+      nostr.pool.subscribeManyEose(["wss://relay.nostr.band"], [filter],
+          onEvent: onEvent);
     }
 
     if (pendingEvents.isNotEmpty) {
@@ -47,7 +44,6 @@ class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
       for (var e in pendingEvents) {
         var eid = getEId(e);
         if (eid != null) {
-          // TODO need to check pubkey is Moderated or not.
           if (_approvedMap[eid] == null) {
             updated = true;
           }

@@ -47,7 +47,7 @@ class CommunityInfo {
         var id = AId(
             kind: kind.EventKind.COMMUNITY_DEFINITION,
             pubkey: event.pubKey,
-            title: title);
+            identifier: title);
         return CommunityInfo(
           createdAt: event.createdAt,
           aId: id,

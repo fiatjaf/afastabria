@@ -38,15 +38,13 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
       future: metadataLoader.load(nostr.publicKey),
       initialData: Metadata.blank(nostr.publicKey),
       builder: (context, snapshot) {
-        final metadata = snapshot.data;
+        final metadata = snapshot.data!;
 
         var themeData = Theme.of(context);
         Color cardColor = themeData.cardColor;
         var mainColor = themeData.primaryColor;
         var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
-        if (metadata == null ||
-            (StringUtil.isBlank(metadata.lud06) &&
-                StringUtil.isBlank(metadata.lud16))) {
+        if (metadata.lud06 == "" && metadata.lud16 == "") {
           return Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -63,7 +61,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
                     str: "Add now",
                     onTap: () async {
                       await RouterUtil.router(
-                          context, RouterPath.PROFILE_EDITOR, metadata);
+                          context, RouterPath.PROFILE_EDITOR);
                       metadataLoader.invalidate(nostr.publicKey);
                     },
                   ),
@@ -100,8 +98,8 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
           ),
         ));
 
-        list.add(Container(
-          child: TextField(
+        list.add(
+          TextField(
             controller: commentController,
             minLines: 1,
             maxLines: 1,
@@ -111,7 +109,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
               border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
             ),
           ),
-        ));
+        );
 
         list.add(Expanded(child: Container()));
 
@@ -124,7 +122,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
             decoration: BoxDecoration(color: mainColor),
             child: InkWell(
               onTap: () {
-                _onConfirm(metadata.pubKey!);
+                _onConfirm(metadata.pubkey);
               },
               highlightColor: mainColor.withOpacity(0.2),
               child: Container(

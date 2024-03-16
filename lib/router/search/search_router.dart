@@ -122,10 +122,10 @@ class _SearchRouter extends CustState<SearchRouter>
 
             return GestureDetector(
               onTap: () {
-                RouterUtil.router(context, RouterPath.USER, metadata.pubKey);
+                RouterUtil.router(context, RouterPath.USER, metadata.pubkey);
               },
               child: MetadataTopComponent(
-                pubkey: metadata.pubKey!,
+                pubkey: metadata.pubkey,
                 metadata: metadata,
               ),
             );
@@ -322,14 +322,14 @@ class _SearchRouter extends CustState<SearchRouter>
 
   List<Metadata> metadatas = [];
 
-  searchMetadataFromCache() {
+  searchMetadataFromCache() async {
     hideKeyBoard();
     metadatas.clear();
     searchAction = SearchActions.searchMetadataFromCache;
 
     var text = controller.text;
     if (text.length >= 2) {
-      final list = MetadataDB.search(text);
+      final list = await MetadataDB.search(text);
 
       setState(() {
         metadatas = list.toList();
@@ -346,7 +346,7 @@ class _SearchRouter extends CustState<SearchRouter>
 
     var text = controller.text;
     if (StringUtil.isNotBlank(text)) {
-      var list = EventFindUtil.findEvent(text, limit: searchMemLimit);
+      var list = EventFindUtil.findEvent(text);
       setState(() {
         events = list;
       });

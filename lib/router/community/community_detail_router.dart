@@ -18,7 +18,6 @@ import 'package:loure/main.dart';
 import 'package:loure/provider/setting_provider.dart';
 import 'package:loure/util/pendingevents_later_function.dart';
 import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
 import 'package:loure/router/edit/editor_router.dart';
 
 class CommunityDetailRouter extends StatefulWidget {
@@ -152,10 +151,6 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
       body: main,
     );
   }
-
-  var infoSubscribeId = StringUtil.rndNameStr(16);
-
-  var subscribeId = StringUtil.rndNameStr(16);
 
   // CommunityInfo? communityInfo;
 

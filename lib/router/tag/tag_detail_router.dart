@@ -15,7 +15,7 @@ import 'package:loure/provider/setting_provider.dart';
 import 'package:loure/util/pendingevents_later_function.dart';
 import 'package:loure/util/platform_util.dart';
 import 'package:loure/util/router_util.dart';
-import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/event_kind.dart';
 import 'package:loure/util/string_util.dart';
 
 class TagDetailRouter extends StatefulWidget {
@@ -154,7 +154,7 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
   void doQuery() {
     // tag query
     // https://github.com/nostr-protocol/nips/blob/master/12.md
-    var filter = Filter(kinds: kind.EventKind.SUPPORTED_EVENTS, limit: 100);
+    var filter = Filter(kinds: EventKind.SUPPORTED_EVENTS, limit: 100);
     var plainTag = tag!.replaceFirst("#", "");
     // this place set #t not #r ???
     var list = TopicMap.getList(plainTag);
@@ -173,7 +173,8 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
       }
       filter.t = list;
     }
-    nostr.pool.querySync(["wss://relay.nostr.band"], filter).then(onEvent);
+    nostr.pool.subscribeManyEose(["wss://relay.nostr.band"], [filter],
+        onEvent: onEvent);
   }
 
   void onEvent(Event? event) {
@@ -189,10 +190,6 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
   void dispose() {
     super.dispose();
     disposeLater();
-
-    try {
-      nostr.unsubscribe(subscribeId);
-    } catch (e) {}
   }
 
   onDeleteCallback(Event event) {

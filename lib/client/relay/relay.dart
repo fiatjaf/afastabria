@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:async';
-import 'dart:js_interop_unsafe';
 
 import 'package:loure/main.dart';
 import 'package:loure/client/event.dart';
@@ -100,7 +99,7 @@ abstract class Relay {
 
           final completer = this._published[id];
           if (completer != null) {
-            this._published.delete(id);
+            this._published.remove(id);
             completer
                 .complete(OK(message[2] as bool, (message[3] ?? "") as String));
           }
@@ -185,7 +184,7 @@ abstract class Relay {
     this._published[event.id] = completer;
     this.send(["EVENT", event.toJson()]);
     Future.delayed(const Duration(seconds: 45), () {
-      this._published.delete(event.id);
+      this._published.remove(event.id);
       completer.completeError(FormatException(
           "$url took too long to reply with OK for ${event.id}"));
     });

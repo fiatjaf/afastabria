@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:js_interop_unsafe';
 
 import 'package:flutter/material.dart';
 
@@ -33,7 +32,7 @@ class RelayPool extends RelayProvider {
     var relay = this._relays[url];
     if (relay != null) {
       if (relay.relayStatus.connected == ConnState.UN_CONNECT) {
-        this._relays.delete(url);
+        this._relays.remove(url);
       } else {
         return relay;
       }
@@ -101,7 +100,7 @@ class RelayPool extends RelayProvider {
         },
         onEose: () {
           if (onEose != null) {
-            eosesMissing.delete(url);
+            eosesMissing.remove(url);
             if (eosesMissing.length == 0) {
               onEose();
             }
@@ -109,7 +108,7 @@ class RelayPool extends RelayProvider {
         },
         onClose: (String msg) {
           if (onClose != null) {
-            closesMissing.delete(url);
+            closesMissing.remove(url);
             if (closesMissing.length == 0) {
               onClose();
             }
@@ -122,7 +121,7 @@ class RelayPool extends RelayProvider {
               evt.sources.add(url);
               return evt;
             });
-            if (idsReceived.has(eventId)) {
+            if (idsReceived.contains(eventId)) {
               return true;
             }
           }

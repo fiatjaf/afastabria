@@ -99,7 +99,7 @@ class RelayInfoRouterState extends State<RelayInfoRouter> {
               final metadata = snapshot.data;
 
               Widget? imageWidget;
-              if (metadata != null || metadata.isBlank) {
+              if (metadata != null || metadata!.isBlank()) {
                 imageWidget = ImageComponent(
                   imageUrl: metadata.picture!,
                   width: IMAGE_WIDTH,

@@ -1,18 +1,10 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:loure/client/upload/uploader.dart';
 import 'package:loure/data/metadata.dart';
 import 'package:loure/util/platform_util.dart';
 import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/event_kind.dart' as kind;
-import 'package:loure/client/filter.dart';
 import 'package:loure/component/appbar4stack.dart';
-import 'package:loure/component/cust_state.dart';
 import 'package:loure/consts/base.dart';
 import 'package:loure/main.dart';
 
@@ -21,11 +13,11 @@ class ProfileEditorRouter extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _ProfileEditorRouter();
+    return ProfileEditorRouterState();
   }
 }
 
-class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
+class ProfileEditorRouterState extends State<ProfileEditorRouter> {
   TextEditingController displayNameController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController aboutController = TextEditingController();
@@ -36,32 +28,25 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
   TextEditingController lud16Controller = TextEditingController();
   TextEditingController lud06Controller = TextEditingController();
 
-  Metadata? metadata;
+  @override
+  void initState() {
+    super.initState();
 
-  String getText(String? str) {
-    return str ?? "";
+    metadataLoader.load(nostr.publicKey).then((metadata) {
+      this.displayNameController.text = metadata.displayName ?? "";
+      this.nameController.text = metadata.name ?? "";
+      this.aboutController.text = metadata.about ?? "";
+      this.pictureController.text = metadata.picture ?? "";
+      this.bannerController.text = metadata.banner ?? "";
+      this.websiteController.text = metadata.website ?? "";
+      this.nip05Controller.text = metadata.nip05 ?? "";
+      this.lud16Controller.text = metadata.lud16 ?? "";
+      this.lud06Controller.text = metadata.lud06 ?? "";
+    });
   }
 
   @override
-  Widget doBuild(BuildContext context) {
-    if (metadata == null) {
-      var arg = RouterUtil.routerArgs(context);
-      if (arg != null && arg is Metadata) {
-        metadata = arg;
-      }
-      metadata ??= Metadata();
-
-      displayNameController.text = getText(metadata!.displayName);
-      nameController.text = getText(metadata!.name);
-      aboutController.text = getText(metadata!.about);
-      pictureController.text = getText(metadata!.picture);
-      bannerController.text = getText(metadata!.banner);
-      websiteController.text = getText(metadata!.website);
-      nip05Controller.text = getText(metadata!.nip05);
-      lud16Controller.text = getText(metadata!.lud16);
-      lud06Controller.text = getText(metadata!.lud06);
-    }
-
+  Widget build(BuildContext context) {
     var themeData = Theme.of(context);
     var cardColor = themeData.cardColor;
     // var mainColor = themeData.primaryColor;
@@ -106,7 +91,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       child: Row(children: [
         Expanded(
           child: TextField(
-            controller: displayNameController,
+            controller: this.displayNameController,
             decoration: const InputDecoration(labelText: "Display Name"),
           ),
         ),
@@ -119,7 +104,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
         ),
         Expanded(
           child: TextField(
-            controller: nameController,
+            controller: this.nameController,
             decoration: const InputDecoration(labelText: "Name"),
           ),
         ),
@@ -132,7 +117,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       child: TextField(
         minLines: 2,
         maxLines: 10,
-        controller: aboutController,
+        controller: this.aboutController,
         decoration: const InputDecoration(labelText: "About"),
       ),
     ));
@@ -141,7 +126,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       margin: margin,
       padding: padding,
       child: TextField(
-        controller: pictureController,
+        controller: this.pictureController,
         decoration: InputDecoration(
           prefixIcon: GestureDetector(
             onTap: pickPicture,
@@ -156,7 +141,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       margin: margin,
       padding: padding,
       child: TextField(
-        controller: bannerController,
+        controller: this.bannerController,
         decoration: InputDecoration(
           prefixIcon: GestureDetector(
             onTap: pickBanner,
@@ -171,7 +156,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       margin: margin,
       padding: padding,
       child: TextField(
-        controller: websiteController,
+        controller: this.websiteController,
         decoration: const InputDecoration(labelText: "Website"),
       ),
     ));
@@ -180,7 +165,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       margin: margin,
       padding: padding,
       child: TextField(
-        controller: nip05Controller,
+        controller: this.nip05Controller,
         decoration: const InputDecoration(labelText: "Nip05"),
       ),
     ));
@@ -189,7 +174,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       margin: margin,
       padding: padding,
       child: TextField(
-        controller: lud16Controller,
+        controller: this.lud16Controller,
         decoration: const InputDecoration(
             labelText: "Lud16", hintText: "walletname@walletservice.com"),
       ),
@@ -199,7 +184,7 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
       margin: margin,
       padding: padding,
       child: TextField(
-        controller: lud06Controller,
+        controller: this.lud06Controller,
         decoration: const InputDecoration(labelText: "Lnurl"),
       ),
     ));
@@ -238,15 +223,15 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
 
   Future<void> pickPicture() async {
     var filepath = await pickImageAndUpload();
-    if (StringUtil.isNotBlank(filepath)) {
-      pictureController.text = filepath!;
+    if (filepath != null && filepath != "") {
+      this.pictureController.text = filepath;
     }
   }
 
   Future<void> pickBanner() async {
     var filepath = await pickImageAndUpload();
-    if (StringUtil.isNotBlank(filepath)) {
-      bannerController.text = filepath!;
+    if (filepath != null && filepath != "") {
+      this.bannerController.text = filepath;
     }
   }
 
@@ -256,9 +241,9 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
     }
 
     var filepath = await Uploader.pick(context);
-    if (StringUtil.isNotBlank(filepath)) {
+    if (filepath != null && filepath != "") {
       return await Uploader.upload(
-        filepath!,
+        filepath,
         imageService: settingProvider.imageService,
       );
     }
@@ -266,51 +251,27 @@ class _ProfileEditorRouter extends CustState<ProfileEditorRouter> {
   }
 
   void profileSave() {
-    Map<String, dynamic>? metadataMap;
-    if (profileEvent != null) {
-      try {
-        metadataMap = jsonDecode(profileEvent!.content);
-      } catch (e) {
-        log("profileSave jsonDecode error");
-        print(e);
-      }
-    } else {
-      metadataMap = {};
+    String? filledOrNull(String s) {
+      s = s.trim();
+      if (s != "") return s;
+      return null;
     }
 
-    metadataMap!["display_name"] = displayNameController.text;
-    metadataMap["name"] = nameController.text;
-    metadataMap["about"] = aboutController.text;
-    metadataMap["picture"] = pictureController.text;
-    metadataMap["banner"] = bannerController.text;
-    metadataMap["website"] = websiteController.text;
-    metadataMap["nip05"] = nip05Controller.text;
-    metadataMap["lud16"] = lud16Controller.text;
-    metadataMap["lud06"] = lud06Controller.text;
+    final metadata = Metadata(
+      null,
+      pubkey: nostr.publicKey,
+      name: filledOrNull(nameController.text),
+      displayName: filledOrNull(displayNameController.text),
+      about: filledOrNull(aboutController.text),
+      picture: filledOrNull(pictureController.text),
+      banner: filledOrNull(bannerController.text),
+      website: filledOrNull(websiteController.text),
+      nip05: filledOrNull(nip05Controller.text),
+      lud16: filledOrNull(lud16Controller.text),
+      lud06: filledOrNull(lud06Controller.text),
+    );
 
-    List<List<String>> tags = [];
-    if (profileEvent != null) {
-      tags = profileEvent!.tags;
-    }
-
-    nostr.sendMetadata(tags, metadataMap);
+    nostr.sendMetadata(metadata);
     RouterUtil.back(context);
-  }
-
-  Event? profileEvent;
-
-  @override
-  Future<void> onReady(BuildContext context) async {
-    var filter = Filter(
-        kinds: [kind.EventKind.METADATA], authors: [nostr.publicKey], limit: 1);
-
-    nostr.pool.querySingle([...nostr.relayList.read, ...nostr.METADATA_RELAYS],
-        filter).then((event) {
-      if (profileEvent == null) {
-        profileEvent = event;
-      } else if (event!.createdAt > profileEvent!.createdAt) {
-        profileEvent = event;
-      }
-    });
   }
 }

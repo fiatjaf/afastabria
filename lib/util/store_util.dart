@@ -1,24 +1,12 @@
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:loure/util/string_util.dart';
 
 class StoreUtil {
-  String? _basePath;
-
-  static StoreUtil? _storeUtil;
-
-  static Future<StoreUtil> getInstance() async {
-    if (_storeUtil == null) {
-      _storeUtil = StoreUtil();
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      _storeUtil!._basePath = appDocDir.path;
-    }
-    return _storeUtil!;
-  }
-
   static Future<String> getBasePath() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     return appDocDir.path;
@@ -32,8 +20,7 @@ class StoreUtil {
       folderPath = "$folderPath/${randFolderName!}";
       checkAndCreateDir("$folderPath/");
     }
-    var tempFilePath =
-        "$folderPath/${StringUtil.rndNameStr(12)}.$extension";
+    var tempFilePath = "$folderPath/temp.$extension";
     if (StringUtil.isNotBlank(filename)) {
       tempFilePath = "$folderPath/${filename!}.$extension";
     }

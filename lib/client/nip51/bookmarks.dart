@@ -27,7 +27,7 @@ class BookmarkItem {
     var aId = eventRelation.aId;
     if (aId != null) {
       key = "a";
-      value = aId.toAString();
+      value = aId.toTag();
     }
     return BookmarkItem(key: key, value: value);
   }

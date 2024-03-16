@@ -3,12 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:loure/router/tag/topic_map.dart';
 
-import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/event_kind.dart';
 import 'package:loure/client/event.dart';
 import 'package:loure/client/nip02/contact.dart';
 import 'package:loure/client/nip02/cust_contact_list.dart';
 import 'package:loure/client/filter.dart';
-import 'package:loure/client/nostr.dart';
 import 'package:loure/main.dart';
 import 'package:loure/util/string_util.dart';
 import 'package:loure/provider/data_util.dart';
@@ -24,15 +23,13 @@ class ContactListProvider extends ChangeNotifier {
     return _contactListProvider!;
   }
 
-  void reload({Nostr? targetNostr}) {
-    targetNostr ??= nostr;
-
+  void reload() {
     String? pubkey;
-    pubkey = targetNostr.publicKey;
+    pubkey = nostr.publicKey;
 
     var str = sharedPreferences.getString(DataKey.CONTACT_LISTS);
     print("str $str");
-    if (StringUtil.isNotBlank(str)) {
+    if (str != "") {
       var jsonMap = jsonDecode(str!);
 
       if (jsonMap is Map<String, dynamic>) {
@@ -72,27 +69,23 @@ class ContactListProvider extends ChangeNotifier {
     }
   }
 
-  var subscriptId = StringUtil.rndNameStr(16);
-
-  void query({Nostr? targetNostr}) {
-    targetNostr ??= nostr;
-    subscriptId = StringUtil.rndNameStr(16);
+  void query() {
     var filter = Filter(
-        kinds: [kind.EventKind.CONTACT_LIST],
-        limit: 1,
-        authors: [targetNostr.publicKey]);
-    targetNostr.addInitQuery([filter], _onEvent, id: subscriptId);
+        kinds: [EventKind.CONTACT_LIST], limit: 1, authors: [nostr.publicKey]);
+
+    nostr.pool
+        .subscribeManyEose(nostr.CONTACT_RELAYS, [filter], onEvent: _onEvent);
   }
 
   void _onEvent(Event e) {
-    if (e.kind == kind.EventKind.CONTACT_LIST) {
+    if (e.kind == EventKind.CONTACT_LIST) {
       if (_event == null || e.createdAt > _event!.createdAt) {
         _event = e;
         _contactList = CustContactList.fromJson(e.tags);
         content = e.content;
         _saveAndNotify();
 
-        relayProvider.relayUpdateByContactListEvent(e);
+        // relayProvider.relayUpdateByContactListEvent(e);
       }
     }
   }
@@ -105,7 +98,7 @@ class ContactListProvider extends ChangeNotifier {
     Map<String, dynamic>? allJsonMap;
 
     var str = sharedPreferences.getString(DataKey.CONTACT_LISTS);
-    if (StringUtil.isNotBlank(str)) {
+    if (str != "") {
       allJsonMap = jsonDecode(str!);
     }
     allJsonMap ??= {};

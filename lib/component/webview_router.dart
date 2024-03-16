@@ -443,15 +443,25 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
         var confirmResult =
             await NIP07Dialog.show(context, NIP07Methods.getRelays);
         if (confirmResult == true) {
-          var relayMaps = {};
-          var relayAddrs = relayProvider.relayAddrs;
-          for (var relayAddr in relayAddrs) {
-            relayMaps[relayAddr] = {"read": true, "write": true};
-          }
-          var resultStr = jsonEncode(relayMaps);
-          resultStr = resultStr.replaceAll("\"", "\\\"");
+          final relayMap = Map.fromEntries(
+            nostr.relayList.write.map((url) => MapEntry(url, {"write": true})),
+          );
+          relayMap.updateAll((url, rw) {
+            if (nostr.relayList.read.contains(url)) {
+              rw['read'] = true;
+            }
+            return rw;
+          });
+          relayMap.addEntries(
+            nostr.relayList.read
+                .where((url) => relayMap[url] == null)
+                .map((url) => MapEntry(url, {"read": true})),
+          );
+
+          final resultStr = jsonEncode(relayMap).replaceAll("\"", "\\\"");
           var script =
               "window.nostr.callback(\"$resultId\", JSON.parse(\"$resultStr\"));";
+
           webViewController!.evaluateJavascript(source: script);
         } else {
           nip07Reject(resultId, "Forbid");

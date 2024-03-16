@@ -10,9 +10,9 @@ import 'package:loure/component/content/content_component.dart';
 import 'package:loure/component/image_component.dart';
 
 class CommunityInfoComponent extends StatefulWidget {
-  CommunityInfo info;
+  final CommunityInfo info;
 
-  CommunityInfoComponent({super.key, required this.info});
+  const CommunityInfoComponent({super.key, required this.info});
 
   @override
   State<StatefulWidget> createState() {
@@ -51,9 +51,9 @@ class _CommunityInfoComponent extends State<CommunityInfoComponent> {
       return GestureDetector(
         onTap: () {
           if (exist) {
-            contactListProvider.removeCommunity(widget.info.aId.toAString());
+            contactListProvider.removeCommunity(widget.info.aId.toTag());
           } else {
-            contactListProvider.addCommunity(widget.info.aId.toAString());
+            contactListProvider.addCommunity(widget.info.aId.toTag());
           }
         },
         child: Container(
@@ -68,7 +68,7 @@ class _CommunityInfoComponent extends State<CommunityInfoComponent> {
         ),
       );
     }, selector: (context, provider) {
-      return provider.containCommunity(widget.info.aId.toAString());
+      return provider.containCommunity(widget.info.aId.toTag());
     });
 
     List<Widget> list = [
@@ -92,7 +92,7 @@ class _CommunityInfoComponent extends State<CommunityInfoComponent> {
                 left: Base.BASE_PADDING,
               ),
               child: Text(
-                widget.info.aId.title,
+                widget.info.aId.identifier,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),

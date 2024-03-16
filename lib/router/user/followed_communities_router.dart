@@ -65,7 +65,7 @@ class _FollowedCommunitiesRouter extends State<FollowedCommunitiesRouter> {
                 color: hintColor,
               ))),
               child: Row(children: [
-                Text(id.title),
+                Text(id.identifier),
                 Expanded(child: Container()),
                 Selector<ContactListProvider, bool>(
                     builder: (context, exist, child) {
@@ -78,9 +78,9 @@ class _FollowedCommunitiesRouter extends State<FollowedCommunitiesRouter> {
                   return GestureDetector(
                     onTap: () {
                       if (exist) {
-                        contactListProvider.removeCommunity(id.toAString());
+                        contactListProvider.removeCommunity(id.toTag());
                       } else {
-                        contactListProvider.addCommunity(id.toAString());
+                        contactListProvider.addCommunity(id.toTag());
                       }
                     },
                     child: Container(
@@ -93,7 +93,7 @@ class _FollowedCommunitiesRouter extends State<FollowedCommunitiesRouter> {
                     ),
                   );
                 }, selector: (context, provider) {
-                  return provider.containCommunity(id.toAString());
+                  return provider.containCommunity(id.toTag());
                 })
               ])),
         );

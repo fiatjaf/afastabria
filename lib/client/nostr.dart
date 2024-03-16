@@ -4,6 +4,7 @@ import 'package:loure/client/aid.dart';
 import 'package:loure/client/event_kind.dart';
 import 'package:loure/client/filter.dart';
 import 'package:loure/consts/base_consts.dart';
+import 'package:loure/data/metadata.dart';
 import 'package:loure/main.dart';
 
 import 'package:loure/client/client_utils/keys.dart';
@@ -241,9 +242,9 @@ class Nostr {
     return event;
   }
 
-  Event sendMetadata(List<List<String>> tags, Map<String, dynamic> metadata) {
+  Event sendMetadata(Metadata metadata) {
     final event = Event.finalize(
-        this.privateKey, EventKind.METADATA, tags, jsonEncode(metadata));
+        this.privateKey, EventKind.METADATA, [], jsonEncode(metadata));
     this.pool.publish([...this.relayList.write, ...METADATA_RELAYS], event);
     return event;
   }

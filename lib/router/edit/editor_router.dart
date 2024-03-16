@@ -146,7 +146,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
                       ),
                     ),
                     Text(
-                      aid.title,
+                      aid.identifier,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),

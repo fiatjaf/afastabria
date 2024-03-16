@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bot_toast/bot_toast.dart';
@@ -667,8 +666,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
         waitingDeleteEventBox.clear();
 
         // use a blank metadata to update it
-        var blankMetadata = Metadata.blank("");
-        nostr.sendMetadata([], blankMetadata.toJson());
+        nostr.sendMetadata(Metadata.blank(""));
 
         // use a blank contact list to update it
         var blankContactList = CustContactList();

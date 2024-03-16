@@ -269,8 +269,7 @@ class _IndexDrawerContnetComponnent
   }
 
   void jumpToProfileEdit() async {
-    final metadata = await metadataLoader.load(nostr.publicKey);
-    RouterUtil.router(context, RouterPath.PROFILE_EDITOR, metadata);
+    RouterUtil.router(context, RouterPath.PROFILE_EDITOR);
   }
 
   void _showBasicModalBottomSheet(context) async {
