@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loure/client/client_utils/keys.dart';
 import 'package:loure/data/metadata.dart';
-import 'package:provider/provider.dart';
 
 import 'package:loure/client/relay/relay_pool.dart';
 import 'package:loure/component/simple_name_component.dart';
@@ -14,11 +13,9 @@ import 'package:loure/component/user/metadata_component.dart';
 import 'package:loure/consts/base_consts.dart';
 import 'package:loure/data/event_mem_box.dart';
 import 'package:loure/main.dart';
-import 'package:loure/provider/setting_provider.dart';
 import 'package:loure/util/load_more_event.dart';
 import 'package:loure/util/pendingevents_later_function.dart';
 import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
 import 'package:loure/router/user/user_statistics_component.dart';
 
 class UserRouter extends StatefulWidget {

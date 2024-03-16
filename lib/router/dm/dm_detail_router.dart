@@ -67,7 +67,7 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
       builder: (context, snapshot) {
         return NameComponnet(
           pubkey: detail!.dmSession.pubkey,
-          metadata: metadata,
+          metadata: snapshot.data,
         );
       },
     );

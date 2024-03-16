@@ -7,7 +7,10 @@ import 'package:loure/data/metadata_db.dart';
 import 'package:loure/main.dart';
 
 class MetadataLoader {
-  DataLoader<String, Metadata> loader = DataLoader(batchLoad);
+  final DataLoader<String, Metadata> _loader =
+      DataLoader(batchLoad, cache: false);
+
+  final Map<String, Future<Metadata>> _promises = {};
 
   static Future<List<Metadata>> batchLoad(Iterable<String> keys) async {
     final threshold = DateTime.now()
@@ -43,11 +46,16 @@ class MetadataLoader {
   }
 
   Future<Metadata> load(String pubkey) {
-    return this.loader.load(pubkey);
+    return this._promises.putIfAbsent(pubkey, () => this._loader.load(pubkey));
+  }
+
+  void invalidate(String pubkey) {
+    MetadataDB.delete(pubkey);
+    this._promises.remove(pubkey);
   }
 
   void clear() {
-    this.loader.close();
+    this._loader.close();
     MetadataDB.deleteAll();
   }
 }

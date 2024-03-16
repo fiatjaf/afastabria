@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:loure/main.dart';
+
 import 'package:loure/client/nip19/nip19.dart';
 import 'package:loure/data/metadata.dart';
-import 'package:loure/provider/metadata_provider.dart';
 import 'package:loure/util/string_util.dart';
-import 'package:provider/provider.dart';
 
 class SimpleNameComponent extends StatefulWidget {
+  final String pubkey;
+  final TextStyle? textStyle;
+
+  const SimpleNameComponent({
+    super.key,
+    required this.pubkey,
+    this.textStyle,
+  });
+
+  @override
+  State<StatefulWidget> createState() {
+    return SimpleNameComponentState();
+  }
+
   static String getSimpleName(String pubkey, Metadata? metadata) {
     String? name;
     if (metadata != null) {
@@ -21,36 +35,21 @@ class SimpleNameComponent extends StatefulWidget {
 
     return name!;
   }
-
-  String pubkey;
-
-  TextStyle? textStyle;
-
-  SimpleNameComponent({super.key, 
-    required this.pubkey,
-    this.textStyle,
-  });
-
-  @override
-  State<StatefulWidget> createState() {
-    return _SimpleNameComponent();
-  }
 }
 
-class _SimpleNameComponent extends State<SimpleNameComponent> {
+class SimpleNameComponentState extends State<SimpleNameComponent> {
   @override
   Widget build(BuildContext context) {
-    return Selector<MetadataProvider, Metadata?>(
-        builder: (context, metadata, child) {
-      var name = SimpleNameComponent.getSimpleName(widget.pubkey, metadata);
-      return Container(
-        child: Text(
-          name,
-          style: widget.textStyle,
-        ),
-      );
-    }, selector: (context, provider) {
-      return provider.getMetadata(widget.pubkey);
-    });
+    return FutureBuilder(
+        future: metadataLoader.load(widget.pubkey),
+        initialData: Metadata.blank(widget.pubkey),
+        builder: (context, snapshot) {
+          var name =
+              SimpleNameComponent.getSimpleName(widget.pubkey, snapshot.data);
+          return Text(
+            name,
+            style: widget.textStyle,
+          );
+        });
   }
 }

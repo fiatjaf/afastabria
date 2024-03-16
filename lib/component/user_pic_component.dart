@@ -1,43 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:loure/data/metadata.dart';
-import 'package:loure/provider/metadata_provider.dart';
-import 'package:loure/util/string_util.dart';
+import 'package:loure/main.dart';
 import 'package:loure/component/image_component.dart';
 
 class UserPicComponent extends StatefulWidget {
-  String pubkey;
+  final String pubkey;
+  final double width;
 
-  double width;
-
-  UserPicComponent({super.key, 
+  const UserPicComponent({
+    super.key,
     required this.pubkey,
     required this.width,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _UserPicComponent();
+    return UserPicComponentState();
   }
 }
 
-class _UserPicComponent extends State<UserPicComponent> {
+class UserPicComponentState extends State<UserPicComponent> {
   @override
   Widget build(BuildContext context) {
-    return Selector<MetadataProvider, Metadata?>(
-      builder: (context, metadata, child) {
+    return FutureBuilder(
+      future: metadataLoader.load(widget.pubkey),
+      initialData: Metadata.blank(widget.pubkey),
+      builder: (context, snapshot) {
+        final metadata = snapshot.data!;
+
         Widget? imageWidget;
-        if (metadata != null) {
-          if (StringUtil.isNotBlank(metadata.picture)) {
-            imageWidget = ImageComponent(
-              imageUrl: metadata.picture!,
-              width: widget.width,
-              height: widget.width,
-              fit: BoxFit.cover,
-              placeholder: (context, url) => const CircularProgressIndicator(),
-            );
-          }
+        if (metadata.picture != "") {
+          imageWidget = ImageComponent(
+            imageUrl: metadata.picture!,
+            width: widget.width,
+            height: widget.width,
+            fit: BoxFit.cover,
+            placeholder: (context, url) => const CircularProgressIndicator(),
+          );
         }
 
         return Container(
@@ -50,9 +50,6 @@ class _UserPicComponent extends State<UserPicComponent> {
           ),
           child: imageWidget,
         );
-      },
-      selector: (context, provider) {
-        return provider.getMetadata(widget.pubkey);
       },
     );
   }

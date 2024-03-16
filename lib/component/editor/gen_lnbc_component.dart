@@ -2,14 +2,12 @@ import 'dart:developer';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:loure/client/zap/zap_action.dart';
 import 'package:loure/consts/base.dart';
 import 'package:loure/consts/router_path.dart';
 import 'package:loure/data/metadata.dart';
 import 'package:loure/main.dart';
-import 'package:loure/provider/metadata_provider.dart';
 import 'package:loure/util/router_util.dart';
 import 'package:loure/util/string_util.dart';
 import 'package:loure/component/content/content_str_link_component.dart';
@@ -36,8 +34,12 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<MetadataProvider, Metadata?>(
-      builder: (context, metadata, child) {
+    return FutureBuilder(
+      future: metadataLoader.load(nostr.publicKey),
+      initialData: Metadata.blank(nostr.publicKey),
+      builder: (context, snapshot) {
+        final metadata = snapshot.data;
+
         var themeData = Theme.of(context);
         Color cardColor = themeData.cardColor;
         var mainColor = themeData.primaryColor;
@@ -62,7 +64,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
                     onTap: () async {
                       await RouterUtil.router(
                           context, RouterPath.PROFILE_EDITOR, metadata);
-                      metadataProvider.update(nostr.publicKey);
+                      metadataLoader.invalidate(nostr.publicKey);
                     },
                   ),
                 )
@@ -154,9 +156,6 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
         );
 
         return main;
-      },
-      selector: (context, provider) {
-        return provider.getMetadata(nostr.publicKey);
       },
     );
   }

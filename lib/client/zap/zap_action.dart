@@ -40,8 +40,8 @@ class ZapAction {
   static Future<String?> _doGenInvoiceCode(
       BuildContext context, int sats, String pubkey,
       {String? eventId, String? pollOption, String? comment}) async {
-    var metadata = metadataProvider.getMetadata(pubkey);
-    if (metadata == null) {
+    var metadata = await metadataLoader.load(pubkey);
+    if (metadata.isBlank()) {
       BotToast.showText(text: "Metadata can not be found.");
       return null;
     }

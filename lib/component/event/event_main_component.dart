@@ -21,7 +21,6 @@ import 'package:loure/consts/base_consts.dart';
 import 'package:loure/consts/router_path.dart';
 import 'package:loure/data/metadata.dart';
 import 'package:loure/main.dart';
-import 'package:loure/provider/metadata_provider.dart';
 import 'package:loure/provider/setting_provider.dart';
 import 'package:loure/util/router_util.dart';
 import 'package:loure/util/string_util.dart';
@@ -44,35 +43,22 @@ import 'package:loure/component/event/event_quote_component.dart';
 import 'package:loure/component/event/event_reactions_component.dart';
 import 'package:loure/component/event/event_top_component.dart';
 
-// ignore: must_be_immutable
 class EventMainComponent extends StatefulWidget {
-  ScreenshotController screenshotController;
+  final ScreenshotController screenshotController;
+  final Event event;
+  final String? pagePubkey;
+  final bool showReplying;
+  final Function? textOnTap;
+  final bool showVideo;
+  final bool imageListMode;
+  final bool showDetailBtn;
+  final bool showLongContent;
+  final bool showSubject;
+  final bool showCommunity;
+  final EventRelation? eventRelation;
+  final bool showLinkedLongForm;
 
-  Event event;
-
-  String? pagePubkey;
-
-  bool showReplying;
-
-  Function? textOnTap;
-
-  bool showVideo;
-
-  bool imageListMode;
-
-  bool showDetailBtn;
-
-  bool showLongContent;
-
-  bool showSubject;
-
-  bool showCommunity;
-
-  EventRelation? eventRelation;
-
-  bool showLinkedLongForm;
-
-  EventMainComponent({
+  const EventMainComponent({
     super.key,
     required this.screenshotController,
     required this.event,
@@ -91,11 +77,11 @@ class EventMainComponent extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _EventMainComponent();
+    return EventMainComponentState();
   }
 }
 
-class _EventMainComponent extends State<EventMainComponent> {
+class EventMainComponentState extends State<EventMainComponent> {
   bool showWarning = false;
 
   late EventRelation eventRelation;
@@ -285,7 +271,7 @@ class _EventMainComponent extends State<EventMainComponent> {
           for (var index = 0; index < length; index++) {
             var p = eventRelation.tagPList[index];
             var isLast = index < length - 1 ? false : true;
-            replyingList.add(EventReplyingcomponent(pubkey: p));
+            replyingList.add(EventReplyingComponent(pubkey: p));
             if (!isLast) {
               replyingList.add(Text(
                 " & ",
@@ -676,27 +662,30 @@ class _EventMainComponent extends State<EventMainComponent> {
   }
 }
 
-// ignore: must_be_immutable
-class EventReplyingcomponent extends StatefulWidget {
-  String pubkey;
+class EventReplyingComponent extends StatefulWidget {
+  final String pubkey;
 
-  EventReplyingcomponent({super.key, required this.pubkey});
+  const EventReplyingComponent({super.key, required this.pubkey});
 
   @override
   State<StatefulWidget> createState() {
-    return _EventReplyingcomponent();
+    return EventReplyingComponentState();
   }
 }
 
-class _EventReplyingcomponent extends State<EventReplyingcomponent> {
+class EventReplyingComponentState extends State<EventReplyingComponent> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         RouterUtil.router(context, RouterPath.USER, widget.pubkey);
       },
-      child: Selector<MetadataProvider, Metadata?>(
-        builder: (context, metadata, child) {
+      child: FutureBuilder(
+        future: metadataLoader.load(widget.pubkey),
+        initialData: Metadata.blank(widget.pubkey),
+        builder: (context, snapshot) {
+          final metadata = snapshot.data!;
+
           var themeData = Theme.of(context);
           var hintColor = themeData.hintColor;
           var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
@@ -711,9 +700,6 @@ class _EventReplyingcomponent extends State<EventReplyingcomponent> {
               // fontWeight: FontWeight.bold,
             ),
           );
-        },
-        selector: (context, provider) {
-          return provider.getMetadata(widget.pubkey);
         },
       ),
     );

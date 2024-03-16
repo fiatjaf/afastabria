@@ -57,6 +57,11 @@ class MetadataDB {
         where: "pubkey = ?", whereArgs: [o.pubkey]);
   }
 
+  static Future<void> delete(String pubkey, {DatabaseExecutor? db}) async {
+    db = await DB.getDB(db);
+    db.execute("delete from metadata where pubkey = ?", [pubkey]);
+  }
+
   static Future<void> deleteAll({DatabaseExecutor? db}) async {
     db = await DB.getDB(db);
     db.execute("delete from metadata");
