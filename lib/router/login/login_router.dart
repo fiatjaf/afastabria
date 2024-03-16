@@ -15,16 +15,14 @@ class LoginRouter extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _LoginRouter();
+    return LoginRouterState();
   }
 }
 
-class _LoginRouter extends State<LoginRouter>
+class LoginRouterState extends State<LoginRouter>
     with SingleTickerProviderStateMixin {
   bool? checkTerms = false;
-
   bool obscureText = true;
-
   TextEditingController controller = TextEditingController();
 
   late AnimationController animationController;
@@ -199,11 +197,11 @@ class _LoginRouter extends State<LoginRouter>
     settingProvider.addAndChangePrivateKey(sk, updateUI: false);
     nostr = Nostr(sk);
 
-    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-    settingProvider.notifyListeners();
-
     firstLogin = true;
     indexProvider.setCurrentTap(1);
+
+    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+    settingProvider.notifyListeners();
   }
 
   void tipAcceptTerm() {

@@ -107,6 +107,10 @@ class _IndexRouter extends CustState<IndexRouter>
         unlock = true;
       });
     }
+
+    settingProvider.addListener(() {
+      this.setState(() {});
+    });
   }
 
   bool unlock = false;

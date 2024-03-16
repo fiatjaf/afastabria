@@ -136,7 +136,7 @@ Future<void> main() async {
     print(e);
   }
 
-  DB.init();
+  await DB.init();
 
   sharedPreferences = await SharedPreferences.getInstance();
 
