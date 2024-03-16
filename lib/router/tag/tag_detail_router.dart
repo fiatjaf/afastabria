@@ -146,8 +146,6 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
     );
   }
 
-  var subscribeId = StringUtil.rndNameStr(16);
-
   @override
   Future<void> onReady(BuildContext context) async {
     doQuery();
@@ -157,12 +155,11 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
     // tag query
     // https://github.com/nostr-protocol/nips/blob/master/12.md
     var filter = Filter(kinds: kind.EventKind.SUPPORTED_EVENTS, limit: 100);
-    var queryArg = filter.toJson();
     var plainTag = tag!.replaceFirst("#", "");
     // this place set #t not #r ???
     var list = TopicMap.getList(plainTag);
     if (list != null) {
-      queryArg["#t"] = list;
+      filter.t = list;
     } else {
       // can't find from topicMap, change to query the source, upperCase and lowerCase
       var upperCase = plainTag.toUpperCase();
@@ -174,12 +171,14 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
       if (upperCase != plainTag && lowerCase != plainTag) {
         list.add(plainTag);
       }
-      queryArg["#t"] = list;
+      filter.t = list;
     }
-    nostr.query([queryArg], onEvent, id: subscribeId);
+    nostr.pool.querySync(["wss://relay.nostr.band"], filter).then(onEvent);
   }
 
-  void onEvent(Event event) {
+  void onEvent(Event? event) {
+    if (event == null) return;
+
     later(event, (list) {
       box.addList(list);
       setState(() {});

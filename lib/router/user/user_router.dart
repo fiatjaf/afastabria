@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:loure/client/client_utils/keys.dart';
+import 'package:loure/data/metadata.dart';
 import 'package:provider/provider.dart';
 
 import 'package:loure/client/relay/relay_pool.dart';
 import 'package:loure/component/simple_name_component.dart';
-import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/event_kind.dart';
 import 'package:loure/client/filter.dart';
 import 'package:loure/component/appbar4stack.dart';
 import 'package:loure/component/cust_state.dart';
@@ -11,9 +13,7 @@ import 'package:loure/component/event/event_list_component.dart';
 import 'package:loure/component/user/metadata_component.dart';
 import 'package:loure/consts/base_consts.dart';
 import 'package:loure/data/event_mem_box.dart';
-import 'package:loure/data/metadata.dart';
 import 'package:loure/main.dart';
-import 'package:loure/provider/metadata_provider.dart';
 import 'package:loure/provider/setting_provider.dart';
 import 'package:loure/util/load_more_event.dart';
 import 'package:loure/util/pendingevents_later_function.dart';
@@ -26,23 +26,26 @@ class UserRouter extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _UserRouter();
+    return UserRouterState();
   }
 }
 
-class _UserRouter extends CustState<UserRouter>
+class UserRouterState extends CustState<UserRouter>
     with PendingEventsLaterFunction, LoadMoreEvent {
   final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
-
   final ScrollController _controller = ScrollController();
-
   String? pubkey;
-
   bool showTitle = false;
-
   bool showAppbarBG = false;
-
   EventMemBox box = EventMemBox();
+
+  /// the offset to show title, bannerHeight + 50;
+  double showTitleHeight = 50;
+
+  /// the offset to appbar background color, showTitleHeight + 100;
+  double showAppbarBGHeight = 50 + 100;
+
+  Future<Metadata>? metadataFuture;
 
   @override
   void initState() {
@@ -50,11 +53,11 @@ class _UserRouter extends CustState<UserRouter>
 
     queryLimit = 200;
 
-    _controller.addListener(() {
+    this._controller.addListener(() {
       var showTitle = false;
       var showAppbarBG = false;
 
-      var offset = _controller.offset;
+      var offset = this._controller.offset;
       if (offset > showTitleHeight) {
         showTitle = true;
       }
@@ -64,28 +67,19 @@ class _UserRouter extends CustState<UserRouter>
 
       if (showTitle != showTitle || showAppbarBG != showAppbarBG) {
         setState(() {
-          showTitle = showTitle;
-          showAppbarBG = showAppbarBG;
+          this.showTitle = showTitle;
+          this.showAppbarBG = showAppbarBG;
         });
       }
     });
-  }
 
-  /// the offset to show title, bannerHeight + 50;
-  double showTitleHeight = 50;
-
-  /// the offset to appbar background color, showTitleHeight + 100;
-  double showAppbarBGHeight = 50 + 100;
-
-  @override
-  Widget doBuild(BuildContext context) {
-    var settingProvider = Provider.of<SettingProvider>(context);
-    if (StringUtil.isBlank(pubkey)) {
+    if (this.pubkey == null || !keyIsValid(this.pubkey!)) {
       pubkey = RouterUtil.routerArgs(context) as String?;
-      if (StringUtil.isBlank(pubkey)) {
+      if (pubkey == null || !keyIsValid(pubkey!)) {
         RouterUtil.back(context);
-        return Container();
+        return;
       }
+
       var events = followEventProvider.eventsByPubkey(pubkey!);
       if (events.isNotEmpty) {
         box.addList(events);
@@ -97,13 +91,21 @@ class _UserRouter extends CustState<UserRouter>
           // arg change! reset.
           box.clear();
           until = null;
-
           pubkey = arg;
           doQuery();
         }
       }
     }
     preBuild();
+
+    this.metadataFuture = metadataLoader.load(pubkey!);
+  }
+
+  @override
+  Widget doBuild(BuildContext context) {
+    if (this.metadataFuture == null) {
+      return Container();
+    }
 
     var paddingTop = mediaDataCache.padding.top;
     var maxWidth = mediaDataCache.size.width;
@@ -114,14 +116,12 @@ class _UserRouter extends CustState<UserRouter>
     var themeData = Theme.of(context);
     // var cardColor = themeData.cardColor;
 
-    return Selector<MetadataProvider, Metadata?>(
-      shouldRebuild: (previous, next) {
-        return previous != next;
-      },
-      selector: (context, metadataProvider) {
-        return metadataProvider.getMetadata(pubkey!);
-      },
-      builder: (context, metadata, child) {
+    return FutureBuilder(
+      future: this.metadataFuture,
+      initialData: Metadata.blank(this.pubkey!),
+      builder: (context, snapshot) {
+        final metadata = snapshot.data;
+
         Color? appbarBackgroundColor = Colors.transparent;
         if (showAppbarBG) {
           appbarBackgroundColor = Colors.white.withOpacity(0.6);
@@ -221,8 +221,6 @@ class _UserRouter extends CustState<UserRouter>
         loadMoreScrollCallback(controller);
       });
     }
-
-    metadataProvider.update(pubkey!);
   }
 
   void onEvent(event) {
@@ -248,27 +246,24 @@ class _UserRouter extends CustState<UserRouter>
 
     // load event from relay
     var filter = Filter(
-      kinds: kind.EventKind.SUPPORTED_EVENTS,
+      kinds: EventKind.SUPPORTED_EVENTS,
       until: until,
       authors: [pubkey!],
       limit: queryLimit,
     );
 
-    if (!box.isEmpty()) {
-      var activeRelays = nostr.activeRelays();
-      var oldestCreatedAts = box.oldestCreatedAtByRelay(
-        activeRelays,
-      );
-      Map<String, List<Map<String, dynamic>>> filtersMap = {};
-      for (var relay in activeRelays) {
-        var oldestCreatedAt = oldestCreatedAts.createdAtMap[relay.url];
-        filter.until = oldestCreatedAt;
-        filtersMap[relay.url] = [filter.toJson()];
-      }
-      nostr.queryByFilters(filtersMap, onEvent, id: subscribeId);
-    } else {
-      nostr.query([filter.toJson()], onEvent, id: subscribeId);
+    var relays = ["wss://relay.nostr.band"];
+    List<Filter> Function(String, List<Filter>)? filterModifier;
+
+    if (!this.box.isEmpty()) {
+      var oldestCreatedAts = this.box.oldestCreatedAtByRelay(relays);
+      filterModifier = (url, filters) {
+        filters[0].until = oldestCreatedAts.createdAtMap[url] ?? until;
+        return filters;
+      };
     }
+
+    nostr.pool.querySync(relays, filter, filterModifier: filterModifier);
   }
 
   @override

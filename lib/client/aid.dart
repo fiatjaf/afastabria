@@ -1,15 +1,15 @@
+import 'package:loure/client/filter.dart';
+
 /// the base aid class.
 class AId {
   int kind = 0;
-
   String pubkey = "";
-
-  String title = "";
+  String identifier = "";
 
   AId({
     required this.kind,
     required this.pubkey,
-    required this.title,
+    required this.identifier,
   });
 
   static AId? fromString(String text) {
@@ -17,17 +17,21 @@ class AId {
     if (strs.length == 3) {
       var kind = int.tryParse(strs[0]);
       var pubkey = strs[1];
-      var title = strs[2];
+      var identifier = strs[2];
 
       if (kind != null) {
-        return AId(kind: kind, pubkey: pubkey, title: title);
+        return AId(kind: kind, pubkey: pubkey, identifier: identifier);
       }
     }
 
     return null;
   }
 
-  String toAString() {
-    return "$kind:$pubkey:$title";
+  String toTag() {
+    return "$kind:$pubkey:$identifier";
+  }
+
+  Filter toFilter() {
+    return Filter(authors: [pubkey], kinds: [kind], d: [identifier]);
   }
 }

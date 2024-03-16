@@ -5,22 +5,18 @@ import 'package:loure/data/metadata.dart';
 import 'package:loure/client/nip19/nip19.dart';
 import 'package:loure/util/string_util.dart';
 
+// ignore: must_be_immutable
 class NameComponnet extends StatefulWidget {
   String pubkey;
-
   Metadata? metadata;
-
   bool showNip05;
-
   double? fontSize;
-
   Color? fontColor;
-
   TextOverflow? textOverflow;
-
   int? maxLines;
 
-  NameComponnet({super.key, 
+  NameComponnet({
+    super.key,
     required this.pubkey,
     this.metadata,
     this.showNip05 = true,
@@ -40,10 +36,11 @@ class _NameComponnet extends State<NameComponnet> {
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
+    // var mainColor = themeData.primaryColor;
     var textSize = themeData.textTheme.bodyMedium!.fontSize;
     var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
     Color hintColor = themeData.hintColor;
+
     var metadata = widget.metadata;
     String nip19Name = Nip19.encodeSimplePubKey(widget.pubkey);
     String displayName = "";
@@ -52,30 +49,23 @@ class _NameComponnet extends State<NameComponnet> {
       hintColor = widget.fontColor!;
     }
 
-    int nip05Status = -1;
     if (metadata != null) {
-      if (StringUtil.isNotBlank(metadata.displayName)) {
+      if (metadata.displayName != "") {
         displayName = metadata.displayName!;
-        if (StringUtil.isNotBlank(metadata.name)) {
+        if (metadata.name != "") {
           name = metadata.name!;
         }
-      } else if (StringUtil.isNotBlank(metadata.name)) {
+      } else if (metadata.name != "") {
         displayName = metadata.name!;
-      }
-
-      if (StringUtil.isNotBlank(metadata.nip05)) {
-        nip05Status = 1;
-      }
-      if (metadata.valid != null && metadata.valid! > 0) {
-        nip05Status = 2;
       }
     }
 
     List<InlineSpan> nameList = [];
 
-    if (StringUtil.isBlank(displayName)) {
+    if (displayName == "") {
       displayName = nip19Name;
     }
+
     nameList.add(TextSpan(
       text: StringUtil.breakWord(displayName),
       style: TextStyle(
@@ -84,7 +74,8 @@ class _NameComponnet extends State<NameComponnet> {
         color: widget.fontColor,
       ),
     ));
-    if (StringUtil.isNotBlank(name)) {
+
+    if (name != "") {
       nameList.add(WidgetSpan(
         child: Container(
           margin: const EdgeInsets.only(left: 2),
@@ -99,15 +90,16 @@ class _NameComponnet extends State<NameComponnet> {
       ));
     }
 
-    Widget nip05Widget = Container();
-    if (widget.showNip05) {
-      nip05Widget = Container(
-        margin: const EdgeInsets.only(left: 3),
-        child: Nip05ValidComponent(pubkey: widget.pubkey),
+    if (metadata != null) {
+      nameList.add(
+        WidgetSpan(
+          child: Container(
+            margin: const EdgeInsets.only(left: 3),
+            child: Nip05ValidComponent(metadata: metadata),
+          ),
+        ),
       );
     }
-
-    nameList.add(WidgetSpan(child: nip05Widget));
 
     return Text.rich(
       TextSpan(children: nameList),

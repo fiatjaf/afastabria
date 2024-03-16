@@ -15,6 +15,15 @@ class Filter {
   /// a list of pubkeys that are referenced in a "p" tag
   List<String>? p;
 
+  /// a list of addresses that are referenced in a "a" tag
+  List<String>? a;
+
+  /// a list of identifiers that are referenced in a "d" tag
+  List<String>? d;
+
+  /// a list of hashtags that are referenced in a "t" tag
+  List<String>? t;
+
   /// a timestamp, events must be newer than this to pass
   int? since;
 
@@ -34,6 +43,9 @@ class Filter {
     this.kinds,
     this.e,
     this.p,
+    this.a,
+    this.d,
+    this.t,
     this.since,
     this.until,
     this.limit,
@@ -48,6 +60,9 @@ class Filter {
     this.kinds = json['kinds'] == null ? null : List<int>.from(json['kinds']);
     this.e = json['#e'] == null ? null : List<String>.from(json['#e']);
     this.p = json['#p'] == null ? null : List<String>.from(json['#p']);
+    this.a = json['#a'] == null ? null : List<String>.from(json['#a']);
+    this.d = json['#d'] == null ? null : List<String>.from(json['#d']);
+    this.t = json['#t'] == null ? null : List<String>.from(json['#t']);
     this.since = json['since'];
     this.until = json['until'];
     this.limit = json['limit'];
@@ -72,6 +87,15 @@ class Filter {
     if (this.p != null) {
       data['#p'] = this.p;
     }
+    if (this.a != null) {
+      data['#a'] = this.a;
+    }
+    if (this.d != null) {
+      data['#d'] = this.d;
+    }
+    if (this.t != null) {
+      data['#t'] = this.t;
+    }
     if (this.since != null) {
       data['since'] = this.since;
     }
@@ -88,7 +112,19 @@ class Filter {
   }
 
   Filter clone() {
-    return Filter(this.ids, this.authors, this.kinds, this.e, this.p,
-        this.since, this.until, this.limit, this.search);
+    return Filter(
+      ids: this.ids,
+      authors: this.authors,
+      kinds: this.kinds,
+      e: this.e,
+      p: this.p,
+      a: this.a,
+      d: this.d,
+      t: this.t,
+      since: this.since,
+      until: this.until,
+      limit: this.limit,
+      search: this.search,
+    );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:loure/client/nostr.dart';
 import 'package:loure/component/webview_router.dart';
 import 'package:loure/util/platform_util.dart';
 
@@ -8,7 +9,6 @@ import 'package:loure/client/client_utils/keys.dart';
 import 'package:loure/client/nip19/nip19.dart';
 import 'package:loure/consts/base.dart';
 import 'package:loure/main.dart';
-import 'package:loure/util/string_util.dart';
 
 class LoginRouter extends StatefulWidget {
   const LoginRouter({super.key});
@@ -134,18 +134,16 @@ class _LoginRouter extends State<LoginRouter>
                 checkTerms = val;
               });
             }),
-        const Text("I accept the" " "),
-        Container(
-          child: GestureDetector(
-            onTap: () {
-              WebViewRouter.open(context, Base.PRIVACY_LINK);
-            },
-            child: Text(
-              "terms of user",
-              style: TextStyle(
-                color: mainColor,
-                decoration: TextDecoration.underline,
-              ),
+        const Text("I accept the "),
+        GestureDetector(
+          onTap: () {
+            WebViewRouter.open(context, Base.PRIVACY_LINK);
+          },
+          child: Text(
+            "Terms of Use",
+            style: TextStyle(
+              color: mainColor,
+              decoration: TextDecoration.underline,
             ),
           ),
         ),
@@ -180,8 +178,8 @@ class _LoginRouter extends State<LoginRouter>
   }
 
   void generatePK() {
-    var pk = generatePrivateKey();
-    controller.text = pk;
+    var sk = generatePrivateKey();
+    controller.text = sk;
   }
 
   void doLogin() {
@@ -190,17 +188,18 @@ class _LoginRouter extends State<LoginRouter>
       return;
     }
 
-    var pk = controller.text;
-    if (StringUtil.isBlank(pk)) {
-      BotToast.showText(text: "Private key is null");
+    var sk = controller.text;
+    if (Nip19.isPrivateKey(sk)) {
+      sk = Nip19.decode(sk);
+    }
+    if (!keyIsValid(sk)) {
+      BotToast.showText(text: "Private key is not valid");
       return;
     }
+    settingProvider.addAndChangePrivateKey(sk, updateUI: false);
+    nostr = Nostr(sk);
 
-    if (Nip19.isPrivateKey(pk)) {
-      pk = Nip19.decode(pk);
-    }
-    settingProvider.addAndChangePrivateKey(pk, updateUI: false);
-    nostr = relayProvider.genNostr(pk);
+    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     settingProvider.notifyListeners();
 
     firstLogin = true;

@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:provider/provider.dart';
+import 'package:screenshot/screenshot.dart';
+
 import 'package:loure/component/content/content_video_component.dart';
 import 'package:loure/component/content/markdown/markdown_mention_event_element_builder.dart';
 import 'package:loure/component/event/event_zap_goals_component.dart';
 import 'package:loure/component/simple_name_component.dart';
 import 'package:loure/util/platform_util.dart';
-import 'package:provider/provider.dart';
-import 'package:screenshot/screenshot.dart';
-
 import 'package:loure/client/event.dart';
-import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/event_kind.dart';
 import 'package:loure/client/event_relation.dart';
 import 'package:loure/client/nip23/long_form_info.dart';
 import 'package:loure/client/nip19/nip19.dart';
@@ -112,7 +112,7 @@ class _EventMainComponent extends State<EventMainComponent> {
 
   @override
   Widget build(BuildContext context) {
-        var settingProvider = Provider.of<SettingProvider>(context);
+    var settingProvider = Provider.of<SettingProvider>(context);
     if (eventRelation.id != widget.event.id) {
       // change when thead root load lazy
       eventRelation = EventRelation.fromEvent(widget.event);
@@ -137,8 +137,8 @@ class _EventMainComponent extends State<EventMainComponent> {
     }
 
     Event? repostEvent;
-    if ((widget.event.kind == kind.EventKind.REPOST ||
-            widget.event.kind == kind.EventKind.GENERIC_REPOST) &&
+    if ((widget.event.kind == EventKind.REPOST ||
+            widget.event.kind == EventKind.GENERIC_REPOST) &&
         widget.event.content.contains("\"pubkey\"")) {
       try {
         var jsonMap = jsonDecode(widget.event.content);
@@ -163,8 +163,9 @@ class _EventMainComponent extends State<EventMainComponent> {
 
     List<Widget> list = [];
     if (showWarning || !eventRelation.warning) {
-      if (widget.event.kind == kind.EventKind.LONG_FORM) {
-        var longFormMargin = const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF);
+      if (widget.event.kind == EventKind.LONG_FORM) {
+        var longFormMargin =
+            const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF);
 
         List<Widget> subList = [];
         var longFormInfo = LongFormInfo.fromEvent(widget.event);
@@ -248,8 +249,8 @@ class _EventMainComponent extends State<EventMainComponent> {
           eventRelation: eventRelation,
           showDetailBtn: widget.showDetailBtn,
         ));
-      } else if (widget.event.kind == kind.EventKind.REPOST ||
-          widget.event.kind == kind.EventKind.GENERIC_REPOST) {
+      } else if (widget.event.kind == EventKind.REPOST ||
+          widget.event.kind == EventKind.GENERIC_REPOST) {
         list.add(Container(
           alignment: Alignment.centerLeft,
           child: const Text("Boost:"),
@@ -327,18 +328,18 @@ class _EventMainComponent extends State<EventMainComponent> {
           buildContentWidget(settingProvider, imagePreview, videoPreview),
         );
 
-        if (widget.event.kind == kind.EventKind.POLL) {
+        if (widget.event.kind == EventKind.POLL) {
           list.add(EventPollComponent(
             event: widget.event,
           ));
-        } else if (widget.event.kind == kind.EventKind.ZAP_GOALS ||
+        } else if (widget.event.kind == EventKind.ZAP_GOALS ||
             StringUtil.isNotBlank(eventRelation.zapraiser)) {
           list.add(EventZapGoalsComponent(
             event: widget.event,
           ));
         }
 
-        if (widget.event.kind == kind.EventKind.FILE_HEADER) {
+        if (widget.event.kind == EventKind.FILE_HEADER) {
           String? m;
           String? url;
           for (var tag in widget.event.tags) {
@@ -385,14 +386,14 @@ class _EventMainComponent extends State<EventMainComponent> {
         }
 
         if (eventRelation.aId != null &&
-            eventRelation.aId!.kind == kind.EventKind.LONG_FORM &&
+            eventRelation.aId!.kind == EventKind.LONG_FORM &&
             widget.showLinkedLongForm) {
           list.add(EventQuoteComponent(
             aId: eventRelation.aId!,
           ));
         }
 
-        if (widget.event.kind != kind.EventKind.ZAP) {
+        if (widget.event.kind != EventKind.ZAP) {
           list.add(EventReactionsComponent(
             screenshotController: widget.screenshotController,
             event: widget.event,
@@ -412,7 +413,7 @@ class _EventMainComponent extends State<EventMainComponent> {
     List<Widget> eventAllList = [];
 
     if (eventRelation.aId != null &&
-        eventRelation.aId!.kind == kind.EventKind.COMMUNITY_DEFINITION &&
+        eventRelation.aId!.kind == EventKind.COMMUNITY_DEFINITION &&
         widget.showCommunity) {
       var communityTitle = Row(
         children: [
@@ -440,7 +441,7 @@ class _EventMainComponent extends State<EventMainComponent> {
                   context, RouterPath.COMMUNITY_DETAIL, eventRelation.aId);
             },
             child: Text(
-              eventRelation.aId!.title,
+              eventRelation.aId!.identifier,
               style: TextStyle(
                 fontSize: smallTextSize,
                 fontWeight: FontWeight.bold,
@@ -612,9 +613,9 @@ class _EventMainComponent extends State<EventMainComponent> {
               var nrelay = NIP19Tlv.decodeNrelay(link);
               if (nrelay != null) {
                 var result = await ConfirmDialog.show(
-                    context, "Add_this_relay_to_local");
+                    context, "Add this relay to local");
                 if (result == true) {
-                  relayProvider.addRelay(nrelay.addr);
+                  nostr.relayList.add(nrelay.addr, true, true);
                 }
               }
             }
@@ -625,10 +626,9 @@ class _EventMainComponent extends State<EventMainComponent> {
   }
 
   Widget buildWarningWidget(double largeTextSize, Color mainColor) {
-    
     return Container(
-      margin:
-          const EdgeInsets.only(bottom: Base.BASE_PADDING, top: Base.BASE_PADDING),
+      margin: const EdgeInsets.only(
+          bottom: Base.BASE_PADDING, top: Base.BASE_PADDING),
       width: double.maxFinite,
       child: Column(
         children: [
@@ -676,6 +676,7 @@ class _EventMainComponent extends State<EventMainComponent> {
   }
 }
 
+// ignore: must_be_immutable
 class EventReplyingcomponent extends StatefulWidget {
   String pubkey;
 

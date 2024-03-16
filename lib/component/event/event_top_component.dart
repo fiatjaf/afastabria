@@ -2,45 +2,47 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get_time_ago/get_time_ago.dart';
+
 import 'package:loure/client/event_kind.dart';
 import 'package:loure/component/name_component.dart';
 import 'package:loure/consts/router_path.dart';
+import 'package:loure/main.dart';
 import 'package:loure/util/router_util.dart';
 import 'package:loure/util/string_util.dart';
-import 'package:provider/provider.dart';
-
 import 'package:loure/client/event.dart';
 import 'package:loure/consts/base.dart';
 import 'package:loure/data/metadata.dart';
-import 'package:loure/provider/metadata_provider.dart';
 import 'package:loure/component/image_component.dart';
 
 class EventTopComponent extends StatefulWidget {
-  Event event;
-  String? pagePubkey;
+  final Event event;
+  final String? pagePubkey;
 
-  EventTopComponent({super.key, 
+  const EventTopComponent({
+    super.key,
     required this.event,
     this.pagePubkey,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _EventTopComponent();
+    return EventTopComponentState();
   }
 }
 
-class _EventTopComponent extends State<EventTopComponent> {
+class EventTopComponentState extends State<EventTopComponent> {
   static const double IMAGE_WIDTH = 34;
-
   static const double HALF_IMAGE_WIDTH = 17;
 
-  @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+  Future<Metadata>? metadataFuture;
+  String? pubkey;
 
-    var pubkey = widget.event.pubKey;
+  @override
+  void initState() {
+    super.initState();
+
+    this.pubkey = widget.event.pubKey;
+
     // if this is the zap event, change the pubkey from the zap tag info
     if (widget.event.kind == EventKind.ZAP) {
       for (var tag in widget.event.tags) {
@@ -49,20 +51,28 @@ class _EventTopComponent extends State<EventTopComponent> {
           var jsonMap = jsonDecode(description);
           var sourceEvent = Event.fromJson(jsonMap);
           if (StringUtil.isNotBlank(sourceEvent.pubKey)) {
-            pubkey = sourceEvent.pubKey;
+            this.pubkey = sourceEvent.pubKey;
           }
         }
       }
     }
 
-    return Selector<MetadataProvider, Metadata?>(
-      shouldRebuild: (previous, next) {
-        return previous != next;
-      },
-      selector: (context, metadataProvider) {
-        return metadataProvider.getMetadata(pubkey);
-      },
-      builder: (context, metadata, child) {
+    this.metadataFuture = metadataLoader.load(this.pubkey!);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (this.pubkey == null) return Container();
+
+    var themeData = Theme.of(context);
+    var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+
+    return FutureBuilder(
+      future: this.metadataFuture,
+      initialData: Metadata.blank(this.pubkey!),
+      builder: (context, snapshot) {
+        final metadata = snapshot.data;
+
         var themeData = Theme.of(context);
 
         Widget? imageWidget;

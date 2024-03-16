@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:pointycastle/ecc/api.dart';
 import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
@@ -8,16 +9,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+
 import 'package:loure/component/datetime_picker_component.dart';
 import 'package:loure/component/editor/zap_goal_input_component.dart';
 import 'package:loure/component/webview_router.dart';
 import 'package:loure/provider/list_provider.dart';
 import 'package:loure/sendbox/sendbox.dart';
-import 'package:pointycastle/ecc/api.dart';
-import 'package:provider/provider.dart';
-
 import 'package:loure/client/event.dart';
-import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/event_kind.dart';
 import 'package:loure/client/nip04/nip04.dart';
 import 'package:loure/client/nip19/nip19.dart';
 import 'package:loure/client/nip19/nip19_tlv.dart';
@@ -533,34 +533,13 @@ mixin EditorMixin {
             if (!_lastIsLineEnd(result)) {
               result += " ";
             }
-            // if (agreement == null) {
-            //   var relayAddr = "";
-            //   var mentionEvent = singleEventProvider.getEvent(value);
-            //   if (mentionEvent != null && mentionEvent.sources.isNotEmpty) {
-            //     relayAddr = mentionEvent.sources[0];
-            //   }
-            //   tags.add(["e", value, relayAddr, "mention"]);
-            //   var index = tags.length - 1;
-            //   result += "#[$index] ";
-            // } else {
-            //   result += "nostr:${Nip19.encodeNoteId(value)} ";
-            // }
-            var mentionEvent = singleEventProvider.getEvent(value);
-            if (mentionEvent != null && mentionEvent.sources.isNotEmpty) {
-              List<String> relays = [];
-              if (mentionEvent.sources.length > 3) {
-                relays.add(mentionEvent.sources[0]);
-                relays.add(mentionEvent.sources[1]);
-                relays.add(mentionEvent.sources[2]);
-              } else {
-                relays.addAll(mentionEvent.sources);
-              }
-              var nevent = Nevent(
-                  id: value, relays: relays, author: mentionEvent.pubKey);
-              result += "${NIP19Tlv.encodeNevent(nevent)} ";
-            } else {
-              result += "nostr:${Nip19.encodeNoteId(value)} ";
+            var nevent = Nevent(id: value);
+            var mentionEvent = nostr.idIndex[value];
+            if (mentionEvent != null) {
+              nevent.author = mentionEvent.pubKey;
+              nevent.relays = mentionEvent.sources.take(3);
             }
+            result += "${NIP19Tlv.encodeNevent(nevent)} ";
             continue;
           }
 
@@ -602,39 +581,37 @@ mixin EditorMixin {
       // dm message
       result = NIP04.encrypt(result, agreement, pubkey!);
       event = Event.finalize(
-          nostr.privateKey, kind.EventKind.DIRECT_MESSAGE, allTags, result,
+          nostr.privateKey, EventKind.DIRECT_MESSAGE, allTags, result,
           publishAt: publishAt);
     } else if (inputPoll) {
       // poll event
       // get poll tag from PollInputComponentn
       var pollTags = pollInputController.getTags();
       allTags.addAll(pollTags);
-      event = Event.finalize(
-          nostr.privateKey, kind.EventKind.POLL, allTags, result,
+      event = Event.finalize(nostr.privateKey, EventKind.POLL, allTags, result,
           publishAt: publishAt);
     } else if (inputZapGoal) {
       // zap goal event
       var extralTags = zapGoalInputController.getTags();
       allTags.addAll(extralTags);
       event = Event.finalize(
-          nostr.privateKey, kind.EventKind.ZAP_GOALS, allTags, result,
+          nostr.privateKey, EventKind.ZAP_GOALS, allTags, result,
           publishAt: publishAt);
     } else {
       // text note
       event = Event.finalize(
-          nostr.privateKey, kind.EventKind.TEXT_NOTE, allTags, result,
+          nostr.privateKey, EventKind.TEXT_NOTE, allTags, result,
           publishAt: publishAt);
     }
 
     if (publishAt != null) {
-      await SendBox.submit(event, relayProvider.relayAddrs);
-      return event;
+      await SendBox.submit(event, nostr.relayList.write);
     } else {
-      var e = nostr.broadcast(event);
+      nostr.pool.publish(nostr.relayList.write, event);
       log(jsonEncode(event.toJson()));
-
-      return e;
     }
+
+    return event;
   }
 
   String handleInlineValue(String result, String value) {
@@ -711,7 +688,7 @@ mixin EditorMixin {
   Future<void> addCustomEmoji() async {
     var emoji = await CustomEmojiAddDialog.show(getContext());
     if (emoji != null) {
-      listProvider.addCustomEmoji(emoji);
+      emojiProvider.addCustomEmoji(emoji);
     }
   }
 

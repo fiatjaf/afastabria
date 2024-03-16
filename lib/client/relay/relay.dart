@@ -6,7 +6,6 @@ import 'dart:js_interop_unsafe';
 import 'package:loure/main.dart';
 import 'package:loure/client/event.dart';
 import 'package:loure/client/filter.dart';
-
 import 'package:loure/client/relay/util.dart';
 import 'package:loure/client/relay/relay_info.dart';
 
@@ -94,7 +93,7 @@ abstract class Relay {
         case 'OK':
           final id = message[1] as String;
 
-          nostr.eventIndex.update(id, (Event evt) {
+          nostr.idIndex.update(id, (Event evt) {
             evt.sources.add(this.url);
             return evt;
           });
@@ -127,13 +126,7 @@ abstract class Relay {
               return;
             }
 
-            nostr.eventIndex.update(event.id, (Event curr) {
-              curr.sources.add(this.url);
-              return curr;
-            }, ifAbsent: () {
-              event.sources.add(this.url);
-              return event;
-            });
+            nostr.updateIndexesAndSource(event, this.url);
 
             sub.onEvent(event);
           }

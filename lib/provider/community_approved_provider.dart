@@ -38,7 +38,7 @@ class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
       ids.addAll(eids);
       filter["#e"] = ids;
       eids.clear();
-      nostr.query([filter], onEvent);
+      nostr.pool.querySync(["wss://relay.nostr.band"], filter).then(onEvent);
     }
 
     if (pendingEvents.isNotEmpty) {
@@ -63,8 +63,9 @@ class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
     }
   }
 
-  void onEvent(Event e) {
-    pendingEvents.add(e);
+  void onEvent(Event? event) {
+    if (event == null) return;
+    pendingEvents.add(event);
     later(laterFunction, null);
   }
 

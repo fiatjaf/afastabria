@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/event_kind.dart';
 import 'package:loure/client/event.dart';
 import 'package:loure/client/filter.dart';
-import 'package:loure/client/nostr.dart';
+import 'package:loure/client/relay/relay_pool.dart';
 import 'package:loure/data/event_mem_box.dart';
 import 'package:loure/main.dart';
 import 'package:loure/util/pendingevents_later_function.dart';
-import 'package:loure/util/string_util.dart';
 
-class MentionMeProvider extends ChangeNotifier
-    with PendingEventsLaterFunction {
+class MentionMeProvider extends ChangeNotifier with PendingEventsLaterFunction {
   late int _initTime;
-
   late EventMemBox eventBox;
 
   MentionMeProvider() {
@@ -39,64 +36,39 @@ class MentionMeProvider extends ChangeNotifier
     return _initTime;
   }
 
-  final List<String> _subscribeIds = [];
+  ManySubscriptionHandle? subHandle;
 
-  List<int> queryEventKinds() {
-    return [
-      kind.EventKind.TEXT_NOTE,
-      kind.EventKind.REPOST,
-      kind.EventKind.BADGE_AWARD,
-      kind.EventKind.GENERIC_REPOST,
-      kind.EventKind.ZAP,
-      kind.EventKind.LONG_FORM,
-    ];
-  }
+  void doQuery({int? until}) {
+    if (this.subHandle != null) {
+      this.subHandle!.close();
+    }
 
-  String? subscribeId;
-
-  void doQuery({Nostr? targetNostr, bool initQuery = false, int? until}) {
-    targetNostr ??= nostr;
-    var filter = Filter(
-      kinds: queryEventKinds(),
+    final filter = Filter(
+      kinds: [
+        EventKind.TEXT_NOTE,
+        EventKind.REPOST,
+        EventKind.BADGE_AWARD,
+        EventKind.GENERIC_REPOST,
+        EventKind.ZAP,
+        EventKind.LONG_FORM,
+      ],
       until: until ?? _initTime,
       limit: 50,
-      p: [targetNostr.publicKey],
+      p: [nostr.publicKey],
     );
 
-    if (subscribeId != null) {
-      try {
-        targetNostr.unsubscribe(subscribeId!);
-      } catch (e) {}
+    var relays = [...nostr.relayList.read];
+    List<Filter> Function(String, List<Filter>)? filterModifier;
+
+    if (!this.eventBox.isEmpty()) {
+      var oldestCreatedAts = this.eventBox.oldestCreatedAtByRelay(relays);
+      filterModifier = (url, filters) {
+        filters[0].until = oldestCreatedAts.createdAtMap[url] ?? until;
+        return filters;
+      };
     }
 
-    subscribeId = _doQueryFunc(targetNostr, filter, initQuery: initQuery);
-  }
-
-  String _doQueryFunc(Nostr targetNostr, Filter filter,
-      {bool initQuery = false}) {
-    var subscribeId = StringUtil.rndNameStr(12);
-    if (initQuery) {
-      // targetNostr.pool.subscribe([filter.toJson()], onEvent, subscribeId);
-      targetNostr.addInitQuery([filter.toJson()], onEvent, id: subscribeId);
-    } else {
-      if (!eventBox.isEmpty()) {
-        var activeRelays = targetNostr.activeRelays();
-        var oldestCreatedAts =
-            eventBox.oldestCreatedAtByRelay(activeRelays, _initTime);
-        Map<String, List<Map<String, dynamic>>> filtersMap = {};
-        for (var relay in activeRelays) {
-          var oldestCreatedAt = oldestCreatedAts.createdAtMap[relay.url];
-          if (oldestCreatedAt != null) {
-            filter.until = oldestCreatedAt;
-            filtersMap[relay.url] = [filter.toJson()];
-          }
-        }
-        targetNostr.queryByFilters(filtersMap, onEvent, id: subscribeId);
-      } else {
-        targetNostr.query([filter.toJson()], onEvent, id: subscribeId);
-      }
-    }
-    return subscribeId;
+    nostr.pool.querySync(relays, filter, filterModifier: filterModifier);
   }
 
   void onEvent(Event event) {
@@ -117,10 +89,7 @@ class MentionMeProvider extends ChangeNotifier
     var allEvents = mentionMeNewProvider.eventMemBox.all();
 
     eventBox.addList(allEvents);
-
-    // sort
     eventBox.sort();
-
     mentionMeNewProvider.clear();
 
     // update ui

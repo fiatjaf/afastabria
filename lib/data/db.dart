@@ -20,17 +20,17 @@ class DB {
         onCreate: (Database db, int version) async {
       // init db
       db.execute(
-          "create table metadata(pub_key      TEXT not null primary key,banner       TEXT,website      TEXT,lud16        TEXT,lud06        TEXT,nip05        TEXT,picture      TEXT,display_name TEXT,about        TEXT,name         TEXT,updated_at   datetime, valid  INTEGER);");
+          "create table metadata(pubkey TEXT not null primary key, event text not null);");
       db.execute(
-          "create table event(key_index  INTEGER, id         text,pubkey     text,created_at integer,kind       integer,tags       text,content    text);");
+          "create table event(key_index INTEGER, id text, pubkey text, created_at integer, kind integer, tags text, content text);");
       db.execute(
           "create unique index event_key_index_id_uindex on event (key_index, id);");
       db.execute(
-          "create index event_date_index    on event (key_index, kind, created_at);");
+          "create index event_date_index on event (key_index, kind, created_at);");
       db.execute(
-          "create index event_pubkey_index    on event (key_index, kind, pubkey, created_at);");
+          "create index event_pubkey_index on event (key_index, kind, pubkey, created_at);");
       db.execute(
-          "create table dm_session_info(key_index  INTEGER, pubkey      text    not null,readed_time integer not null,value1      text,value2      text,value3      text);");
+          "create table dm_session_info(key_index INTEGER, pubkey text not null, readed_time integer not null, value1 text, value2 text, value3 text);");
       db.execute(
           "create unique index dm_session_info_uindex on dm_session_info (key_index, pubkey);");
     });

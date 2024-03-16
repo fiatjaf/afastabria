@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:loure/client/event.dart';
 
-import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/event_kind.dart';
 import 'package:loure/client/filter.dart';
-import 'package:loure/client/nostr.dart';
 import 'package:loure/main.dart';
 
 class BadgeProvider extends ChangeNotifier {
@@ -29,39 +28,24 @@ class BadgeProvider extends ChangeNotifier {
     }
     tags.add(eList);
 
-    var newEvent = Event.finalize(
-        nostr.privateKey, kind.EventKind.BADGE_ACCEPT, tags, content);
+    this.badgeEvent = nostr.sendList(EventKind.BADGE_ACCEPT, tags, content);
 
-    var result = nostr.broadcast(newEvent);
-    badgeEvent = result;
-    _parseProfileBadge();
-    notifyListeners();
+    this._parseProfileBadge();
+    this.notifyListeners();
   }
 
-  void reload({bool initQuery = false, Nostr? targetNostr}) {
-    targetNostr ??= nostr;
-
-    String? pubkey;
-    pubkey = targetNostr.publicKey;
-
-    if (pubkey == null) {
-      return;
-    }
-
+  void reload() {
     var filter =
-        Filter(authors: [pubkey], kinds: [kind.EventKind.BADGE_ACCEPT]);
-    if (initQuery) {
-      targetNostr.addInitQuery([filter], onEvent);
-    } else {
-      targetNostr.query([filter.toJson()], onEvent);
-    }
+        Filter(authors: [nostr.publicKey], kinds: [EventKind.BADGE_ACCEPT]);
+
+    nostr.pool.subscribeMany(nostr.relayList.write, [filter], onEvent: onEvent);
   }
 
   void onEvent(Event event) {
     if (badgeEvent == null || event.createdAt > badgeEvent!.createdAt) {
-      badgeEvent = event;
-      _parseProfileBadge();
-      notifyListeners();
+      this.badgeEvent = event;
+      this._parseProfileBadge();
+      this.notifyListeners();
     }
   }
 

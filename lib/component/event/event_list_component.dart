@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:loure/provider/community_approved_provider.dart';
-import 'package:loure/util/string_util.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 
-import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/main.dart';
+import 'package:loure/provider/community_approved_provider.dart';
+import 'package:loure/util/string_util.dart';
+import 'package:loure/client/event_kind.dart';
 import 'package:loure/client/event.dart';
 import 'package:loure/client/event_relation.dart';
 import 'package:loure/consts/base.dart';
@@ -15,24 +16,19 @@ import 'package:loure/util/router_util.dart';
 import 'package:loure/component/event/event_bitcion_icon_component.dart';
 import 'package:loure/component/event/event_main_component.dart';
 
+// ignore: must_be_immutable
 class EventListComponent extends StatefulWidget {
   Event event;
-
   String? pagePubkey;
-
   bool jumpable;
-
   bool showVideo;
-
   bool imageListMode;
-
   bool showDetailBtn;
-
   bool showLongContent;
-
   bool showCommunity;
 
-  EventListComponent({super.key, 
+  EventListComponent({
+    super.key,
     required this.event,
     this.pagePubkey,
     this.jumpable = true,
@@ -82,7 +78,7 @@ class _EventListComponent extends State<EventListComponent> {
       ),
     );
 
-    if (widget.event.kind == kind.EventKind.ZAP) {
+    if (widget.event.kind == EventKind.ZAP) {
       main = Stack(
         children: [
           main,
@@ -118,7 +114,7 @@ class _EventListComponent extends State<EventListComponent> {
   }
 
   void jumpToThread() {
-    if (widget.event.kind == kind.EventKind.REPOST) {
+    if (widget.event.kind == EventKind.REPOST) {
       // try to find target event
       if (widget.event.content.contains("\"pubkey\"")) {
         try {
@@ -133,7 +129,7 @@ class _EventListComponent extends State<EventListComponent> {
 
       var eventRelation = EventRelation.fromEvent(widget.event);
       if (StringUtil.isNotBlank(eventRelation.rootId)) {
-        var event = singleEventProvider.getEvent(eventRelation.rootId!);
+        var event = nostr.idIndex[eventRelation.rootId!];
         if (event != null) {
           RouterUtil.router(context, RouterPath.THREAD_DETAIL, event);
           return;

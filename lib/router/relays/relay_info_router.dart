@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:loure/client/client_utils/keys.dart';
+import 'package:loure/main.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:loure/component/name_component.dart';
 import 'package:loure/consts/base.dart';
 import 'package:loure/consts/router_path.dart';
 import 'package:loure/data/metadata.dart';
-import 'package:loure/provider/metadata_provider.dart';
 import 'package:loure/component/image_component.dart';
 import 'package:loure/component/webview_router.dart';
 import 'package:loure/util/router_util.dart';
@@ -18,14 +18,16 @@ class RelayInfoRouter extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _RelayInfoRouter();
+    return RelayInfoRouterState();
   }
 }
 
-class _RelayInfoRouter extends State<RelayInfoRouter> {
+class RelayInfoRouterState extends State<RelayInfoRouter> {
   double IMAGE_WIDTH = 45;
   RelayInfo? info;
   String? url;
+
+  Future<Metadata>? ownerFuture;
 
   @override
   void initState() {
@@ -44,6 +46,10 @@ class _RelayInfoRouter extends State<RelayInfoRouter> {
         this.info = RelayInfo.fromJson(jsonDecode(response.body) as Map);
       });
     });
+
+    this.ownerFuture = this.info != null && keyIsValid(this.info!.pubKey)
+        ? metadataLoader.load(this.info!.pubKey)
+        : null;
   }
 
   @override
@@ -82,56 +88,63 @@ class _RelayInfoRouter extends State<RelayInfoRouter> {
       child: SelectableText(this.url!),
     ));
 
-    list.add(RelayInfoItemComponent(
-      title: "Owner",
-      child: Selector<MetadataProvider, Metadata?>(
-        builder: (context, metadata, child) {
-          List<Widget> list = [];
+    if (this.ownerFuture != null) {
+      list.add(
+        RelayInfoItemComponent(
+          title: "Owner",
+          child: FutureBuilder(
+            future: ownerFuture,
+            initialData: Metadata.blank(this.info!.pubKey),
+            builder: (context, snapshot) {
+              final metadata = snapshot.data;
 
-          Widget? imageWidget;
-          if (metadata != null) {
-            imageWidget = ImageComponent(
-              imageUrl: metadata.picture!,
-              width: IMAGE_WIDTH,
-              height: IMAGE_WIDTH,
-              fit: BoxFit.cover,
-              placeholder: (context, url) => const CircularProgressIndicator(),
-            );
-          }
-          list.add(Container(
-            alignment: Alignment.center,
-            height: IMAGE_WIDTH,
-            width: IMAGE_WIDTH,
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(IMAGE_WIDTH / 2),
-              color: Colors.grey,
-            ),
-            child: imageWidget,
-          ));
+              Widget? imageWidget;
+              if (metadata != null || metadata.isBlank) {
+                imageWidget = ImageComponent(
+                  imageUrl: metadata.picture!,
+                  width: IMAGE_WIDTH,
+                  height: IMAGE_WIDTH,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
+                );
+              }
 
-          list.add(Container(
-            margin: const EdgeInsets.only(left: Base.BASE_PADDING),
-            child: NameComponnet(
-              pubkey: this.info!.pubKey,
-              metadata: metadata,
-            ),
-          ));
+              List<Widget> list = [];
+              list.add(Container(
+                alignment: Alignment.center,
+                height: IMAGE_WIDTH,
+                width: IMAGE_WIDTH,
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(IMAGE_WIDTH / 2),
+                  color: Colors.grey,
+                ),
+                child: imageWidget,
+              ));
 
-          return GestureDetector(
-            onTap: () {
-              RouterUtil.router(context, RouterPath.USER, this.info!.pubKey);
+              list.add(Container(
+                margin: const EdgeInsets.only(left: Base.BASE_PADDING),
+                child: NameComponnet(
+                  pubkey: this.info!.pubKey,
+                  metadata: metadata,
+                ),
+              ));
+
+              return GestureDetector(
+                onTap: () {
+                  RouterUtil.router(
+                      context, RouterPath.USER, this.info!.pubKey);
+                },
+                child: Row(
+                  children: list,
+                ),
+              );
             },
-            child: Row(
-              children: list,
-            ),
-          );
-        },
-        selector: (context, provider) {
-          return provider.getMetadata(this.info!.pubKey);
-        },
-      ),
-    ));
+          ),
+        ),
+      );
+    }
 
     list.add(RelayInfoItemComponent(
       title: "Contact",

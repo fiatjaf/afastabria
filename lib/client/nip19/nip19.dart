@@ -1,6 +1,15 @@
 import 'package:bech32/bech32.dart';
 import 'package:hex/hex.dart';
-import 'package:loure/client/nip19/hrps.dart';
+
+class Hrps {
+  static const String PUBLIC_KEY = "npub";
+  static const String PRIVATE_KEY = "nsec";
+  static const String NOTE_ID = "note";
+  static const String NPROFILE = "nprofile";
+  static const String NEVENT = "nevent";
+  static const String NRELAY = "nrelay";
+  static const String NADDR = "naddr";
+}
 
 class Nip19 {
   // static String encodePubKey(String pubKey) {

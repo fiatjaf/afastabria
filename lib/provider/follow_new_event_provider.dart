@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:loure/client/event.dart';
+import 'package:loure/client/event_kind.dart';
 import 'package:loure/client/filter.dart';
 import 'package:loure/client/nip02/contact.dart';
+import 'package:loure/client/relay/relay_pool.dart';
 import 'package:loure/data/event_mem_box.dart';
 import 'package:loure/main.dart';
 import 'package:loure/util/pendingevents_later_function.dart';
-import 'package:loure/util/string_util.dart';
 import 'package:loure/provider/follow_event_provider.dart';
 
 class FollowNewEventProvider extends ChangeNotifier
@@ -15,67 +16,37 @@ class FollowNewEventProvider extends ChangeNotifier
   EventMemBox eventMemBox = EventMemBox();
 
   int? _localSince;
+  ManySubscriptionHandle? subHandle;
 
-  List<String> _subscribeIds = [];
-
-  void doUnscribe() {
-    if (_subscribeIds.isNotEmpty) {
-      for (var subscribeId in _subscribeIds) {
-        try {
-          nostr.unsubscribe(subscribeId);
-        } catch (e) {}
-      }
-      _subscribeIds.clear();
-    }
-  }
-
-  void queryNew() {
-    doUnscribe();
-
-    bool queriedTags = false;
+  void start() {
     _localSince =
         _localSince == null || followEventProvider.lastTime() > _localSince!
             ? followEventProvider.lastTime()
             : _localSince;
-    var filter = Filter(
-        since: _localSince! + 1, kinds: followEventProvider.queryEventKinds());
 
-    List<String> subscribeIds = [];
+    final filter =
+        Filter(since: _localSince! + 1, kinds: EventKind.SUPPORTED_EVENTS);
+
     Iterable<Contact> contactList = contactListProvider.list();
-    List<String> ids = [];
+    Set<String> pubkeys = {};
+
     for (Contact contact in contactList) {
-      ids.add(contact.publicKey);
-      if (ids.length > 100) {
-        filter.authors = ids;
-        var subscribeId = _doQueryFunc(filter, queriyTags: queriedTags);
-        subscribeIds.add(subscribeId);
-        ids = [];
-        queriedTags = true;
-      }
+      pubkeys.add(contact.publicKey);
     }
-    if (ids.isNotEmpty) {
-      filter.authors = ids;
-      var subscribeId = _doQueryFunc(filter, queriyTags: queriedTags);
-      subscribeIds.add(subscribeId);
-    }
+    pubkeys.add(nostr.publicKey);
 
-    _subscribeIds = subscribeIds;
-  }
-
-  String _doQueryFunc(Filter filter, {bool queriyTags = false}) {
-    var subscribeId = StringUtil.rndNameStr(12);
-    nostr.query(
-        FollowEventProvider.addTagCommunityFilter(
-            [filter.toJson()], queriyTags), (event) {
+    // TODO: outbox model
+    filter.authors = pubkeys.toList();
+    this.subHandle = nostr.pool.subscribeMany(
+        ["wss://relay.nostr.band"], [filter], onEvent: (Event event) {
       later(event, handleEvents, null);
-    }, id: subscribeId);
-    return subscribeId;
+    });
   }
 
   void clear() {
     eventPostMemBox.clear();
     eventMemBox.clear();
-
+    if (this.subHandle != null) this.subHandle!.close();
     notifyListeners();
   }
 

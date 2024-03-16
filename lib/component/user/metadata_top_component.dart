@@ -330,7 +330,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
       if (StringUtil.isNotBlank(widget.metadata!.nip05)) {
         topList.add(MetadataIconDataComp(
           text: widget.metadata!.nip05!,
-          leftWidget: Nip05ValidComponent(pubkey: widget.pubkey),
+          leftWidget: Nip05ValidComponent(metadata: widget.metadata!),
         ));
       }
       if (widget.metadata != null) {
@@ -482,6 +482,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
   }
 }
 
+// ignore: must_be_immutable
 class MetadataIconBtn extends StatelessWidget {
   void Function()? onTap;
 

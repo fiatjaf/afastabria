@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:widget_size/widget_size.dart';
 
 import 'package:loure/client/event.dart';
-import 'package:loure/client/filter.dart';
 import 'package:loure/client/event_kind.dart' as kind;
 import 'package:loure/component/event/event_list_component.dart';
 import 'package:loure/component/event/event_load_list_component.dart';
@@ -29,6 +28,8 @@ class _EventDetailRouter extends State<EventDetailRouter> {
   bool showTitle = false;
   final ScrollController _controller = ScrollController();
   double rootEventHeight = 120;
+
+  String? eventId;
   Future<Event?>? eventFuture;
 
   @override
@@ -51,17 +52,10 @@ class _EventDetailRouter extends State<EventDetailRouter> {
     if (arg != null) {
       if (arg is Event) {
         this.eventFuture = Future.value(arg);
+        eventId = arg.id;
       } else if (arg is String) {
-        var eventId = arg;
-        var evt = nostr.eventIndex[eventId];
-        if (evt != null) {
-          eventFuture = Future.value(evt);
-          return;
-        } else {
-          eventFuture =
-              nostr.pool.querySingle(nostr.ID_RELAYS, Filter(ids: [eventId]));
-          return;
-        }
+        eventId = arg;
+        this.eventFuture = nostr.getByID(arg);
       }
     }
 
@@ -162,7 +156,7 @@ class _EventDetailRouter extends State<EventDetailRouter> {
         return main;
       },
       selector: (context, provider) {
-        return provider.get(eventId);
+        return this.eventId == null ? null : provider.get(this.eventId!);
       },
       shouldRebuild: (previous, next) {
         if ((previous == null && next != null) ||

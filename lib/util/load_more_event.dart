@@ -28,15 +28,10 @@ mixin LoadMoreEvent {
   }
 
   int queryInterval = 1000 * 15;
-
   int? until;
-
   int queryLimit = 50;
-
   DateTime? queryTime;
-
   int beginQueryNum = 0;
-
   bool forceUserLimit = false;
 
   // this function should be call by user in the build function

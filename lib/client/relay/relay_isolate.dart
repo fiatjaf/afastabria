@@ -27,7 +27,6 @@ class RelayIsolate extends Relay {
   Future<bool> doConnect() async {
     if (subToMainReceivePort == null) {
       relayStatus.connected = ConnState.CONNECTING;
-      getRelayInfo(url);
 
       // never run isolate, begin to run
       subToMainReceivePort = ReceivePort("relay_stm_$url");

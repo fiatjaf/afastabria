@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:loure/component/user/metadata_top_component.dart';
 import 'package:loure/data/event_find_util.dart';
 import 'package:loure/data/metadata.dart';
+import 'package:loure/data/metadata_db.dart';
 import 'package:loure/router/search/search_action_item_component.dart';
 import 'package:loure/util/when_stop_function.dart';
 import 'package:provider/provider.dart';
@@ -288,8 +289,6 @@ class _SearchRouter extends CustState<SearchRouter>
     disposeWhenStop();
   }
 
-  static const int searchMemLimit = 100;
-
   onDeletedCallback(Event event) {
     eventMemBox.delete(event.id);
     setState(() {});
@@ -329,11 +328,11 @@ class _SearchRouter extends CustState<SearchRouter>
     searchAction = SearchActions.searchMetadataFromCache;
 
     var text = controller.text;
-    if (StringUtil.isNotBlank(text)) {
-      var list = metadataProvider.findUser(text, limit: searchMemLimit);
+    if (text.length >= 2) {
+      final list = MetadataDB.search(text);
 
       setState(() {
-        metadatas = list;
+        metadatas = list.toList();
       });
     }
   }

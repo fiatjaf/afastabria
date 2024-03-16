@@ -21,7 +21,6 @@ import 'package:loure/consts/base.dart';
 import 'package:loure/data/metadata.dart';
 import 'package:loure/main.dart';
 import 'package:loure/provider/dm_provider.dart';
-import 'package:loure/provider/metadata_provider.dart';
 import 'package:loure/util/router_util.dart';
 import 'package:loure/router/dm/dm_detail_item_component.dart';
 
@@ -38,11 +37,13 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
   DMSessionDetail? detail;
 
   ECDHBasicAgreement? agreement;
+  Future<Metadata>? metadataFuture;
 
   @override
   void initState() {
     super.initState();
     handleFocusInit();
+    this.metadataFuture = metadataLoader.load(detail!.dmSession.pubkey);
   }
 
   @override
@@ -60,15 +61,14 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
     }
     detail = arg as DMSessionDetail;
 
-    var nameComponnet = Selector<MetadataProvider, Metadata?>(
-      builder: (context, metadata, child) {
+    var nameComponnet = FutureBuilder(
+      future: this.metadataFuture,
+      initialData: Metadata.blank(detail!.dmSession.pubkey),
+      builder: (context, snapshot) {
         return NameComponnet(
           pubkey: detail!.dmSession.pubkey,
           metadata: metadata,
         );
-      },
-      selector: (context, provider) {
-        return provider.getMetadata(detail!.dmSession.pubkey);
       },
     );
 

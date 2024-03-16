@@ -1,17 +1,16 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:bot_toast/bot_toast.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:share_plus/share_plus.dart';
+
 import 'package:loure/client/nip19/nip19.dart';
 import 'package:loure/component/name_component.dart';
 import 'package:loure/component/user/metadata_top_component.dart';
 import 'package:loure/data/metadata.dart';
-import 'package:pretty_qr_code/pretty_qr_code.dart';
-import 'package:provider/provider.dart';
+import 'package:loure/main.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:share_plus/share_plus.dart';
-
 import 'package:loure/consts/base.dart';
-import 'package:loure/provider/metadata_provider.dart';
 import 'package:loure/util/router_util.dart';
 import 'package:loure/util/store_util.dart';
 import 'package:loure/util/string_util.dart';
@@ -44,6 +43,13 @@ class _QrcodeDialog extends State<QrcodeDialog> {
   static const double QR_WIDTH = 200;
 
   ScreenshotController screenshotController = ScreenshotController();
+  Future<Metadata>? metadataFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    this.metadataFuture = metadataLoader.load(widget.pubkey);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +59,12 @@ class _QrcodeDialog extends State<QrcodeDialog> {
 
     List<Widget> list = [];
     var nip19Pubkey = Nip19.encodePubKey(widget.pubkey);
-    Widget topWidget = Selector<MetadataProvider, Metadata?>(
-      builder: (context, metadata, child) {
+    Widget topWidget = FutureBuilder(
+      future: this.metadataFuture,
+      initialData: Metadata.blank(widget.pubkey),
+      builder: (context, snapshot) {
+        final metadata = snapshot.data;
+
         Widget? imageWidget;
         if (metadata != null && StringUtil.isNotBlank(metadata.picture)) {
           imageWidget = ImageComponent(
@@ -103,9 +113,6 @@ class _QrcodeDialog extends State<QrcodeDialog> {
             ],
           ),
         );
-      },
-      selector: (content, provider) {
-        return provider.getMetadata(widget.pubkey);
       },
     );
     list.add(topWidget);

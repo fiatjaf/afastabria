@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:loure/client/aid.dart';
 import 'package:loure/client/event.dart';
-import 'package:loure/client/event_kind.dart' as kind;
 import 'package:loure/client/nip172/community_info.dart';
 
 import 'package:loure/client/filter.dart';
 import 'package:loure/main.dart';
 import 'package:loure/util/later_function.dart';
-import 'package:loure/util/string_util.dart';
 
 class CommunityInfoProvider extends ChangeNotifier with LaterFunction {
   final Map<String, CommunityInfo> _cache = {};
@@ -44,21 +42,18 @@ class CommunityInfoProvider extends ChangeNotifier with LaterFunction {
   }
 
   void _laterSearch() {
-    List<Map<String, dynamic>> filters = [];
+    List<Filter> filters = [];
     for (var idStr in _needPullIds) {
       var aId = AId.fromString(idStr);
       if (aId == null) {
         continue;
       }
 
-      var filter = Filter(
-          kinds: [kind.EventKind.COMMUNITY_DEFINITION], authors: [aId.pubkey]);
-      var queryArg = filter.toJson();
-      queryArg["#d"] = [aId.title];
-      filters.add(queryArg);
+      filters.add(aId.toFilter());
     }
-    var subscriptId = StringUtil.rndNameStr(16);
-    nostr.query(filters, _onEvent, id: subscriptId);
+
+    nostr.pool.subscribeManyEose(["wss://relay.nostr.band"], filters,
+        onEvent: _onEvent);
 
     for (var pubkey in _needPullIds) {
       _handingIds[pubkey] = 1;
@@ -77,7 +72,7 @@ class CommunityInfoProvider extends ChangeNotifier with LaterFunction {
     for (var event in _pendingEvents) {
       var communityInfo = CommunityInfo.fromEvent(event);
       if (communityInfo != null) {
-        var aid = communityInfo.aId.toAString();
+        var aid = communityInfo.aId.toTag();
         var oldInfo = _cache[aid];
         if (oldInfo == null || oldInfo.createdAt < communityInfo.createdAt) {
           _cache[aid] = communityInfo;

@@ -664,14 +664,11 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
       deleteAccountLoadingCancel = BotToast.showLoading();
       try {
         whenStopMS = 2000;
-
         waitingDeleteEventBox.clear();
 
         // use a blank metadata to update it
-        var blankMetadata = Metadata();
-        var updateEvent = Event.finalize(nostr.privateKey,
-            kind.EventKind.METADATA, [], jsonEncode(blankMetadata));
-        nostr.broadcast(updateEvent);
+        var blankMetadata = Metadata.blank("");
+        nostr.sendMetadata([], blankMetadata.toJson());
 
         // use a blank contact list to update it
         var blankContactList = CustContactList();
@@ -684,7 +681,9 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
           kind.EventKind.REPOST,
           kind.EventKind.GENERIC_REPOST,
         ]);
-        nostr.query([filter.toJson()], onDeletedEventReceive);
+
+        nostr.pool.subscribeManyEose(["wss://relay.nostr.band"], [filter],
+            onEvent: onDeletedEventReceive);
       } catch (e) {
         log("delete account error ${e.toString()}");
       }
@@ -718,9 +717,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
       if (index != null) {
         AccountManagerComponentState.onLogoutTap(index,
             routerBack: true, context: context);
-        metadataProvider.clear();
-      } else {
-        nostr = null;
+        metadataLoader.clear();
       }
       if (deleteAccountLoadingCancel != null) {
         deleteAccountLoadingCancel!.call();

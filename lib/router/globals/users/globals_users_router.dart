@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:loure/util/platform_util.dart';
-import 'package:provider/provider.dart';
 
 import 'package:loure/component/keep_alive_cust_state.dart';
 import 'package:loure/component/placeholder/metadata_list_placeholder.dart';
@@ -12,7 +11,6 @@ import 'package:loure/consts/base.dart';
 import 'package:loure/consts/router_path.dart';
 import 'package:loure/data/metadata.dart';
 import 'package:loure/main.dart';
-import 'package:loure/provider/metadata_provider.dart';
 import 'package:loure/util/dio_util.dart';
 import 'package:loure/util/router_util.dart';
 import 'package:loure/util/string_util.dart';
@@ -22,18 +20,25 @@ class GlobalsUsersRouter extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _GlobalsUsersRouter();
+    return GlobalsUsersRouterState();
   }
 }
 
-class _GlobalsUsersRouter extends KeepAliveCustState<GlobalsUsersRouter> {
+class GlobalsUsersRouterState extends KeepAliveCustState<GlobalsUsersRouter> {
   ScrollController scrollController = ScrollController();
 
   List<String> pubkeys = [];
+  List<Future<Metadata>>? metadataFutures;
+
+  @override
+  void initState() {
+    super.initState();
+    this.metadataFutures = this.pubkeys.map(metadataLoader.load).toList();
+  }
 
   @override
   Widget doBuild(BuildContext context) {
-    if (pubkeys.isEmpty) {
+    if (this.pubkeys.isEmpty) {
       return MetadataListPlaceholder(
         onRefresh: refresh,
       );
@@ -41,35 +46,35 @@ class _GlobalsUsersRouter extends KeepAliveCustState<GlobalsUsersRouter> {
 
     var main = ListView.builder(
       controller: scrollController,
+      itemCount: this.pubkeys.length,
       itemBuilder: (context, index) {
-        var pubkey = pubkeys[index];
+        var pubkey = this.pubkeys[index];
+
         if (StringUtil.isBlank(pubkey)) {
           return Container();
         }
 
         return Container(
           margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
-          child: Selector<MetadataProvider, Metadata?>(
-            builder: (context, metadata, child) {
-              return GestureDetector(
-                onTap: () {
-                  RouterUtil.router(context, RouterPath.USER, pubkey);
-                },
-                behavior: HitTestBehavior.translucent,
-                child: MetadataComponent(
+          child: GestureDetector(
+            onTap: () {
+              RouterUtil.router(context, RouterPath.USER, pubkey);
+            },
+            behavior: HitTestBehavior.translucent,
+            child: FutureBuilder(
+              future: this.metadataFutures![index],
+              initialData: Metadata.blank(pubkey),
+              builder: (context, snapshot) {
+                return MetadataComponent(
                   pubKey: pubkey,
-                  metadata: metadata,
+                  metadata: snapshot.data,
                   jumpable: true,
-                ),
-              );
-            },
-            selector: (context, provider) {
-              return provider.getMetadata(pubkey);
-            },
+                );
+              },
+            ),
           ),
         );
       },
-      itemCount: pubkeys.length,
     );
 
     if (PlatformUtil.isTableMode()) {

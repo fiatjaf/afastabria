@@ -5,6 +5,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_socks_proxy/socks_proxy.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loure/client/metadata_loader.dart';
 import 'package:loure/client/nostr.dart';
 import 'package:loure/client/relay/relay_pool.dart';
 import 'package:loure/provider/badge_definition_provider.dart';
@@ -41,12 +42,9 @@ import 'package:loure/provider/follow_event_provider.dart';
 import 'package:loure/provider/index_provider.dart';
 import 'package:loure/provider/link_preview_data_provider.dart';
 import 'package:loure/provider/list_provider.dart';
-import 'package:loure/provider/list_set_provider.dart';
 import 'package:loure/provider/mention_me_provider.dart';
-import 'package:loure/provider/metadata_provider.dart';
 import 'package:loure/provider/pc_router_fake_provider.dart';
 import 'package:loure/provider/notice_provider.dart';
-import 'package:loure/provider/replaceable_event_provider.dart';
 import 'package:loure/provider/setting_provider.dart';
 import 'package:loure/provider/webview_provider.dart';
 import 'package:loure/router/bookmark/bookmark_router.dart';
@@ -74,9 +72,10 @@ import 'package:loure/util/image/cache_manager_builder.dart';
 import 'package:loure/util/media_data_cache.dart';
 import 'package:loure/util/string_util.dart';
 
+late MetadataLoader metadataLoader;
 late SharedPreferences sharedPreferences;
+
 late SettingProvider settingProvider;
-late MetadataProvider metadataProvider;
 late ContactListProvider contactListProvider;
 late FollowEventProvider followEventProvider;
 late FollowNewEventProvider followNewEventProvider;
@@ -97,7 +96,6 @@ late WebViewProvider webViewProvider;
 // late CustomEmojiProvider customEmojiProvider;
 late CommunityApprovedProvider communityApprovedProvider;
 late CommunityInfoProvider communityInfoProvider;
-late ReplaceableEventProvider replaceableEventProvider;
 late BookmarkProvider bookmarkProvider;
 late EmojiProvider emojiProvider;
 late BadgeProvider badgeProvider;
@@ -145,13 +143,11 @@ Future<void> main() async {
   var dbInitTask = DB.getCurrentDatabase();
   var dataUtilTask = DataUtil.getInstance();
   var dataFutureResultList = await Future.wait([dbInitTask, dataUtilTask]);
-  sharedPreferences = dataFutureResultList[1] as SharedPreferences;
 
-  var settingTask = SettingProvider.getInstance();
-  var metadataTask = MetadataProvider.getInstance();
-  var futureResultList = await Future.wait([settingTask, metadataTask]);
-  settingProvider = futureResultList[0] as SettingProvider;
-  metadataProvider = futureResultList[1] as MetadataProvider;
+  sharedPreferences = dataFutureResultList[1] as SharedPreferences;
+  metadataLoader = MetadataLoader();
+
+  settingProvider = await SettingProvider.getInstance();
   contactListProvider = ContactListProvider.getInstance();
   followEventProvider = FollowEventProvider();
   followNewEventProvider = FollowNewEventProvider();
@@ -173,7 +169,6 @@ Future<void> main() async {
   // customEmojiProvider = CustomEmojiProvider.load();
   communityApprovedProvider = CommunityApprovedProvider();
   communityInfoProvider = CommunityInfoProvider();
-  replaceableEventProvider = ReplaceableEventProvider();
   bookmarkProvider = BookmarkProvider();
   badgeProvider = BadgeProvider();
 
@@ -260,9 +255,6 @@ class _MyApp extends State<MyApp> {
         ListenableProvider<RelayPool>.value(
           value: nostr.pool,
         ),
-        ListenableProvider<MetadataProvider>.value(
-          value: metadataProvider,
-        ),
         ListenableProvider<IndexProvider>.value(
           value: indexProvider,
         ),
@@ -313,9 +305,6 @@ class _MyApp extends State<MyApp> {
         ),
         ListenableProvider<CommunityInfoProvider>.value(
           value: communityInfoProvider,
-        ),
-        ListenableProvider<ReplaceableEventProvider>.value(
-          value: replaceableEventProvider,
         ),
         ListenableProvider<BookmarkProvider>.value(
           value: bookmarkProvider,

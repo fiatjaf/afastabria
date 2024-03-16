@@ -8,7 +8,6 @@ import 'package:loure/component/editor/text_input_dialog.dart';
 import 'package:loure/component/name_component.dart';
 import 'package:loure/component/point_component.dart';
 import 'package:loure/data/metadata.dart';
-import 'package:loure/provider/metadata_provider.dart';
 import 'package:loure/provider/setting_provider.dart';
 import 'package:loure/util/router_util.dart';
 import 'package:loure/client/nostr.dart';
@@ -226,13 +225,10 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
 // ignore: must_be_immutable
 class AccountManagerItemComponent extends StatefulWidget {
   bool isCurrent;
-
   int index;
-
   String privateKey;
-
+  String publicKey;
   Function(int)? onLoginTap;
-
   Function(int)? onLogoutTap;
 
   AccountManagerItemComponent({
@@ -242,25 +238,25 @@ class AccountManagerItemComponent extends StatefulWidget {
     required this.privateKey,
     this.onLoginTap,
     this.onLogoutTap,
-  });
+  }) : this.publicKey = getPublicKey(privateKey);
 
   @override
   State<StatefulWidget> createState() {
-    return _AccountManagerItemComponent();
+    return AccountManagerItemComponentState();
   }
 }
 
-class _AccountManagerItemComponent extends State<AccountManagerItemComponent> {
+class AccountManagerItemComponentState
+    extends State<AccountManagerItemComponent> {
   static const double IMAGE_WIDTH = 26;
-
   static const double LINE_HEIGHT = 44;
 
-  late String pubkey;
+  Future<Metadata>? metadataFuture;
 
   @override
   void initState() {
     super.initState();
-    pubkey = getPublicKey(widget.privateKey);
+    this.metadataFuture = metadataLoader.load(widget.publicKey);
   }
 
   @override
@@ -272,105 +268,105 @@ class _AccountManagerItemComponent extends State<AccountManagerItemComponent> {
       cardColor = Colors.grey[300];
     }
 
-    return Selector<MetadataProvider, Metadata?>(
-        builder: (context, metadata, child) {
-      Color currentColor = Colors.green;
-      List<Widget> list = [];
+    return FutureBuilder(
+        future: this.metadataFuture,
+        initialData: Metadata.blank(widget.publicKey),
+        builder: (context, snapshot) {
+          final metadata = snapshot.data!;
 
-      var nip19PubKey = Nip19.encodePubKey(pubkey);
+          Color currentColor = Colors.green;
+          List<Widget> list = [];
 
-      Widget? imageWidget;
-      if (metadata != null) {
-        if (StringUtil.isNotBlank(metadata.picture)) {
-          imageWidget = ImageComponent(
-            imageUrl: metadata.picture!,
+          var nip19PubKey = Nip19.encodePubKey(metadata.pubkey);
+
+          Widget? imageWidget;
+          if (metadata.picture != "") {
+            imageWidget = ImageComponent(
+              imageUrl: metadata.picture!,
+              width: IMAGE_WIDTH,
+              height: IMAGE_WIDTH,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => const CircularProgressIndicator(),
+            );
+          }
+
+          list.add(Container(
+            width: 24,
+            alignment: Alignment.centerLeft,
+            child: SizedBox(
+              width: 15,
+              child: widget.isCurrent
+                  ? PointComponent(
+                      width: 15,
+                      color: currentColor,
+                    )
+                  : null,
+            ),
+          ));
+
+          list.add(Container(
             width: IMAGE_WIDTH,
             height: IMAGE_WIDTH,
-            fit: BoxFit.cover,
-            placeholder: (context, url) => const CircularProgressIndicator(),
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(IMAGE_WIDTH / 2),
+              color: Colors.grey,
+            ),
+            child: imageWidget,
+          ));
+
+          list.add(Container(
+            margin: const EdgeInsets.only(left: 5, right: 5),
+            child: NameComponnet(
+              pubkey: metadata.pubkey,
+              metadata: metadata,
+            ),
+          ));
+
+          list.add(Expanded(
+              child: Container(
+            padding: const EdgeInsets.only(
+              left: Base.BASE_PADDING_HALF,
+              right: Base.BASE_PADDING_HALF,
+              top: 4,
+              bottom: 4,
+            ),
+            decoration: BoxDecoration(
+              color: cardColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              nip19PubKey,
+              overflow: TextOverflow.ellipsis,
+            ),
+          )));
+
+          list.add(GestureDetector(
+            onTap: onLogout,
+            child: Container(
+              padding: const EdgeInsets.only(left: 5),
+              height: LINE_HEIGHT,
+              child: const Icon(Icons.logout),
+            ),
+          ));
+
+          return GestureDetector(
+            onTap: onTap,
+            behavior: HitTestBehavior.translucent,
+            child: Container(
+              height: LINE_HEIGHT,
+              width: double.maxFinite,
+              padding: const EdgeInsets.only(
+                left: Base.BASE_PADDING * 2,
+                right: Base.BASE_PADDING * 2,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: list,
+              ),
+            ),
           );
-        }
-      }
-
-      list.add(Container(
-        width: 24,
-        alignment: Alignment.centerLeft,
-        child: SizedBox(
-          width: 15,
-          child: widget.isCurrent
-              ? PointComponent(
-                  width: 15,
-                  color: currentColor,
-                )
-              : null,
-        ),
-      ));
-
-      list.add(Container(
-        width: IMAGE_WIDTH,
-        height: IMAGE_WIDTH,
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(IMAGE_WIDTH / 2),
-          color: Colors.grey,
-        ),
-        child: imageWidget,
-      ));
-
-      list.add(Container(
-        margin: const EdgeInsets.only(left: 5, right: 5),
-        child: NameComponnet(
-          pubkey: pubkey,
-          metadata: metadata,
-        ),
-      ));
-
-      list.add(Expanded(
-          child: Container(
-        padding: const EdgeInsets.only(
-          left: Base.BASE_PADDING_HALF,
-          right: Base.BASE_PADDING_HALF,
-          top: 4,
-          bottom: 4,
-        ),
-        decoration: BoxDecoration(
-          color: cardColor,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Text(
-          nip19PubKey,
-          overflow: TextOverflow.ellipsis,
-        ),
-      )));
-
-      list.add(GestureDetector(
-        onTap: onLogout,
-        child: Container(
-          padding: const EdgeInsets.only(left: 5),
-          height: LINE_HEIGHT,
-          child: const Icon(Icons.logout),
-        ),
-      ));
-
-      return GestureDetector(
-        onTap: onTap,
-        behavior: HitTestBehavior.translucent,
-        child: Container(
-          height: LINE_HEIGHT,
-          width: double.maxFinite,
-          padding: const EdgeInsets.only(
-            left: Base.BASE_PADDING * 2,
-            right: Base.BASE_PADDING * 2,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: list,
-          ),
-        ),
-      );
-    }, selector: (context, provider) {
-      return provider.getMetadata(pubkey);
-    });
+        });
   }
 
   void onLogout() {

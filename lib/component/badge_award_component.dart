@@ -69,7 +69,7 @@ class _BadgeAwardComponent extends State<BadgeAwardComponent> {
           onTap: () {
             String? source;
             if (widget.event.sources.isNotEmpty) {
-              source = widget.event.sources[0];
+              source = widget.event.sources.first;
             }
             badgeProvider.wear(badgeId, widget.event.id, relayAddr: source);
           },

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:loure/client/event.dart';
-import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/event_kind.dart';
 import 'package:loure/client/filter.dart';
 import 'package:loure/client/nip58/badge_definition.dart';
 import 'package:loure/main.dart';
 import 'package:loure/util/later_function.dart';
-import 'package:loure/util/string_util.dart';
 
 class BadgeDefinitionProvider extends ChangeNotifier with LaterFunction {
   Map<String, BadgeDefinition> map = {};
@@ -43,15 +42,10 @@ class BadgeDefinitionProvider extends ChangeNotifier with LaterFunction {
   }
 
   void _laterSearch() {
-    List<Map<String, dynamic>> filters = [];
-    for (var pubkey in _needUpdatePubKeys) {
-      var filter =
-          Filter(kinds: [kind.EventKind.BADGE_DEFINITION], authors: [pubkey]);
-      filters.add(filter.toJson());
-    }
-    var subscriptId = StringUtil.rndNameStr(16);
-    // use query and close after EOSE
-    nostr.query(filters, _onEvent, id: subscriptId);
+    final filter = Filter(
+        kinds: [EventKind.BADGE_DEFINITION], authors: _needUpdatePubKeys);
+    nostr.pool.subscribeManyEose(["wss://relay.nostr.band"], [filter],
+        onEvent: _onEvent);
 
     for (var pubkey in _needUpdatePubKeys) {
       _handingPubkeys[pubkey] = 1;

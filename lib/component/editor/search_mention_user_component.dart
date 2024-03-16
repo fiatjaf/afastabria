@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:loure/client/nip19/nip19.dart';
 import 'package:loure/consts/base.dart';
 import 'package:loure/data/metadata.dart';
+import 'package:loure/data/metadata_db.dart';
 import 'package:loure/main.dart';
 import 'package:loure/util/router_util.dart';
 import 'package:loure/util/string_util.dart';
@@ -61,30 +62,27 @@ class _SearchMentionUserComponent extends State<SearchMentionUserComponent>
     );
   }
 
-  static const int searchMemLimit = 100;
-
   List<Metadata> metadatas = [];
 
-  void handleSearch(String? text) {
+  void handleSearch(String text) async {
     metadatas.clear();
 
-    if (StringUtil.isNotBlank(text)) {
-      var list = metadataProvider.findUser(text!, limit: searchMemLimit);
-      metadatas = list;
+    if (text.length >= 2) {
+      final list = await MetadataDB.search(text);
+      setState(() {
+        metadatas = list.toList();
+      });
     }
-
-    setState(() {});
   }
 }
 
 class SearchMentionUserItemComponent extends StatelessWidget {
   static const double IMAGE_WIDTH = 36;
+  final Metadata metadata;
+  final double width;
 
-  Metadata metadata;
-
-  double width;
-
-  SearchMentionUserItemComponent({super.key, 
+  const SearchMentionUserItemComponent({
+    super.key,
     required this.metadata,
     required this.width,
   });
@@ -92,7 +90,7 @@ class SearchMentionUserItemComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
+    // var mainColor = themeData.primaryColor;
     var cardColor = themeData.cardColor;
     Color hintColor = themeData.hintColor;
 
@@ -107,7 +105,7 @@ class SearchMentionUserItemComponent extends StatelessWidget {
       );
     }
 
-    String nip19Name = Nip19.encodeSimplePubKey(metadata.pubKey!);
+    String nip19Name = Nip19.encodeSimplePubKey(metadata.pubkey);
     String displayName = nip19Name;
     String name = "";
     if (StringUtil.isNotBlank(metadata.displayName)) {
@@ -165,7 +163,7 @@ class SearchMentionUserItemComponent extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        RouterUtil.back(context, metadata.pubKey);
+        RouterUtil.back(context, metadata.pubkey);
       },
       child: main,
     );

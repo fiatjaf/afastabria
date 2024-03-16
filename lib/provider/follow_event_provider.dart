@@ -1,18 +1,15 @@
-
 import 'package:flutter/material.dart';
 
-import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/event_kind.dart';
 import 'package:loure/client/event.dart';
 import 'package:loure/client/nip02/contact.dart';
 import 'package:loure/client/nip02/cust_contact_list.dart';
 import 'package:loure/client/filter.dart';
-import 'package:loure/client/nostr.dart';
+import 'package:loure/client/relay/relay_pool.dart';
 import 'package:loure/data/event_mem_box.dart';
 import 'package:loure/main.dart';
-import 'package:loure/router/tag/topic_map.dart';
 import 'package:loure/util/find_event_interface.dart';
 import 'package:loure/util/pendingevents_later_function.dart';
-import 'package:loure/util/string_util.dart';
 
 class FollowEventProvider extends ChangeNotifier
     with PendingEventsLaterFunction
@@ -20,8 +17,9 @@ class FollowEventProvider extends ChangeNotifier
   late int _initTime;
 
   late EventMemBox eventBox;
-
   late EventMemBox postsBox;
+
+  ManySubscriptionHandle? subHandle;
 
   FollowEventProvider() {
     _initTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
@@ -51,8 +49,6 @@ class FollowEventProvider extends ChangeNotifier
     return _initTime;
   }
 
-  List<String> _subscribeIds = [];
-
   void deleteEvent(String id) {
     postsBox.delete(id);
     var result = eventBox.delete(id);
@@ -61,159 +57,62 @@ class FollowEventProvider extends ChangeNotifier
     }
   }
 
-  List<int> queryEventKinds() {
-    return kind.EventKind.SUPPORTED_EVENTS;
-  }
-
-  void doQuery(
-      {Nostr? targetNostr,
-      bool initQuery = false,
-      int? until,
-      bool forceUserLimit = false}) {
+  void doQuery({int? until, bool forceUserLimit = false}) {
     var filter = Filter(
-      kinds: queryEventKinds(),
+      kinds: EventKind.SUPPORTED_EVENTS,
       until: until ?? _initTime,
       limit: 20,
     );
-    targetNostr ??= nostr;
-    bool queriedTags = false;
+    this.unsubscribe();
 
-    doUnscribe(targetNostr);
-
-    List<String> subscribeIds = [];
     Iterable<Contact> contactList = contactListProvider.list();
-    var contactListLength = contactList.length;
-    List<String> ids = [];
+    Set<String> pubkeys = {};
+
     // timeline pull my events too.
-    int maxQueryIdsNum = 400;
-    if (contactListLength > maxQueryIdsNum) {
-      var times = (contactListLength / maxQueryIdsNum).ceil();
-      maxQueryIdsNum = (contactListLength / times).ceil();
-    }
-    maxQueryIdsNum += 2;
-    ids.add(targetNostr.publicKey);
+    pubkeys.add(nostr.publicKey);
+
+    // TODO: outbox model
     for (Contact contact in contactList) {
-      ids.add(contact.publicKey);
-      if (ids.length > maxQueryIdsNum) {
-        filter.authors = ids;
-        var subscribeId = _doQueryFunc(targetNostr, filter,
-            initQuery: initQuery,
-            forceUserLimit: forceUserLimit,
-            queriyTags: !queriedTags);
-        subscribeIds.add(subscribeId);
-        ids = [];
-        queriedTags = true;
-      }
-    }
-    if (ids.isNotEmpty) {
-      filter.authors = ids;
-      var subscribeId = _doQueryFunc(targetNostr, filter,
-          initQuery: initQuery,
-          forceUserLimit: forceUserLimit,
-          queriyTags: !queriedTags);
-      subscribeIds.add(subscribeId);
+      pubkeys.add(contact.publicKey);
     }
 
-    if (!initQuery) {
-      _subscribeIds = subscribeIds;
-    }
-  }
+    filter.authors = pubkeys.toList();
 
-  void doUnscribe(Nostr targetNostr) {
-    if (_subscribeIds.isNotEmpty) {
-      for (var subscribeId in _subscribeIds) {
-        try {
-          targetNostr.unsubscribe(subscribeId);
-        } catch (e) {}
-      }
-      _subscribeIds.clear();
-    }
-  }
+    var relays = [...nostr.relayList.read];
+    List<Filter> Function(String, List<Filter>)? filterModifier;
 
-  String _doQueryFunc(Nostr targetNostr, Filter filter,
-      {bool initQuery = false,
-      bool forceUserLimit = false,
-      bool queriyTags = false}) {
-    var subscribeId = StringUtil.rndNameStr(12);
-    if (initQuery) {
-      // tags query can't query by size! if will make timeline xxxx
-      // targetNostr.addInitQuery(
-      //     addTagFilter([filter.toJson()], queriyTags), onEvent,
-      //     id: subscribeId);
-      targetNostr.addInitQuery([filter.toJson()], onEvent, id: subscribeId);
-    } else {
-      if (!eventBox.isEmpty()) {
-        var activeRelays = targetNostr.activeRelays();
-        var oldestCreatedAts =
-            eventBox.oldestCreatedAtByRelay(activeRelays, _initTime);
-        Map<String, List<Map<String, dynamic>>> filtersMap = {};
-        for (var relay in activeRelays) {
-          var oldestCreatedAt = oldestCreatedAts.createdAtMap[relay.url];
-          if (oldestCreatedAt != null) {
-            filter.until = oldestCreatedAt;
-            if (!forceUserLimit) {
-              filter.limit = null;
-              if (filter.until! < oldestCreatedAts.avCreatedAt - 60 * 60 * 18) {
-                filter.since = oldestCreatedAt - 60 * 60 * 12;
-              } else if (filter.until! >
-                  oldestCreatedAts.avCreatedAt - 60 * 60 * 6) {
-                filter.since = oldestCreatedAt - 60 * 60 * 36;
-              } else {
-                filter.since = oldestCreatedAt - 60 * 60 * 24;
-              }
-            }
-            filtersMap[relay.url] =
-                addTagCommunityFilter([filter.toJson()], queriyTags);
-          }
-        }
-        targetNostr.queryByFilters(filtersMap, onEvent, id: subscribeId);
-      } else {
-        // this maybe refresh
-        targetNostr.query(
-            addTagCommunityFilter([filter.toJson()], queriyTags), onEvent,
-            id: subscribeId);
-      }
-    }
-    return subscribeId;
-  }
-
-  static List<Map<String, dynamic>> addTagCommunityFilter(
-      List<Map<String, dynamic>> filters, bool queriyTags) {
-    if (queriyTags && filters.isNotEmpty) {
-      var filter = filters[0];
-      // tags filter
-      {
-        var tagFilter = Map<String, dynamic>.from(filter);
-        tagFilter.remove("authors");
-        // handle tag with TopicMap
-        var tagList = contactListProvider.tagList().toList();
-        List<String> queryTagList = [];
-        for (var tag in tagList) {
-          var list = TopicMap.getList(tag);
-          if (list != null) {
-            queryTagList.addAll(list);
+    if (!this.eventBox.isEmpty()) {
+      var oldestCreatedAts = this.eventBox.oldestCreatedAtByRelay(relays);
+      filterModifier = (url, filters) {
+        final filter = filters[0];
+        final oca = oldestCreatedAts.createdAtMap[url];
+        if (oca != null) {
+          filter.until = oca;
+          filter.limit = null;
+          if (filter.until! < oldestCreatedAts.avCreatedAt - 60 * 60 * 18) {
+            filter.since = oca - 60 * 60 * 12;
+          } else if (filter.until! >
+              oldestCreatedAts.avCreatedAt - 60 * 60 * 6) {
+            filter.since = oca - 60 * 60 * 36;
           } else {
-            queryTagList.add(tag);
+            filter.since = oca - 60 * 60 * 24;
           }
         }
-        if (queryTagList.isNotEmpty) {
-          tagFilter["#t"] = queryTagList;
-          filters.add(tagFilter);
-        }
-      }
-      // community filter
-      {
-        var communityFilter = Map<String, dynamic>.from(filter);
-        communityFilter.remove("authors");
-        var communityList =
-            contactListProvider.followedCommunitiesList().toList();
-        if (communityFilter.isNotEmpty) {
-          communityFilter["#a"] = communityList;
-          filters.add(communityFilter);
-        }
-      }
+
+        return filters;
+      };
     }
-    return filters;
+
+    this.subHandle = nostr.pool.subscribeMany(
+        relays,
+        [
+          Filter(kinds: [EventKind.TEXT_NOTE])
+        ],
+        filterModifier: filterModifier);
+  }
+
+  void unsubscribe() {
+    if (this.subHandle != null) this.subHandle!.close();
   }
 
   // check if is posts (no tag e and not Mentions, TODO handle NIP27)
@@ -286,19 +185,15 @@ class FollowEventProvider extends ChangeNotifier
   }
 
   void clear() {
-    eventBox.clear();
-    postsBox.clear();
-
-    doUnscribe(nostr);
-
-    notifyListeners();
+    this.eventBox.clear();
+    this.postsBox.clear();
+    this.unsubscribe();
+    this.notifyListeners();
   }
 
   void metadataUpdatedCallback(CustContactList? contactList) {
     if (firstLogin ||
-        (eventBox.isEmpty() &&
-            contactList != null &&
-            !contactList.isEmpty())) {
+        (eventBox.isEmpty() && contactList != null && !contactList.isEmpty())) {
       doQuery();
     }
 

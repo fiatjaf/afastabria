@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loure/client/aid.dart';
+import 'package:loure/client/relay/relay_pool.dart';
 import 'package:loure/component/community_info_component.dart';
 import 'package:loure/consts/base.dart';
 import 'package:loure/provider/community_info_provider.dart';
@@ -7,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:widget_size/widget_size.dart';
 
 import 'package:loure/client/event.dart';
-import 'package:loure/client/filter.dart';
 import 'package:loure/client/nip172/community_info.dart';
 import 'package:loure/component/cust_state.dart';
 import 'package:loure/component/event/event_list_component.dart';
@@ -18,7 +18,6 @@ import 'package:loure/main.dart';
 import 'package:loure/provider/setting_provider.dart';
 import 'package:loure/util/pendingevents_later_function.dart';
 import 'package:loure/util/router_util.dart';
-import 'package:loure/client/event_kind.dart' as kind;
 import 'package:loure/util/string_util.dart';
 import 'package:loure/router/edit/editor_router.dart';
 
@@ -35,13 +34,11 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
     with PendingEventsLaterFunction {
   EventMemBox box = EventMemBox();
 
-  AId? aId;
-
   final ScrollController _controller = ScrollController();
-
   bool showTitle = false;
-
   double infoHeight = 80;
+  AId? aId;
+  ManySubscriptionHandle? subHandle;
 
   @override
   void initState() {
@@ -78,7 +75,7 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
     Widget? appBarTitle;
     if (showTitle) {
       appBarTitle = Text(
-        aId!.title,
+        aId!.identifier,
         style: TextStyle(
           fontSize: bodyLargeFontSize,
           overflow: TextOverflow.ellipsis,
@@ -105,7 +102,7 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
                 child: CommunityInfoComponent(info: info),
               );
             }, selector: (context, provider) {
-              return provider.getCommunity(aId!.toAString());
+              return provider.getCommunity(aId!.toTag());
             });
           }
 
@@ -167,7 +164,7 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
     if (aId != null) {
       // {
       //   var filter = Filter(kinds: [
-      //     kind.EventKind.COMMUNITY_DEFINITION,
+      //     EventKind.COMMUNITY_DEFINITION,
       //   ], authors: [
       //     aId!.pubkey
       //   ], limit: 1);
@@ -189,10 +186,10 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
   }
 
   void queryEvents() {
-    var filter = Filter(kinds: kind.EventKind.SUPPORTED_EVENTS, limit: 100);
-    var queryArg = filter.toJson();
-    queryArg["#a"] = [aId!.toAString()];
-    nostr.query([queryArg], onEvent, id: subscribeId);
+    if (this.aId == null) return;
+    this.subHandle = nostr.pool.subscribeManyEose(
+        ["wss://relay.nostr.band"], [this.aId!.toFilter()],
+        onEvent: onEvent);
   }
 
   void onEvent(Event event) {
@@ -207,9 +204,7 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
     super.dispose();
     disposeLater();
 
-    try {
-      nostr.unsubscribe(subscribeId);
-    } catch (e) {}
+    if (this.subHandle != null) this.subHandle!.close();
   }
 
   onDeleteCallback(Event event) {
@@ -219,12 +214,9 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
 
   Future<void> addToCommunity() async {
     if (aId != null) {
-      List<String> aTag = ["a", aId!.toAString()];
-      if (relayProvider.relayAddrs.isNotEmpty) {
-        aTag.add(relayProvider.relayAddrs[0]);
-      }
-
-      var event = await EditorRouter.open(context, tags: [aTag]);
+      var event = await EditorRouter.open(context, tags: [
+        ["a", aId!.toTag()]
+      ]);
       if (event != null) {
         queryEvents();
       }

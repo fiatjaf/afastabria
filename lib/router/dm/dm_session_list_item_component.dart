@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pointycastle/export.dart' as pointycastle;
 import 'package:get_time_ago/get_time_ago.dart';
+
 import 'package:loure/client/nip04/nip04.dart';
 import 'package:loure/component/name_component.dart';
 import 'package:loure/component/point_component.dart';
@@ -7,150 +9,154 @@ import 'package:loure/component/user_pic_component.dart';
 import 'package:loure/consts/base.dart';
 import 'package:loure/consts/router_path.dart';
 import 'package:loure/data/metadata.dart';
+import 'package:loure/main.dart';
 import 'package:loure/provider/dm_provider.dart';
-import 'package:loure/provider/metadata_provider.dart';
 import 'package:loure/util/router_util.dart';
-import 'package:provider/provider.dart';
-import 'package:pointycastle/export.dart' as pointycastle;
-
 import 'package:loure/util/string_util.dart';
 
 class DMSessionListItemComponent extends StatefulWidget {
-  DMSessionDetail detail;
+  final DMSessionDetail detail;
+  final pointycastle.ECDHBasicAgreement agreement;
 
-  pointycastle.ECDHBasicAgreement agreement;
-
-  DMSessionListItemComponent({super.key, 
+  const DMSessionListItemComponent({
+    super.key,
     required this.detail,
     required this.agreement,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _DMSessionListItemComponent();
+    return DMSessionListItemComponentState();
   }
 }
 
-class _DMSessionListItemComponent extends State<DMSessionListItemComponent> {
+class DMSessionListItemComponentState
+    extends State<DMSessionListItemComponent> {
   static const double IMAGE_WIDTH = 34;
-
   static const double HALF_IMAGE_WIDTH = 17;
+
+  Future<Metadata>? metadataFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    this.metadataFuture = metadataLoader.load(widget.detail.dmSession.pubkey);
+  }
 
   @override
   Widget build(BuildContext context) {
-    var main = Selector<MetadataProvider, Metadata?>(
-      builder: (context, metadata, child) {
-        var themeData = Theme.of(context);
-        var mainColor = themeData.primaryColor;
-        var hintColor = themeData.hintColor;
-        var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
-
-        var dmSession = widget.detail.dmSession;
-
-        var content = NIP04.decrypt(
-            dmSession.newestEvent!.content, widget.agreement, dmSession.pubkey);
-        content = content.replaceAll("\r", " ");
-        content = content.replaceAll("\n", " ");
-
-        var leftWidget = Container(
-          margin: const EdgeInsets.only(top: 4),
-          child: UserPicComponent(
-            pubkey: dmSession.pubkey,
-            width: IMAGE_WIDTH,
-          ),
-        );
-
-        var lastEvent = dmSession.newestEvent!;
-
-        bool hasNewMessage = widget.detail.hasNewMessage();
-
-        List<Widget> contentList = [
-          Expanded(
-            child: Text(
-              StringUtil.breakWord(content),
-              style: TextStyle(
-                fontSize: smallTextSize,
-                color: themeData.hintColor,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          )
-        ];
-        if (hasNewMessage) {
-          contentList.add(Container(
-            child: PointComponent(color: mainColor),
-          ));
-        }
-
-        return Container(
-          padding: const EdgeInsets.all(Base.BASE_PADDING),
-          decoration: BoxDecoration(
-              border: Border(
-                  bottom: BorderSide(
-            width: 1,
-            color: hintColor,
-          ))),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              leftWidget,
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.only(
-                    left: Base.BASE_PADDING,
-                    right: Base.BASE_PADDING,
-                    top: 4,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: NameComponnet(
-                              pubkey: dmSession.pubkey,
-                              metadata: metadata,
-                              maxLines: 1,
-                              textOverflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              GetTimeAgo.parse(
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                      lastEvent.createdAt * 1000)),
-                              style: TextStyle(
-                                fontSize: smallTextSize,
-                                color: themeData.hintColor,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 2),
-                        child: Row(children: contentList),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-      selector: (context, provider) {
-        return provider.getMetadata(widget.detail.dmSession.pubkey);
-      },
-    );
-
     return GestureDetector(
       onTap: () {
         RouterUtil.router(context, RouterPath.DM_DETAIL, widget.detail);
       },
-      child: main,
+      child: FutureBuilder(
+        future: this.metadataFuture,
+        initialData: Metadata.blank(widget.detail.dmSession.pubkey),
+        builder: (context, snapshot) {
+          final metadata = snapshot.data;
+
+          final themeData = Theme.of(context);
+          final mainColor = themeData.primaryColor;
+          final hintColor = themeData.hintColor;
+          final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+
+          final dmSession = widget.detail.dmSession;
+
+          var content = NIP04.decrypt(dmSession.newestEvent!.content,
+              widget.agreement, dmSession.pubkey);
+          content = content.replaceAll("\r", " ");
+          content = content.replaceAll("\n", " ");
+
+          var leftWidget = Container(
+            margin: const EdgeInsets.only(top: 4),
+            child: UserPicComponent(
+              pubkey: dmSession.pubkey,
+              width: IMAGE_WIDTH,
+            ),
+          );
+
+          var lastEvent = dmSession.newestEvent!;
+
+          bool hasNewMessage = widget.detail.hasNewMessage();
+
+          List<Widget> contentList = [
+            Expanded(
+              child: Text(
+                StringUtil.breakWord(content),
+                style: TextStyle(
+                  fontSize: smallTextSize,
+                  color: themeData.hintColor,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            )
+          ];
+          if (hasNewMessage) {
+            contentList.add(
+              PointComponent(color: mainColor),
+            );
+          }
+
+          return Container(
+            padding: const EdgeInsets.all(Base.BASE_PADDING),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+              width: 1,
+              color: hintColor,
+            ))),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                leftWidget,
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(
+                      left: Base.BASE_PADDING,
+                      right: Base.BASE_PADDING,
+                      top: 4,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: NameComponnet(
+                                pubkey: dmSession.pubkey,
+                                metadata: metadata,
+                                maxLines: 1,
+                                textOverflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                GetTimeAgo.parse(
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                        lastEvent.createdAt * 1000)),
+                                style: TextStyle(
+                                  fontSize: smallTextSize,
+                                  color: themeData.hintColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(top: 2),
+                          child: Row(children: contentList),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

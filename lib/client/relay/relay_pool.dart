@@ -118,7 +118,7 @@ class RelayPool extends RelayProvider {
         id: id,
         intercept: (String? eventId) {
           if (eventId != null) {
-            nostr.eventIndex.update(eventId, (Event evt) {
+            nostr.idIndex.update(eventId, (Event evt) {
               evt.sources.add(url);
               return evt;
             });
@@ -138,7 +138,7 @@ class RelayPool extends RelayProvider {
     Function(Event)? onEvent,
     Function()? onClose,
     String? id,
-    Function(String, List<Filter>)? filterModifier,
+    List<Filter> Function(String, List<Filter>)? filterModifier,
   }) {
     ManySubscriptionHandle? closeHandle;
     closeHandle =
@@ -152,7 +152,7 @@ class RelayPool extends RelayProvider {
     Iterable<String> relays,
     Filter filter, {
     String? id,
-    Function(String, List<Filter>)? filterModifier,
+    List<Filter> Function(String, List<Filter>)? filterModifier,
   }) async {
     final completer = Completer<Set<Event>>();
     final results = <Event>{};
@@ -168,7 +168,7 @@ class RelayPool extends RelayProvider {
     Iterable<String> relays,
     Filter filter, {
     String? id,
-    Function(String, List<Filter>)? filterModifier,
+    List<Filter> Function(String, List<Filter>)? filterModifier,
   }) async {
     final completer = Completer<Event>();
     Event? result;

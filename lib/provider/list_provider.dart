@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:loure/client/aid.dart';
 import 'package:loure/client/event.dart';
 import 'package:loure/client/filter.dart';
 import 'package:loure/main.dart';
@@ -164,10 +163,12 @@ class BookmarkProvider extends ListProvider {
 class EmojiProvider extends ListProvider {
   EmojiProvider() : super(EventKind.EMOJIS_LIST);
 
-  Bookmarks bookmarks = Bookmarks();
-
   @override
   processEvent() {}
+
+  Event? getEmojiEvent() {
+    return this.latest;
+  }
 
   List<MapEntry<String, List<CustomEmoji>>> emojis(Event? emojiEvent) {
     List<MapEntry<String, List<CustomEmoji>>> result = [];

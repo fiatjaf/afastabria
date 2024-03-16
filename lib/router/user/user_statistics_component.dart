@@ -16,7 +16,6 @@ import 'package:loure/data/event_mem_box.dart';
 import 'package:loure/main.dart';
 import 'package:loure/util/number_format_util.dart';
 import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
 
 // ignore: must_be_immutable
 class UserStatisticsComponent extends StatefulWidget {
@@ -32,16 +31,10 @@ class UserStatisticsComponent extends StatefulWidget {
 
 class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
   Event? contactListEvent;
-
   CustContactList? contactList;
-
   Event? relaysEvent;
-
   List<dynamic>? relaysTags;
-
   EventMemBox? zapEventBox;
-
-  // followedMap
   Map<String, Event>? followedMap;
 
   int length = 0;
@@ -52,26 +45,25 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
   int? followedNum;
 
   bool isLocal = false;
-
   String? pubkey;
 
   @override
   Widget doBuild(BuildContext context) {
     if (pubkey != null && pubkey != widget.pubkey) {
       // arg changed! reset
-      contactListEvent = null;
-      contactList = null;
-      relaysEvent = null;
-      relaysTags = null;
-      zapEventBox = null;
-      followedMap = null;
+      this.contactListEvent = null;
+      this.contactList = null;
+      this.relaysEvent = null;
+      this.relaysTags = null;
+      this.zapEventBox = null;
+      this.followedMap = null;
 
-      length = 0;
-      relaysNum = 0;
-      followedTagsLength = 0;
-      followedCommunitiesLength = 0;
-      zapNum = null;
-      followedNum = null;
+      this.length = 0;
+      this.relaysNum = 0;
+      this.followedTagsLength = 0;
+      this.followedCommunitiesLength = 0;
+      this.zapNum = null;
+      this.followedNum = null;
       doQuery();
     }
     pubkey = widget.pubkey;
@@ -199,10 +191,6 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     BotToast.showText(text: "Begin to load contact history");
   }
 
-  String queryId = "";
-
-  String queryId2 = "";
-
   @override
   Future<void> onReady(BuildContext context) async {
     if (!isLocal) {
@@ -310,18 +298,23 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     }
   }
 
-  String zapSubscribeId = "";
-
   onZapTap() {
     if (zapEventBox == null) {
       zapEventBox = EventMemBox(sortAfterAdd: false);
       // pull zap event
-      var filter = Filter(kinds: [kind.EventKind.ZAP], p: [widget.pubkey]);
-      zapSubscribeId = StringUtil.rndNameStr(12);
-      // print(filter);
-      nostr.query([filter.toJson()], onZapEvent, id: zapSubscribeId);
+      var filter =
+          Filter(kinds: [kind.EventKind.ZAP], p: [widget.pubkey], limit: 1);
+      nostr.pool
+          .querySingle(["wss://relay.nostr.band"], filter).then((Event? event) {
+        if (event == null) return;
+        if (event.kind == kind.EventKind.ZAP && zapEventBox!.add(event)) {
+          setState(() {
+            this.zapNum = this.zapNum! + ZapNumUtil.getNumFromZapEvent(event);
+          });
+        }
+      });
 
-      zapNum = 0;
+      this.zapNum = 0;
     } else {
       // Router to vist list
       zapEventBox!.sort();
@@ -330,34 +323,21 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     }
   }
 
-  onZapEvent(Event event) {
-    // print(event.toJson());
-    if (event.kind == kind.EventKind.ZAP && zapEventBox!.add(event)) {
-      setState(() {
-        zapNum = zapNum! + ZapNumUtil.getNumFromZapEvent(event);
-      });
-    }
-  }
-
   @override
   void dispose() {
     super.dispose();
 
-    _disposed = true;
-    checkAndUnsubscribe(queryId);
-    checkAndUnsubscribe(queryId2);
-    checkAndUnsubscribe(zapSubscribeId);
+    // checkAndUnsubscribe(queryId);
+    // checkAndUnsubscribe(queryId2);
   }
 
-  void checkAndUnsubscribe(String queryId) {
-    if (StringUtil.isNotBlank(queryId)) {
-      try {
-        nostr.unsubscribe(queryId);
-      } catch (e) {}
-    }
-  }
-
-  bool _disposed = false;
+  // void checkAndUnsubscribe(String queryId) {
+  //   if (StringUtil.isNotBlank(queryId)) {
+  //     try {
+  //       nostr.unsubscribe(queryId);
+  //     } catch (e) {}
+  //   }
+  // }
 
   onFollowedCommunitiesTap() {
     if (contactList != null) {

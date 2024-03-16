@@ -1,3 +1,5 @@
+import 'package:provider/provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:loure/component/user/metadata_top_component.dart';
 import 'package:loure/consts/base.dart';
@@ -8,11 +10,8 @@ import 'package:loure/router/user/user_statistics_component.dart';
 import 'package:loure/util/platform_util.dart';
 import 'package:loure/util/router_util.dart';
 import 'package:loure/util/string_util.dart';
-import 'package:provider/provider.dart';
-
 import 'package:loure/data/metadata.dart';
 import 'package:loure/main.dart';
-import 'package:loure/provider/metadata_provider.dart';
 import 'package:loure/router/edit/editor_router.dart';
 import 'package:loure/router/index/account_manager_component.dart';
 
@@ -28,14 +27,21 @@ class IndexDrawerContnetComponnent extends StatefulWidget {
 class _IndexDrawerContnetComponnent
     extends State<IndexDrawerContnetComponnent> {
   ScrollController userStatisticscontroller = ScrollController();
-
   double profileEditBtnWidth = 40;
+
+  Future<Metadata>? metadataFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    metadataFuture = metadataLoader.load(nostr.publicKey);
+  }
 
   @override
   Widget build(BuildContext context) {
     var indexProvider = Provider.of<IndexProvider>(context);
 
-        var pubkey = nostr.publicKey;
+    var pubkey = nostr.publicKey;
     var paddingTop = mediaDataCache.padding.top;
     var themeData = Theme.of(context);
     var mainColor = themeData.primaryColor;
@@ -43,20 +49,18 @@ class _IndexDrawerContnetComponnent
     var hintColor = themeData.hintColor;
     List<Widget> list = [];
 
-    list.add(Container(
-      // margin: EdgeInsets.only(bottom: Base.BASE_PADDING),
-      child: Stack(children: [
-        Selector<MetadataProvider, Metadata?>(
-          builder: (context, metadata, child) {
+    list.add(
+      Stack(children: [
+        FutureBuilder(
+          future: this.metadataFuture,
+          initialData: Metadata.blank(pubkey),
+          builder: (context, snapshot) {
             return MetadataTopComponent(
               pubkey: pubkey,
-              metadata: metadata,
+              metadata: snapshot.data,
               isLocal: true,
               jumpable: true,
             );
-          },
-          selector: (context, provider) {
-            return provider.getMetadata(pubkey);
           },
         ),
         Positioned(
@@ -76,7 +80,7 @@ class _IndexDrawerContnetComponnent
           ),
         ),
       ]),
-    ));
+    );
 
     list.add(GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -259,15 +263,13 @@ class _IndexDrawerContnetComponnent
       child: Text("V ${Base.VERSION_NAME}"),
     ));
 
-    return Container(
-      child: Column(
-        children: list,
-      ),
+    return Column(
+      children: list,
     );
   }
 
-  void jumpToProfileEdit() {
-    var metadata = metadataProvider.getMetadata(nostr.publicKey);
+  void jumpToProfileEdit() async {
+    final metadata = await metadataLoader.load(nostr.publicKey);
     RouterUtil.router(context, RouterPath.PROFILE_EDITOR, metadata);
   }
 
@@ -283,21 +285,17 @@ class _IndexDrawerContnetComponnent
 }
 
 class IndexDrawerItem extends StatelessWidget {
-  IconData iconData;
-
-  String name;
-
-  Function onTap;
-
-  Function? onDoubleTap;
-
-  Color? color;
+  final IconData iconData;
+  final String name;
+  final Function onTap;
+  final Function? onDoubleTap;
+  final Color? color;
 
   // bool borderTop;
-
   // bool borderBottom;
 
-  IndexDrawerItem({super.key, 
+  const IndexDrawerItem({
+    super.key,
     required this.iconData,
     required this.name,
     required this.onTap,
@@ -309,8 +307,6 @@ class IndexDrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
     List<Widget> list = [];
 
     list.add(Container(
@@ -325,8 +321,6 @@ class IndexDrawerItem extends StatelessWidget {
     ));
 
     list.add(Text(name, style: TextStyle(color: color)));
-
-    var borderSide = BorderSide(width: 1, color: hintColor);
 
     return GestureDetector(
       onTap: () {

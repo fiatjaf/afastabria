@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:loure/main.dart';
 
 import 'package:loure/component/user/metadata_component.dart';
 import 'package:loure/consts/base.dart';
 import 'package:loure/consts/router_path.dart';
 import 'package:loure/data/metadata.dart';
-import 'package:loure/provider/metadata_provider.dart';
 import 'package:loure/util/platform_util.dart';
 import 'package:loure/util/router_util.dart';
 import 'package:loure/util/string_util.dart';
@@ -23,20 +22,31 @@ class _FollowedRouter extends State<FollowedRouter> {
   ScrollController scrollController = ScrollController();
 
   List<String>? pubkeys;
+  List<Future<Metadata>>? metadataFutures;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final arg = RouterUtil.routerArgs(context);
+    if (arg != null) {
+      this.pubkeys = arg as List<String>;
+    }
+
+    if (this.pubkeys == null) {
+      RouterUtil.back(context);
+      return;
+    }
+
+    this.metadataFutures = this.pubkeys!.map(metadataLoader.load).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
-    
-    if (pubkeys == null) {
-      var arg = RouterUtil.routerArgs(context);
-      if (arg != null) {
-        pubkeys = arg as List<String>;
-      }
-    }
-    if (pubkeys == null) {
-      RouterUtil.back(context);
+    if (this.metadataFutures == null) {
       return Container();
     }
+
     var themeData = Theme.of(context);
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
@@ -50,8 +60,10 @@ class _FollowedRouter extends State<FollowedRouter> {
 
         return Container(
           margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
-          child: Selector<MetadataProvider, Metadata?>(
-            builder: (context, metadata, child) {
+          child: FutureBuilder(
+            future: this.metadataFutures![index],
+            initialData: Metadata.blank(pubkey),
+            builder: (context, snapshot) {
               return GestureDetector(
                 onTap: () {
                   RouterUtil.router(context, RouterPath.USER, pubkey);
@@ -59,13 +71,10 @@ class _FollowedRouter extends State<FollowedRouter> {
                 behavior: HitTestBehavior.translucent,
                 child: MetadataComponent(
                   pubKey: pubkey,
-                  metadata: metadata,
+                  metadata: snapshot.data,
                   jumpable: true,
                 ),
               );
-            },
-            selector: (context, provider) {
-              return provider.getMetadata(pubkey);
             },
           ),
         );

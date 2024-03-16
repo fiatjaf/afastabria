@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'package:loure/client/event.dart';
-
 import 'package:loure/client/relay/relay.dart';
 
 class RelayBase extends Relay {
@@ -25,7 +24,6 @@ class RelayBase extends Relay {
 
     try {
       relayStatus.connected = ConnState.CONNECTING;
-      getRelayInfo(url);
 
       final wsUrl = Uri.parse(url);
       _wsChannel = WebSocketChannel.connect(wsUrl);

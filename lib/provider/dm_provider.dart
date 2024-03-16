@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:loure/client/event_kind.dart' as kind;
+import 'package:loure/client/event_kind.dart';
 import 'package:loure/client/event.dart';
 import 'package:loure/client/filter.dart';
 import 'package:loure/client/nip04/dm_session.dart';
-import 'package:loure/client/nostr.dart';
 import 'package:loure/data/dm_session_info.dart';
 import 'package:loure/data/dm_session_info_db.dart';
 import 'package:loure/data/event_db.dart';
@@ -13,20 +12,11 @@ import 'package:loure/util/pendingevents_later_function.dart';
 import 'package:loure/util/string_util.dart';
 
 class DMProvider extends ChangeNotifier with PendingEventsLaterFunction {
-  static DMProvider? _dmProvider;
-
   final List<DMSessionDetail> _knownList = [];
-
   final List<DMSessionDetail> _unknownList = [];
-
   final Map<String, DMSession> _sessions = {};
-
   Map<String, DMSessionInfo> infoMap = {};
-
-  String? localPubkey;
-
   List<DMSessionDetail> get knownList => _knownList;
-
   List<DMSessionDetail> get unknownList => _unknownList;
 
   DMSession? getSession(String pubkey) {
@@ -91,15 +81,14 @@ class DMProvider extends ChangeNotifier with PendingEventsLaterFunction {
 
   int _initSince = 0;
 
-  Future<void> initDMSessions(String localPubkey) async {
+  Future<void> initDMSessions() async {
     _sessions.clear();
     _knownList.clear();
     _unknownList.clear();
 
-    this.localPubkey = localPubkey;
     var keyIndex = settingProvider.privateKeyIndex!;
-    var events = await EventDB.list(
-        keyIndex, kind.EventKind.DIRECT_MESSAGE, 0, 10000000);
+    var events =
+        await EventDB.list(keyIndex, EventKind.DIRECT_MESSAGE, 0, 10000000);
     if (events.isNotEmpty) {
       // find the newest event, subscribe behind the new newest event
       _initSince = events.first.createdAt;
@@ -109,7 +98,7 @@ class DMProvider extends ChangeNotifier with PendingEventsLaterFunction {
     for (var event in events) {
       // print("dmEvent");
       // print(event.toJson());
-      var pubkey = _getPubkey(localPubkey, event);
+      var pubkey = _getPubkey(nostr.publicKey, event);
       if (StringUtil.isNotBlank(pubkey)) {
         var list = eventListMap[pubkey!];
         if (list == null) {
@@ -180,6 +169,24 @@ class DMProvider extends ChangeNotifier with PendingEventsLaterFunction {
     return null;
   }
 
+  void query() {
+    var filter0 = Filter(
+      kinds: [EventKind.DIRECT_MESSAGE],
+      authors: [nostr.publicKey],
+      since: _initSince + 1,
+    );
+    var filter1 = Filter(
+      kinds: [EventKind.DIRECT_MESSAGE],
+      p: [nostr.publicKey],
+      since: _initSince + 1,
+    );
+
+    nostr.pool.subscribeMany(nostr.relayList.read, [filter0, filter1],
+        onEvent: (Event event) {
+      later(event, eventLaterHandle, null);
+    });
+  }
+
   bool _addEvent(String localPubkey, Event event) {
     var pubkey = _getPubkey(localPubkey, event);
     if (StringUtil.isBlank(pubkey)) {
@@ -201,41 +208,11 @@ class DMProvider extends ChangeNotifier with PendingEventsLaterFunction {
     return addResult;
   }
 
-  void query({Nostr? targetNostr, bool initQuery = false}) {
-    targetNostr ??= nostr;
-    var filter0 = Filter(
-      kinds: [kind.EventKind.DIRECT_MESSAGE],
-      authors: [targetNostr.publicKey],
-      since: _initSince + 1,
-    );
-    var filter1 = Filter(
-      kinds: [kind.EventKind.DIRECT_MESSAGE],
-      p: [targetNostr.publicKey],
-      since: _initSince + 1,
-    );
-
-    if (initQuery) {
-      targetNostr.addInitQuery([filter0.toJson(), filter1.toJson()], onEvent);
-    } else {
-      // targetNostr.pool.subscribe([filter0.toJson(), filter1.toJson()], onEvent);
-      targetNostr.query([filter0.toJson(), filter1.toJson()], onEvent);
-    }
-  }
-
-  // void handleEventImmediately(Event event) {
-  //   pendingEvents.add(event);
-  //   eventLaterHandle(pendingEvents);
-  // }
-
-  void onEvent(Event event) {
-    later(event, eventLaterHandle, null);
-  }
-
   void eventLaterHandle(List<Event> events, {bool updateUI = true}) {
     bool updated = false;
     var keyIndex = settingProvider.privateKeyIndex!;
     for (var event in events) {
-      var addResult = _addEvent(localPubkey!, event);
+      var addResult = _addEvent(nostr.publicKey, event);
       // save to local
       if (addResult) {
         updated = true;

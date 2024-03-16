@@ -4,26 +4,25 @@ import 'package:loure/util/string_util.dart';
 import 'package:loure/util/when_stop_function.dart';
 
 typedef ResultBuildFunc = Widget Function();
-
 typedef HandleSearchFunc = void Function(String);
 
 class SaerchMentionComponent extends StatefulWidget {
-  ResultBuildFunc resultBuildFunc;
+  final ResultBuildFunc resultBuildFunc;
+  final HandleSearchFunc handleSearchFunc;
 
-  HandleSearchFunc handleSearchFunc;
-
-  SaerchMentionComponent({super.key, 
+  const SaerchMentionComponent({
+    super.key,
     required this.resultBuildFunc,
     required this.handleSearchFunc,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _SaerchMentionComponent();
+    return SaerchMentionComponentState();
   }
 }
 
-class _SaerchMentionComponent extends State<SaerchMentionComponent>
+class SaerchMentionComponentState extends State<SaerchMentionComponent>
     with WhenStopFunction {
   TextEditingController controller = TextEditingController();
 
@@ -55,7 +54,7 @@ class _SaerchMentionComponent extends State<SaerchMentionComponent>
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
     var backgroundColor = themeData.scaffoldBackgroundColor;
-        List<Widget> list = [];
+    List<Widget> list = [];
 
     Widget? suffixWidget;
     if (showSuffix) {
@@ -66,8 +65,8 @@ class _SaerchMentionComponent extends State<SaerchMentionComponent>
         child: const Icon(Icons.close),
       );
     }
-    list.add(Container(
-      child: TextField(
+    list.add(
+      TextField(
         autofocus: true,
         controller: controller,
         decoration: InputDecoration(
@@ -77,7 +76,7 @@ class _SaerchMentionComponent extends State<SaerchMentionComponent>
         ),
         onEditingComplete: checkInput,
       ),
-    ));
+    );
 
     list.add(Expanded(
       child: Container(
@@ -86,11 +85,9 @@ class _SaerchMentionComponent extends State<SaerchMentionComponent>
       ),
     ));
 
-    return Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: list,
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: list,
     );
   }
 

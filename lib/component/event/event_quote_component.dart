@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 
 import 'package:loure/client/aid.dart';
 import 'package:loure/main.dart';
-import 'package:loure/provider/replaceable_event_provider.dart';
 import 'package:loure/client/event.dart';
-import 'package:loure/client/filter.dart';
 import 'package:loure/consts/base.dart';
 import 'package:loure/consts/router_path.dart';
 import 'package:loure/util/router_util.dart';
@@ -41,14 +38,10 @@ class _EventQuoteComponent extends State<EventQuoteComponent> {
   void initState() {
     super.initState();
 
-    if (widget.id != null) {
-      var evt = nostr.eventIndex[widget.id];
-      if (evt != null) {
-        eventFuture = Future.value(evt);
-      } else {
-        eventFuture =
-            nostr.pool.querySingle(nostr.ID_RELAYS, Filter(ids: [widget.id!]));
-      }
+    if (widget.aId != null) {
+      this.eventFuture = nostr.getByAddress(widget.aId!);
+    } else if (widget.id != null) {
+      this.eventFuture = nostr.getByID(widget.id!);
     }
   }
 
@@ -70,21 +63,6 @@ class _EventQuoteComponent extends State<EventQuoteComponent> {
 
     if (widget.event != null) {
       return buildEventWidget(widget.event!, cardColor, boxDecoration);
-    }
-
-    if (widget.aId != null) {
-      return Selector<ReplaceableEventProvider, Event?>(
-        builder: (context, event, child) {
-          if (event == null) {
-            return buildBlankWidget(boxDecoration);
-          }
-
-          return buildEventWidget(event, cardColor, boxDecoration);
-        },
-        selector: (context, provider) {
-          return provider.getEvent(widget.aId!);
-        },
-      );
     }
 
     return FutureBuilder(

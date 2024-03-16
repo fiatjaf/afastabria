@@ -11,7 +11,6 @@ class EventRelation {
   late String pubkey;
 
   List<String> tagPList = [];
-
   List<String> tagEList = [];
 
   String? rootId;

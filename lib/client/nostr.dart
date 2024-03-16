@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:loure/client/aid.dart';
 import 'package:loure/client/event_kind.dart';
 import 'package:loure/client/filter.dart';
 import 'package:loure/consts/base_consts.dart';
@@ -18,7 +19,8 @@ class Nostr {
 
   late RelayList relayList;
 
-  final eventIndex = <String, Event>{};
+  final idIndex = <String, Event>{};
+  final addressIndex = <String, Event>{};
 
   Nostr(String privateKey) {
     if (keyIsValid(privateKey)) {
@@ -31,16 +33,17 @@ class Nostr {
   }
 
   void init(String secretKey) {
-    contactListProvider.reload(targetNostr: this);
-    contactListProvider.query(targetNostr: this);
-    followEventProvider.doQuery(targetNostr: this, initQuery: true);
-    mentionMeProvider.doQuery(targetNostr: this, initQuery: true);
-    dmProvider.initDMSessions(this.publicKey).then((_) {
-      dmProvider.query(targetNostr: this, initQuery: true);
+    contactListProvider.reload();
+    contactListProvider.query();
+    followEventProvider.doQuery();
+    mentionMeProvider.doQuery();
+    dmProvider.initDMSessions().then((_) {
+      dmProvider.query();
     });
 
     bookmarkProvider.init();
-    badgeProvider.reload(targetNostr: this, initQuery: true);
+    badgeProvider.reload();
+    followNewEventProvider.start();
 
     this
         .pool
@@ -69,6 +72,7 @@ class Nostr {
           return b;
         }
       });
+
       relayList = RelayList.fromEvent(latest);
     });
   }
@@ -109,8 +113,53 @@ class Nostr {
   ];
   final List<String> BLASTR = ["wss://nostr.mutinywallet.com"];
 
+  Future<Event?> getByID(String id) async {
+    var evt = nostr.idIndex[id];
+    if (evt != null) {
+      return evt;
+    } else {
+      return await nostr.pool.querySingle(nostr.ID_RELAYS, Filter(ids: [id]));
+    }
+  }
+
+  Future<Event?> getByAddress(AId aid, {Iterable<String>? relays}) async {
+    final tag = aid.toTag();
+    var evt = nostr.addressIndex[tag];
+    if (evt != null) {
+      return evt;
+    } else {
+      return nostr.pool.querySingle(
+          relays == null
+              ? nostr.RANDOM_RELAYS
+              : [...relays, ...nostr.RANDOM_RELAYS],
+          aid.toFilter());
+    }
+  }
+
+  void updateIndexesAndSource(Event event, String relayURL) {
+    this.idIndex.update(event.id, (Event curr) {
+      curr.sources.add(relayURL);
+      return curr;
+    }, ifAbsent: () {
+      event.sources.add(relayURL);
+      return event;
+    });
+
+    if (event.kind >= 30000 && event.kind < 40000) {
+      final aid = AId(
+        kind: event.kind,
+        pubkey: event.pubKey,
+        identifier: event.tags
+                .firstWhere((tag) => tag.firstOrNull == "d", orElse: () => [])
+                .firstOrNull ??
+            "",
+      );
+      this.addressIndex[aid.toTag()] = event;
+    }
+  }
+
   Event? sendLike(String id) {
-    var target = nostr.eventIndex[id];
+    var target = nostr.idIndex[id];
     if (target == null) {
       return null;
     }
@@ -129,7 +178,7 @@ class Nostr {
 
   void deleteEvent(String id) {
     var relays = [...BLASTR];
-    var target = nostr.eventIndex[id];
+    var target = nostr.idIndex[id];
     if (target != null) {
       relays.addAll(target.sources);
     }
@@ -149,7 +198,7 @@ class Nostr {
 
     List<List<String>> tags = [];
     for (var id in ids) {
-      var target = nostr.eventIndex[id];
+      var target = nostr.idIndex[id];
       if (target != null) {
         relays.addAll(target.sources);
       }
@@ -163,7 +212,7 @@ class Nostr {
   }
 
   Event? sendRepost(String id) {
-    var target = nostr.eventIndex[id];
+    var target = nostr.idIndex[id];
     if (target == null) {
       return null;
     }

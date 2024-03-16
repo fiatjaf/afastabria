@@ -2,11 +2,10 @@ import 'dart:convert';
 
 import 'package:bech32/bech32.dart';
 import 'package:hex/hex.dart';
+
 import 'package:loure/client/nip19/nip19.dart';
 import 'package:loure/client/nip19/tlv_util.dart';
-
 import 'package:loure/component/content/content_decoder.dart';
-import 'package:loure/client/nip19/hrps.dart';
 
 class NIP19Tlv {
   static bool isNprofile(String text) {
@@ -226,19 +225,14 @@ class NIP19Tlv {
 
 class Nprofile {
   String pubkey;
-
-  List<String>? relays;
-
+  Iterable<String>? relays;
   Nprofile({required this.pubkey, this.relays});
 }
 
 class Nevent {
   String id;
-
-  List<String>? relays;
-
+  Iterable<String>? relays;
   String? author;
-
   Nevent({required this.id, this.relays, this.author});
 }
 
@@ -250,12 +244,9 @@ class Nrelay {
 
 class Naddr {
   String id;
-
   String author;
-
   int kind;
-
-  List<String>? relays;
+  Iterable<String>? relays;
 
   Naddr({
     required this.id,

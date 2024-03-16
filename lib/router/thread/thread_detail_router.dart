@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:loure/provider/replaceable_event_provider.dart';
-import 'package:loure/provider/single_event_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:loure/client/relay/relay_pool.dart';
 import 'package:widget_size/widget_size.dart';
 
 import 'package:loure/client/aid.dart';
@@ -55,11 +53,9 @@ class ThreadDetailRouter extends StatefulWidget {
         fontSize: bodyLargeFontSize,
       ),
     )));
-    return Container(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: appBarTitleList,
-      ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: appBarTitleList,
     );
   }
 }
@@ -67,199 +63,183 @@ class ThreadDetailRouter extends StatefulWidget {
 class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
     with PendingEventsLaterFunction, WhenStopFunction {
   EventMemBox box = EventMemBox();
-
   Event? sourceEvent;
-
   bool showTitle = false;
-
   final ScrollController _controller = ScrollController();
-
   double rootEventHeight = 120;
+  Future<Event?>? rootEventFuture;
+  AId? aId;
+  String? rootId;
+  List<ThreadDetailEvent>? rootSubList = [];
+  ManySubscriptionHandle? repliesSubHandle;
 
   @override
   void initState() {
     super.initState();
-    _controller.addListener(() {
-      if (_controller.offset > rootEventHeight * 0.8 && !showTitle) {
+
+    this._controller.addListener(() {
+      if (this._controller.offset > this.rootEventHeight * 0.8 &&
+          !this.showTitle) {
         setState(() {
-          showTitle = true;
+          this.showTitle = true;
         });
-      } else if (_controller.offset < rootEventHeight * 0.8 && showTitle) {
+      } else if (this._controller.offset < this.rootEventHeight * 0.8 &&
+          this.showTitle) {
         setState(() {
-          showTitle = false;
+          this.showTitle = false;
         });
       }
     });
-  }
 
-  GlobalKey sourceEventKey = GlobalKey();
-
-  void initFromArgs() {
-    // do some init oper
-    var eventRelation = EventRelation.fromEvent(sourceEvent!);
-    rootId = eventRelation.rootId;
-    if (eventRelation.aId != null &&
-        eventRelation.aId!.kind == kind.EventKind.LONG_FORM) {
-      aId = eventRelation.aId;
-    }
-    if (rootId == null) {
-      if (aId == null) {
-        if (eventRelation.replyId != null) {
-          rootId = eventRelation.replyId;
-        } else {
-          // source event is root event
-          rootId = sourceEvent!.id;
-          rootEvent = sourceEvent!;
-        }
-      } else {
-        // aid linked root event
-        rootEvent = replaceableEventProvider.getEvent(aId!);
-        if (rootEvent != null) {
-          rootId = rootEvent!.id;
-        }
-      }
-    }
-    if (rootEvent != null && StringUtil.isNotBlank(eventRelation.dTag)) {
-      aId = AId(
-          kind: rootEvent!.kind,
-          pubkey: rootEvent!.pubKey,
-          title: eventRelation.dTag!);
-    }
-
-    // load replies from cache and avoid blank page
-    {
-      var eventReactions =
-          eventReactionsProvider.get(sourceEvent!.id, avoidPull: true);
-      if (eventReactions != null && eventReactions.replies.isNotEmpty) {
-        box.addList(eventReactions.replies);
-      }
-    }
-    if (rootId != null && rootId != sourceEvent!.id) {
-      var eventReactions = eventReactionsProvider.get(rootId!, avoidPull: true);
-      if (eventReactions != null && eventReactions.replies.isNotEmpty) {
-        box.addList(eventReactions.replies);
-      }
-    }
-    if (rootEvent == null) {
-      box.add(sourceEvent!);
-    }
-    listToTree(refresh: false);
-  }
-
-  @override
-  Widget doBuild(BuildContext context) {
-        if (sourceEvent == null) {
+    if (this.sourceEvent == null) {
       var obj = RouterUtil.routerArgs(context);
       if (obj != null && obj is Event) {
-        sourceEvent = obj;
+        this.sourceEvent = obj;
       }
-      if (sourceEvent == null) {
+      if (this.sourceEvent == null) {
         RouterUtil.back(context);
-        return Container();
+        return;
       }
 
-      initFromArgs();
+      this.initFromArgs();
     } else {
       var obj = RouterUtil.routerArgs(context);
       if (obj != null && obj is Event) {
         if (obj.id != sourceEvent!.id) {
           // arg change! reset.
-          sourceEvent = null;
-          rootId = null;
-          rootEvent = null;
-          box = EventMemBox();
-          rootSubList = [];
+          this.sourceEvent = obj;
+          this.rootId = null;
+          this.box = EventMemBox();
+          this.rootSubList = [];
 
-          sourceEvent = obj;
-          initFromArgs();
-          doQuery();
+          this.initFromArgs();
+          this.subscribeReplies();
         }
       }
     }
+  }
 
+  GlobalKey sourceEventKey = GlobalKey();
+
+  void initFromArgs() {
+    var eventRelation = EventRelation.fromEvent(sourceEvent!);
+    this.rootId = eventRelation.rootId;
+
+    if (eventRelation.aId != null &&
+        eventRelation.aId!.kind == kind.EventKind.LONG_FORM) {
+      this.aId = eventRelation.aId;
+    }
+
+    // TODO: if we have a rootId and also an aId and we can't find the rootEvent with the id, try with the aId
+    if (this.rootId == null) {
+      this.rootEventFuture = nostr.getByID(this.rootId!);
+    } else {
+      if (this.aId == null) {
+        if (eventRelation.replyId != null) {
+          this.rootId = eventRelation.replyId;
+        } else {
+          // source event is root event
+          // TODO: check if source is a replaceable event and check tags here instead of just id
+          this.rootId = sourceEvent!.id;
+          this.rootEventFuture = Future.value(sourceEvent!);
+        }
+      } else {
+        // aid linked root event
+        this.rootEventFuture = nostr.getByAddress(aId!);
+      }
+    }
+
+    this.rootEventFuture!.then((Event? rootEvent) {
+      // if (rootEvent != null && StringUtil.isNotBlank(eventRelation.dTag)) {
+      //   aId = AId(
+      //       kind: rootEvent!.kind,
+      //       pubkey: rootEvent!.pubKey,
+      //       identifier: eventRelation.dTag!);
+      // }
+
+      // load replies from cache and avoid blank page
+      {
+        var eventReactions =
+            eventReactionsProvider.get(this.sourceEvent!.id, avoidPull: true);
+        if (eventReactions != null && eventReactions.replies.isNotEmpty) {
+          box.addList(eventReactions.replies);
+        }
+      }
+      if (this.rootId != null && this.rootId != this.sourceEvent!.id) {
+        var eventReactions =
+            eventReactionsProvider.get(this.rootId!, avoidPull: true);
+        if (eventReactions != null && eventReactions.replies.isNotEmpty) {
+          box.addList(eventReactions.replies);
+        }
+      }
+      if (rootEvent == null) {
+        box.add(sourceEvent!);
+      }
+      listToTree(refresh: false);
+
+      if (rootEvent != null) {
+        // check if the rootEvent isn't rootEvent
+        var newRelation = EventRelation.fromEvent(rootEvent);
+        String? newRootId;
+        if (newRelation.rootId != null) {
+          newRootId = newRelation.rootId;
+        } else if (newRelation.replyId != null) {
+          newRootId = newRelation.replyId;
+        }
+
+        if (newRootId != null) {
+          this.rootId = newRootId;
+          this.subscribeReplies();
+          this.setState(() {
+            this.rootEventFuture = nostr.getByID(this.rootId!);
+          });
+        }
+      }
+    });
+  }
+
+  @override
+  Widget doBuild(BuildContext context) {
     var themeData = Theme.of(context);
-    var bodyLargeFontSize = themeData.textTheme.bodyLarge!.fontSize;
-    var titleTextColor = themeData.appBarTheme.titleTextStyle!.color;
-    var cardColor = themeData.cardColor;
+    // var bodyLargeFontSize = themeData.textTheme.bodyLarge!.fontSize;
+    // var titleTextColor = themeData.appBarTheme.titleTextStyle!.color;
+    // var cardColor = themeData.cardColor;
+
+    if (this.rootEventFuture == null) return Container();
 
     Widget? appBarTitle;
-    if (showTitle && rootEvent != null) {
-      appBarTitle = ThreadDetailRouter.detailAppBarTitle(rootEvent!, themeData);
+    if (showTitle) {
+      appBarTitle = FutureBuilder(
+          future: this.rootEventFuture,
+          initialData: null,
+          builder: (context, snapshot) {
+            final rootEvent = snapshot.data;
+            if (rootEvent != null) {
+              return ThreadDetailRouter.detailAppBarTitle(rootEvent, themeData);
+            } else {
+              return Container();
+            }
+          });
     }
 
-    Widget? rootEventWidget;
-    if (rootEvent == null) {
-      if (StringUtil.isNotBlank(rootId)) {
-        rootEventWidget = Selector<SingleEventProvider, Event?>(
-            builder: (context, event, child) {
-          if (event == null) {
-            return const EventLoadListComponent();
-          }
+    Widget rootEventWidget = FutureBuilder(
+      future: this.rootEventFuture,
+      initialData: null,
+      builder: (context, snapshot) {
+        final rootEvent = snapshot.data;
+        if (rootEvent == null) {
+          return const EventLoadListComponent();
+        }
 
-          {
-            // check if the rootEvent isn't rootEvent
-            var newRelation = EventRelation.fromEvent(event);
-            String? newRootId;
-            if (newRelation.rootId != null) {
-              newRootId = newRelation.rootId;
-            } else if (newRelation.replyId != null) {
-              newRootId = newRelation.replyId;
-            }
-
-            if (StringUtil.isNotBlank(newRootId)) {
-              rootId = newRootId;
-              doQuery();
-              singleEventProvider.getEvent(newRootId!);
-            }
-          }
-
-          return EventListComponent(
-            event: event,
-            jumpable: false,
-            showVideo: true,
-            imageListMode: false,
-            showLongContent: true,
-          );
-        }, selector: (context, provider) {
-          return provider.getEvent(rootId!);
-        });
-      } else if (aId != null) {
-        rootEventWidget = Selector<ReplaceableEventProvider, Event?>(
-            builder: (context, event, child) {
-          if (event == null) {
-            return const EventLoadListComponent();
-          }
-
-          if (rootId != null) {
-            // find the root event now! try to load data again!
-            rootId = event.id;
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              doQuery();
-            });
-          }
-
-          return EventListComponent(
-            event: event,
-            jumpable: false,
-            showVideo: true,
-            imageListMode: false,
-            showLongContent: true,
-          );
-        }, selector: (context, provider) {
-          return provider.getEvent(aId!);
-        });
-      } else {
-        rootEventWidget = Container();
-      }
-    } else {
-      rootEventWidget = EventListComponent(
-        event: rootEvent!,
-        jumpable: false,
-        showVideo: true,
-        imageListMode: false,
-        showLongContent: true,
-      );
-    }
+        return EventListComponent(
+          event: rootEvent,
+          jumpable: false,
+          showVideo: true,
+          imageListMode: false,
+          showLongContent: true,
+        );
+      },
+    );
 
     List<Widget> mainList = [];
 
@@ -270,7 +250,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
       },
     ));
 
-    for (var item in rootSubList!) {
+    for (var item in this.rootSubList!) {
       // if (item.event.kind == kind.EventKind.ZAP &&
       //     StringUtil.isBlank(item.event.content)) {
       //   continue;
@@ -347,53 +327,32 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
 
   @override
   Future<void> onReady(BuildContext context) async {
-    doQuery();
+    this.subscribeReplies();
   }
 
-  void doQuery() {
-    if (StringUtil.isNotBlank(rootId)) {
-      // if (rootEvent == null) {
-      //   // source event isn't root event，query root event
-      //   var filter = Filter(ids: [rootId!]);
-      //   nostr!.query([filter.toJson()], onRootEvent);
-      // }
+  void subscribeReplies() {
+    if (this.repliesSubHandle != null) this.repliesSubHandle!.close();
+    if (this.rootId == null && this.aId == null) return;
 
-      List<int> replyKinds = [...kind.EventKind.SUPPORTED_EVENTS]
-        ..remove(kind.EventKind.REPOST);
+    List<int> replyKinds = [...kind.EventKind.SUPPORTED_EVENTS];
+    replyKinds.remove(kind.EventKind.REPOST);
 
-      // query sub events
-      var filter = Filter(e: [rootId!], kinds: replyKinds);
+    // query sub events
+    var filter = this.aId == null
+        ? Filter(
+            e: [this.rootId!],
+            kinds: replyKinds,
+          )
+        : Filter(
+            a: [this.aId!.toTag()],
+            kinds: replyKinds,
+          );
 
-      var filters = [filter.toJson()];
-      if (aId != null) {
-        var f = Filter(kinds: replyKinds);
-        var m = f.toJson();
-        m["#a"] = [aId!.toAString()];
-        filters.add(m);
-      }
-
-      // print(filters);
-
-      nostr.query(filters, onEvent);
-    }
+    this.repliesSubHandle = nostr.pool
+        .subscribeMany(nostr.relayList.read, [filter], onEvent: onEvent);
   }
-
-  AId? aId;
-
-  String? rootId;
-
-  Event? rootEvent;
-
-  List<ThreadDetailEvent>? rootSubList = [];
-
-  // void onRootEvent(Event event) {
-  //   setState(() {
-  //     rootEvent = event;
-  //   });
-  // }
 
   void onEvent(Event event) {
-    // print(event.toJson());
     if (event.kind == kind.EventKind.ZAP && StringUtil.isBlank(event.content)) {
       return;
     }
@@ -435,8 +394,8 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
       }
     }
 
-    rootSubList = rootSubList;
-    for (var rootSub in rootSubList) {
+    this.rootSubList = rootSubList;
+    for (var rootSub in this.rootSubList!) {
       rootSub.handleTotalLevelNum(0);
     }
 
@@ -457,6 +416,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
   @override
   void dispose() {
     super.dispose();
+    if (this.repliesSubHandle != null) this.repliesSubHandle!.close();
     disposeLater();
   }
 

@@ -1,31 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/provider/metadata_provider.dart';
-import 'package:provider/provider.dart';
 
+import 'package:loure/data/metadata.dart';
+import 'package:loure/main.dart';
 import 'package:loure/component/simple_name_component.dart';
 import 'package:loure/consts/base.dart';
 
 class EditorNotifyItem {
   String pubkey;
-
   bool selected;
 
   EditorNotifyItem({required this.pubkey, this.selected = true});
 }
 
 class EditorNotifyItemComponent extends StatefulWidget {
-  EditorNotifyItem item;
+  final EditorNotifyItem item;
 
-  EditorNotifyItemComponent({super.key, required this.item});
+  const EditorNotifyItemComponent({super.key, required this.item});
 
   @override
   State<StatefulWidget> createState() {
-    return _EditorNotifyItemComponent();
+    return EditorNotifyItemComponentState();
   }
 }
 
-class _EditorNotifyItemComponent extends State<EditorNotifyItemComponent> {
+class EditorNotifyItemComponentState extends State<EditorNotifyItemComponent> {
+  Future<Metadata>? metadataFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    this.metadataFuture = metadataLoader.load(widget.item.pubkey);
+  }
+
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
@@ -33,17 +39,20 @@ class _EditorNotifyItemComponent extends State<EditorNotifyItemComponent> {
     var textColor = themeData.appBarTheme.titleTextStyle!.color;
 
     List<Widget> list = [];
-    list.add(Selector<MetadataProvider, Metadata?>(
-        builder: (context, metadata, child) {
-      String name =
-          SimpleNameComponent.getSimpleName(widget.item.pubkey, metadata);
-      return Text(
-        name,
-        style: TextStyle(color: textColor),
-      );
-    }, selector: (context, provider) {
-      return provider.getMetadata(widget.item.pubkey);
-    }));
+    list.add(
+      FutureBuilder(
+        future: this.metadataFuture,
+        initialData: Metadata.blank(widget.item.pubkey),
+        builder: (context, snapshot) {
+          String name = SimpleNameComponent.getSimpleName(
+              widget.item.pubkey, snapshot.data);
+          return Text(
+            name,
+            style: TextStyle(color: textColor),
+          );
+        },
+      ),
+    );
 
     list.add(SizedBox(
       width: 24,
