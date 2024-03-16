@@ -1,33 +1,33 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:google_mlkit_language_id/google_mlkit_language_id.dart';
-import 'package:google_mlkit_translation/google_mlkit_translation.dart';
-import 'package:loure/client/cashu/cashu_tokens.dart';
-import 'package:loure/component/content/content_decoder.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/provider/setting_provider.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:google_mlkit_language_id/google_mlkit_language_id.dart";
+import "package:google_mlkit_translation/google_mlkit_translation.dart";
+import "package:loure/client/cashu/cashu_tokens.dart";
+import "package:loure/component/content/content_decoder.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/provider/setting_provider.dart";
+import "package:loure/util/string_util.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/event_kind.dart';
-import 'package:loure/client/nip19/nip19.dart';
-import 'package:loure/client/nip19/nip19_tlv.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/component/event/event_quote_component.dart';
-import 'package:loure/component/webview_router.dart';
-import 'package:loure/component/content/content_cashu_component.dart';
-import 'package:loure/component/content/content_custom_emoji_component.dart';
-import 'package:loure/component/content/content_event_tag_infos.dart';
-import 'package:loure/component/content/content_image_component.dart';
-import 'package:loure/component/content/content_link_pre_component.dart';
-import 'package:loure/component/content/content_lnbc_component.dart';
-import 'package:loure/component/content/content_mention_user_component.dart';
-import 'package:loure/component/content/content_relay_component.dart';
-import 'package:loure/component/content/content_tag_component.dart';
-import 'package:loure/component/content/content_video_component.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/event_kind.dart";
+import "package:loure/client/nip19/nip19.dart";
+import "package:loure/client/nip19/nip19_tlv.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/main.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/component/event/event_quote_component.dart";
+import "package:loure/component/webview_router.dart";
+import "package:loure/component/content/content_cashu_component.dart";
+import "package:loure/component/content/content_custom_emoji_component.dart";
+import "package:loure/component/content/content_event_tag_infos.dart";
+import "package:loure/component/content/content_image_component.dart";
+import "package:loure/component/content/content_link_pre_component.dart";
+import "package:loure/component/content/content_lnbc_component.dart";
+import "package:loure/component/content/content_mention_user_component.dart";
+import "package:loure/component/content/content_relay_component.dart";
+import "package:loure/component/content/content_tag_component.dart";
+import "package:loure/component/content/content_video_component.dart";
 
 /// This is the new ContentComponent.
 /// 1. Support image, video, link. These can config showable or replace by a str_line_component.
@@ -42,6 +42,17 @@ import 'package:loure/component/content/content_video_component.dart';
 /// 10.Show more, hide extral when the content is too long.
 /// 11.Simple Markdown support. (LineStr with pre # - FontWeight blod and bigger fontSize, with pre ## - FontWeight blod and normal fontSize).
 class ContentComponent extends StatefulWidget {
+  ContentComponent({
+    super.key,
+    this.content,
+    this.event,
+    this.textOnTap,
+    this.showImage = true,
+    this.showVideo = false,
+    this.showLinkPreview = true,
+    this.imageListMode = false,
+    this.smallest = false,
+  });
   String? content;
   Event? event;
 
@@ -52,17 +63,6 @@ class ContentComponent extends StatefulWidget {
   bool imageListMode = false;
 
   bool smallest;
-
-  ContentComponent({super.key, 
-    this.content,
-    this.event,
-    this.textOnTap,
-    this.showImage = true,
-    this.showVideo = false,
-    this.showLinkPreview = true,
-    this.imageListMode = false,
-    this.smallest = false,
-  });
 
   @override
   State<StatefulWidget> createState() {
@@ -148,13 +148,13 @@ class _ContentComponent extends State<ContentComponent> {
   TextSpan? translateTips;
 
   @override
-  Widget build(BuildContext context) {
-        var themeData = Theme.of(context);
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
     smallTextSize = themeData.textTheme.bodySmall!.fontSize!;
-    var fontSize = themeData.textTheme.bodyLarge!.fontSize!;
+    final fontSize = themeData.textTheme.bodyLarge!.fontSize!;
     iconWidgetWidth = fontSize + 4;
     hintColor = themeData.hintColor;
-    var settingProvider = Provider.of<SettingProvider>(context);
+    final settingProvider = Provider.of<SettingProvider>(context);
     mdh1Style = TextStyle(
       fontSize: fontSize + 1,
       fontWeight: FontWeight.bold,
@@ -188,23 +188,24 @@ class _ContentComponent extends State<ContentComponent> {
       );
     }
 
-    var main = decodeContent();
+    final main = decodeContent();
 
     // decode complete, begin to checkAndTranslate
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((final _) {
       checkAndTranslate();
     });
 
     if (widget.imageListMode &&
         settingProvider.limitNoteHeight != OpenStatus.CLOSE) {
       // imageListMode is true, means this content is in list, should limit height
-      return LayoutBuilder(builder: (context, constraints) {
-        TextPainter textPainter = TextPainter(textDirection: TextDirection.ltr);
+      return LayoutBuilder(builder: (final context, final constraints) {
+        final TextPainter textPainter =
+            TextPainter(textDirection: TextDirection.ltr);
         textPainter.text = TextSpan(
             text: counter.toString(), style: TextStyle(fontSize: fontSize));
         textPainter.layout(maxWidth: constraints.maxWidth);
-        var lineHeight = textPainter.preferredLineHeight;
-        var lineNum = textPainter.height / lineHeight;
+        final lineHeight = textPainter.preferredLineHeight;
+        final lineNum = textPainter.height / lineHeight;
 
         if (lineNum > MAX_SHOW_LINE_NUM_REACH) {
           return Stack(
@@ -281,12 +282,12 @@ class _ContentComponent extends State<ContentComponent> {
     }
     List<InlineSpan> allList = [];
     List<String> images = [];
-    var buffer = StringBuffer();
+    final buffer = StringBuffer();
     contentDecoderInfo = decodeTest(widget.content!);
 
     if (targetTextMap.isNotEmpty) {
       // has bean translate
-      var iconBtn = WidgetSpan(
+      final iconBtn = WidgetSpan(
         child: GestureDetector(
           onTap: () {
             setState(() {
@@ -318,16 +319,16 @@ class _ContentComponent extends State<ContentComponent> {
       allList.add(iconBtn);
     }
 
-    var lineStrs = contentDecoderInfo!.strs;
-    var lineLength = lineStrs.length;
+    final lineStrs = contentDecoderInfo!.strs;
+    final lineLength = lineStrs.length;
     for (var i = 0; i < lineLength; i++) {
       // var lineStr = lineStrs[i];
 
       // this line has text, begin to handle it.
-      var strs = lineStrs[i];
-      var strsLength = strs.length;
+      final strs = lineStrs[i];
+      final strsLength = strs.length;
       for (var j = 0; j < strsLength; j++) {
-        var str = strs[j];
+        final str = strs[j];
 
         if (j == 0) {
           // the first str, check simple markdown support
@@ -351,7 +352,7 @@ class _ContentComponent extends State<ContentComponent> {
           }
         }
 
-        var remain = checkAndHandleStr(str, buffer, allList, images);
+        final remain = checkAndHandleStr(str, buffer, allList, images);
         if (remain != null) {
           buffer.write(remain);
         }
@@ -369,7 +370,7 @@ class _ContentComponent extends State<ContentComponent> {
     }
     bufferToList(buffer, allList);
 
-    var main = SizedBox(
+    final main = SizedBox(
       width: !widget.smallest ? double.infinity : null,
       // padding: EdgeInsets.only(bottom: 20),
       // color: Colors.red,
@@ -390,7 +391,7 @@ class _ContentComponent extends State<ContentComponent> {
       // showImageList in bottom
       List<Widget> imageWidgetList = [];
       var index = 0;
-      for (var image in images) {
+      for (final image in images) {
         imageWidgetList.add(SliverToBoxAdapter(
           child: Container(
             margin: const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
@@ -426,11 +427,11 @@ class _ContentComponent extends State<ContentComponent> {
     }
   }
 
-  String? checkAndHandleStr(String str, StringBuffer buffer,
-      List<InlineSpan> allList, List<String> images) {
+  String? checkAndHandleStr(String str, final StringBuffer buffer,
+      final List<InlineSpan> allList, final List<String> images) {
     if (str.indexOf(HTTPS_PRE) == 0 || str.indexOf(HTTP_PRE) == 0) {
       // http style, get path style
-      var pathType = ContentDecoder.getPathType(str);
+      final pathType = ContentDecoder.getPathType(str);
       if (pathType == "image") {
         images.add(str);
         if (!widget.showImage) {
@@ -440,7 +441,7 @@ class _ContentComponent extends State<ContentComponent> {
               (contentDecoderInfo != null &&
                   contentDecoderInfo!.imageNum > 1)) {
             // this content decode in list, use list mode
-            var imagePlaceholder = Container(
+            final imagePlaceholder = Container(
               // margin: const EdgeInsets.only(left: 4),
               child: const Icon(
                 Icons.image,
@@ -452,7 +453,7 @@ class _ContentComponent extends State<ContentComponent> {
             allList.add(WidgetSpan(child: imagePlaceholder));
           } else {
             // show image in content
-            var imageWidget = ContentImageComponent(
+            final imageWidget = ContentImageComponent(
               imageUrl: str,
               imageList: images,
               imageIndex: images.length - 1,
@@ -468,7 +469,7 @@ class _ContentComponent extends State<ContentComponent> {
         if (widget.showVideo && !PlatformUtil.isPC()) {
           // block
           bufferToList(buffer, allList, removeLastSpan: true);
-          var vComponent = ContentVideoComponent(url: str);
+          final vComponent = ContentVideoComponent(url: str);
           allList.add(WidgetSpan(child: vComponent));
           counterAddLines(fake_video_counter);
         } else {
@@ -484,7 +485,7 @@ class _ContentComponent extends State<ContentComponent> {
           allList.add(buildLinkSpan(str));
         } else {
           bufferToList(buffer, allList, removeLastSpan: true);
-          var w = ContentLinkPreComponent(
+          final w = ContentLinkPreComponent(
             link: str,
           );
           allList.add(WidgetSpan(child: w));
@@ -524,7 +525,7 @@ class _ContentComponent extends State<ContentComponent> {
         }
         key = Nip19.decode(key);
         bufferToList(buffer, allList, removeLastSpan: true);
-        var w = EventQuoteComponent(
+        final w = EventQuoteComponent(
           id: key,
           showVideo: widget.showVideo,
         );
@@ -533,7 +534,7 @@ class _ContentComponent extends State<ContentComponent> {
 
         return otherStr;
       } else if (NIP19Tlv.isNprofile(key)) {
-        var nprofile = NIP19Tlv.decodeNprofile(key);
+        final nprofile = NIP19Tlv.decodeNprofile(key);
         if (nprofile != null) {
           // inline
           // mention user
@@ -546,7 +547,7 @@ class _ContentComponent extends State<ContentComponent> {
           return str;
         }
       } else if (NIP19Tlv.isNrelay(key)) {
-        var nrelay = NIP19Tlv.decodeNrelay(key);
+        final nrelay = NIP19Tlv.decodeNrelay(key);
         if (nrelay != null) {
           // inline
           bufferToList(buffer, allList);
@@ -557,11 +558,11 @@ class _ContentComponent extends State<ContentComponent> {
           return str;
         }
       } else if (NIP19Tlv.isNevent(key)) {
-        var nevent = NIP19Tlv.decodeNevent(key);
+        final nevent = NIP19Tlv.decodeNevent(key);
         if (nevent != null) {
           // block
           bufferToList(buffer, allList, removeLastSpan: true);
-          var w = EventQuoteComponent(
+          final w = EventQuoteComponent(
             id: nevent.id,
             showVideo: widget.showVideo,
           );
@@ -573,13 +574,13 @@ class _ContentComponent extends State<ContentComponent> {
           return str;
         }
       } else if (NIP19Tlv.isNaddr(key)) {
-        var naddr = NIP19Tlv.decodeNaddr(key);
+        final naddr = NIP19Tlv.decodeNaddr(key);
         if (naddr != null) {
           if (StringUtil.isNotBlank(naddr.id) &&
               naddr.kind == EventKind.TEXT_NOTE) {
             // block
             bufferToList(buffer, allList, removeLastSpan: true);
-            var w = EventQuoteComponent(
+            final w = EventQuoteComponent(
               id: naddr.id,
               showVideo: widget.showVideo,
             );
@@ -604,11 +605,11 @@ class _ContentComponent extends State<ContentComponent> {
       // first char is `#`, seconde isn't `[` and `#`
       // tag
       var extralStr = "";
-      var length = str.length;
+      final length = str.length;
       if (tagInfos != null) {
-        for (var hashtagInfo in tagInfos!.tagEntryInfos) {
-          var hashtag = hashtagInfo.key;
-          var hashtagLength = hashtagInfo.value;
+        for (final hashtagInfo in tagInfos!.tagEntryInfos) {
+          final hashtag = hashtagInfo.key;
+          final hashtagLength = hashtagInfo.value;
           if (str.indexOf(hashtag) == 1) {
             // dua to tagEntryInfos is sorted, so this is the match hashtag
             if (hashtagLength > 0 && length > hashtagLength) {
@@ -635,18 +636,18 @@ class _ContentComponent extends State<ContentComponent> {
         str.indexOf(LIGHTNING) == 0 ||
         str.indexOf(OTHER_LIGHTNING) == 0) {
       bufferToList(buffer, allList, removeLastSpan: true);
-      var w = ContentLnbcComponent(lnbc: str);
+      final w = ContentLnbcComponent(lnbc: str);
       allList.add(WidgetSpan(child: w));
       counterAddLines(fake_zap_counter);
 
       return null;
     } else if (str.length > 20 && str.indexOf(PRE_CASHU) == 0) {
-      var cashuStr = str.replaceFirst(PRE_CASHU_LINK, str);
-      var cashuTokens = Tokens.load(cashuStr);
+      final cashuStr = str.replaceFirst(PRE_CASHU_LINK, str);
+      final cashuTokens = Tokens.load(cashuStr);
       if (cashuTokens != null) {
         // decode success
         bufferToList(buffer, allList, removeLastSpan: true);
-        var w = ContentCashuComponent(
+        final w = ContentCashuComponent(
           tokens: cashuTokens,
           cashuStr: cashuStr,
         );
@@ -658,18 +659,18 @@ class _ContentComponent extends State<ContentComponent> {
         str.length > 3 &&
         str.indexOf("#[") == 0) {
       // mention
-      var endIndex = str.indexOf("]");
-      var indexStr = str.substring(2, endIndex);
-      var index = int.tryParse(indexStr);
+      final endIndex = str.indexOf("]");
+      final indexStr = str.substring(2, endIndex);
+      final index = int.tryParse(indexStr);
       if (index != null && widget.event!.tags.length > index) {
-        var tag = widget.event!.tags[index];
+        final tag = widget.event!.tags[index];
         if (tag.length > 1) {
-          var tagType = tag[0];
+          final tagType = tag[0];
           if (tagType == "e") {
             // block
             // mention event
             bufferToList(buffer, allList, removeLastSpan: true);
-            var w = EventQuoteComponent(
+            final w = EventQuoteComponent(
               id: tag[1],
               showVideo: widget.showVideo,
             );
@@ -692,10 +693,10 @@ class _ContentComponent extends State<ContentComponent> {
     return str;
   }
 
-  void _removeEndBlank(List<InlineSpan> allList) {
-    var length = allList.length;
+  void _removeEndBlank(final List<InlineSpan> allList) {
+    final length = allList.length;
     for (var i = length - 1; i >= 0; i--) {
-      var span = allList[i];
+      final span = allList[i];
       if (span is TextSpan) {
         var text = span.text;
         if (StringUtil.isNotBlank(text)) {
@@ -715,8 +716,8 @@ class _ContentComponent extends State<ContentComponent> {
     }
   }
 
-  void bufferToList(StringBuffer buffer, List<InlineSpan> allList,
-      {bool removeLastSpan = false}) {
+  void bufferToList(final StringBuffer buffer, final List<InlineSpan> allList,
+      {final bool removeLastSpan = false}) {
     var text = buffer.toString();
     if (removeLastSpan) {
       // sometimes if the pre text's last chat is NL, need to remove it.
@@ -731,12 +732,12 @@ class _ContentComponent extends State<ContentComponent> {
     }
 
     if (tagInfos != null && tagInfos!.emojiMap.isNotEmpty) {
-      var strs = text.split(":");
+      final strs = text.split(":");
       if (strs.length >= 3) {
         bool preStrIsEmoji = false;
-        StringBuffer sb = StringBuffer(strs[0]);
+        final StringBuffer sb = StringBuffer(strs[0]);
         for (var i = 1; i < strs.length - 1; i++) {
-          var emojiValue = tagInfos!.emojiMap[strs[i]];
+          final emojiValue = tagInfos!.emojiMap[strs[i]];
           if (emojiValue != null) {
             // this is the emoji!!!!
             _onlyBufferToList(sb, allList);
@@ -768,19 +769,20 @@ class _ContentComponent extends State<ContentComponent> {
     _addTextToList(text, allList);
   }
 
-  void _onlyBufferToList(StringBuffer buffer, List<InlineSpan> allList) {
-    var text = buffer.toString();
+  void _onlyBufferToList(
+      final StringBuffer buffer, final List<InlineSpan> allList) {
+    final text = buffer.toString();
     buffer.clear();
     if (StringUtil.isNotBlank(text)) {
       _addTextToList(text, allList);
     }
   }
 
-  void _addTextToList(String text, List<InlineSpan> allList) {
+  void _addTextToList(final String text, final List<InlineSpan> allList) {
     counter.write(text);
 
     textList.add(text);
-    var targetText = targetTextMap[text];
+    final targetText = targetTextMap[text];
     if (targetText == null) {
       allList.add(TextSpan(text: text, style: currentTextStyle));
     } else {
@@ -792,7 +794,8 @@ class _ContentComponent extends State<ContentComponent> {
     }
   }
 
-  TextSpan buildTapableSpan(String str, {GestureTapCallback? onTap}) {
+  TextSpan buildTapableSpan(final String str,
+      {final GestureTapCallback? onTap}) {
     return TextSpan(
       text: str,
       style: highlightStyle,
@@ -800,7 +803,7 @@ class _ContentComponent extends State<ContentComponent> {
     );
   }
 
-  TextSpan buildLinkSpan(String str) {
+  TextSpan buildLinkSpan(final String str) {
     return buildTapableSpan(str, onTap: () {
       WebViewRouter.open(context, str);
     });
@@ -808,16 +811,16 @@ class _ContentComponent extends State<ContentComponent> {
 
   static ContentDecoderInfo decodeTest(String content) {
     content = content.trim();
-    var strs = content.split(NL);
+    final strs = content.split(NL);
 
-    ContentDecoderInfo info = ContentDecoderInfo();
-    for (var str in strs) {
-      var subStrs = str.split(SP);
+    final ContentDecoderInfo info = ContentDecoderInfo();
+    for (final str in strs) {
+      final subStrs = str.split(SP);
       info.strs.add(subStrs);
-      for (var subStr in subStrs) {
+      for (final subStr in subStrs) {
         if (subStr.indexOf("http") == 0) {
           // link, image, video etc
-          var pathType = ContentDecoder.getPathType(subStr);
+          final pathType = ContentDecoder.getPathType(subStr);
           if (pathType == "image") {
             info.imageNum++;
           }
@@ -838,7 +841,7 @@ class _ContentComponent extends State<ContentComponent> {
 
   int fake_zap_counter = 6;
 
-  void counterAddLines(int lineNum) {
+  void counterAddLines(final int lineNum) {
     for (var i = 0; i < lineNum; i++) {
       counter.write(NL);
     }
@@ -887,7 +890,7 @@ class _ContentComponent extends State<ContentComponent> {
       }
     }
 
-    var translateTarget = settingProvider.translateTarget;
+    final translateTarget = settingProvider.translateTarget;
     if (StringUtil.isBlank(translateTarget)) {
       return;
     }
@@ -907,7 +910,7 @@ class _ContentComponent extends State<ContentComponent> {
           await languageIdentifier.identifyPossibleLanguages(newSourceText);
 
       if (possibleLanguages.isNotEmpty) {
-        var pl = possibleLanguages[0];
+        final pl = possibleLanguages[0];
         if (!settingProvider.translateSourceArgsCheck(pl.languageTag)) {
           if (targetTextMap.isNotEmpty) {
             // set targetText to null
@@ -925,11 +928,11 @@ class _ContentComponent extends State<ContentComponent> {
         onDeviceTranslator = OnDeviceTranslator(
             sourceLanguage: sourceLanguage!, targetLanguage: targetLanguage!);
 
-        for (var text in textList) {
+        for (final text in textList) {
           if (text == NL || StringUtil.isBlank(text)) {
             continue;
           }
-          var result = await onDeviceTranslator.translateText(text);
+          final result = await onDeviceTranslator.translateText(text);
           if (StringUtil.isNotBlank(result)) {
             targetTextMap[text] = result;
           }

@@ -1,22 +1,21 @@
-import 'package:loure/data/event_mem_box.dart';
-import 'package:loure/client/event.dart';
+import "package:loure/data/event_mem_box.dart";
+import "package:loure/client/event.dart";
 
 class DMSession {
+  DMSession({required this.pubkey});
   final String pubkey;
 
   EventMemBox _box = EventMemBox();
-
-  DMSession({required this.pubkey});
 
   DMSession clone() {
     return DMSession(pubkey: pubkey).._box = _box;
   }
 
-  bool addEvent(Event event) {
+  bool addEvent(final Event event) {
     return _box.add(event);
   }
 
-  void addEvents(List<Event> events) {
+  void addEvents(final List<Event> events) {
     _box.addList(events);
   }
 
@@ -28,7 +27,7 @@ class DMSession {
     return _box.length();
   }
 
-  Event? get(int index) {
+  Event? get(final int index) {
     if (_box.length() <= index) {
       return null;
     }

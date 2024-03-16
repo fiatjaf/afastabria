@@ -1,13 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:loure/component/content/content_component.dart';
+import "package:flutter/material.dart";
+import "package:loure/component/content/content_component.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/component/user/metadata_top_component.dart';
-import 'package:loure/component/user/user_badges_component.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/component/user/metadata_top_component.dart";
+import "package:loure/component/user/user_badges_component.dart";
 
 class MetadataComponent extends StatefulWidget {
+  MetadataComponent({
+    required this.pubKey,
+    super.key,
+    this.metadata,
+    this.jumpable = false,
+    this.showBadges = false,
+    this.userPicturePreview = false,
+  });
   String pubKey;
 
   Metadata? metadata;
@@ -18,14 +26,6 @@ class MetadataComponent extends StatefulWidget {
 
   bool userPicturePreview;
 
-  MetadataComponent({super.key, 
-    required this.pubKey,
-    this.metadata,
-    this.jumpable = false,
-    this.showBadges = false,
-    this.userPicturePreview = false,
-  });
-
   @override
   State<StatefulWidget> createState() {
     return _MetadataComponent();
@@ -34,7 +34,7 @@ class MetadataComponent extends StatefulWidget {
 
 class _MetadataComponent extends State<MetadataComponent> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     List<Widget> mainList = [];
 
     mainList.add(MetadataTopComponent(

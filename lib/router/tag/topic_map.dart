@@ -21,17 +21,17 @@ class TopicMap {
 
   static Map<String, List<String>> topicMap = {};
 
-  static List<String>? getList(String topic) {
+  static List<String>? getList(final String topic) {
     if (topicMap.isEmpty) {
-      for (var list in topicLists) {
-        for (var t in list) {
+      for (final list in topicLists) {
+        for (final t in list) {
           topicMap[t] = list;
         }
       }
 
       // nips
       for (var i = 0; i < 10; i++) {
-        var list = [
+        final list = [
           "NIP0$i",
           "NIP-0$i",
           "nip0$i",
@@ -39,13 +39,13 @@ class TopicMap {
           "Nip0$i",
           "Nip-0$i"
         ];
-        for (var t in list) {
+        for (final t in list) {
           topicMap[t] = list;
         }
       }
       for (var i = 10; i < 100; i++) {
-        var list = ["NIP$i", "NIP-$i", "nip$i", "nip-$i", "Nip$i", "Nip-$i"];
-        for (var t in list) {
+        final list = ["NIP$i", "NIP-$i", "nip$i", "nip-$i", "Nip$i", "Nip-$i"];
+        for (final t in list) {
           topicMap[t] = list;
         }
       }

@@ -1,20 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:loure/component/image_component.dart';
-import 'package:loure/component/simple_name_component.dart';
-import 'package:loure/component/user_pic_component.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
+import "package:flutter/material.dart";
+import "package:loure/component/image_component.dart";
+import "package:loure/component/simple_name_component.dart";
+import "package:loure/component/user_pic_component.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
 
-import 'package:loure/client/nip58/badge_definition.dart';
+import "package:loure/client/nip58/badge_definition.dart";
 
 class BadgeDetailComponent extends StatefulWidget {
-  BadgeDefinition badgeDefinition;
-
-  BadgeDetailComponent({super.key, 
+  BadgeDetailComponent({
     required this.badgeDefinition,
+    super.key,
   });
+  BadgeDefinition badgeDefinition;
 
   @override
   State<StatefulWidget> createState() {
@@ -24,11 +24,11 @@ class BadgeDetailComponent extends StatefulWidget {
 
 class _BadgeDetailComponent extends State<BadgeDetailComponent> {
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
-    var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
-    
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
+    final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+
     List<Widget> list = [];
 
     if (StringUtil.isNotBlank(widget.badgeDefinition.image)) {

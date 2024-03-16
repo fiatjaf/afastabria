@@ -1,17 +1,20 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/widgets.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/widgets.dart";
 
-import 'package:loure/main.dart';
-import 'package:loure/util/lightning_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/client/zap/zap.dart';
+import "package:loure/main.dart";
+import "package:loure/util/lightning_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/client/zap/zap.dart";
 
 class ZapAction {
-  static Future<void> handleZap(BuildContext context, int sats, String pubkey,
-      {String? eventId, String? pollOption, String? comment}) async {
-    var cancelFunc = BotToast.showLoading();
+  static Future<void> handleZap(
+      final BuildContext context, final int sats, final String pubkey,
+      {final String? eventId,
+      final String? pollOption,
+      final String? comment}) async {
+    final cancelFunc = BotToast.showLoading();
     try {
-      var invoiceCode = await _doGenInvoiceCode(context, sats, pubkey,
+      final invoiceCode = await _doGenInvoiceCode(context, sats, pubkey,
           eventId: eventId, pollOption: pollOption, comment: comment);
 
       if (StringUtil.isBlank(invoiceCode)) {
@@ -26,9 +29,11 @@ class ZapAction {
   }
 
   static Future<String?> genInvoiceCode(
-      BuildContext context, int sats, String pubkey,
-      {String? eventId, String? pollOption, String? comment}) async {
-    var cancelFunc = BotToast.showLoading();
+      final BuildContext context, final int sats, final String pubkey,
+      {final String? eventId,
+      final String? pollOption,
+      final String? comment}) async {
+    final cancelFunc = BotToast.showLoading();
     try {
       return await _doGenInvoiceCode(context, sats, pubkey,
           eventId: eventId, pollOption: pollOption, comment: comment);
@@ -38,9 +43,11 @@ class ZapAction {
   }
 
   static Future<String?> _doGenInvoiceCode(
-      BuildContext context, int sats, String pubkey,
-      {String? eventId, String? pollOption, String? comment}) async {
-    var metadata = await metadataLoader.load(pubkey);
+      final BuildContext context, final int sats, final String pubkey,
+      {final String? eventId,
+      final String? pollOption,
+      final String? comment}) async {
+    final metadata = await metadataLoader.load(pubkey);
     if (metadata.isBlank()) {
       BotToast.showText(text: "Metadata can not be found.");
       return null;

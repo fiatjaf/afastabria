@@ -1,6 +1,6 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:google_mlkit_translation/google_mlkit_translation.dart';
+import "package:google_mlkit_translation/google_mlkit_translation.dart";
 
 class TranslateModelManager {
   static TranslateModelManager? _manager;
@@ -20,8 +20,8 @@ class TranslateModelManager {
   }
 
   Future<void> checkAndDownloadAllModel() async {
-    for (var lan in TranslateLanguage.values) {
-      var bcpCode = lan.bcpCode;
+    for (final lan in TranslateLanguage.values) {
+      final bcpCode = lan.bcpCode;
       if (!await modelManager!.isModelDownloaded(bcpCode)) {
         log("begin to download model $bcpCode");
         await modelManager!.downloadModel(bcpCode, isWifiRequired: false);
@@ -31,8 +31,8 @@ class TranslateModelManager {
     }
   }
 
-  Future<void> checkAndDownloadTargetModel(List<String> bcpCodes) async {
-    for (var bcpCode in bcpCodes) {
+  Future<void> checkAndDownloadTargetModel(final List<String> bcpCodes) async {
+    for (final bcpCode in bcpCodes) {
       if (!await modelManager!.isModelDownloaded(bcpCode)) {
         log("begin to download model $bcpCode");
         await modelManager!.downloadModel(bcpCode, isWifiRequired: false);

@@ -1,24 +1,24 @@
-import 'package:flutter/material.dart';
-import 'package:loure/client/aid.dart';
-import 'package:loure/client/relay/relay_pool.dart';
-import 'package:loure/component/community_info_component.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/provider/community_info_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:widget_size/widget_size.dart';
+import "package:flutter/material.dart";
+import "package:loure/client/aid.dart";
+import "package:loure/client/relay/relay_pool.dart";
+import "package:loure/component/community_info_component.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/provider/community_info_provider.dart";
+import "package:provider/provider.dart";
+import "package:widget_size/widget_size.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/nip172/community_info.dart';
-import 'package:loure/component/cust_state.dart';
-import 'package:loure/component/event/event_list_component.dart';
-import 'package:loure/component/event_delete_callback.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/data/event_mem_box.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/setting_provider.dart';
-import 'package:loure/util/pendingevents_later_function.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/router/edit/editor_router.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/nip172/community_info.dart";
+import "package:loure/component/cust_state.dart";
+import "package:loure/component/event/event_list_component.dart";
+import "package:loure/component/event_delete_callback.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/data/event_mem_box.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/setting_provider.dart";
+import "package:loure/util/pendingevents_later_function.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/router/edit/editor_router.dart";
 
 class CommunityDetailRouter extends StatefulWidget {
   const CommunityDetailRouter({super.key});
@@ -56,9 +56,9 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
   }
 
   @override
-  Widget doBuild(BuildContext context) {
+  Widget doBuild(final BuildContext context) {
     if (aId == null) {
-      var arg = RouterUtil.routerArgs(context);
+      final arg = RouterUtil.routerArgs(context);
       if (arg != null) {
         aId = arg as AId;
       }
@@ -67,9 +67,9 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
       RouterUtil.back(context);
       return Container();
     }
-    var settingProvider = Provider.of<SettingProvider>(context);
-    var themeData = Theme.of(context);
-    var bodyLargeFontSize = themeData.textTheme.bodyLarge!.fontSize;
+    final settingProvider = Provider.of<SettingProvider>(context);
+    final themeData = Theme.of(context);
+    final bodyLargeFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
     Widget? appBarTitle;
     if (showTitle) {
@@ -82,30 +82,30 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
       );
     }
 
-    Widget main = EventDeleteCallback(
+    final Widget main = EventDeleteCallback(
       onDeleteCallback: onDeleteCallback,
       child: ListView.builder(
         controller: _controller,
-        itemBuilder: (context, index) {
+        itemBuilder: (final context, final index) {
           if (index == 0) {
             return Selector<CommunityInfoProvider, CommunityInfo?>(
-                builder: (context, info, child) {
+                builder: (final context, final info, final child) {
               if (info == null) {
                 return Container();
               }
 
               return WidgetSize(
-                onChange: (s) {
+                onChange: (final s) {
                   infoHeight = s.height;
                 },
                 child: CommunityInfoComponent(info: info),
               );
-            }, selector: (context, provider) {
+            }, selector: (final context, final provider) {
               return provider.getCommunity(aId!.toTag());
             });
           }
 
-          var event = box.get(index - 1);
+          final event = box.get(index - 1);
           if (event == null) {
             return null;
           }
@@ -155,7 +155,7 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
   // CommunityInfo? communityInfo;
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     if (aId != null) {
       // {
       //   var filter = Filter(kinds: [
@@ -187,8 +187,8 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
         onEvent: onEvent);
   }
 
-  void onEvent(Event event) {
-    later(event, (list) {
+  void onEvent(final Event event) {
+    later(event, (final list) {
       box.addList(list);
       setState(() {});
     }, null);
@@ -202,14 +202,14 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
     if (this.subHandle != null) this.subHandle!.close();
   }
 
-  onDeleteCallback(Event event) {
+  onDeleteCallback(final Event event) {
     box.delete(event.id);
     setState(() {});
   }
 
   Future<void> addToCommunity() async {
     if (aId != null) {
-      var event = await EditorRouter.open(context, tags: [
+      final event = await EditorRouter.open(context, tags: [
         ["a", aId!.toTag()]
       ]);
       if (event != null) {

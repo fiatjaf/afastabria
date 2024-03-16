@@ -1,29 +1,28 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
 
-import 'package:loure/client/zap/zap_action.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/router_util.dart';
+import "package:loure/client/zap/zap_action.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/util/router_util.dart";
 
 // ignore: must_be_immutable
 class ZapGenDialog extends StatefulWidget {
+  ZapGenDialog(
+      {required this.pubkey,
+      required this.parentContext,
+      super.key,
+      this.eventId});
   String pubkey;
 
   String? eventId;
 
   BuildContext parentContext;
 
-  ZapGenDialog(
-      {super.key,
-      required this.pubkey,
-      this.eventId,
-      required this.parentContext});
-
-  static Future<void> show(BuildContext context, String pubkey,
-      {String? eventId}) async {
+  static Future<void> show(final BuildContext context, final String pubkey,
+      {final String? eventId}) async {
     return await showDialog<void>(
       context: context,
-      builder: (context) {
+      builder: (final context) {
         return ZapGenDialog(
           pubkey: pubkey,
           eventId: eventId,
@@ -51,11 +50,11 @@ class _ZapGenDialog extends State<ZapGenDialog> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    Color cardColor = themeData.cardColor;
-    var mainColor = themeData.primaryColor;
-    var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final Color cardColor = themeData.cardColor;
+    final mainColor = themeData.primaryColor;
+    final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
     List<Widget> list = [];
 
@@ -107,9 +106,7 @@ class _ZapGenDialog extends State<ZapGenDialog> {
       child: Ink(
         decoration: BoxDecoration(color: mainColor),
         child: InkWell(
-          onTap: () {
-            _onConfirm();
-          },
+          onTap: _onConfirm,
           highlightColor: mainColor.withOpacity(0.2),
           child: Container(
             color: mainColor,
@@ -127,7 +124,7 @@ class _ZapGenDialog extends State<ZapGenDialog> {
       ),
     ));
 
-    var main = Container(
+    final main = Container(
       padding: const EdgeInsets.all(Base.BASE_PADDING),
       decoration: BoxDecoration(
         color: cardColor,
@@ -167,14 +164,14 @@ class _ZapGenDialog extends State<ZapGenDialog> {
   }
 
   Future<void> _onConfirm() async {
-    var text = controller.text;
-    var num = int.tryParse(text);
+    final text = controller.text;
+    final num = int.tryParse(text);
     if (num == null) {
       BotToast.showText(text: "Number_parse_error");
       return;
     }
 
-    var comment = commentController.text;
+    final comment = commentController.text;
     RouterUtil.back(context);
 
     await ZapAction.handleZap(widget.parentContext, num, widget.pubkey,

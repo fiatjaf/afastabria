@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class WebViewProvider extends ChangeNotifier {
   String? _url;
@@ -9,7 +9,7 @@ class WebViewProvider extends ChangeNotifier {
 
   bool get showable => _showable;
 
-  void open(String url) {
+  void open(final String url) {
     _url = url;
     _showable = true;
     notifyListeners();

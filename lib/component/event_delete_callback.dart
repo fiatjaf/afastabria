@@ -1,26 +1,25 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/client/event.dart';
+import "package:loure/client/event.dart";
 
 class EventDeleteCallback extends InheritedWidget {
-  Function(Event) onDeleteCallback;
-
   EventDeleteCallback({
-    super.key,
     required super.child,
     required this.onDeleteCallback,
+    super.key,
   });
+  Function(Event) onDeleteCallback;
 
-  static EventDeleteCallback? of(BuildContext context) {
+  static EventDeleteCallback? of(final BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<EventDeleteCallback>();
   }
 
   @override
-  bool updateShouldNotify(covariant EventDeleteCallback oldWidget) {
+  bool updateShouldNotify(covariant final EventDeleteCallback oldWidget) {
     return false;
   }
 
-  void onDelete(Event event) {
+  void onDelete(final Event event) {
     onDeleteCallback(event);
   }
 }

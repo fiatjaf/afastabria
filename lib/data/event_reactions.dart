@@ -1,12 +1,13 @@
-import 'package:loure/util/string_util.dart';
+import "package:loure/util/string_util.dart";
 
-import 'package:loure/client/event_kind.dart' as kind;
-import 'package:loure/client/event.dart';
-import 'package:loure/client/zap/zap_num_util.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/find_event_interface.dart';
+import "package:loure/client/event_kind.dart" as kind;
+import "package:loure/client/event.dart";
+import "package:loure/client/zap/zap_num_util.dart";
+import "package:loure/main.dart";
+import "package:loure/util/find_event_interface.dart";
 
 class EventReactions implements FindEventInterface {
+  EventReactions(this.id);
   String id;
 
   int replyNum = 0;
@@ -29,8 +30,6 @@ class EventReactions implements FindEventInterface {
 
   Map<String, int> eventIdMap = {};
 
-  EventReactions(this.id);
-
   DateTime accessTime = DateTime.now();
 
   DateTime dataTime = DateTime.now();
@@ -52,9 +51,9 @@ class EventReactions implements FindEventInterface {
   }
 
   @override
-  List<Event> findEvent(String str, {int? limit = 5}) {
+  List<Event> findEvent(final String str, {final int? limit = 5}) {
     List<Event> list = [];
-    for (var event in replies) {
+    for (final event in replies) {
       if (event.content.contains(str)) {
         list.add(event);
 
@@ -66,14 +65,14 @@ class EventReactions implements FindEventInterface {
     return list;
   }
 
-  void access(DateTime t) {
+  void access(final DateTime t) {
     accessTime = t;
   }
 
-  bool onEvent(Event event) {
+  bool onEvent(final Event event) {
     dataTime = DateTime.now();
 
-    var id = event.id;
+    final id = event.id;
     if (eventIdMap[id] == null) {
       eventIdMap[id] = 1;
 

@@ -1,22 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:loure/component/event_delete_callback.dart';
-import 'package:loure/router/tag/topic_map.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:loure/component/event_delete_callback.dart";
+import "package:loure/router/tag/topic_map.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/filter.dart';
-import 'package:loure/component/cust_state.dart';
-import 'package:loure/component/event/event_list_component.dart';
-import 'package:loure/component/tag_info_component.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/data/event_mem_box.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/setting_provider.dart';
-import 'package:loure/util/pendingevents_later_function.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/client/event_kind.dart';
-import 'package:loure/util/string_util.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/filter.dart";
+import "package:loure/component/cust_state.dart";
+import "package:loure/component/event/event_list_component.dart";
+import "package:loure/component/tag_info_component.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/data/event_mem_box.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/setting_provider.dart";
+import "package:loure/util/pendingevents_later_function.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/client/event_kind.dart";
+import "package:loure/util/string_util.dart";
 
 class TagDetailRouter extends StatefulWidget {
   const TagDetailRouter({super.key});
@@ -56,15 +56,15 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
   }
 
   @override
-  Widget doBuild(BuildContext context) {
-    var settingProvider = Provider.of<SettingProvider>(context);
+  Widget doBuild(final BuildContext context) {
+    final settingProvider = Provider.of<SettingProvider>(context);
     if (StringUtil.isBlank(tag)) {
-      var arg = RouterUtil.routerArgs(context);
+      final arg = RouterUtil.routerArgs(context);
       if (arg != null && arg is String) {
         tag = arg;
       }
     } else {
-      var arg = RouterUtil.routerArgs(context);
+      final arg = RouterUtil.routerArgs(context);
       if (arg != null && arg is String && tag != arg) {
         // arg changed! reset
         tag = arg;
@@ -78,8 +78,8 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
       return Container();
     }
 
-    var themeData = Theme.of(context);
-    var bodyLargeFontSize = themeData.textTheme.bodyLarge!.fontSize;
+    final themeData = Theme.of(context);
+    final bodyLargeFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
     Widget? appBarTitle;
     if (showTitle) {
@@ -96,7 +96,7 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
       onDeleteCallback: onDeleteCallback,
       child: ListView.builder(
         controller: _controller,
-        itemBuilder: (context, index) {
+        itemBuilder: (final context, final index) {
           if (index == 0) {
             return TagInfoComponent(
               tag: tag!,
@@ -104,7 +104,7 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
             );
           }
 
-          var event = box.get(index - 1);
+          final event = box.get(index - 1);
           if (event == null) {
             return null;
           }
@@ -120,7 +120,7 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
 
     if (PlatformUtil.isTableMode()) {
       main = GestureDetector(
-        onVerticalDragUpdate: (detail) {
+        onVerticalDragUpdate: (final detail) {
           _controller.jumpTo(_controller.offset - detail.delta.dy);
         },
         behavior: HitTestBehavior.translucent,
@@ -147,23 +147,23 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     doQuery();
   }
 
   void doQuery() {
     // tag query
     // https://github.com/nostr-protocol/nips/blob/master/12.md
-    var filter = Filter(kinds: EventKind.SUPPORTED_EVENTS, limit: 100);
-    var plainTag = tag!.replaceFirst("#", "");
+    final filter = Filter(kinds: EventKind.SUPPORTED_EVENTS, limit: 100);
+    final plainTag = tag!.replaceFirst("#", "");
     // this place set #t not #r ???
     var list = TopicMap.getList(plainTag);
     if (list != null) {
       filter.t = list;
     } else {
       // can't find from topicMap, change to query the source, upperCase and lowerCase
-      var upperCase = plainTag.toUpperCase();
-      var lowerCase = plainTag.toLowerCase();
+      final upperCase = plainTag.toUpperCase();
+      final lowerCase = plainTag.toLowerCase();
       list = [upperCase];
       if (upperCase != lowerCase) {
         list.add(lowerCase);
@@ -177,10 +177,10 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
         onEvent: onEvent);
   }
 
-  void onEvent(Event? event) {
+  void onEvent(final Event? event) {
     if (event == null) return;
 
-    later(event, (list) {
+    later(event, (final list) {
       box.addList(list);
       setState(() {});
     }, null);
@@ -192,7 +192,7 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
     disposeLater();
   }
 
-  onDeleteCallback(Event event) {
+  onDeleteCallback(final Event event) {
     box.delete(event.id);
     setState(() {});
   }

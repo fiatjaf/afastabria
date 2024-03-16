@@ -1,19 +1,29 @@
-import 'dart:io';
-import 'dart:ui';
+import "dart:io";
+import "dart:ui";
 
-import 'package:bot_toast/bot_toast.dart';
-import 'package:easy_image_viewer/easy_image_viewer.dart';
-import 'package:file_saver/file_saver.dart';
-import 'package:flutter/material.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:loure/util/image_tool.dart';
-import 'package:permission_handler/permission_handler.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:easy_image_viewer/easy_image_viewer.dart";
+import "package:file_saver/file_saver.dart";
+import "package:flutter/material.dart";
+import "package:image_gallery_saver/image_gallery_saver.dart";
+import "package:loure/util/image_tool.dart";
+import "package:permission_handler/permission_handler.dart";
 
 const _defaultBackgroundColor = Colors.black;
 const _defaultCloseButtonColor = Colors.white;
-const _defaultCloseButtonTooltip = 'Close';
+const _defaultCloseButtonTooltip = "Close";
 
 class ImagePreviewDialog extends StatefulWidget {
+
+  const ImagePreviewDialog(this.imageProvider,
+      {required this.closeButtonColor, required this.backgroundColor, required this.closeButtonTooltip, final Key? key,
+      this.immersive = true,
+      this.onPageChanged,
+      this.onViewerDismissed,
+      this.useSafeArea = false,
+      this.swipeDismissible = false,
+      this.doubleTapZoomable = false})
+      : super(key: key);
   final EasyImageProvider imageProvider;
   final bool immersive;
   final void Function(int)? onPageChanged;
@@ -24,19 +34,6 @@ class ImagePreviewDialog extends StatefulWidget {
   final Color backgroundColor;
   final String closeButtonTooltip;
   final Color closeButtonColor;
-
-  const ImagePreviewDialog(this.imageProvider,
-      {Key? key,
-      this.immersive = true,
-      this.onPageChanged,
-      this.onViewerDismissed,
-      this.useSafeArea = false,
-      this.swipeDismissible = false,
-      this.doubleTapZoomable = false,
-      required this.backgroundColor,
-      required this.closeButtonTooltip,
-      required this.closeButtonColor})
-      : super(key: key);
 
   /// Shows the given [imageProvider] in a full-screen [Dialog].
   /// Setting [immersive] to false will prevent the top and bottom bars from being hidden.
@@ -49,16 +46,16 @@ class ImagePreviewDialog extends StatefulWidget {
   /// close button and is used for accessibility.
   /// The [closeButtonColor] defaults to white, but can be set to any other color.
   static Future<void> show(
-      BuildContext context, EasyImageProvider imageProvider,
-      {bool immersive = true,
-      void Function(int)? onPageChanged,
-      void Function(int)? onViewerDismissed,
-      bool useSafeArea = false,
-      bool swipeDismissible = false,
-      bool doubleTapZoomable = false,
-      Color backgroundColor = _defaultBackgroundColor,
-      String closeButtonTooltip = _defaultCloseButtonTooltip,
-      Color closeButtonColor = _defaultCloseButtonColor}) {
+      final BuildContext context, final EasyImageProvider imageProvider,
+      {final bool immersive = true,
+      final void Function(int)? onPageChanged,
+      final void Function(int)? onViewerDismissed,
+      final bool useSafeArea = false,
+      final bool swipeDismissible = false,
+      final bool doubleTapZoomable = false,
+      final Color backgroundColor = _defaultBackgroundColor,
+      final String closeButtonTooltip = _defaultCloseButtonTooltip,
+      final Color closeButtonColor = _defaultCloseButtonColor}) {
     // if (immersive) {
     //   // Hide top and bottom bars
     //   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
@@ -67,7 +64,7 @@ class ImagePreviewDialog extends StatefulWidget {
     return showDialog(
         context: context,
         useSafeArea: useSafeArea,
-        builder: (context) {
+        builder: (final context) {
           return ImagePreviewDialog(imageProvider,
               immersive: immersive,
               onPageChanged: onPageChanged,
@@ -123,8 +120,8 @@ class _ImagePreviewDialog extends State<ImagePreviewDialog> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var main = Scaffold(
+  Widget build(final BuildContext context) {
+    final main = Scaffold(
       backgroundColor: widget.backgroundColor.withOpacity(0.5),
       body: Stack(
           clipBehavior: Clip.none,
@@ -134,7 +131,7 @@ class _ImagePreviewDialog extends State<ImagePreviewDialog> {
                 easyImageProvider: widget.imageProvider,
                 pageController: _pageController,
                 doubleTapZoomable: widget.doubleTapZoomable,
-                onScaleChanged: (scale) {
+                onScaleChanged: (final scale) {
                   setState(() {
                     _dismissDirection = scale <= 1.0
                         ? DismissDirection.down
@@ -178,15 +175,15 @@ class _ImagePreviewDialog extends State<ImagePreviewDialog> {
       return Dismissible(
           direction: _dismissDirection,
           resizeDuration: null,
-          confirmDismiss: (dir) async {
+          confirmDismiss: (final dir) async {
             return true;
           },
-          onDismissed: (_) {
+          onDismissed: (final _) {
             Navigator.of(context).pop();
 
             _handleDismissal();
           },
-          key: const Key('dismissible_easy_image_viewer_dialog'),
+          key: const Key("dismissible_easy_image_viewer_dialog"),
           child: popScopeAwareDialog);
     } else {
       return popScopeAwareDialog;
@@ -197,7 +194,7 @@ class _ImagePreviewDialog extends State<ImagePreviewDialog> {
     if (Platform.isIOS) {
       _doSaveImage();
     } else if (Platform.isAndroid) {
-      PermissionStatus permission = await Permission.storage.request();
+      final PermissionStatus permission = await Permission.storage.request();
       if (permission == PermissionStatus.granted) {
         _doSaveImage();
       } else {
@@ -208,20 +205,20 @@ class _ImagePreviewDialog extends State<ImagePreviewDialog> {
     }
   }
 
-  Future<void> _doSaveImage({bool isPc = false}) async {
-    var index = _pageController.page!.toInt();
-    var imageProvider = widget.imageProvider.imageBuilder(context, index);
-    var imageAsBytes =
+  Future<void> _doSaveImage({final bool isPc = false}) async {
+    final index = _pageController.page!.toInt();
+    final imageProvider = widget.imageProvider.imageBuilder(context, index);
+    final imageAsBytes =
         await imageProvider.getBytes(context, format: ImageByteFormat.png);
     if (imageAsBytes != null) {
       if (!isPc) {
-        var result =
+        final result =
             await ImageGallerySaver.saveImage(imageAsBytes, quality: 100);
         if (result != null && result is Map && result["isSuccess"]) {
           BotToast.showText(text: "Image_save_success");
         }
       } else {
-        var result = await FileSaver.instance.saveFile(
+        final result = await FileSaver.instance.saveFile(
           name: DateTime.now().millisecondsSinceEpoch.toString(),
           bytes: imageAsBytes,
           ext: ".png",

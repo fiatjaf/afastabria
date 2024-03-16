@@ -1,23 +1,13 @@
-import 'package:loure/client/event.dart';
+import "package:loure/client/event.dart";
 
 class PollInfo {
-  List<List<String>> pollOptions = [];
-
-  int? valueMaximum;
-
-  int? valueMinimum;
-
-  String? consensusThreshold;
-
-  int? closedAt;
-
-  PollInfo.fromEvent(Event event) {
-    var length = event.tags.length;
+  PollInfo.fromEvent(final Event event) {
+    final length = event.tags.length;
     for (var i = 0; i < length; i++) {
-      var tag = event.tags[i];
-      var tagLength = tag.length;
+      final tag = event.tags[i];
+      final tagLength = tag.length;
       if (tagLength > 1) {
-        var value = tag[1];
+        final value = tag[1];
         if (tag[0] == "poll_option") {
           pollOptions.add([tag[1], tag[2]]);
         } else if (tag[0] == "value_maximum") {
@@ -32,4 +22,13 @@ class PollInfo {
       }
     }
   }
+  List<List<String>> pollOptions = [];
+
+  int? valueMaximum;
+
+  int? valueMinimum;
+
+  String? consensusThreshold;
+
+  int? closedAt;
 }

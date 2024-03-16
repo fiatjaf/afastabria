@@ -1,34 +1,42 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_image_viewer/easy_image_viewer.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:loure/client/nip19/nip19_tlv.dart';
-import 'package:loure/component/nip05_valid_component.dart';
-import 'package:loure/component/qrcode_dialog.dart';
-import 'package:loure/component/webview_router.dart';
-import 'package:loure/component/zap_gen_dialog.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/contact_list_provider.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:provider/provider.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:cached_network_image/cached_network_image.dart";
+import "package:easy_image_viewer/easy_image_viewer.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:loure/client/nip19/nip19_tlv.dart";
+import "package:loure/component/nip05_valid_component.dart";
+import "package:loure/component/qrcode_dialog.dart";
+import "package:loure/component/webview_router.dart";
+import "package:loure/component/zap_gen_dialog.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/contact_list_provider.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/router_util.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/client/nip02/contact.dart';
-import 'package:loure/client/nip19/nip19.dart';
-import 'package:loure/client/zap/zap_action.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/component/confirm_dialog.dart';
-import 'package:loure/component/image_component.dart';
-import 'package:loure/component/image_preview_dialog.dart';
+import "package:loure/client/nip02/contact.dart";
+import "package:loure/client/nip19/nip19.dart";
+import "package:loure/client/zap/zap_action.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/component/confirm_dialog.dart";
+import "package:loure/component/image_component.dart";
+import "package:loure/component/image_preview_dialog.dart";
 
 // ignore: must_be_immutable
 class MetadataTopComponent extends StatefulWidget {
-  static double getPcBannerHeight(double maxHeight) {
-    var height = maxHeight * 0.2;
+  MetadataTopComponent({
+    required this.pubkey,
+    super.key,
+    this.metadata,
+    this.isLocal = false,
+    this.jumpable = false,
+    this.userPicturePreview = false,
+  });
+  static double getPcBannerHeight(final double maxHeight) {
+    final height = maxHeight * 0.2;
     if (height > 200) {
       return 200;
     }
@@ -46,15 +54,6 @@ class MetadataTopComponent extends StatefulWidget {
   bool jumpable;
 
   bool userPicturePreview;
-
-  MetadataTopComponent({
-    super.key,
-    required this.pubkey,
-    this.metadata,
-    this.isLocal = false,
-    this.jumpable = false,
-    this.userPicturePreview = false,
-  });
 
   @override
   State<StatefulWidget> createState() {
@@ -79,21 +78,21 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
-    var hintColor = themeData.hintColor;
-    var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
-    var maxWidth = mediaDataCache.size.width;
-    var largeFontSize = themeData.textTheme.bodyLarge!.fontSize;
-    var fontSize = themeData.textTheme.bodyMedium!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
+    final hintColor = themeData.hintColor;
+    final scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
+    final maxWidth = mediaDataCache.size.width;
+    final largeFontSize = themeData.textTheme.bodyLarge!.fontSize;
+    final fontSize = themeData.textTheme.bodyMedium!.fontSize;
     var bannerHeight = maxWidth / 3;
     if (PlatformUtil.isTableMode()) {
       bannerHeight =
           MetadataTopComponent.getPcBannerHeight(mediaDataCache.size.height);
     }
 
-    String nip19Name = Nip19.encodeSimplePubKey(widget.pubkey);
+    final String nip19Name = Nip19.encodeSimplePubKey(widget.pubkey);
     String displayName = "";
     String? name;
     if (widget.metadata != null) {
@@ -115,7 +114,8 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
         width: IMAGE_WIDTH,
         height: IMAGE_WIDTH,
         fit: BoxFit.cover,
-        placeholder: (context, url) => const CircularProgressIndicator(),
+        placeholder: (final context, final url) =>
+            const CircularProgressIndicator(),
       );
     }
     Widget? bannerImage;
@@ -155,7 +155,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
           (StringUtil.isNotBlank(widget.metadata!.lud06) ||
               StringUtil.isNotBlank(widget.metadata!.lud16))) {
         topBtnList.add(wrapBtn(PopupMenuButton<int>(
-          itemBuilder: (context) {
+          itemBuilder: (final context) {
             return [
               const PopupMenuItem(
                 value: 10,
@@ -234,7 +234,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
         onTap: openDMSession,
       )));
       topBtnList.add(Selector<ContactListProvider, Contact?>(
-        builder: (context, contact, child) {
+        builder: (final context, final contact, final child) {
           if (contact == null) {
             return wrapBtn(MetadataTextBtn(
               text: "Follow",
@@ -253,7 +253,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
             ));
           }
         },
-        selector: (context, provider) {
+        selector: (final context, final provider) {
           return provider.getContact(widget.pubkey);
         },
       ));
@@ -403,7 +403,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
     );
   }
 
-  Widget wrapBtn(Widget child) {
+  Widget wrapBtn(final Widget child) {
     return Container(
       margin: const EdgeInsets.only(right: 8),
       child: child,
@@ -411,7 +411,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
   }
 
   copyPubKey() {
-    Clipboard.setData(ClipboardData(text: nip19PubKey)).then((_) {
+    Clipboard.setData(ClipboardData(text: nip19PubKey)).then((final _) {
       BotToast.showText(text: "key_has_been_copy");
     });
   }
@@ -421,37 +421,37 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
   }
 
   void openDMSession() {
-    var detail = dmProvider.findOrNewADetail(widget.pubkey);
+    final detail = dmProvider.findOrNewADetail(widget.pubkey);
     RouterUtil.router(context, RouterPath.DM_DETAIL, detail);
   }
 
-  void onZapSelect(int sats) {
+  void onZapSelect(final int sats) {
     ZapAction.handleZap(context, sats, widget.pubkey);
   }
 
   Future<void> handleScanner() async {
-    var result = await RouterUtil.router(context, RouterPath.QRSCANNER);
+    final result = await RouterUtil.router(context, RouterPath.QRSCANNER);
     if (StringUtil.isNotBlank(result)) {
       if (Nip19.isPubkey(result)) {
-        var pubkey = Nip19.decode(result);
+        final pubkey = Nip19.decode(result);
         RouterUtil.router(context, RouterPath.USER, pubkey);
       } else if (NIP19Tlv.isNprofile(result)) {
-        var nprofile = NIP19Tlv.decodeNprofile(result);
+        final nprofile = NIP19Tlv.decodeNprofile(result);
         if (nprofile != null) {
           RouterUtil.router(context, RouterPath.USER, nprofile.pubkey);
         }
       } else if (Nip19.isNoteId(result)) {
-        var noteId = Nip19.decode(result);
+        final noteId = Nip19.decode(result);
         RouterUtil.router(context, RouterPath.EVENT_DETAIL, noteId);
       } else if (NIP19Tlv.isNevent(result)) {
-        var nevent = NIP19Tlv.decodeNevent(result);
+        final nevent = NIP19Tlv.decodeNevent(result);
         if (nevent != null) {
           RouterUtil.router(context, RouterPath.EVENT_DETAIL, nevent.id);
         }
       } else if (NIP19Tlv.isNrelay(result)) {
-        var nrelay = NIP19Tlv.decodeNrelay(result);
+        final nrelay = NIP19Tlv.decodeNrelay(result);
         if (nrelay != null) {
-          var result =
+          final result =
               await ConfirmDialog.show(context, "Add this relay to local");
           if (result == true) {
             nostr.relayList.add(nrelay.addr, true, true);
@@ -460,7 +460,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
       } else if (result.indexOf("http") == 0) {
         WebViewRouter.open(context, result);
       } else {
-        Clipboard.setData(ClipboardData(text: result)).then((_) {
+        Clipboard.setData(ClipboardData(text: result)).then((final _) {
           BotToast.showText(text: "Copy_success");
         });
       }
@@ -473,7 +473,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
       List<ImageProvider> imageProviders = [];
       imageProviders.add(CachedNetworkImageProvider(widget.metadata!.picture!));
 
-      MultiImageProvider multiImageProvider =
+      final MultiImageProvider multiImageProvider =
           MultiImageProvider(imageProviders, initialIndex: 0);
 
       ImagePreviewDialog.show(context, multiImageProvider,
@@ -484,22 +484,21 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
 
 // ignore: must_be_immutable
 class MetadataIconBtn extends StatelessWidget {
+  MetadataIconBtn(
+      {required this.iconData, super.key, this.onTap, this.onLongPress});
   void Function()? onTap;
 
   void Function()? onLongPress;
 
   IconData iconData;
 
-  MetadataIconBtn(
-      {super.key, required this.iconData, this.onTap, this.onLongPress});
-
   @override
-  Widget build(BuildContext context) {
-    var decoration = BoxDecoration(
+  Widget build(final BuildContext context) {
+    final decoration = BoxDecoration(
       borderRadius: BorderRadius.circular(14),
       border: Border.all(width: 1),
     );
-    var main = SizedBox(
+    final main = SizedBox(
       height: 28,
       width: 28,
       child: Icon(
@@ -536,21 +535,20 @@ class MetadataIconBtn extends StatelessWidget {
 }
 
 class MetadataTextBtn extends StatelessWidget {
+  MetadataTextBtn({
+    required this.text,
+    required this.onTap,
+    super.key,
+    this.borderColor,
+  });
   void Function() onTap;
 
   String text;
 
   Color? borderColor;
 
-  MetadataTextBtn({
-    super.key,
-    required this.text,
-    required this.onTap,
-    this.borderColor,
-  });
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Ink(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
@@ -578,6 +576,15 @@ class MetadataTextBtn extends StatelessWidget {
 }
 
 class MetadataIconDataComp extends StatelessWidget {
+  MetadataIconDataComp({
+    required this.text,
+    super.key,
+    this.iconData,
+    this.leftWidget,
+    this.iconColor,
+    this.textBG = false,
+    this.onTap,
+  });
   String text;
 
   IconData? iconData;
@@ -590,19 +597,9 @@ class MetadataIconDataComp extends StatelessWidget {
 
   Widget? leftWidget;
 
-  MetadataIconDataComp({
-    super.key,
-    required this.text,
-    this.iconData,
-    this.leftWidget,
-    this.iconColor,
-    this.textBG = false,
-    this.onTap,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
     Color? cardColor = themeData.cardColor;
     if (cardColor == Colors.white) {
       cardColor = Colors.grey[300];

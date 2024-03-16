@@ -1,21 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:google_mlkit_language_id/google_mlkit_language_id.dart';
-import 'package:google_mlkit_translation/google_mlkit_translation.dart';
-import 'package:google_mlkit_translation/src/on_device_translator.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/setting_provider.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:google_mlkit_language_id/google_mlkit_language_id.dart";
+import "package:google_mlkit_translation/google_mlkit_translation.dart";
+import "package:google_mlkit_translation/src/on_device_translator.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/setting_provider.dart";
+import "package:loure/util/string_util.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/component/cust_state.dart';
+import "package:loure/component/cust_state.dart";
 
 class TextTranslateComponent extends StatefulWidget {
+  TextTranslateComponent(this.text, {super.key, this.textOnTap});
   String text;
 
   Function? textOnTap;
-
-  TextTranslateComponent(this.text, {super.key, this.textOnTap});
 
   @override
   State<StatefulWidget> createState() {
@@ -37,20 +36,20 @@ class _TextTranslateComponent extends CustState<TextTranslateComponent> {
   bool showSource = false;
 
   @override
-  Widget doBuild(BuildContext context) {
-    var settingProvider = Provider.of<SettingProvider>(context);
+  Widget doBuild(final BuildContext context) {
+    final settingProvider = Provider.of<SettingProvider>(context);
 
     if (isInited) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((final _) {
         checkAndTranslate();
       });
     }
 
-    var themeData = Theme.of(context);
-    var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
-    var fontSize = themeData.textTheme.bodyMedium!.fontSize;
-    var iconWidgetWidth = fontSize! + 4;
-    var hintColor = themeData.hintColor;
+    final themeData = Theme.of(context);
+    final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+    final fontSize = themeData.textTheme.bodyMedium!.fontSize;
+    final iconWidgetWidth = fontSize! + 4;
+    final hintColor = themeData.hintColor;
 
     List<InlineSpan> list = [TextSpan(text: targetText ?? widget.text)];
     if (targetLanguage != null &&
@@ -72,7 +71,7 @@ class _TextTranslateComponent extends CustState<TextTranslateComponent> {
         );
       }
 
-      var iconBtn = WidgetSpan(
+      final iconBtn = WidgetSpan(
         child: GestureDetector(
           onTap: () {
             setState(() {
@@ -132,7 +131,7 @@ class _TextTranslateComponent extends CustState<TextTranslateComponent> {
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     checkAndTranslate();
   }
 
@@ -164,7 +163,7 @@ class _TextTranslateComponent extends CustState<TextTranslateComponent> {
       }
     }
 
-    var translateTarget = settingProvider.translateTarget;
+    final translateTarget = settingProvider.translateTarget;
     if (StringUtil.isBlank(translateTarget)) {
       return;
     }
@@ -182,7 +181,7 @@ class _TextTranslateComponent extends CustState<TextTranslateComponent> {
           await languageIdentifier.identifyPossibleLanguages(widget.text);
 
       if (possibleLanguages.isNotEmpty) {
-        var pl = possibleLanguages[0];
+        final pl = possibleLanguages[0];
         if (!settingProvider.translateSourceArgsCheck(pl.languageTag)) {
           if (targetText != null) {
             // set targetText to null
@@ -200,7 +199,7 @@ class _TextTranslateComponent extends CustState<TextTranslateComponent> {
         onDeviceTranslator = OnDeviceTranslator(
             sourceLanguage: sourceLanguage!, targetLanguage: targetLanguage!);
 
-        var result = await onDeviceTranslator.translateText(widget.text);
+        final result = await onDeviceTranslator.translateText(widget.text);
         if (StringUtil.isNotBlank(result)) {
           setState(() {
             targetText = result;

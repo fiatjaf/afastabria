@@ -7,7 +7,7 @@ mixin WhenStopFunction {
 
   bool waitingStop = false;
 
-  void whenStop(Function func) {
+  void whenStop(final Function func) {
     _updateStopTime();
     if (!waitingStop) {
       waitingStop = true;
@@ -19,13 +19,13 @@ mixin WhenStopFunction {
     stopTime = DateTime.now().millisecondsSinceEpoch + whenStopMS;
   }
 
-  void _goWaitForStop(Function func) {
+  void _goWaitForStop(final Function func) {
     Future.delayed(Duration(milliseconds: whenStopMS), () {
       if (!_WhenStopRunning) {
         return;
       }
 
-      var nowMS = DateTime.now().millisecondsSinceEpoch;
+      final nowMS = DateTime.now().millisecondsSinceEpoch;
       if (nowMS >= stopTime) {
         waitingStop = false;
         func();

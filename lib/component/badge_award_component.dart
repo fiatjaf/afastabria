@@ -1,22 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:loure/client/event.dart';
-import 'package:loure/client/nip58/badge_definition.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/badge_definition_provider.dart';
-import 'package:loure/provider/badge_provider.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:loure/client/event.dart";
+import "package:loure/client/nip58/badge_definition.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/badge_definition_provider.dart";
+import "package:loure/provider/badge_provider.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/component/badge_detail_component.dart';
+import "package:loure/component/badge_detail_component.dart";
 
 // ignore: must_be_immutable
 class BadgeAwardComponent extends StatefulWidget {
-  Event event;
-
   BadgeAwardComponent({
-    super.key,
     required this.event,
+    super.key,
   });
+  Event event;
 
   @override
   State<StatefulWidget> createState() {
@@ -31,10 +30,10 @@ class _BadgeAwardComponent extends State<BadgeAwardComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+  Widget build(final BuildContext context) {
+    final theme = Theme.of(context);
     var badgeId = "";
-    for (var tag in widget.event.tags) {
+    for (final tag in widget.event.tags) {
       if (tag[0] == "a") {
         badgeId = tag[1];
       }
@@ -44,8 +43,8 @@ class _BadgeAwardComponent extends State<BadgeAwardComponent> {
       return Container();
     }
 
-    var badgeDetailComp = Selector<BadgeDefinitionProvider, BadgeDefinition?>(
-        builder: (context, badgeDefinition, child) {
+    final badgeDetailComp = Selector<BadgeDefinitionProvider, BadgeDefinition?>(
+        builder: (final context, final badgeDefinition, final child) {
       if (badgeDefinition == null) {
         return Container();
       }
@@ -53,14 +52,14 @@ class _BadgeAwardComponent extends State<BadgeAwardComponent> {
       return BadgeDetailComponent(
         badgeDefinition: badgeDefinition,
       );
-    }, selector: (context, provider) {
+    }, selector: (final context, final provider) {
       return provider.get(badgeId, widget.event.pubKey);
     });
 
     List<Widget> list = [badgeDetailComp];
 
-    var wearComp = Selector<BadgeProvider, bool>(
-      builder: ((context, exist, child) {
+    final wearComp = Selector<BadgeProvider, bool>(
+      builder: (final context, final exist, final child) {
         if (exist) {
           return Container();
         }
@@ -91,10 +90,10 @@ class _BadgeAwardComponent extends State<BadgeAwardComponent> {
             ),
           ),
         );
-      }),
-      selector: ((context, badgeProvider) {
+      },
+      selector: (final context, final badgeProvider) {
         return badgeProvider.containBadge(badgeId);
-      }),
+      },
     );
     list.add(wearComp);
 

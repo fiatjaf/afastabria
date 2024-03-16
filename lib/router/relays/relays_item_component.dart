@@ -1,25 +1,25 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 
-import 'package:loure/client/relay/relay.dart';
-import 'package:loure/client/nip19/nip19_tlv.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/consts/base.dart';
+import "package:loure/client/relay/relay.dart";
+import "package:loure/client/nip19/nip19_tlv.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/main.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/consts/base.dart";
 
 // ignore: must_be_immutable
 class RelaysItemComponent extends StatelessWidget {
+  RelaysItemComponent(
+      {required this.addr, required this.relayStatus, super.key});
   String addr;
   RelayStatus relayStatus;
-  RelaysItemComponent(
-      {super.key, required this.addr, required this.relayStatus});
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
     Color borderLeftColor = Colors.green;
     if (relayStatus.connected == ConnState.UN_CONNECT) {
       borderLeftColor = Colors.red;
@@ -91,8 +91,8 @@ class RelaysItemComponent extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  var text = NIP19Tlv.encodeNrelay(Nrelay(addr));
-                  Clipboard.setData(ClipboardData(text: text)).then((_) {
+                  final text = NIP19Tlv.encodeNrelay(Nrelay(addr));
+                  Clipboard.setData(ClipboardData(text: text)).then((final _) {
                     BotToast.showText(text: "Copy_success");
                   });
                 },
@@ -119,28 +119,27 @@ class RelaysItemComponent extends StatelessWidget {
     );
   }
 
-  void removeRelay(String addr) {
+  void removeRelay(final String addr) {
     nostr.relayList.remove(addr);
   }
 }
 
 // ignore: must_be_immutable
 class RelaysItemNumComponent extends StatelessWidget {
+  RelaysItemNumComponent({
+    required this.iconData,
+    required this.num,
+    super.key,
+    this.iconColor,
+  });
   Color? iconColor;
   IconData iconData;
   int num;
 
-  RelaysItemNumComponent({
-    super.key,
-    this.iconColor,
-    required this.iconData,
-    required this.num,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var smallFontSize = themeData.textTheme.bodySmall!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final smallFontSize = themeData.textTheme.bodySmall!.fontSize;
 
     return Row(
       mainAxisSize: MainAxisSize.min,

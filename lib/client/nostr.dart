@@ -1,20 +1,31 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:loure/client/aid.dart';
-import 'package:loure/client/event_kind.dart';
-import 'package:loure/client/filter.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/main.dart';
+import "package:loure/client/aid.dart";
+import "package:loure/client/event_kind.dart";
+import "package:loure/client/filter.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/main.dart";
 
-import 'package:loure/client/client_utils/keys.dart';
-import 'package:loure/client/event.dart';
-import 'package:loure/client/nip02/cust_contact_list.dart';
-import 'package:loure/client/nip65/relay_list.dart';
+import "package:loure/client/client_utils/keys.dart";
+import "package:loure/client/event.dart";
+import "package:loure/client/nip02/cust_contact_list.dart";
+import "package:loure/client/nip65/relay_list.dart";
+
+const ONE = "0000000000000000000000000000000000000000000000000000000000000001";
 
 class Nostr {
+  Nostr(this.privateKey) : this.publicKey = getPublicKey(privateKey);
+  factory Nostr.empty() {
+    return Nostr(ONE);
+  }
+
   final String privateKey;
   final String publicKey;
+
+  bool isEmpty() {
+    return this.privateKey == ONE;
+  }
 
   RelayList relayList = RelayList([
     "wss://nostr.wine",
@@ -31,16 +42,14 @@ class Nostr {
   final idIndex = <String, Event>{};
   final addressIndex = <String, Event>{};
 
-  Nostr(this.privateKey) : this.publicKey = getPublicKey(privateKey);
-
-  void init(String secretKey) {
+  void init(final String secretKey) {
     pool
         .querySync(RELAYLIST_RELAYS,
             Filter(kinds: [10002], authors: [nostr.publicKey]))
-        .then((Iterable<Event> evts) {
+        .then((final Iterable<Event> evts) {
       if (evts.length == 0) return;
 
-      Event latest = evts.reduce((Event a, Event b) {
+      final Event latest = evts.reduce((final Event a, final Event b) {
         if (a.createdAt > b.createdAt) {
           return a;
         } else {
@@ -88,8 +97,8 @@ class Nostr {
   ];
   final List<String> BLASTR = ["wss://nostr.mutinywallet.com"];
 
-  Future<Event?> getByID(String id) async {
-    var evt = nostr.idIndex[id];
+  Future<Event?> getByID(final String id) async {
+    final evt = nostr.idIndex[id];
     if (evt != null) {
       return evt;
     } else {
@@ -97,9 +106,10 @@ class Nostr {
     }
   }
 
-  Future<Event?> getByAddress(AId aid, {Iterable<String>? relays}) async {
+  Future<Event?> getByAddress(final AId aid,
+      {final Iterable<String>? relays}) async {
     final tag = aid.toTag();
-    var evt = nostr.addressIndex[tag];
+    final evt = nostr.addressIndex[tag];
     if (evt != null) {
       return evt;
     } else {
@@ -111,8 +121,8 @@ class Nostr {
     }
   }
 
-  void updateIndexesAndSource(Event event, String relayURL) {
-    this.idIndex.update(event.id, (Event curr) {
+  void updateIndexesAndSource(final Event event, final String relayURL) {
+    this.idIndex.update(event.id, (final Event curr) {
       curr.sources.add(relayURL);
       return curr;
     }, ifAbsent: () {
@@ -125,7 +135,8 @@ class Nostr {
         kind: event.kind,
         pubkey: event.pubKey,
         identifier: event.tags
-                .firstWhere((tag) => tag.firstOrNull == "d", orElse: () => [])
+                .firstWhere((final tag) => tag.firstOrNull == "d",
+                    orElse: () => [])
                 .firstOrNull ??
             "",
       );
@@ -133,13 +144,13 @@ class Nostr {
     }
   }
 
-  Event? sendLike(String id) {
-    var target = nostr.idIndex[id];
+  Event? sendLike(final String id) {
+    final target = nostr.idIndex[id];
     if (target == null) {
       return null;
     }
 
-    Event event = Event.finalize(
+    final Event event = Event.finalize(
         this.privateKey,
         EventKind.REACTION,
         [
@@ -151,14 +162,14 @@ class Nostr {
     return event;
   }
 
-  void deleteEvent(String id) {
-    var relays = [...BLASTR];
-    var target = nostr.idIndex[id];
+  void deleteEvent(final String id) {
+    final relays = [...BLASTR];
+    final target = nostr.idIndex[id];
     if (target != null) {
       relays.addAll(target.sources);
     }
 
-    Event event = Event.finalize(
+    final Event event = Event.finalize(
         this.privateKey,
         EventKind.EVENT_DELETION,
         [
@@ -168,12 +179,12 @@ class Nostr {
     pool.publish(relays, event);
   }
 
-  void deleteEvents(List<String> ids) {
-    var relays = BLASTR.toSet();
+  void deleteEvents(final List<String> ids) {
+    final relays = BLASTR.toSet();
 
     List<List<String>> tags = [];
-    for (var id in ids) {
-      var target = nostr.idIndex[id];
+    for (final id in ids) {
+      final target = nostr.idIndex[id];
       if (target != null) {
         relays.addAll(target.sources);
       }
@@ -181,18 +192,18 @@ class Nostr {
       tags.add(["e", id]);
     }
 
-    Event event = Event.finalize(
+    final Event event = Event.finalize(
         this.privateKey, EventKind.EVENT_DELETION, tags, "delete");
     pool.publish(relays, event);
   }
 
-  Event? sendRepost(String id) {
-    var target = nostr.idIndex[id];
+  Event? sendRepost(final String id) {
+    final target = nostr.idIndex[id];
     if (target == null) {
       return null;
     }
 
-    Event event = Event.finalize(
+    final Event event = Event.finalize(
         this.privateKey,
         EventKind.REPOST,
         [
@@ -209,21 +220,22 @@ class Nostr {
     return event;
   }
 
-  Event sendTextNote(String text, [List<List<String>> tags = const []]) {
-    Event event =
+  Event sendTextNote(final String text,
+      [final List<List<String>> tags = const []]) {
+    final Event event =
         Event.finalize(this.privateKey, EventKind.TEXT_NOTE, tags, text);
     pool.publish(this.relayList.write, event);
     return event;
   }
 
-  Event sendMetadata(Metadata metadata) {
+  Event sendMetadata(final Metadata metadata) {
     final event = Event.finalize(
         this.privateKey, EventKind.METADATA, [], jsonEncode(metadata));
     pool.publish([...this.relayList.write, ...METADATA_RELAYS], event);
     return event;
   }
 
-  Event sendContactList(CustContactList contacts, String content) {
+  Event sendContactList(final CustContactList contacts, final String content) {
     final tags = contacts.toTags();
     final event =
         Event.finalize(this.privateKey, EventKind.CONTACT_LIST, tags, content);
@@ -231,13 +243,14 @@ class Nostr {
     return event;
   }
 
-  Event sendRelayList(String content) {
-    var event = this.relayList.toEvent(nostr.privateKey);
+  Event sendRelayList(final String content) {
+    final event = this.relayList.toEvent(nostr.privateKey);
     pool.publish([...this.relayList.write, ...RELAYLIST_RELAYS], event);
     return event;
   }
 
-  Event sendList(int kind, List<List<String>> tags, String content) {
+  Event sendList(
+      final int kind, final List<List<String>> tags, final String content) {
     final event = Event.finalize(this.privateKey, kind, tags, content);
     pool.publish(this.relayList.write, event);
     return event;

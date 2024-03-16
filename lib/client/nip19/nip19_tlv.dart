@@ -1,26 +1,26 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:bech32/bech32.dart';
-import 'package:hex/hex.dart';
+import "package:bech32/bech32.dart";
+import "package:hex/hex.dart";
 
-import 'package:loure/client/nip19/nip19.dart';
-import 'package:loure/client/nip19/tlv_util.dart';
-import 'package:loure/component/content/content_decoder.dart';
+import "package:loure/client/nip19/nip19.dart";
+import "package:loure/client/nip19/tlv_util.dart";
+import "package:loure/component/content/content_decoder.dart";
 
 class NIP19Tlv {
-  static bool isNprofile(String text) {
+  static bool isNprofile(final String text) {
     return Nip19.isKey(Hrps.NPROFILE, text);
   }
 
-  static bool isNevent(String text) {
+  static bool isNevent(final String text) {
     return Nip19.isKey(Hrps.NEVENT, text);
   }
 
-  static bool isNrelay(String text) {
+  static bool isNrelay(final String text) {
     return Nip19.isKey(Hrps.NRELAY, text);
   }
 
-  static bool isNaddr(String text) {
+  static bool isNaddr(final String text) {
     return Nip19.isKey(Hrps.NADDR, text);
   }
 
@@ -28,9 +28,9 @@ class NIP19Tlv {
     try {
       text = text.replaceAll(ContentDecoder.NOTE_REFERENCES, "");
 
-      var decoder = Bech32Decoder();
-      var bech32Result = decoder.convert(text, 1000);
-      var buf = Nip19.convertBits(bech32Result.data, 5, 8, false);
+      final decoder = Bech32Decoder();
+      final bech32Result = decoder.convert(text, 1000);
+      final buf = Nip19.convertBits(bech32Result.data, 5, 8, false);
 
       return buf;
     } catch (e) {
@@ -38,7 +38,7 @@ class NIP19Tlv {
     }
   }
 
-  static Nprofile? decodeNprofile(String text) {
+  static Nprofile? decodeNprofile(final String text) {
     List<int> buf = _decodePreHandle(text);
 
     String? pubkey;
@@ -46,7 +46,7 @@ class NIP19Tlv {
 
     int startIndex = 0;
     while (true) {
-      var tlvData = TLVUtil.readTLVEntry(buf, startIndex: startIndex);
+      final tlvData = TLVUtil.readTLVEntry(buf, startIndex: startIndex);
       if (tlvData == null) {
         break;
       }
@@ -55,7 +55,7 @@ class NIP19Tlv {
       if (tlvData.typ == TLVType.Default) {
         pubkey = HEX.encode(tlvData.data);
       } else if (tlvData.typ == TLVType.Relay) {
-        var relay = utf8.decode(tlvData.data);
+        final relay = utf8.decode(tlvData.data);
         relays.add(relay);
       }
     }
@@ -67,7 +67,7 @@ class NIP19Tlv {
     return null;
   }
 
-  static Nevent? decodeNevent(String text) {
+  static Nevent? decodeNevent(final String text) {
     List<int> buf = _decodePreHandle(text);
 
     String? id;
@@ -76,7 +76,7 @@ class NIP19Tlv {
 
     int startIndex = 0;
     while (true) {
-      var tlvData = TLVUtil.readTLVEntry(buf, startIndex: startIndex);
+      final tlvData = TLVUtil.readTLVEntry(buf, startIndex: startIndex);
       if (tlvData == null) {
         break;
       }
@@ -85,7 +85,7 @@ class NIP19Tlv {
       if (tlvData.typ == TLVType.Default) {
         id = HEX.encode(tlvData.data);
       } else if (tlvData.typ == TLVType.Relay) {
-        var relay = utf8.decode(tlvData.data);
+        final relay = utf8.decode(tlvData.data);
         relays.add(relay);
       } else if (tlvData.typ == TLVType.Author) {
         author = HEX.encode(tlvData.data);
@@ -99,21 +99,21 @@ class NIP19Tlv {
     return null;
   }
 
-  static Nrelay? decodeNrelay(String text) {
+  static Nrelay? decodeNrelay(final String text) {
     List<int> buf = _decodePreHandle(text);
 
     String? addr;
 
     int startIndex = 0;
     while (true) {
-      var tlvData = TLVUtil.readTLVEntry(buf, startIndex: startIndex);
+      final tlvData = TLVUtil.readTLVEntry(buf, startIndex: startIndex);
       if (tlvData == null) {
         break;
       }
       startIndex += tlvData.length + 2;
 
       if (tlvData.typ == TLVType.Default) {
-        var relay = utf8.decode(tlvData.data);
+        final relay = utf8.decode(tlvData.data);
         addr = relay;
       }
     }
@@ -125,7 +125,7 @@ class NIP19Tlv {
     return null;
   }
 
-  static Naddr? decodeNaddr(String text) {
+  static Naddr? decodeNaddr(final String text) {
     List<int> buf = _decodePreHandle(text);
 
     String? id;
@@ -135,7 +135,7 @@ class NIP19Tlv {
 
     int startIndex = 0;
     while (true) {
-      var tlvData = TLVUtil.readTLVEntry(buf, startIndex: startIndex);
+      final tlvData = TLVUtil.readTLVEntry(buf, startIndex: startIndex);
       if (tlvData == null) {
         break;
       }
@@ -144,7 +144,7 @@ class NIP19Tlv {
       if (tlvData.typ == TLVType.Default) {
         id = HEX.encode(tlvData.data);
       } else if (tlvData.typ == TLVType.Relay) {
-        var relay = utf8.decode(tlvData.data);
+        final relay = utf8.decode(tlvData.data);
         relays.add(relay);
       } else if (tlvData.typ == TLVType.Kind) {
         kind = tlvData.data[0];
@@ -160,17 +160,17 @@ class NIP19Tlv {
     return null;
   }
 
-  static String _handleEncodeResult(String hrp, List<int> buf) {
-    var encoder = Bech32Encoder();
-    Bech32 input = Bech32(hrp, buf);
+  static String _handleEncodeResult(final String hrp, final List<int> buf) {
+    final encoder = Bech32Encoder();
+    final Bech32 input = Bech32(hrp, buf);
     return ContentDecoder.NOTE_REFERENCES + encoder.convert(input, 2000);
   }
 
-  static String encodeNprofile(Nprofile o) {
+  static String encodeNprofile(final Nprofile o) {
     List<int> buf = [];
     TLVUtil.writeTLVEntry(buf, TLVType.Default, HEX.decode(o.pubkey));
     if (o.relays != null) {
-      for (var relay in o.relays!) {
+      for (final relay in o.relays!) {
         TLVUtil.writeTLVEntry(buf, TLVType.Relay, utf8.encode(relay));
       }
     }
@@ -180,11 +180,11 @@ class NIP19Tlv {
     return _handleEncodeResult(Hrps.NPROFILE, buf);
   }
 
-  static String encodeNevent(Nevent o) {
+  static String encodeNevent(final Nevent o) {
     List<int> buf = [];
     TLVUtil.writeTLVEntry(buf, TLVType.Default, HEX.decode(o.id));
     if (o.relays != null) {
-      for (var relay in o.relays!) {
+      for (final relay in o.relays!) {
         TLVUtil.writeTLVEntry(buf, TLVType.Relay, utf8.encode(relay));
       }
     }
@@ -197,7 +197,7 @@ class NIP19Tlv {
     return _handleEncodeResult(Hrps.NEVENT, buf);
   }
 
-  static String encodeNrelay(Nrelay o) {
+  static String encodeNrelay(final Nrelay o) {
     List<int> buf = [];
     TLVUtil.writeTLVEntry(buf, TLVType.Default, utf8.encode(o.addr));
 
@@ -206,13 +206,13 @@ class NIP19Tlv {
     return _handleEncodeResult(Hrps.NRELAY, buf);
   }
 
-  static String encodeNaddr(Naddr o) {
+  static String encodeNaddr(final Naddr o) {
     List<int> buf = [];
     TLVUtil.writeTLVEntry(buf, TLVType.Default, HEX.decode(o.id));
     TLVUtil.writeTLVEntry(buf, TLVType.Author, HEX.decode(o.author));
     TLVUtil.writeTLVEntry(buf, TLVType.Kind, [o.kind]);
     if (o.relays != null) {
-      for (var relay in o.relays!) {
+      for (final relay in o.relays!) {
         TLVUtil.writeTLVEntry(buf, TLVType.Relay, utf8.encode(relay));
       }
     }
@@ -224,34 +224,32 @@ class NIP19Tlv {
 }
 
 class Nprofile {
+  Nprofile({required this.pubkey, this.relays});
   String pubkey;
   Iterable<String>? relays;
-  Nprofile({required this.pubkey, this.relays});
 }
 
 class Nevent {
+  Nevent({required this.id, this.relays, this.author});
   String id;
   Iterable<String>? relays;
   String? author;
-  Nevent({required this.id, this.relays, this.author});
 }
 
 class Nrelay {
-  String addr;
-
   Nrelay(this.addr);
+  String addr;
 }
 
 class Naddr {
-  String id;
-  String author;
-  int kind;
-  Iterable<String>? relays;
-
   Naddr({
     required this.id,
     required this.author,
     required this.kind,
     this.relays,
   });
+  String id;
+  String author;
+  int kind;
+  Iterable<String>? relays;
 }

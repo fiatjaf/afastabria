@@ -1,49 +1,65 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:provider/provider.dart';
-import 'package:screenshot/screenshot.dart';
+import "package:flutter/material.dart";
+import "package:flutter_markdown/flutter_markdown.dart";
+import "package:provider/provider.dart";
+import "package:screenshot/screenshot.dart";
 
-import 'package:loure/component/content/content_video_component.dart';
-import 'package:loure/component/content/markdown/markdown_mention_event_element_builder.dart';
-import 'package:loure/component/event/event_zap_goals_component.dart';
-import 'package:loure/component/simple_name_component.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/client/event.dart';
-import 'package:loure/client/event_kind.dart';
-import 'package:loure/client/event_relation.dart';
-import 'package:loure/client/nip23/long_form_info.dart';
-import 'package:loure/client/nip19/nip19.dart';
-import 'package:loure/client/nip19/nip19_tlv.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/setting_provider.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/component/confirm_dialog.dart';
-import 'package:loure/component/content/content_component.dart';
-import 'package:loure/component/content/content_decoder.dart';
-import 'package:loure/component/content/content_image_component.dart';
-import 'package:loure/component/content/content_link_component.dart';
-import 'package:loure/component/content/content_tag_component.dart';
-import 'package:loure/component/content/markdown/markdown_mention_event_inline_syntax.dart';
-import 'package:loure/component/content/markdown/markdown_mention_user_element_builder.dart';
-import 'package:loure/component/content/markdown/markdown_mention_user_inline_syntax.dart';
-import 'package:loure/component/content/markdown/markdown_nevent_inline_syntax.dart';
-import 'package:loure/component/content/markdown/markdown_nprofile_inline_syntax.dart';
-import 'package:loure/component/content/markdown/markdown_nrelay_element_builder.dart';
-import 'package:loure/component/content/markdown/markdown_nrelay_inline_syntax%20copy.dart';
-import 'package:loure/component/event/event_poll_component.dart';
-import 'package:loure/component/webview_router.dart';
-import 'package:loure/component/event/event_quote_component.dart';
-import 'package:loure/component/event/event_reactions_component.dart';
-import 'package:loure/component/event/event_top_component.dart';
+import "package:loure/component/content/content_video_component.dart";
+import "package:loure/component/content/markdown/markdown_mention_event_element_builder.dart";
+import "package:loure/component/event/event_zap_goals_component.dart";
+import "package:loure/component/simple_name_component.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/client/event.dart";
+import "package:loure/client/event_kind.dart";
+import "package:loure/client/event_relation.dart";
+import "package:loure/client/nip23/long_form_info.dart";
+import "package:loure/client/nip19/nip19.dart";
+import "package:loure/client/nip19/nip19_tlv.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/setting_provider.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/component/confirm_dialog.dart";
+import "package:loure/component/content/content_component.dart";
+import "package:loure/component/content/content_decoder.dart";
+import "package:loure/component/content/content_image_component.dart";
+import "package:loure/component/content/content_link_component.dart";
+import "package:loure/component/content/content_tag_component.dart";
+import "package:loure/component/content/markdown/markdown_mention_event_inline_syntax.dart";
+import "package:loure/component/content/markdown/markdown_mention_user_element_builder.dart";
+import "package:loure/component/content/markdown/markdown_mention_user_inline_syntax.dart";
+import "package:loure/component/content/markdown/markdown_nevent_inline_syntax.dart";
+import "package:loure/component/content/markdown/markdown_nprofile_inline_syntax.dart";
+import "package:loure/component/content/markdown/markdown_nrelay_element_builder.dart";
+import "package:loure/component/content/markdown/markdown_nrelay_inline_syntax%20copy.dart";
+import "package:loure/component/event/event_poll_component.dart";
+import "package:loure/component/webview_router.dart";
+import "package:loure/component/event/event_quote_component.dart";
+import "package:loure/component/event/event_reactions_component.dart";
+import "package:loure/component/event/event_top_component.dart";
 
 class EventMainComponent extends StatefulWidget {
+  const EventMainComponent({
+    required this.screenshotController,
+    required this.event,
+    super.key,
+    this.pagePubkey,
+    this.showReplying = true,
+    this.textOnTap,
+    this.showVideo = false,
+    this.imageListMode = false,
+    this.showDetailBtn = true,
+    this.showLongContent = false,
+    this.showSubject = true,
+    this.showCommunity = true,
+    this.eventRelation,
+    this.showLinkedLongForm = true,
+  });
   final ScreenshotController screenshotController;
   final Event event;
   final String? pagePubkey;
@@ -57,23 +73,6 @@ class EventMainComponent extends StatefulWidget {
   final bool showCommunity;
   final EventRelation? eventRelation;
   final bool showLinkedLongForm;
-
-  const EventMainComponent({
-    super.key,
-    required this.screenshotController,
-    required this.event,
-    this.pagePubkey,
-    this.showReplying = true,
-    this.textOnTap,
-    this.showVideo = false,
-    this.imageListMode = false,
-    this.showDetailBtn = true,
-    this.showLongContent = false,
-    this.showSubject = true,
-    this.showCommunity = true,
-    this.eventRelation,
-    this.showLinkedLongForm = true,
-  });
 
   @override
   State<StatefulWidget> createState() {
@@ -97,25 +96,25 @@ class EventMainComponentState extends State<EventMainComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var settingProvider = Provider.of<SettingProvider>(context);
+  Widget build(final BuildContext context) {
+    final settingProvider = Provider.of<SettingProvider>(context);
     if (eventRelation.id != widget.event.id) {
       // change when thead root load lazy
       eventRelation = EventRelation.fromEvent(widget.event);
     }
 
-    bool imagePreview = settingProvider.imagePreview == null ||
+    final bool imagePreview = settingProvider.imagePreview == null ||
         settingProvider.imagePreview == OpenStatus.OPEN;
     bool videoPreview = widget.showVideo;
     if (settingProvider.videoPreview != null) {
       videoPreview = settingProvider.videoPreview == OpenStatus.OPEN;
     }
 
-    var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
-    var largeTextSize = themeData.textTheme.bodyLarge!.fontSize;
-    var mainColor = themeData.primaryColor;
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+    final largeTextSize = themeData.textTheme.bodyLarge!.fontSize;
+    final mainColor = themeData.primaryColor;
 
     Color? contentCardColor = themeData.cardColor;
     if (contentCardColor == Colors.white) {
@@ -127,7 +126,7 @@ class EventMainComponentState extends State<EventMainComponent> {
             widget.event.kind == EventKind.GENERIC_REPOST) &&
         widget.event.content.contains("\"pubkey\"")) {
       try {
-        var jsonMap = jsonDecode(widget.event.content);
+        final jsonMap = jsonDecode(widget.event.content);
         repostEvent = Event.fromJson(jsonMap);
 
         // set source to repost event
@@ -150,11 +149,10 @@ class EventMainComponentState extends State<EventMainComponent> {
     List<Widget> list = [];
     if (showWarning || !eventRelation.warning) {
       if (widget.event.kind == EventKind.LONG_FORM) {
-        var longFormMargin =
-            const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF);
+        const longFormMargin = EdgeInsets.only(bottom: Base.BASE_PADDING_HALF);
 
         List<Widget> subList = [];
-        var longFormInfo = LongFormInfo.fromEvent(widget.event);
+        final longFormInfo = LongFormInfo.fromEvent(widget.event);
         if (StringUtil.isNotBlank(longFormInfo.title)) {
           subList.add(
             Container(
@@ -172,7 +170,7 @@ class EventMainComponentState extends State<EventMainComponent> {
         }
         if (longFormInfo.topics.isNotEmpty) {
           List<Widget> topicWidgets = [];
-          for (var topic in longFormInfo.topics) {
+          for (final topic in longFormInfo.topics) {
             topicWidgets.add(ContentTagComponent(tag: "#$topic"));
           }
 
@@ -186,7 +184,7 @@ class EventMainComponentState extends State<EventMainComponent> {
           ));
         }
         if (StringUtil.isNotBlank(longFormInfo.summary)) {
-          Widget summaryTextWidget = Text(
+          final Widget summaryTextWidget = Text(
             longFormInfo.summary!,
             style: TextStyle(
               color: hintColor,
@@ -221,7 +219,7 @@ class EventMainComponentState extends State<EventMainComponent> {
         );
 
         if (widget.showLongContent) {
-          var markdownWidget = buildMarkdownWidget(themeData);
+          final markdownWidget = buildMarkdownWidget(themeData);
 
           list.add(SizedBox(
             width: double.infinity,
@@ -258,19 +256,19 @@ class EventMainComponentState extends State<EventMainComponent> {
         }
       } else {
         if (widget.showReplying && eventRelation.tagPList.isNotEmpty) {
-          var textStyle = TextStyle(
+          final textStyle = TextStyle(
             color: hintColor,
             fontSize: smallTextSize,
           );
           List<Widget> replyingList = [];
-          var length = eventRelation.tagPList.length;
+          final length = eventRelation.tagPList.length;
           replyingList.add(Text(
             "${"Replying"}: ",
             style: textStyle,
           ));
           for (var index = 0; index < length; index++) {
-            var p = eventRelation.tagPList[index];
-            var isLast = index < length - 1 ? false : true;
+            final p = eventRelation.tagPList[index];
+            final isLast = index < length - 1 ? false : true;
             replyingList.add(EventReplyingComponent(pubkey: p));
             if (!isLast) {
               replyingList.add(Text(
@@ -328,10 +326,10 @@ class EventMainComponentState extends State<EventMainComponent> {
         if (widget.event.kind == EventKind.FILE_HEADER) {
           String? m;
           String? url;
-          for (var tag in widget.event.tags) {
+          for (final tag in widget.event.tags) {
             if (tag.length > 1) {
-              var key = tag[0];
-              var value = tag[1];
+              final key = tag[0];
+              final value = tag[1];
               if (key == "url") {
                 url = value;
               } else if (key == "m") {
@@ -353,7 +351,7 @@ class EventMainComponentState extends State<EventMainComponent> {
                 list.add(ContentLinkComponent(link: url!));
               }
             } else {
-              var fileType = ContentDecoder.getPathType(url!);
+              final fileType = ContentDecoder.getPathType(url!);
               if (fileType == "image") {
                 list.add(ContentImageComponent(imageUrl: url));
               } else if (fileType == "video" && !PlatformUtil.isPC()) {
@@ -401,7 +399,7 @@ class EventMainComponentState extends State<EventMainComponent> {
     if (eventRelation.aId != null &&
         eventRelation.aId!.kind == EventKind.COMMUNITY_DEFINITION &&
         widget.showCommunity) {
-      var communityTitle = Row(
+      final communityTitle = Row(
         children: [
           Icon(
             Icons.groups,
@@ -474,9 +472,9 @@ class EventMainComponentState extends State<EventMainComponent> {
 
   bool hideLongContent = false;
 
-  Widget buildContentWidget(
-      SettingProvider settingProvider, bool imagePreview, bool videoPreview) {
-    var main = SizedBox(
+  Widget buildContentWidget(final SettingProvider settingProvider,
+      final bool imagePreview, final bool videoPreview) {
+    final main = SizedBox(
       width: double.maxFinite,
       child: ContentComponent(
         content: widget.event.content,
@@ -506,17 +504,17 @@ class EventMainComponentState extends State<EventMainComponent> {
     return main;
   }
 
-  buildMarkdownWidget(ThemeData themeData) {
+  buildMarkdownWidget(final ThemeData themeData) {
     // handle old mention, replace to NIP-27 style: nostr:note1xxxx or nostr:npub1xxx
     var content = widget.event.content;
-    var tagLength = widget.event.tags.length;
+    final tagLength = widget.event.tags.length;
     for (var i = 0; i < tagLength; i++) {
-      var tag = widget.event.tags[i];
+      final tag = widget.event.tags[i];
       String? link;
 
       if (tag.length > 1) {
-        var key = tag[0];
-        var value = tag[1];
+        final key = tag[0];
+        final value = tag[1];
         if (key == "e") {
           link = "nostr:${Nip19.encodeNoteId(value)}";
         } else if (key == "p") {
@@ -547,7 +545,7 @@ class EventMainComponentState extends State<EventMainComponent> {
         MarkdownNprofileInlineSyntax(),
         MarkdownNrelayInlineSyntax(),
       ],
-      imageBuilder: (Uri uri, String? title, String? alt) {
+      imageBuilder: (final Uri uri, final String? title, final String? alt) {
         if (settingProvider.imagePreview == OpenStatus.CLOSE) {
           return ContentLinkComponent(
             link: uri.toString(),
@@ -562,43 +560,44 @@ class EventMainComponentState extends State<EventMainComponent> {
           decoration: TextDecoration.underline,
         ),
       ),
-      onTapLink: (String text, String? href, String title) async {
+      onTapLink:
+          (final String text, final String? href, final String title) async {
         // print("text $text href $href title $title");
         if (StringUtil.isNotBlank(href)) {
           if (href!.indexOf("http") == 0) {
             WebViewRouter.open(context, href);
           } else if (href.indexOf("nostr:") == 0) {
-            var link = href.replaceFirst("nostr:", "");
+            final link = href.replaceFirst("nostr:", "");
             if (Nip19.isPubkey(link)) {
               // jump user page
-              var pubkey = Nip19.decode(link);
+              final pubkey = Nip19.decode(link);
               if (StringUtil.isNotBlank(pubkey)) {
                 RouterUtil.router(context, RouterPath.USER, pubkey);
               }
             } else if (NIP19Tlv.isNprofile(link)) {
-              var nprofile = NIP19Tlv.decodeNprofile(link);
+              final nprofile = NIP19Tlv.decodeNprofile(link);
               if (nprofile != null) {
                 RouterUtil.router(context, RouterPath.USER, nprofile.pubkey);
               }
             } else if (Nip19.isNoteId(link)) {
-              var noteId = Nip19.decode(link);
+              final noteId = Nip19.decode(link);
               if (StringUtil.isNotBlank(noteId)) {
                 RouterUtil.router(context, RouterPath.EVENT_DETAIL, noteId);
               }
             } else if (NIP19Tlv.isNevent(link)) {
-              var nevent = NIP19Tlv.decodeNevent(link);
+              final nevent = NIP19Tlv.decodeNevent(link);
               if (nevent != null) {
                 RouterUtil.router(context, RouterPath.EVENT_DETAIL, nevent.id);
               }
             } else if (NIP19Tlv.isNaddr(link)) {
-              var naddr = NIP19Tlv.decodeNaddr(link);
+              final naddr = NIP19Tlv.decodeNaddr(link);
               if (naddr != null) {
                 RouterUtil.router(context, RouterPath.EVENT_DETAIL, naddr.id);
               }
             } else if (NIP19Tlv.isNrelay(link)) {
-              var nrelay = NIP19Tlv.decodeNrelay(link);
+              final nrelay = NIP19Tlv.decodeNrelay(link);
               if (nrelay != null) {
-                var result = await ConfirmDialog.show(
+                final result = await ConfirmDialog.show(
                     context, "Add this relay to local");
                 if (result == true) {
                   nostr.relayList.add(nrelay.addr, true, true);
@@ -611,7 +610,7 @@ class EventMainComponentState extends State<EventMainComponent> {
     );
   }
 
-  Widget buildWarningWidget(double largeTextSize, Color mainColor) {
+  Widget buildWarningWidget(final double largeTextSize, final Color mainColor) {
     return Container(
       margin: const EdgeInsets.only(
           bottom: Base.BASE_PADDING, top: Base.BASE_PADDING),
@@ -663,9 +662,8 @@ class EventMainComponentState extends State<EventMainComponent> {
 }
 
 class EventReplyingComponent extends StatefulWidget {
+  const EventReplyingComponent({required this.pubkey, super.key});
   final String pubkey;
-
-  const EventReplyingComponent({super.key, required this.pubkey});
 
   @override
   State<StatefulWidget> createState() {
@@ -675,7 +673,7 @@ class EventReplyingComponent extends StatefulWidget {
 
 class EventReplyingComponentState extends State<EventReplyingComponent> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return GestureDetector(
       onTap: () {
         RouterUtil.router(context, RouterPath.USER, widget.pubkey);
@@ -683,13 +681,13 @@ class EventReplyingComponentState extends State<EventReplyingComponent> {
       child: FutureBuilder(
         future: metadataLoader.load(widget.pubkey),
         initialData: Metadata.blank(widget.pubkey),
-        builder: (context, snapshot) {
+        builder: (final context, final snapshot) {
           final metadata = snapshot.data!;
 
-          var themeData = Theme.of(context);
-          var hintColor = themeData.hintColor;
-          var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
-          var displayName =
+          final themeData = Theme.of(context);
+          final hintColor = themeData.hintColor;
+          final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+          final displayName =
               SimpleNameComponent.getSimpleName(widget.pubkey, metadata);
 
           return Text(

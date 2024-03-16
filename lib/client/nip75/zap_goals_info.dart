@@ -1,28 +1,14 @@
-import 'package:loure/client/event.dart';
+import "package:loure/client/event.dart";
 
 class ZapGoalsInfo {
-  int? amount;
-
-  List<String>? relays;
-
-  int? closedAt;
-
-  String? r;
-
-  String? a;
-
-  String? goal;
-
-  String? goalRelay;
-
-  ZapGoalsInfo.fromEvent(Event event) {
-    var length = event.tags.length;
+  ZapGoalsInfo.fromEvent(final Event event) {
+    final length = event.tags.length;
     for (var i = 0; i < length; i++) {
-      var tag = event.tags[i];
-      var tagLength = tag.length;
+      final tag = event.tags[i];
+      final tagLength = tag.length;
       if (tagLength > 1) {
-        var key = tag[0];
-        var value = tag[1];
+        final key = tag[0];
+        final value = tag[1];
         if (key == "amount") {
           amount = int.tryParse(value);
           if (amount != null) {
@@ -47,4 +33,17 @@ class ZapGoalsInfo {
       }
     }
   }
+  int? amount;
+
+  List<String>? relays;
+
+  int? closedAt;
+
+  String? r;
+
+  String? a;
+
+  String? goal;
+
+  String? goalRelay;
 }

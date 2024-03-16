@@ -1,15 +1,15 @@
-import 'dart:convert';
-import 'dart:math';
+import "dart:convert";
+import "dart:math";
 
-import 'package:flutter/material.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/util/router_util.dart';
+import "package:flutter/material.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/util/router_util.dart";
 
-import 'package:loure/component/keep_alive_cust_state.dart';
-import 'package:loure/component/placeholder/tap_list_placeholder.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/dio_util.dart';
-import 'package:loure/util/string_util.dart';
+import "package:loure/component/keep_alive_cust_state.dart";
+import "package:loure/component/placeholder/tap_list_placeholder.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/util/dio_util.dart";
+import "package:loure/util/string_util.dart";
 
 class GlobalsTagsRouter extends StatefulWidget {
   const GlobalsTagsRouter({super.key});
@@ -24,15 +24,15 @@ class _GlobalsTagsRouter extends KeepAliveCustState<GlobalsTagsRouter> {
   List<String> topics = [];
 
   @override
-  Widget doBuild(BuildContext context) {
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
+  Widget doBuild(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
 
     if (topics.isEmpty) {
       return const TapListPlaceholder();
     } else {
       List<Widget> list = [];
-      for (var topic in topics) {
+      for (final topic in topics) {
         list.add(GestureDetector(
           onTap: () {
             RouterUtil.router(context, RouterPath.TAG_DETAIL, topic);
@@ -70,19 +70,19 @@ class _GlobalsTagsRouter extends KeepAliveCustState<GlobalsTagsRouter> {
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {
-    var str = await DioUtil.getStr(Base.INDEXS_TOPICS);
+  Future<void> onReady(final BuildContext context) async {
+    final str = await DioUtil.getStr(Base.INDEXS_TOPICS);
     if (StringUtil.isNotBlank(str)) {
       topics.clear();
-      var itfs = jsonDecode(str!);
-      for (var itf in itfs) {
+      final itfs = jsonDecode(str!);
+      for (final itf in itfs) {
         topics.add(itf as String);
       }
 
       // Disorder
       for (var i = 1; i < topics.length; i++) {
-        var j = getRandomInt(0, i);
-        var t = topics[i];
+        final j = getRandomInt(0, i);
+        final t = topics[i];
         topics[i] = topics[j];
         topics[j] = t;
       }
@@ -91,7 +91,7 @@ class _GlobalsTagsRouter extends KeepAliveCustState<GlobalsTagsRouter> {
     }
   }
 
-  int getRandomInt(int min, int max) {
+  int getRandomInt(final int min, final int max) {
     final random = Random();
     return random.nextInt((max - min).floor()) + min;
   }

@@ -1,4 +1,4 @@
-import 'package:loure/client/event.dart';
+import "package:loure/client/event.dart";
 
 mixin PendingEventsLaterFunction {
   int laterTimeMS = 200;
@@ -6,7 +6,8 @@ mixin PendingEventsLaterFunction {
   List<Event> pendingEvents = [];
   bool _running = true;
 
-  void later(Event event, Function(List<Event>) func, Function? completeFunc) {
+  void later(final Event event, final Function(List<Event>) func,
+      final Function? completeFunc) {
     pendingEvents.add(event);
     if (latering) {
       return;

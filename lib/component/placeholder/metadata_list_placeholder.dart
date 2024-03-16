@@ -1,15 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:loure/component/placeholder/metadata_placeholder.dart';
+import "package:flutter/material.dart";
+import "package:loure/component/placeholder/metadata_placeholder.dart";
 
 class MetadataListPlaceholder extends StatelessWidget {
-  Function? onRefresh;
-
   MetadataListPlaceholder({super.key, this.onRefresh});
+  Function? onRefresh;
 
   final ScrollController _controller = ScrollController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return GestureDetector(
       child: RefreshIndicator(
         onRefresh: () async {
@@ -18,7 +17,7 @@ class MetadataListPlaceholder extends StatelessWidget {
           }
         },
         child: ListView.builder(
-          itemBuilder: (BuildContext context, int index) {
+          itemBuilder: (final BuildContext context, final int index) {
             return const MetadataPlaceholder();
           },
           itemCount: 10,

@@ -1,29 +1,28 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:pretty_qr_code/pretty_qr_code.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:loure/util/string_util.dart";
+import "package:pretty_qr_code/pretty_qr_code.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/router_util.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/util/router_util.dart";
 
 // ignore: must_be_immutable
 class LightningQrcodeDialog extends StatefulWidget {
+  LightningQrcodeDialog({
+    required this.text,
+    super.key,
+    this.title,
+  });
   String? title;
 
   String text;
 
-  LightningQrcodeDialog({
-    super.key,
-    this.title,
-    required this.text,
-  });
-
-  static Future<bool?> show(BuildContext context, String text,
-      {String? content, String? title}) async {
+  static Future<bool?> show(final BuildContext context, final String text,
+      {final String? content, final String? title}) async {
     return await showDialog<bool>(
       context: context,
-      builder: (context) {
+      builder: (final context) {
         return LightningQrcodeDialog(
           text: text,
           title: title,
@@ -43,10 +42,10 @@ class _LightningQrcodeDialog extends State<LightningQrcodeDialog> {
   static const double QR_WIDTH = 200;
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    Color cardColor = themeData.cardColor;
-    var hintColor = themeData.hintColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final Color cardColor = themeData.cardColor;
+    final hintColor = themeData.hintColor;
 
     List<Widget> list = [];
     if (widget.title == null) {
@@ -96,7 +95,7 @@ class _LightningQrcodeDialog extends State<LightningQrcodeDialog> {
       ),
     ));
 
-    var main = Container(
+    final main = Container(
       width: QR_WIDTH + 200,
       padding: const EdgeInsets.only(
         top: 20,
@@ -139,8 +138,8 @@ class _LightningQrcodeDialog extends State<LightningQrcodeDialog> {
     );
   }
 
-  void _doCopy(String text) {
-    Clipboard.setData(ClipboardData(text: text)).then((_) {
+  void _doCopy(final String text) {
+    Clipboard.setData(ClipboardData(text: text)).then((final _) {
       BotToast.showText(text: "Copy_success");
     });
   }

@@ -1,14 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:loure/client/event.dart';
+import "package:flutter/material.dart";
+import "package:loure/client/event.dart";
 
-import 'package:loure/client/event_kind.dart';
-import 'package:loure/client/filter.dart';
-import 'package:loure/main.dart';
+import "package:loure/client/event_kind.dart";
+import "package:loure/client/filter.dart";
+import "package:loure/main.dart";
 
 class BadgeProvider extends ChangeNotifier {
   Event? badgeEvent;
 
-  void wear(String badgeId, String eventId, {String? relayAddr}) {
+  void wear(final String badgeId, final String eventId,
+      {final String? relayAddr}) {
     String content = "";
     List<List<String>> tags = [];
 
@@ -22,7 +23,7 @@ class BadgeProvider extends ChangeNotifier {
     }
 
     tags.add(["a", badgeId]);
-    var eList = ["e", eventId];
+    final eList = ["e", eventId];
     if (relayAddr != null) {
       eList.add(relayAddr);
     }
@@ -35,13 +36,13 @@ class BadgeProvider extends ChangeNotifier {
   }
 
   void reload() {
-    var filter =
+    final filter =
         Filter(authors: [nostr.publicKey], kinds: [EventKind.BADGE_ACCEPT]);
 
     pool.subscribeMany(nostr.relayList.write, [filter], onEvent: onEvent);
   }
 
-  void onEvent(Event event) {
+  void onEvent(final Event event) {
     if (badgeEvent == null || event.createdAt > badgeEvent!.createdAt) {
       this.badgeEvent = event;
       this._parseProfileBadge();
@@ -53,15 +54,15 @@ class BadgeProvider extends ChangeNotifier {
 
   void _parseProfileBadge() {
     if (badgeEvent != null) {
-      var badgeIds = parseProfileBadge(badgeEvent!);
+      final badgeIds = parseProfileBadge(badgeEvent!);
       _badgeIdsMap = {};
-      for (var badgeId in badgeIds) {
+      for (final badgeId in badgeIds) {
         _badgeIdsMap[badgeId] = 1;
       }
     }
   }
 
-  bool containBadge(String badgeId) {
+  bool containBadge(final String badgeId) {
     if (_badgeIdsMap[badgeId] != null) {
       return true;
     }
@@ -69,12 +70,12 @@ class BadgeProvider extends ChangeNotifier {
     return false;
   }
 
-  static List<String> parseProfileBadge(Event event) {
+  static List<String> parseProfileBadge(final Event event) {
     List<String> badgeIds = [];
 
-    for (var tag in event.tags) {
+    for (final tag in event.tags) {
       if (tag[0] == "a") {
-        var badgeId = tag[1];
+        final badgeId = tag[1];
 
         badgeIds.add(badgeId);
       }

@@ -1,16 +1,16 @@
-import 'dart:convert';
-import 'dart:developer';
+import "dart:convert";
+import "dart:developer";
 
-import 'package:flutter/material.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/encrypt_util.dart';
-import 'package:loure/util/platform_util.dart';
+import "package:flutter/material.dart";
+import "package:loure/main.dart";
+import "package:loure/util/encrypt_util.dart";
+import "package:loure/util/platform_util.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/consts/theme_style.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/provider/data_util.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/consts/theme_style.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/provider/data_util.dart";
 
 class SettingProvider extends ChangeNotifier {
   static SettingProvider? _settingProvider;
@@ -20,9 +20,9 @@ class SettingProvider extends ChangeNotifier {
   Future<void> init() async {
     String? settingStr = sharedPreferences.getString(DataKey.SETTING);
     if (StringUtil.isNotBlank(settingStr)) {
-      var jsonMap = json.decode(settingStr!);
+      final jsonMap = json.decode(settingStr!);
       if (jsonMap != null) {
-        var setting = SettingData.fromJson(jsonMap);
+        final setting = SettingData.fromJson(jsonMap);
         _settingData = setting;
         _privateKeyMap.clear();
 
@@ -46,9 +46,10 @@ class SettingProvider extends ChangeNotifier {
 
         if (StringUtil.isNotBlank(privateKeyMapText)) {
           try {
-            var jsonKeyMap = jsonDecode(privateKeyMapText!);
+            final jsonKeyMap = jsonDecode(privateKeyMapText!);
             if (jsonKeyMap != null) {
-              for (var entry in (jsonKeyMap as Map<String, dynamic>).entries) {
+              for (final entry
+                  in (jsonKeyMap as Map<String, dynamic>).entries) {
                 _privateKeyMap[entry.key] = entry.value;
               }
             }
@@ -81,10 +82,10 @@ class SettingProvider extends ChangeNotifier {
     return null;
   }
 
-  int addAndChangePrivateKey(String pk, {bool updateUI = false}) {
+  int addAndChangePrivateKey(final String pk, {final bool updateUI = false}) {
     int? findIndex;
-    var entries = _privateKeyMap.entries;
-    for (var entry in entries) {
+    final entries = _privateKeyMap.entries;
+    for (final entry in entries) {
       if (entry.value == pk) {
         findIndex = int.tryParse(entry.key);
         break;
@@ -96,8 +97,8 @@ class SettingProvider extends ChangeNotifier {
     }
 
     for (var i = 0; i < 20; i++) {
-      var index = i.toString();
-      var pk0 = _privateKeyMap[index];
+      final index = i.toString();
+      final pk0 = _privateKeyMap[index];
       if (pk0 == null) {
         _privateKeyMap[index] = pk;
 
@@ -115,13 +116,13 @@ class SettingProvider extends ChangeNotifier {
   }
 
   void _encodePrivateKeyMap() {
-    var privateKeyMap = json.encode(_privateKeyMap);
+    final privateKeyMap = json.encode(_privateKeyMap);
     _settingData!.encryptPrivateKeyMap =
         EncryptUtil.aesEncrypt(privateKeyMap, Base.KEY_EKEY, Base.KEY_IV);
   }
 
-  void removeKey(int index) {
-    var indexStr = index.toString();
+  void removeKey(final int index) {
+    final indexStr = index.toString();
     _privateKeyMap.remove(indexStr);
     // _settingData!.privateKeyMap = json.encode(_privateKeyMap);
     _encodePrivateKeyMap();
@@ -130,7 +131,7 @@ class SettingProvider extends ChangeNotifier {
         _settingData!.privateKeyIndex = null;
       } else {
         // find a index
-        var keyIndex = _privateKeyMap.keys.first;
+        final keyIndex = _privateKeyMap.keys.first;
         _settingData!.privateKeyIndex = int.tryParse(keyIndex);
       }
     }
@@ -194,10 +195,10 @@ class SettingProvider extends ChangeNotifier {
 
   void _reloadTranslateSourceArgs() {
     _translateSourceArgsMap.clear();
-    var args = _settingData!.translateSourceArgs;
+    final args = _settingData!.translateSourceArgs;
     if (StringUtil.isNotBlank(args)) {
-      var argStrs = args!.split(",");
-      for (var argStr in argStrs) {
+      final argStrs = args!.split(",");
+      for (final argStr in argStrs) {
         if (StringUtil.isNotBlank(argStr)) {
           _translateSourceArgsMap[argStr] = 1;
         }
@@ -205,7 +206,7 @@ class SettingProvider extends ChangeNotifier {
     }
   }
 
-  bool translateSourceArgsCheck(String str) {
+  bool translateSourceArgsCheck(final String str) {
     return _translateSourceArgsMap[str] != null;
   }
 
@@ -230,12 +231,12 @@ class SettingProvider extends ChangeNotifier {
 
   int? get limitNoteHeight => _settingData!.limitNoteHeight;
 
-  set settingData(SettingData o) {
+  set settingData(final SettingData o) {
     _settingData = o;
     saveAndNotifyListeners();
   }
 
-  set privateKeyIndex(int? o) {
+  set privateKeyIndex(final int? o) {
     _settingData!.privateKeyIndex = o;
     saveAndNotifyListeners();
   }
@@ -246,134 +247,134 @@ class SettingProvider extends ChangeNotifier {
   // }
 
   /// open lock
-  set lockOpen(int o) {
+  set lockOpen(final int o) {
     _settingData!.lockOpen = o;
     saveAndNotifyListeners();
   }
 
-  set defaultIndex(int? o) {
+  set defaultIndex(final int? o) {
     _settingData!.defaultIndex = o;
     saveAndNotifyListeners();
   }
 
-  set defaultTab(int? o) {
+  set defaultTab(final int? o) {
     _settingData!.defaultTab = o;
     saveAndNotifyListeners();
   }
 
-  set linkPreview(int o) {
+  set linkPreview(final int o) {
     _settingData!.linkPreview = o;
     saveAndNotifyListeners();
   }
 
-  set videoPreviewInList(int o) {
+  set videoPreviewInList(final int o) {
     _settingData!.videoPreviewInList = o;
     saveAndNotifyListeners();
   }
 
-  set network(String? o) {
+  set network(final String? o) {
     _settingData!.network = o;
     saveAndNotifyListeners();
   }
 
-  set imageService(String? o) {
+  set imageService(final String? o) {
     _settingData!.imageService = o;
     saveAndNotifyListeners();
   }
 
-  set videoPreview(int? o) {
+  set videoPreview(final int? o) {
     _settingData!.videoPreview = o;
     saveAndNotifyListeners();
   }
 
-  set imagePreview(int? o) {
+  set imagePreview(final int? o) {
     _settingData!.imagePreview = o;
     saveAndNotifyListeners();
   }
 
   /// image compress
-  set imgCompress(int o) {
+  set imgCompress(final int o) {
     _settingData!.imgCompress = o;
     saveAndNotifyListeners();
   }
 
   /// theme style
-  set themeStyle(int o) {
+  set themeStyle(final int o) {
     _settingData!.themeStyle = o;
     saveAndNotifyListeners();
   }
 
   /// theme color
-  set themeColor(int? o) {
+  set themeColor(final int? o) {
     _settingData!.themeColor = o;
     saveAndNotifyListeners();
   }
 
   /// fontFamily
-  set fontFamily(String? fontFamily) {
+  set fontFamily(final String? fontFamily) {
     _settingData!.fontFamily = fontFamily;
     saveAndNotifyListeners();
   }
 
-  set openTranslate(int? o) {
+  set openTranslate(final int? o) {
     _settingData!.openTranslate = o;
     saveAndNotifyListeners();
   }
 
-  set translateSourceArgs(String? o) {
+  set translateSourceArgs(final String? o) {
     _settingData!.translateSourceArgs = o;
     saveAndNotifyListeners();
   }
 
-  set translateTarget(String? o) {
+  set translateTarget(final String? o) {
     _settingData!.translateTarget = o;
     saveAndNotifyListeners();
   }
 
-  set broadcaseWhenBoost(int? o) {
+  set broadcaseWhenBoost(final int? o) {
     _settingData!.broadcaseWhenBoost = o;
     saveAndNotifyListeners();
   }
 
-  set fontSize(double o) {
+  set fontSize(final double o) {
     _settingData!.fontSize = o;
     saveAndNotifyListeners();
   }
 
-  set webviewAppbarOpen(int o) {
+  set webviewAppbarOpen(final int o) {
     _settingData!.webviewAppbarOpen = o;
     saveAndNotifyListeners();
   }
 
-  set tableMode(int? o) {
+  set tableMode(final int? o) {
     _settingData!.tableMode = o;
     saveAndNotifyListeners();
   }
 
-  set autoOpenSensitive(int? o) {
+  set autoOpenSensitive(final int? o) {
     _settingData!.autoOpenSensitive = o;
     saveAndNotifyListeners();
   }
 
-  set relayMode(int? o) {
+  set relayMode(final int? o) {
     _settingData!.relayMode = o;
     saveAndNotifyListeners();
   }
 
-  set eventSignCheck(int? o) {
+  set eventSignCheck(final int? o) {
     _settingData!.eventSignCheck = o;
     saveAndNotifyListeners();
   }
 
-  set limitNoteHeight(int? o) {
+  set limitNoteHeight(final int? o) {
     _settingData!.limitNoteHeight = o;
     saveAndNotifyListeners();
   }
 
-  Future<void> saveAndNotifyListeners({bool updateUI = true}) async {
+  Future<void> saveAndNotifyListeners({final bool updateUI = true}) async {
     _settingData!.updatedTime = DateTime.now().millisecondsSinceEpoch;
-    var m = _settingData!.toJson();
-    var jsonStr = json.encode(m);
+    final m = _settingData!.toJson();
+    final jsonStr = json.encode(m);
     // print(jsonStr);
     await sharedPreferences.setString(DataKey.SETTING, jsonStr);
     _settingProvider!._reloadTranslateSourceArgs();
@@ -385,6 +386,81 @@ class SettingProvider extends ChangeNotifier {
 }
 
 class SettingData {
+  SettingData({
+    this.privateKeyIndex,
+    this.privateKeyMap,
+    this.lockOpen = OpenStatus.CLOSE,
+    this.defaultIndex,
+    this.defaultTab,
+    this.linkPreview,
+    this.videoPreviewInList,
+    this.network,
+    this.imageService,
+    this.videoPreview,
+    this.imagePreview,
+    this.imgCompress = 50,
+    this.themeStyle = ThemeStyle.AUTO,
+    this.themeColor,
+    this.fontFamily,
+    this.openTranslate,
+    this.translateTarget,
+    this.translateSourceArgs,
+    this.broadcaseWhenBoost,
+    this.fontSize,
+    this.webviewAppbarOpen = OpenStatus.OPEN,
+    this.tableMode,
+    this.autoOpenSensitive,
+    this.relayMode,
+    this.eventSignCheck,
+    this.limitNoteHeight,
+    this.updatedTime = 0,
+  });
+
+  SettingData.fromJson(final Map<String, dynamic> json) {
+    privateKeyIndex = json["privateKeyIndex"];
+    privateKeyMap = json["privateKeyMap"];
+    encryptPrivateKeyMap = json["encryptPrivateKeyMap"];
+    if (json["lockOpen"] != null) {
+      lockOpen = json["lockOpen"];
+    } else {
+      lockOpen = OpenStatus.CLOSE;
+    }
+    defaultIndex = json["defaultIndex"];
+    defaultTab = json["defaultTab"];
+    linkPreview = json["linkPreview"];
+    videoPreviewInList = json["videoPreviewInList"];
+    network = json["network"];
+    imageService = json["imageService"];
+    videoPreview = json["videoPreview"];
+    imagePreview = json["imagePreview"];
+    if (json["imgCompress"] != null) {
+      imgCompress = json["imgCompress"];
+    } else {
+      imgCompress = 50;
+    }
+    if (json["themeStyle"] != null) {
+      themeStyle = json["themeStyle"];
+    } else {
+      themeStyle = ThemeStyle.AUTO;
+    }
+    themeColor = json["themeColor"];
+    openTranslate = json["openTranslate"];
+    translateTarget = json["translateTarget"];
+    translateSourceArgs = json["translateSourceArgs"];
+    broadcaseWhenBoost = json["broadcaseWhenBoost"];
+    fontSize = json["fontSize"];
+    webviewAppbarOpen = json["webviewAppbarOpen"] ?? OpenStatus.OPEN;
+    tableMode = json["tableMode"];
+    autoOpenSensitive = json["autoOpenSensitive"];
+    relayMode = json["relayMode"];
+    eventSignCheck = json["eventSignCheck"];
+    limitNoteHeight = json["limitNoteHeight"];
+    if (json["updatedTime"] != null) {
+      updatedTime = json["updatedTime"];
+    } else {
+      updatedTime = 0;
+    }
+  }
   int? privateKeyIndex;
   String? privateKeyMap;
   String? encryptPrivateKeyMap;
@@ -432,112 +508,36 @@ class SettingData {
   /// updated time
   late int updatedTime;
 
-  SettingData({
-    this.privateKeyIndex,
-    this.privateKeyMap,
-    this.lockOpen = OpenStatus.CLOSE,
-    this.defaultIndex,
-    this.defaultTab,
-    this.linkPreview,
-    this.videoPreviewInList,
-    this.network,
-    this.imageService,
-    this.videoPreview,
-    this.imagePreview,
-    this.imgCompress = 50,
-    this.themeStyle = ThemeStyle.AUTO,
-    this.themeColor,
-    this.fontFamily,
-    this.openTranslate,
-    this.translateTarget,
-    this.translateSourceArgs,
-    this.broadcaseWhenBoost,
-    this.fontSize,
-    this.webviewAppbarOpen = OpenStatus.OPEN,
-    this.tableMode,
-    this.autoOpenSensitive,
-    this.relayMode,
-    this.eventSignCheck,
-    this.limitNoteHeight,
-    this.updatedTime = 0,
-  });
-
-  SettingData.fromJson(Map<String, dynamic> json) {
-    privateKeyIndex = json['privateKeyIndex'];
-    privateKeyMap = json['privateKeyMap'];
-    encryptPrivateKeyMap = json['encryptPrivateKeyMap'];
-    if (json['lockOpen'] != null) {
-      lockOpen = json['lockOpen'];
-    } else {
-      lockOpen = OpenStatus.CLOSE;
-    }
-    defaultIndex = json['defaultIndex'];
-    defaultTab = json['defaultTab'];
-    linkPreview = json['linkPreview'];
-    videoPreviewInList = json['videoPreviewInList'];
-    network = json['network'];
-    imageService = json['imageService'];
-    videoPreview = json['videoPreview'];
-    imagePreview = json['imagePreview'];
-    if (json['imgCompress'] != null) {
-      imgCompress = json['imgCompress'];
-    } else {
-      imgCompress = 50;
-    }
-    if (json['themeStyle'] != null) {
-      themeStyle = json['themeStyle'];
-    } else {
-      themeStyle = ThemeStyle.AUTO;
-    }
-    themeColor = json['themeColor'];
-    openTranslate = json['openTranslate'];
-    translateTarget = json['translateTarget'];
-    translateSourceArgs = json['translateSourceArgs'];
-    broadcaseWhenBoost = json['broadcaseWhenBoost'];
-    fontSize = json['fontSize'];
-    webviewAppbarOpen = json['webviewAppbarOpen'] ?? OpenStatus.OPEN;
-    tableMode = json['tableMode'];
-    autoOpenSensitive = json['autoOpenSensitive'];
-    relayMode = json['relayMode'];
-    eventSignCheck = json['eventSignCheck'];
-    limitNoteHeight = json['limitNoteHeight'];
-    if (json['updatedTime'] != null) {
-      updatedTime = json['updatedTime'];
-    } else {
-      updatedTime = 0;
-    }
-  }
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['privateKeyIndex'] = privateKeyIndex;
-    data['privateKeyMap'] = privateKeyMap;
-    data['encryptPrivateKeyMap'] = encryptPrivateKeyMap;
-    data['lockOpen'] = lockOpen;
-    data['defaultIndex'] = defaultIndex;
-    data['defaultTab'] = defaultTab;
-    data['linkPreview'] = linkPreview;
-    data['videoPreviewInList'] = videoPreviewInList;
-    data['network'] = network;
-    data['imageService'] = imageService;
-    data['videoPreview'] = videoPreview;
-    data['imagePreview'] = imagePreview;
-    data['imgCompress'] = imgCompress;
-    data['themeStyle'] = themeStyle;
-    data['themeColor'] = themeColor;
-    data['fontFamily'] = fontFamily;
-    data['openTranslate'] = openTranslate;
-    data['translateTarget'] = translateTarget;
-    data['translateSourceArgs'] = translateSourceArgs;
-    data['broadcaseWhenBoost'] = broadcaseWhenBoost;
-    data['fontSize'] = fontSize;
-    data['webviewAppbarOpen'] = webviewAppbarOpen;
-    data['tableMode'] = tableMode;
-    data['autoOpenSensitive'] = autoOpenSensitive;
-    data['relayMode'] = relayMode;
-    data['eventSignCheck'] = eventSignCheck;
-    data['limitNoteHeight'] = limitNoteHeight;
-    data['updatedTime'] = updatedTime;
+    data["privateKeyIndex"] = privateKeyIndex;
+    data["privateKeyMap"] = privateKeyMap;
+    data["encryptPrivateKeyMap"] = encryptPrivateKeyMap;
+    data["lockOpen"] = lockOpen;
+    data["defaultIndex"] = defaultIndex;
+    data["defaultTab"] = defaultTab;
+    data["linkPreview"] = linkPreview;
+    data["videoPreviewInList"] = videoPreviewInList;
+    data["network"] = network;
+    data["imageService"] = imageService;
+    data["videoPreview"] = videoPreview;
+    data["imagePreview"] = imagePreview;
+    data["imgCompress"] = imgCompress;
+    data["themeStyle"] = themeStyle;
+    data["themeColor"] = themeColor;
+    data["fontFamily"] = fontFamily;
+    data["openTranslate"] = openTranslate;
+    data["translateTarget"] = translateTarget;
+    data["translateSourceArgs"] = translateSourceArgs;
+    data["broadcaseWhenBoost"] = broadcaseWhenBoost;
+    data["fontSize"] = fontSize;
+    data["webviewAppbarOpen"] = webviewAppbarOpen;
+    data["tableMode"] = tableMode;
+    data["autoOpenSensitive"] = autoOpenSensitive;
+    data["relayMode"] = relayMode;
+    data["eventSignCheck"] = eventSignCheck;
+    data["limitNoteHeight"] = limitNoteHeight;
+    data["updatedTime"] = updatedTime;
     return data;
   }
 }

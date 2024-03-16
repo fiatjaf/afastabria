@@ -1,21 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:screenshot/screenshot.dart';
+import "package:flutter/material.dart";
+import "package:screenshot/screenshot.dart";
 
-import 'package:loure/client/aid.dart';
-import 'package:loure/main.dart';
-import 'package:loure/client/event.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/component/event/event_main_component.dart';
+import "package:loure/client/aid.dart";
+import "package:loure/main.dart";
+import "package:loure/client/event.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/component/event/event_main_component.dart";
 
 // ignore: must_be_immutable
 class EventQuoteComponent extends StatefulWidget {
-  Event? event;
-  String? id;
-  AId? aId;
-  bool showVideo;
-
   EventQuoteComponent({
     super.key,
     this.event,
@@ -23,6 +18,10 @@ class EventQuoteComponent extends StatefulWidget {
     this.aId,
     this.showVideo = false,
   });
+  Event? event;
+  String? id;
+  AId? aId;
+  bool showVideo;
 
   @override
   State<StatefulWidget> createState() {
@@ -46,10 +45,10 @@ class _EventQuoteComponent extends State<EventQuoteComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
-    var boxDecoration = BoxDecoration(
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
+    final boxDecoration = BoxDecoration(
       color: cardColor,
       boxShadow: [
         BoxShadow(
@@ -68,7 +67,7 @@ class _EventQuoteComponent extends State<EventQuoteComponent> {
     return FutureBuilder(
       future: this.eventFuture,
       initialData: null,
-      builder: (context, as) {
+      builder: (final context, final as) {
         if (as.data == null) {
           return buildBlankWidget(boxDecoration);
         }
@@ -77,8 +76,8 @@ class _EventQuoteComponent extends State<EventQuoteComponent> {
     );
   }
 
-  Widget buildEventWidget(
-      Event event, Color cardColor, BoxDecoration boxDecoration) {
+  Widget buildEventWidget(final Event event, final Color cardColor,
+      final BoxDecoration boxDecoration) {
     return Screenshot(
       controller: screenshotController,
       child: Container(
@@ -105,7 +104,7 @@ class _EventQuoteComponent extends State<EventQuoteComponent> {
     );
   }
 
-  Widget buildBlankWidget(BoxDecoration boxDecoration) {
+  Widget buildBlankWidget(final BoxDecoration boxDecoration) {
     return Container(
       margin: const EdgeInsets.all(Base.BASE_PADDING),
       height: 60,
@@ -114,7 +113,7 @@ class _EventQuoteComponent extends State<EventQuoteComponent> {
     );
   }
 
-  void jumpToThread(Event event) {
+  void jumpToThread(final Event event) {
     RouterUtil.router(context, RouterPath.THREAD_DETAIL, event);
   }
 }

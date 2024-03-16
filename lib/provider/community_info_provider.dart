@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:loure/client/aid.dart';
-import 'package:loure/client/event.dart';
-import 'package:loure/client/nip172/community_info.dart';
+import "package:flutter/material.dart";
+import "package:loure/client/aid.dart";
+import "package:loure/client/event.dart";
+import "package:loure/client/nip172/community_info.dart";
 
-import 'package:loure/client/filter.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/later_function.dart';
+import "package:loure/client/filter.dart";
+import "package:loure/main.dart";
+import "package:loure/util/later_function.dart";
 
 class CommunityInfoProvider extends ChangeNotifier with LaterFunction {
   final Map<String, CommunityInfo> _cache = {};
@@ -16,8 +16,8 @@ class CommunityInfoProvider extends ChangeNotifier with LaterFunction {
 
   final List<Event> _pendingEvents = [];
 
-  CommunityInfo? getCommunity(String aid) {
-    var ci = _cache[aid];
+  CommunityInfo? getCommunity(final String aid) {
+    final ci = _cache[aid];
     if (ci != null) {
       return ci;
     }
@@ -43,8 +43,8 @@ class CommunityInfoProvider extends ChangeNotifier with LaterFunction {
 
   void _laterSearch() {
     List<Filter> filters = [];
-    for (var idStr in _needPullIds) {
-      var aId = AId.fromString(idStr);
+    for (final idStr in _needPullIds) {
+      final aId = AId.fromString(idStr);
       if (aId == null) {
         continue;
       }
@@ -55,13 +55,13 @@ class CommunityInfoProvider extends ChangeNotifier with LaterFunction {
     pool.subscribeManyEose(["wss://relay.nostr.band"], filters,
         onEvent: _onEvent);
 
-    for (var pubkey in _needPullIds) {
+    for (final pubkey in _needPullIds) {
       _handingIds[pubkey] = 1;
     }
     _needPullIds.clear();
   }
 
-  void _onEvent(Event event) {
+  void _onEvent(final Event event) {
     _pendingEvents.add(event);
     later(_laterCallback, null);
   }
@@ -69,11 +69,11 @@ class CommunityInfoProvider extends ChangeNotifier with LaterFunction {
   void _handlePendingEvents() {
     bool updated = false;
 
-    for (var event in _pendingEvents) {
-      var communityInfo = CommunityInfo.fromEvent(event);
+    for (final event in _pendingEvents) {
+      final communityInfo = CommunityInfo.fromEvent(event);
       if (communityInfo != null) {
-        var aid = communityInfo.aId.toTag();
-        var oldInfo = _cache[aid];
+        final aid = communityInfo.aId.toTag();
+        final oldInfo = _cache[aid];
         if (oldInfo == null || oldInfo.createdAt < communityInfo.createdAt) {
           _cache[aid] = communityInfo;
           updated = true;

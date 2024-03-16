@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/provider/notice_provider.dart';
-import 'package:loure/router/edit/editor_router.dart';
-import 'package:loure/router/notice/notice_list_item_component.dart';
+import "package:loure/provider/notice_provider.dart";
+import "package:loure/router/edit/editor_router.dart";
+import "package:loure/router/notice/notice_list_item_component.dart";
 
 class NoticeRouter extends StatefulWidget {
   const NoticeRouter({super.key});
@@ -16,11 +16,10 @@ class NoticeRouter extends StatefulWidget {
 
 class _NoticeRouter extends State<NoticeRouter> {
   @override
-  Widget build(BuildContext context) {
-    
-    var noticeProvider = Provider.of<NoticeProvider>(context);
-    var notices = noticeProvider.notices;
-    var length = notices.length;
+  Widget build(final BuildContext context) {
+    final noticeProvider = Provider.of<NoticeProvider>(context);
+    final notices = noticeProvider.notices;
+    final length = notices.length;
 
     Widget? main;
     if (length == 0) {
@@ -36,8 +35,8 @@ class _NoticeRouter extends State<NoticeRouter> {
       );
     } else {
       main = ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          var notice = notices[length - 1 - index];
+        itemBuilder: (final BuildContext context, final int index) {
+          final notice = notices[length - 1 - index];
           return NoticeListItemComponent(
             notice: notice,
           );

@@ -1,20 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_placeholder_textlines/placeholder_lines.dart';
+import "package:flutter/material.dart";
+import "package:flutter_placeholder_textlines/placeholder_lines.dart";
 
-import 'package:loure/consts/base.dart';
+import "package:loure/consts/base.dart";
 
 class EventTopPlaceholder extends StatelessWidget {
+  const EventTopPlaceholder({super.key});
   static const double IMAGE_WIDTH = 34;
 
   static const double HALF_IMAGE_WIDTH = 17;
-
-  const EventTopPlaceholder({super.key});
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var textSize = themeData.textTheme.bodyMedium!.fontSize;
-    var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final textSize = themeData.textTheme.bodyMedium!.fontSize;
+    final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
 
     return Container(
       padding: const EdgeInsets.only(

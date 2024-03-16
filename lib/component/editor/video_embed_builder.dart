@@ -1,13 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
+import "package:flutter/material.dart";
+import "package:flutter_quill/flutter_quill.dart";
 
-import 'package:loure/component/content/content_video_component.dart';
+import "package:loure/component/content/content_video_component.dart";
 
 class VideoEmbedBuilder extends EmbedBuilder {
   @override
-  Widget build(BuildContext context, QuillController controller, Embed node,
-      bool readOnly, bool inline, TextStyle textStyle) {
-    var url = node.value.data as String;
+  Widget build(
+      final BuildContext context,
+      final QuillController controller,
+      final Embed node,
+      final bool readOnly,
+      final bool inline,
+      final TextStyle textStyle) {
+    final url = node.value.data as String;
     return ContentVideoComponent(url: url);
   }
 

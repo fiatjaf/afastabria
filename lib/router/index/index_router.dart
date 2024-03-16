@@ -1,35 +1,34 @@
-import 'dart:async';
-import 'dart:io';
+import "dart:async";
+import "dart:io";
 
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
-import 'package:loure/component/cust_state.dart';
-import 'package:loure/component/pc_router_fake.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/provider/pc_router_fake_provider.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:provider/provider.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:flutter_inapp_purchase/flutter_inapp_purchase.dart";
+import "package:loure/component/cust_state.dart";
+import "package:loure/component/pc_router_fake.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/provider/pc_router_fake_provider.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/main.dart';
-import 'package:loure/provider/index_provider.dart';
-import 'package:loure/util/auth_util.dart';
-import 'package:loure/router/dm/dm_router.dart';
-import 'package:loure/router/edit/editor_router.dart';
-import 'package:loure/router/follow/follow_index_router.dart';
-import 'package:loure/router/globals/globals_index_router.dart';
-import 'package:loure/router/login/login_router.dart';
-import 'package:loure/router/search/search_router.dart';
-import 'package:loure/router/index/index_app_bar.dart';
-import 'package:loure/router/index/index_bottom_bar.dart';
-import 'package:loure/router/index/index_drawer_content.dart';
+import "package:loure/main.dart";
+import "package:loure/provider/index_provider.dart";
+import "package:loure/util/auth_util.dart";
+import "package:loure/router/dm/dm_router.dart";
+import "package:loure/router/edit/editor_router.dart";
+import "package:loure/router/follow/follow_index_router.dart";
+import "package:loure/router/globals/globals_index_router.dart";
+import "package:loure/router/login/login_router.dart";
+import "package:loure/router/search/search_router.dart";
+import "package:loure/router/index/index_app_bar.dart";
+import "package:loure/router/index/index_bottom_bar.dart";
+import "package:loure/router/index/index_drawer_content.dart";
 
 // ignore: must_be_immutable
 class IndexRouter extends StatefulWidget {
+  IndexRouter({required this.reload, super.key});
   Function reload;
-
-  IndexRouter({super.key, required this.reload});
 
   @override
   State<StatefulWidget> createState() {
@@ -78,7 +77,7 @@ class _IndexRouter extends CustState<IndexRouter>
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(final AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     switch (state) {
       case AppLifecycleState.resumed:
@@ -100,7 +99,7 @@ class _IndexRouter extends CustState<IndexRouter>
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     if (settingProvider.lockOpen == OpenStatus.OPEN && !unlock) {
       doAuth();
     } else {
@@ -113,10 +112,10 @@ class _IndexRouter extends CustState<IndexRouter>
   bool unlock = false;
 
   @override
-  Widget doBuild(BuildContext context) {
+  Widget doBuild(final BuildContext context) {
     mediaDataCache.update(context);
 
-    if (nostr == null) {
+    if (nostr.isEmpty()) {
       return const LoginRouter();
     }
 
@@ -124,13 +123,13 @@ class _IndexRouter extends CustState<IndexRouter>
       return const Scaffold();
     }
 
-    var indexProvider = Provider.of<IndexProvider>(context);
+    final indexProvider = Provider.of<IndexProvider>(context);
     indexProvider.setFollowTabController(followTabController);
     indexProvider.setGlobalTabController(globalsTabController);
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
-    var titleTextColor = themeData.appBarTheme.titleTextStyle!.color;
-    var titleTextStyle = TextStyle(
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
+    final titleTextColor = themeData.appBarTheme.titleTextStyle!.color;
+    final titleTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
       color: titleTextColor,
     );
@@ -244,7 +243,7 @@ class _IndexRouter extends CustState<IndexRouter>
       );
     }
 
-    var addBtn = FloatingActionButton(
+    final addBtn = FloatingActionButton(
       onPressed: () {
         EditorRouter.open(context);
       },
@@ -256,7 +255,7 @@ class _IndexRouter extends CustState<IndexRouter>
       ),
     );
 
-    var mainCenterWidget = MediaQuery.removePadding(
+    final mainCenterWidget = MediaQuery.removePadding(
       context: context,
       removeTop: true,
       child: Expanded(
@@ -278,7 +277,7 @@ class _IndexRouter extends CustState<IndexRouter>
       )),
     );
 
-    var mainIndex = Column(
+    final mainIndex = Column(
       children: [
         IndexAppBar(
           center: appBarCenter,
@@ -288,7 +287,7 @@ class _IndexRouter extends CustState<IndexRouter>
     );
 
     if (PlatformUtil.isTableMode()) {
-      var maxWidth = mediaDataCache.size.width;
+      final maxWidth = mediaDataCache.size.width;
       double column0Width = maxWidth * 1 / 5;
       double column1Width = maxWidth * 2 / 5;
       if (column0Width > PC_MAX_COLUMN_0) {
@@ -316,18 +315,18 @@ class _IndexRouter extends CustState<IndexRouter>
           ),
           Expanded(
             child: Selector<PcRouterFakeProvider, List<RouterFakeInfo>>(
-              builder: (context, infos, child) {
+              builder: (final context, final infos, final child) {
                 if (infos.isEmpty) {
                   return const Center(
                     child: Text("There should be a universe here."),
                   );
                 }
 
-                List<Widget> pages = [];
-                for (var info in infos) {
+                final List<Widget> pages = [];
+                for (final info in infos) {
                   if (StringUtil.isNotBlank(info.routerPath) &&
                       routes[info.routerPath] != null) {
-                    var builder = routes[info.routerPath];
+                    final builder = routes[info.routerPath];
                     if (builder != null) {
                       pages.add(PcRouterFake(
                         info: info,
@@ -347,10 +346,10 @@ class _IndexRouter extends CustState<IndexRouter>
                   children: pages,
                 );
               },
-              selector: (context, provider) {
+              selector: (final context, final provider) {
                 return provider.routerFakeInfos;
               },
-              shouldRebuild: (previous, next) {
+              shouldRebuild: (final previous, final next) {
                 if (previous != next) {
                   return true;
                 }
@@ -376,7 +375,7 @@ class _IndexRouter extends CustState<IndexRouter>
 
   void doAuth() {
     AuthUtil.authenticate(context, "Please_authenticate_to_use_app")
-        .then((didAuthenticate) {
+        .then((final didAuthenticate) {
       if (didAuthenticate) {
         setState(() {
           unlock = true;
@@ -392,7 +391,7 @@ class _IndexRouter extends CustState<IndexRouter>
   void asyncInitState() async {
     await FlutterInappPurchase.instance.initialize();
     _purchaseUpdatedSubscription =
-        FlutterInappPurchase.purchaseUpdated.listen((productItem) async {
+        FlutterInappPurchase.purchaseUpdated.listen((final productItem) async {
       if (productItem == null) {
         return;
       }
@@ -407,7 +406,7 @@ class _IndexRouter extends CustState<IndexRouter>
       } catch (e) {
         print(e);
       }
-      print('purchase-updated: $productItem');
+      print("purchase-updated: $productItem");
       BotToast.showText(text: "Thanks yours coffee!");
     });
   }

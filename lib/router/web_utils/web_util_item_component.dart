@@ -1,23 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:loure/component/webview_router.dart';
+import "package:flutter/material.dart";
+import "package:loure/component/webview_router.dart";
 
-import 'package:loure/consts/base.dart';
+import "package:loure/consts/base.dart";
 
 class WebUtilItemComponent extends StatelessWidget {
+  WebUtilItemComponent({required this.link, required this.des, super.key});
   String link;
 
   String des;
 
-  WebUtilItemComponent({super.key, required this.link, required this.des});
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
-    var hintColor = themeData.hintColor;
-    var largeTextSize = themeData.textTheme.bodyLarge!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
+    final hintColor = themeData.hintColor;
+    final largeTextSize = themeData.textTheme.bodyLarge!.fontSize;
 
-    var main = Container(
+    final main = Container(
       width: double.maxFinite,
       color: cardColor,
       margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),

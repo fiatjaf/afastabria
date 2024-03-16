@@ -1,5 +1,5 @@
-import 'package:loure/client/event.dart';
+import "package:loure/client/event.dart";
 
 abstract class FindEventInterface {
-  List<Event> findEvent(String str, {int? limit = 5});
+  List<Event> findEvent(final String str, {final int? limit = 5});
 }

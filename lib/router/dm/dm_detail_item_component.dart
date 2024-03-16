@@ -1,19 +1,26 @@
-import 'package:flutter/material.dart';
-import 'package:get_time_ago/get_time_ago.dart';
-import 'package:loure/client/nip04/nip04.dart';
-import 'package:loure/component/content/content_component.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:pointycastle/export.dart' as pointycastle;
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:get_time_ago/get_time_ago.dart";
+import "package:loure/client/nip04/nip04.dart";
+import "package:loure/component/content/content_component.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/util/router_util.dart";
+import "package:pointycastle/export.dart" as pointycastle;
+import "package:provider/provider.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/component/user_pic_component.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/provider/setting_provider.dart';
+import "package:loure/client/event.dart";
+import "package:loure/component/user_pic_component.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/provider/setting_provider.dart";
 
 class DMDetailItemComponent extends StatefulWidget {
+  DMDetailItemComponent({
+    required this.sessionPubkey,
+    required this.event,
+    required this.isLocal,
+    required this.agreement,
+    super.key,
+  });
   String sessionPubkey;
 
   Event event;
@@ -21,13 +28,6 @@ class DMDetailItemComponent extends StatefulWidget {
   bool isLocal;
 
   pointycastle.ECDHBasicAgreement agreement;
-
-  DMDetailItemComponent({super.key, 
-    required this.sessionPubkey,
-    required this.event,
-    required this.isLocal,
-    required this.agreement,
-  });
 
   @override
   State<StatefulWidget> createState() {
@@ -41,10 +41,10 @@ class _DMDetailItemComponent extends State<DMDetailItemComponent> {
   static const double BLANK_WIDTH = 50;
 
   @override
-  Widget build(BuildContext context) {
-    var settingProvider = Provider.of<SettingProvider>(context);
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
+  Widget build(final BuildContext context) {
+    final settingProvider = Provider.of<SettingProvider>(context);
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
     Widget userHeadWidget = Container(
       margin: const EdgeInsets.only(top: 2),
       child: UserPicComponent(
@@ -53,16 +53,16 @@ class _DMDetailItemComponent extends State<DMDetailItemComponent> {
       ),
     );
     // var maxWidth = mediaDataCache.size.width;
-    var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
-    var hintColor = themeData.hintColor;
+    final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+    final hintColor = themeData.hintColor;
 
-    String timeStr = GetTimeAgo.parse(
+    final String timeStr = GetTimeAgo.parse(
         DateTime.fromMillisecondsSinceEpoch(widget.event.createdAt * 1000));
 
-    var content = NIP04.decrypt(
+    final content = NIP04.decrypt(
         widget.event.content, widget.agreement, widget.sessionPubkey);
 
-    var contentWidget = Container(
+    final contentWidget = Container(
       margin: const EdgeInsets.only(
         left: Base.BASE_PADDING_HALF,
         right: Base.BASE_PADDING_HALF,

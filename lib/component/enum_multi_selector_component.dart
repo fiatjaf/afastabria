@@ -1,25 +1,25 @@
-import 'package:flutter/material.dart';
-import 'package:loure/component/enum_selector_component.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/router_util.dart';
+import "package:flutter/material.dart";
+import "package:loure/component/enum_selector_component.dart";
+import "package:loure/main.dart";
+import "package:loure/util/router_util.dart";
 
-import 'package:loure/consts/base_consts.dart';
+import "package:loure/consts/base_consts.dart";
 
 class EnumMultiSelectorComponent extends StatefulWidget {
+  const EnumMultiSelectorComponent({
+    required this.list,
+    required this.values,
+    super.key,
+  });
   final List<EnumObj> list;
 
   final List<EnumObj> values;
 
-  const EnumMultiSelectorComponent({super.key, 
-    required this.list,
-    required this.values,
-  });
-
-  static Future<List<EnumObj>?> show(
-      BuildContext context, List<EnumObj> list, List<EnumObj> values) async {
+  static Future<List<EnumObj>?> show(final BuildContext context,
+      final List<EnumObj> list, final List<EnumObj> values) async {
     return await showDialog<List<EnumObj>?>(
       context: context,
-      builder: (context) {
+      builder: (final context) {
         return EnumMultiSelectorComponent(
           list: list,
           values: values,
@@ -46,10 +46,10 @@ class _EnumMultiSelectorComponent extends State<EnumMultiSelectorComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
-    var btnTextColor = themeData.appBarTheme.titleTextStyle!.color;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
+    final btnTextColor = themeData.appBarTheme.titleTextStyle!.color;
 
     return Stack(
       alignment: Alignment.center,
@@ -79,14 +79,14 @@ class _EnumMultiSelectorComponent extends State<EnumMultiSelectorComponent> {
     );
   }
 
-  Widget enumItemBuild(BuildContext context, EnumObj enumObj) {
+  Widget enumItemBuild(final BuildContext context, final EnumObj enumObj) {
     bool isLast = false;
     if (enumObj.value == widget.list.last.value) {
       isLast = true;
     }
 
     bool exist = false;
-    for (var value in values) {
+    for (final value in values) {
       if (value.value == enumObj.value) {
         exist = true;
       }
@@ -100,16 +100,16 @@ class _EnumMultiSelectorComponent extends State<EnumMultiSelectorComponent> {
     );
   }
 
-  void onTap(EnumObj enumObj) {
+  void onTap(final EnumObj enumObj) {
     bool exist = false;
-    for (var value in values) {
+    for (final value in values) {
       if (value.value == enumObj.value) {
         exist = true;
       }
     }
 
     if (exist) {
-      values.removeWhere((element) {
+      values.removeWhere((final element) {
         return element.value == enumObj.value;
       });
     } else {

@@ -1,17 +1,17 @@
-import 'package:loure/main.dart';
+import "package:loure/main.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/util/find_event_interface.dart';
-import 'package:loure/data/event_mem_box.dart';
+import "package:loure/client/event.dart";
+import "package:loure/util/find_event_interface.dart";
+import "package:loure/data/event_mem_box.dart";
 
 class EventFindUtil {
-  static List<Event> findEvent(String str, {int? limit = 5}) {
+  static List<Event> findEvent(final String str, {final int? limit = 5}) {
     List<FindEventInterface> finders = [followEventProvider];
     finders.addAll(eventReactionsProvider.allReactions());
 
-    var eventBox = EventMemBox(sortAfterAdd: false);
-    for (var finder in finders) {
-      var list = finder.findEvent(str, limit: limit);
+    final eventBox = EventMemBox(sortAfterAdd: false);
+    for (final finder in finders) {
+      final list = finder.findEvent(str, limit: limit);
       if (list.isNotEmpty) {
         eventBox.addList(list);
 

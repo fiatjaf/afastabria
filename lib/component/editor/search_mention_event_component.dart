@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/data/event_find_util.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/util/when_stop_function.dart';
-import 'package:loure/component/event/event_list_component.dart';
-import 'package:loure/component/editor/search_mention_component.dart';
+import "package:loure/client/event.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/data/event_find_util.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/util/when_stop_function.dart";
+import "package:loure/component/event/event_list_component.dart";
+import "package:loure/component/editor/search_mention_component.dart";
 
 class SearchMentionEventComponent extends StatefulWidget {
   const SearchMentionEventComponent({super.key});
@@ -21,7 +21,7 @@ class SearchMentionEventComponent extends StatefulWidget {
 class _SearchMentionEventComponent extends State<SearchMentionEventComponent>
     with WhenStopFunction {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return SearchMentionComponent(
       resultBuildFunc: resultBuild,
       handleSearchFunc: handleSearch,
@@ -35,8 +35,8 @@ class _SearchMentionEventComponent extends State<SearchMentionEventComponent>
         bottom: Base.BASE_PADDING_HALF,
       ),
       child: ListView.builder(
-        itemBuilder: (context, index) {
-          var event = events[index];
+        itemBuilder: (final context, final index) {
+          final event = events[index];
           return GestureDetector(
             onTap: () {
               RouterUtil.back(context, event.id);
@@ -56,10 +56,10 @@ class _SearchMentionEventComponent extends State<SearchMentionEventComponent>
 
   List<Event> events = [];
 
-  void handleSearch(String? text) {
+  void handleSearch(final String? text) {
     events.clear();
     if (StringUtil.isNotBlank(text)) {
-      var list = EventFindUtil.findEvent(text!, limit: searchMemLimit);
+      final list = EventFindUtil.findEvent(text!, limit: searchMemLimit);
       setState(() {
         events = list;
       });

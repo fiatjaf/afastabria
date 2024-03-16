@@ -1,9 +1,16 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/router_util.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/util/router_util.dart";
 
 class TextInputDialogInnerComponent extends StatefulWidget {
+  TextInputDialogInnerComponent(
+    this.title, {
+    super.key,
+    this.hintText,
+    this.value,
+    this.valueCheck,
+  });
   String title;
 
   String? hintText;
@@ -11,13 +18,6 @@ class TextInputDialogInnerComponent extends StatefulWidget {
   String? value;
 
   bool Function(BuildContext, String)? valueCheck;
-
-  TextInputDialogInnerComponent(
-    this.title, {super.key, 
-    this.hintText,
-    this.value,
-    this.valueCheck,
-  });
 
   @override
   State<StatefulWidget> createState() {
@@ -36,11 +36,11 @@ class _TextInputDialogInnerComponent
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    Color cardColor = themeData.cardColor;
-    var mainColor = themeData.primaryColor;
-    var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final Color cardColor = themeData.cardColor;
+    final mainColor = themeData.primaryColor;
+    final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
     List<Widget> list = [];
 
@@ -91,7 +91,7 @@ class _TextInputDialogInnerComponent
       ),
     ));
 
-    var main = Container(
+    final main = Container(
       padding: const EdgeInsets.all(Base.BASE_PADDING),
       decoration: BoxDecoration(
         color: cardColor,
@@ -107,7 +107,7 @@ class _TextInputDialogInnerComponent
   }
 
   void _onConfirm() {
-    var value = controller.text;
+    final value = controller.text;
     // if (StringUtil.isBlank(value)) {
     //   BotToast.showText(text: "Input can't be null");
     //   return;

@@ -1,14 +1,14 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:loure/client/nostr.dart';
-import 'package:loure/component/webview_router.dart';
-import 'package:loure/util/platform_util.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:flutter_animate/flutter_animate.dart";
+import "package:loure/client/nostr.dart";
+import "package:loure/component/webview_router.dart";
+import "package:loure/util/platform_util.dart";
 
-import 'package:loure/client/client_utils/keys.dart';
-import 'package:loure/client/nip19/nip19.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/main.dart';
+import "package:loure/client/client_utils/keys.dart";
+import "package:loure/client/nip19/nip19.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/main.dart";
 
 class LoginRouter extends StatefulWidget {
   const LoginRouter({super.key});
@@ -39,10 +39,10 @@ class _LoginRouter extends State<LoginRouter>
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
-    var maxWidth = mediaDataCache.size.width;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
+    final maxWidth = mediaDataCache.size.width;
     var mainWidth = maxWidth * 0.8;
     if (PlatformUtil.isTableMode()) {
       if (mainWidth > 550) {
@@ -50,7 +50,7 @@ class _LoginRouter extends State<LoginRouter>
       }
     }
 
-    var logoWiget = Image.asset(
+    final logoWiget = Image.asset(
       "assets/imgs/logo/logo512.png",
       width: 100,
       height: 100,
@@ -72,7 +72,7 @@ class _LoginRouter extends State<LoginRouter>
       ),
     ));
 
-    var suffixIcon = GestureDetector(
+    final suffixIcon = GestureDetector(
       onTap: () {
         setState(() {
           obscureText = !obscureText;
@@ -124,12 +124,12 @@ class _LoginRouter extends State<LoginRouter>
       ),
     ));
 
-    var termsWiget = Row(
+    final termsWiget = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Checkbox(
             value: checkTerms,
-            onChanged: (val) {
+            onChanged: (final val) {
               setState(() {
                 checkTerms = val;
               });
@@ -178,7 +178,7 @@ class _LoginRouter extends State<LoginRouter>
   }
 
   void generatePK() {
-    var sk = generatePrivateKey();
+    final sk = generatePrivateKey();
     controller.text = sk;
   }
 

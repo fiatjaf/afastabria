@@ -1,23 +1,23 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/component/event/reaction_event_item_component.dart';
+import "package:loure/client/event.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/component/event/reaction_event_item_component.dart";
 
 class ReactionEventListComponent extends StatefulWidget {
+  ReactionEventListComponent({
+    required this.event,
+    required this.text,
+    super.key,
+    this.jumpable = true,
+  });
   Event event;
 
   bool jumpable;
 
   String text;
-
-  ReactionEventListComponent({super.key, 
-    required this.event,
-    this.jumpable = true,
-    required this.text,
-  });
 
   @override
   State<StatefulWidget> createState() => _ReactionEventListComponent();
@@ -25,11 +25,11 @@ class ReactionEventListComponent extends StatefulWidget {
 
 class _ReactionEventListComponent extends State<ReactionEventListComponent> {
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
 
-    var main = Container(
+    final main = Container(
       color: cardColor,
       margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
       padding: const EdgeInsets.only(

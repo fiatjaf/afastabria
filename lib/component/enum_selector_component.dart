@@ -1,23 +1,24 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/util/router_util.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/util/router_util.dart";
 
 class EnumSelectorComponent extends StatelessWidget {
+  EnumSelectorComponent({
+    required this.list,
+    super.key,
+    this.enumItemBuild,
+  });
   final List<EnumObj> list;
 
   Widget Function(BuildContext, EnumObj)? enumItemBuild;
 
-  EnumSelectorComponent({super.key, 
-    required this.list,
-    this.enumItemBuild,
-  });
-
-  static Future<EnumObj?> show(BuildContext context, List<EnumObj> list) async {
+  static Future<EnumObj?> show(
+      final BuildContext context, final List<EnumObj> list) async {
     return await showDialog<EnumObj?>(
       context: context,
-      builder: (context) {
+      builder: (final context) {
         return EnumSelectorComponent(
           list: list,
         );
@@ -26,14 +27,14 @@ class EnumSelectorComponent extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    Color cardColor = themeData.cardColor;
-    var maxHeight = MediaQuery.of(context).size.height;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final Color cardColor = themeData.cardColor;
+    final maxHeight = MediaQuery.of(context).size.height;
 
     List<Widget> widgets = [];
     for (var i = 0; i < list.length; i++) {
-      var enumObj = list[i];
+      final enumObj = list[i];
       if (enumItemBuild != null) {
         widgets.add(enumItemBuild!(context, enumObj));
       } else {
@@ -44,7 +45,7 @@ class EnumSelectorComponent extends StatelessWidget {
       }
     }
 
-    Widget main = Container(
+    final Widget main = Container(
       width: double.infinity,
       padding: const EdgeInsets.only(
         left: Base.BASE_PADDING,
@@ -96,6 +97,13 @@ class EnumSelectorComponent extends StatelessWidget {
 }
 
 class EnumSelectorItemComponent extends StatelessWidget {
+  EnumSelectorItemComponent({
+    required this.enumObj,
+    super.key,
+    this.isLast = false,
+    this.onTap,
+    this.color,
+  });
   static const double HEIGHT = 44;
 
   final EnumObj enumObj;
@@ -106,19 +114,12 @@ class EnumSelectorItemComponent extends StatelessWidget {
 
   Color? color;
 
-  EnumSelectorItemComponent({super.key, 
-    required this.enumObj,
-    this.isLast = false,
-    this.onTap,
-    this.color,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var dividerColor = themeData.dividerColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final dividerColor = themeData.dividerColor;
 
-    Widget main = Container(
+    final Widget main = Container(
       padding: const EdgeInsets.only(
           left: Base.BASE_PADDING + 5, right: Base.BASE_PADDING + 5),
       child: Text(enumObj.name),

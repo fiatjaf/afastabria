@@ -1,19 +1,18 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/main.dart';
-import 'package:loure/client/nip02/contact.dart';
-import 'package:loure/client/nip02/cust_contact_list.dart';
-import 'package:loure/component/user/metadata_component.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/router_util.dart';
+import "package:loure/main.dart";
+import "package:loure/client/nip02/contact.dart";
+import "package:loure/client/nip02/cust_contact_list.dart";
+import "package:loure/component/user/metadata_component.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/router_util.dart";
 
 class UserContactListComponent extends StatefulWidget {
+  const UserContactListComponent({required this.contactList, super.key});
   final CustContactList contactList;
-
-  const UserContactListComponent({super.key, required this.contactList});
 
   @override
   State<StatefulWidget> createState() {
@@ -31,18 +30,19 @@ class _UserContactListComponent extends State<UserContactListComponent> {
   void initState() {
     super.initState();
     this.list = widget.contactList.list().toList();
-    this.metadataFutures =
-        list!.map((contact) => metadataLoader.load(contact.publicKey)).toList();
+    this.metadataFutures = list!
+        .map((final contact) => metadataLoader.load(contact.publicKey))
+        .toList();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     if (this.metadataFutures == null) return Container();
 
     Widget main = ListView.builder(
       controller: _controller,
-      itemBuilder: (context, index) {
-        var contact = list![index];
+      itemBuilder: (final context, final index) {
+        final contact = list![index];
         return Container(
           margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
           child: GestureDetector(
@@ -53,7 +53,7 @@ class _UserContactListComponent extends State<UserContactListComponent> {
             child: FutureBuilder(
               future: this.metadataFutures![index],
               initialData: Metadata.blank(contact.publicKey),
-              builder: (context, snapshot) {
+              builder: (final context, final snapshot) {
                 return MetadataComponent(
                   pubKey: contact.publicKey,
                   metadata: snapshot.data,
@@ -69,7 +69,7 @@ class _UserContactListComponent extends State<UserContactListComponent> {
 
     if (PlatformUtil.isTableMode()) {
       main = GestureDetector(
-        onVerticalDragUpdate: (detail) {
+        onVerticalDragUpdate: (final detail) {
           _controller.jumpTo(_controller.offset - detail.delta.dy);
         },
         behavior: HitTestBehavior.translucent,

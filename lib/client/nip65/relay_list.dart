@@ -1,21 +1,18 @@
-import 'package:loure/client/event.dart';
-import 'package:loure/client/relay/util.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/relay/util.dart";
 
 class RelayList {
-  final List<String> read;
-  final List<String> write;
-
   RelayList(this.read, this.write);
 
-  factory RelayList.fromEvent(Event event) {
+  factory RelayList.fromEvent(final Event event) {
     List<String> read = [];
     List<String> write = [];
-    for (var tag in event.tags) {
+    for (final tag in event.tags) {
       if (tag.length < 2) {
         continue;
       }
 
-      var url = RelayUtil.normalizeURL(tag[1]);
+      final url = RelayUtil.normalizeURL(tag[1]);
 
       if (tag.length >= 3) {
         if (tag[2] == "read") {
@@ -37,10 +34,12 @@ class RelayList {
     }
     return RelayList(read, write);
   }
+  final List<String> read;
+  final List<String> write;
 
-  Event toEvent(String privateKey) {
+  Event toEvent(final String privateKey) {
     List<List<String>> tags = [];
-    for (var relay in this.write) {
+    for (final relay in this.write) {
       List<String> tag = ["r", relay, "write"];
       if (this.read.contains(relay)) {
         tag = tag.sublist(0, 2);
@@ -48,7 +47,7 @@ class RelayList {
       tags.add(tag);
     }
 
-    for (var relay in this.read) {
+    for (final relay in this.read) {
       if (this.write.contains(relay)) continue;
       tags.add(["r", relay, "read"]);
     }
@@ -58,17 +57,17 @@ class RelayList {
 
   List<String> get all {
     List<String> urls = [];
-    for (var relay in this.write) {
+    for (final relay in this.write) {
       urls.add(relay);
     }
-    for (var relay in this.read) {
+    for (final relay in this.read) {
       if (this.write.contains(relay)) continue;
       urls.add(relay);
     }
     return urls;
   }
 
-  void add(String relay, bool read, bool write) {
+  void add(String relay, final bool read, final bool write) {
     relay = RelayUtil.normalizeURL(relay);
     if (read) {
       this.read.add(relay);

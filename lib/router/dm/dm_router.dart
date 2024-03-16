@@ -1,15 +1,14 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/client/nip04/nip04.dart';
-import 'package:loure/main.dart';
-import 'package:loure/router/dm/dm_known_list_router.dart';
-import 'package:loure/router/dm/dm_unknown_list_router.dart';
+import "package:loure/client/nip04/nip04.dart";
+import "package:loure/main.dart";
+import "package:loure/router/dm/dm_known_list_router.dart";
+import "package:loure/router/dm/dm_unknown_list_router.dart";
 
 // ignore: must_be_immutable
 class DMRouter extends StatefulWidget {
+  DMRouter({required this.tabController, super.key});
   TabController tabController;
-
-  DMRouter({super.key, required this.tabController});
 
   @override
   State<StatefulWidget> createState() {
@@ -19,9 +18,9 @@ class DMRouter extends StatefulWidget {
 
 class _DMRouter extends State<DMRouter> {
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var agreement = NIP04.getAgreement(nostr.privateKey);
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final agreement = NIP04.getAgreement(nostr.privateKey);
 
     return Container(
       color: themeData.scaffoldBackgroundColor,

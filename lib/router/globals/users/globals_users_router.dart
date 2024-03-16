@@ -1,19 +1,19 @@
-import 'dart:convert';
-import 'dart:math';
+import "dart:convert";
+import "dart:math";
 
-import 'package:flutter/material.dart';
-import 'package:loure/util/platform_util.dart';
+import "package:flutter/material.dart";
+import "package:loure/util/platform_util.dart";
 
-import 'package:loure/component/keep_alive_cust_state.dart';
-import 'package:loure/component/placeholder/metadata_list_placeholder.dart';
-import 'package:loure/component/user/metadata_component.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/dio_util.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
+import "package:loure/component/keep_alive_cust_state.dart";
+import "package:loure/component/placeholder/metadata_list_placeholder.dart";
+import "package:loure/component/user/metadata_component.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/main.dart";
+import "package:loure/util/dio_util.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
 
 class GlobalsUsersRouter extends StatefulWidget {
   const GlobalsUsersRouter({super.key});
@@ -37,18 +37,18 @@ class GlobalsUsersRouterState extends KeepAliveCustState<GlobalsUsersRouter> {
   }
 
   @override
-  Widget doBuild(BuildContext context) {
+  Widget doBuild(final BuildContext context) {
     if (this.pubkeys.isEmpty) {
       return MetadataListPlaceholder(
         onRefresh: refresh,
       );
     }
 
-    var main = ListView.builder(
+    final main = ListView.builder(
       controller: scrollController,
       itemCount: this.pubkeys.length,
-      itemBuilder: (context, index) {
-        var pubkey = this.pubkeys[index];
+      itemBuilder: (final context, final index) {
+        final pubkey = this.pubkeys[index];
 
         if (StringUtil.isBlank(pubkey)) {
           return Container();
@@ -64,7 +64,7 @@ class GlobalsUsersRouterState extends KeepAliveCustState<GlobalsUsersRouter> {
             child: FutureBuilder(
               future: this.metadataFutures![index],
               initialData: Metadata.blank(pubkey),
-              builder: (context, snapshot) {
+              builder: (final context, final snapshot) {
                 return MetadataComponent(
                   pubKey: pubkey,
                   metadata: snapshot.data,
@@ -79,7 +79,7 @@ class GlobalsUsersRouterState extends KeepAliveCustState<GlobalsUsersRouter> {
 
     if (PlatformUtil.isTableMode()) {
       return GestureDetector(
-        onVerticalDragUpdate: (detail) {
+        onVerticalDragUpdate: (final detail) {
           scrollController.jumpTo(scrollController.offset - detail.delta.dy);
         },
         behavior: HitTestBehavior.translucent,
@@ -91,24 +91,24 @@ class GlobalsUsersRouterState extends KeepAliveCustState<GlobalsUsersRouter> {
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     indexProvider.setUserScrollController(scrollController);
     refresh();
   }
 
   Future<void> refresh() async {
-    var str = await DioUtil.getStr(Base.INDEXS_CONTACTS);
+    final str = await DioUtil.getStr(Base.INDEXS_CONTACTS);
     if (StringUtil.isNotBlank(str)) {
       pubkeys.clear();
-      var itfs = jsonDecode(str!);
-      for (var itf in itfs) {
+      final itfs = jsonDecode(str!);
+      for (final itf in itfs) {
         pubkeys.add(itf as String);
       }
 
       // Disorder
       for (var i = 1; i < pubkeys.length; i++) {
-        var j = getRandomInt(0, i);
-        var t = pubkeys[i];
+        final j = getRandomInt(0, i);
+        final t = pubkeys[i];
         pubkeys[i] = pubkeys[j];
         pubkeys[j] = t;
       }
@@ -117,7 +117,7 @@ class GlobalsUsersRouterState extends KeepAliveCustState<GlobalsUsersRouter> {
     }
   }
 
-  int getRandomInt(int min, int max) {
+  int getRandomInt(final int min, final int max) {
     final random = Random();
     return random.nextInt((max - min).floor()) + min;
   }

@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:loure/util/platform_util.dart';
+import "package:flutter/material.dart";
+import "package:loure/util/platform_util.dart";
 
-import 'package:loure/component/user_pic_component.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/router_util.dart';
+import "package:loure/component/user_pic_component.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/main.dart";
+import "package:loure/util/router_util.dart";
 
 class IndexAppBar extends StatefulWidget {
+  IndexAppBar({super.key, this.center});
   static const double height = 56;
 
   Widget? center;
-  IndexAppBar({super.key, this.center});
 
   @override
   State<StatefulWidget> createState() {
@@ -23,11 +23,11 @@ class _IndexAppBar extends State<IndexAppBar> {
   double picHeight = 30;
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var paddingTop = mediaDataCache.padding.top;
-    var textColor = themeData.appBarTheme.titleTextStyle!.color;
-    var appBarBackgroundColor = themeData.appBarTheme.backgroundColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final paddingTop = mediaDataCache.padding.top;
+    final textColor = themeData.appBarTheme.titleTextStyle!.color;
+    final appBarBackgroundColor = themeData.appBarTheme.backgroundColor;
 
     Widget? userPicWidget;
     if (!PlatformUtil.isTableMode()) {

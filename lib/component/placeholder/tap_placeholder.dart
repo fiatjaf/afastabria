@@ -1,16 +1,15 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/consts/base.dart';
+import "package:loure/consts/base.dart";
 
 class TapPlaceholder extends StatelessWidget {
+  TapPlaceholder({required this.width, required this.color, super.key});
   Color color;
 
   double width;
 
-  TapPlaceholder({super.key, required this.width, required this.color});
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Container(
       width: width,
       height: 30,

@@ -1,22 +1,22 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/consts/base.dart';
+import "package:loure/consts/base.dart";
 
 class SettingGroupTitleComponent extends StatelessWidget {
+  SettingGroupTitleComponent({
+    required this.iconData,
+    required this.title,
+    super.key,
+  });
   IconData iconData;
 
   String title;
 
-  SettingGroupTitleComponent({super.key, 
-    required this.iconData,
-    required this.title,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var fontSize = themeData.textTheme.bodyMedium!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final fontSize = themeData.textTheme.bodyMedium!.fontSize;
 
     return SliverToBoxAdapter(
       child: Container(

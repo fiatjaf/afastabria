@@ -1,28 +1,28 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:loure/client/nip04/dm_session.dart';
-import 'package:loure/component/cust_state.dart';
-import 'package:loure/component/editor/editor_mixin.dart';
-import 'package:pointycastle/ecc/api.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill;
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/gestures.dart";
+import "package:flutter/material.dart";
+import "package:loure/client/nip04/dm_session.dart";
+import "package:loure/component/cust_state.dart";
+import "package:loure/component/editor/editor_mixin.dart";
+import "package:pointycastle/ecc/api.dart";
+import "package:provider/provider.dart";
+import "package:flutter_quill/flutter_quill.dart" as quill;
 
-import 'package:loure/client/nip04/nip04.dart';
-import 'package:loure/component/editor/custom_emoji_embed_builder.dart';
-import 'package:loure/component/editor/lnbc_embed_builder.dart';
-import 'package:loure/component/editor/mention_event_embed_builder.dart';
-import 'package:loure/component/editor/mention_user_embed_builder.dart';
-import 'package:loure/component/editor/pic_embed_builder.dart';
-import 'package:loure/component/editor/tag_embed_builder.dart';
-import 'package:loure/component/editor/video_embed_builder.dart';
-import 'package:loure/component/name_component.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/dm_provider.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/router/dm/dm_detail_item_component.dart';
+import "package:loure/client/nip04/nip04.dart";
+import "package:loure/component/editor/custom_emoji_embed_builder.dart";
+import "package:loure/component/editor/lnbc_embed_builder.dart";
+import "package:loure/component/editor/mention_event_embed_builder.dart";
+import "package:loure/component/editor/mention_user_embed_builder.dart";
+import "package:loure/component/editor/pic_embed_builder.dart";
+import "package:loure/component/editor/tag_embed_builder.dart";
+import "package:loure/component/editor/video_embed_builder.dart";
+import "package:loure/component/name_component.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/dm_provider.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/router/dm/dm_detail_item_component.dart";
 
 class DMDetailRouter extends StatefulWidget {
   const DMDetailRouter({super.key});
@@ -47,24 +47,24 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
   }
 
   @override
-  Widget doBuild(BuildContext context) {
-    var themeData = Theme.of(context);
-    var textColor = themeData.textTheme.bodyMedium!.color;
-    var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
+  Widget doBuild(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final textColor = themeData.textTheme.bodyMedium!.color;
+    final scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
 
     // var hintColor = themeData.hintColor;
 
-    var arg = RouterUtil.routerArgs(context);
+    final arg = RouterUtil.routerArgs(context);
     if (arg == null) {
       RouterUtil.back(context);
       return Container();
     }
     detail = arg as DMSessionDetail;
 
-    var nameComponent = FutureBuilder(
+    final nameComponent = FutureBuilder(
       future: this.metadataFuture,
       initialData: Metadata.blank(detail!.dmSession.pubkey),
-      builder: (context, snapshot) {
+      builder: (final context, final snapshot) {
         return NameComponent(
           pubkey: detail!.dmSession.pubkey,
           metadata: snapshot.data,
@@ -72,20 +72,20 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
       },
     );
 
-    var localPubkey = nostr.publicKey;
+    final localPubkey = nostr.publicKey;
     agreement = NIP04.getAgreement(nostr.privateKey);
 
     List<Widget> list = [];
 
-    var listWidget = Selector<DMProvider, DMSession?>(
-      builder: (context, session, child) {
+    final listWidget = Selector<DMProvider, DMSession?>(
+      builder: (final context, final session, final child) {
         if (session == null) {
           return Container();
         }
 
         return ListView.builder(
-          itemBuilder: (context, index) {
-            var event = session.get(index);
+          itemBuilder: (final context, final index) {
+            final event = session.get(index);
             if (event == null) {
               return null;
             }
@@ -102,7 +102,7 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
           dragStartBehavior: DragStartBehavior.down,
         );
       },
-      selector: (context, provider) {
+      selector: (final context, final provider) {
         return provider.getSession(detail!.dmSession.pubkey);
       },
     );
@@ -240,9 +240,9 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
   }
 
   Future<void> send() async {
-    var cancelFunc = BotToast.showLoading();
+    final cancelFunc = BotToast.showLoading();
     try {
-      var event = await doDocumentSave();
+      final event = await doDocumentSave();
       if (event == null) {
         BotToast.showText(text: "Send_fail");
         return;
@@ -256,14 +256,14 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
   }
 
   Future<void> addDmSessionToKnown() async {
-    var detail_ = await dmProvider.addDmSessionToKnown(detail!);
+    final detail_ = await dmProvider.addDmSessionToKnown(detail!);
     setState(() {
       detail = detail_;
     });
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     if (detail != null &&
         detail!.info != null &&
         detail!.dmSession.newestEvent != null) {
@@ -308,7 +308,7 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
 
   @override
   List<List<String>> getTags() {
-    var pubkey = detail!.dmSession.pubkey;
+    final pubkey = detail!.dmSession.pubkey;
     List<List<String>> tags = [
       ["p", pubkey]
     ];

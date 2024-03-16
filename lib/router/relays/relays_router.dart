@@ -1,15 +1,15 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:loure/client/relay/relay.dart';
-import 'package:loure/main.dart';
-import 'package:loure/router/relays/relays_item_component.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:loure/client/relay/relay.dart";
+import "package:loure/main.dart";
+import "package:loure/router/relays/relays_item_component.dart";
 
-import 'package:loure/util/when_stop_function.dart';
+import "package:loure/util/when_stop_function.dart";
 
-import 'package:loure/component/cust_state.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
+import "package:loure/component/cust_state.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
 
 class RelaysRouter extends StatefulWidget {
   const RelaysRouter({super.key});
@@ -23,10 +23,10 @@ class RelaysRouter extends StatefulWidget {
 class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
   TextEditingController controller = TextEditingController();
   @override
-  Widget doBuild(BuildContext context) {
-    var themeData = Theme.of(context);
+  Widget doBuild(final BuildContext context) {
+    final themeData = Theme.of(context);
     // var color = themeData.textTheme.bodyLarge!.color;
-    var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+    final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
     return Scaffold(
       appBar: AppBar(
@@ -54,8 +54,8 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
               top: Base.BASE_PADDING,
             ),
             child: ListView.builder(
-              itemBuilder: (context, index) {
-                var addr = nostr.relayList.all[index];
+              itemBuilder: (final context, final index) {
+                final addr = nostr.relayList.all[index];
                 var relayStatus = pool.getRelayStatus(addr);
                 relayStatus ??= RelayStatus(addr);
                 return RelaysItemComponent(
@@ -98,7 +98,7 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
   // Event? remoteRelayEvent;
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     // var filter = Filter(
     //     authors: [nostr!.publicKey],
     //     limit: 1,

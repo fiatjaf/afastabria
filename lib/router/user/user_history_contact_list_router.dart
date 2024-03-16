@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:loure/main.dart';
+import "package:flutter/material.dart";
+import "package:loure/main.dart";
 
-import 'package:loure/client/nip02/cust_contact_list.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/router/user/user_contact_list_component.dart';
+import "package:loure/client/nip02/cust_contact_list.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/router/user/user_contact_list_component.dart";
 
 class UserHistoryContactListRouter extends StatefulWidget {
   const UserHistoryContactListRouter({super.key});
@@ -19,10 +19,9 @@ class _UserHistoryContactListRouter
   CustContactList? contactList;
 
   @override
-  Widget build(BuildContext context) {
-    
+  Widget build(final BuildContext context) {
     if (contactList == null) {
-      var arg = RouterUtil.routerArgs(context);
+      final arg = RouterUtil.routerArgs(context);
       if (arg != null) {
         contactList = arg as CustContactList;
       }
@@ -31,9 +30,9 @@ class _UserHistoryContactListRouter
       RouterUtil.back(context);
       return Container();
     }
-    var themeData = Theme.of(context);
-    var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
-    var titleTextColor = themeData.appBarTheme.titleTextStyle!.color;
+    final themeData = Theme.of(context);
+    final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+    final titleTextColor = themeData.appBarTheme.titleTextStyle!.color;
 
     return Scaffold(
       appBar: AppBar(

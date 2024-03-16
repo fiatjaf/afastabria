@@ -1,17 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_link_previewer/flutter_link_previewer.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart';
-import 'package:loure/component/webview_router.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/link_preview_data_provider.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:flutter_link_previewer/flutter_link_previewer.dart";
+import "package:flutter_chat_types/flutter_chat_types.dart";
+import "package:loure/component/webview_router.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/link_preview_data_provider.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/consts/base.dart';
+import "package:loure/consts/base.dart";
 
 class ContentLinkPreComponent extends StatefulWidget {
+  ContentLinkPreComponent({required this.link, super.key});
   String link;
-
-  ContentLinkPreComponent({super.key, required this.link});
 
   @override
   State<StatefulWidget> createState() {
@@ -21,12 +20,12 @@ class ContentLinkPreComponent extends StatefulWidget {
 
 class _ContentLinkPreComponent extends State<ContentLinkPreComponent> {
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
 
     return Selector<LinkPreviewDataProvider, PreviewData?>(
-      builder: (context, data, child) {
+      builder: (final context, final data, final child) {
         return Container(
           margin: const EdgeInsets.all(Base.BASE_PADDING),
           decoration: BoxDecoration(
@@ -46,20 +45,20 @@ class _ContentLinkPreComponent extends State<ContentLinkPreComponent> {
               decorationColor: Colors.blue,
             ),
             enableAnimation: true,
-            onPreviewDataFetched: (data) {
+            onPreviewDataFetched: (final data) {
               // Save preview data
               linkPreviewDataProvider.set(widget.link, data);
             },
             previewData: data,
             text: widget.link,
             width: mediaDataCache.size.width,
-            onLinkPressed: (link) {
+            onLinkPressed: (final link) {
               WebViewRouter.open(context, link);
             },
           ),
         );
       },
-      selector: (context, provider) {
+      selector: (final context, final provider) {
         return provider.getPreviewData(widget.link);
       },
     );

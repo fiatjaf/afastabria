@@ -1,18 +1,17 @@
-import 'dart:isolate';
+import "dart:isolate";
 
-import 'package:flutter_socks_proxy/socks_proxy.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import "package:flutter_socks_proxy/socks_proxy.dart";
+import "package:loure/util/string_util.dart";
+import "package:web_socket_channel/web_socket_channel.dart";
 
-import 'package:loure/client/relay/relay_isolate.dart';
+import "package:loure/client/relay/relay_isolate.dart";
 
 class RelayIsolateWorker {
-  RelayIsolateConfig config;
-  WebSocketChannel? wsChannel;
-
   RelayIsolateWorker({
     required this.config,
   });
+  RelayIsolateConfig config;
+  WebSocketChannel? wsChannel;
 
   Future<void> run() async {
     if (StringUtil.isNotBlank(config.network)) {
@@ -22,11 +21,11 @@ class RelayIsolateWorker {
       SocksProxy.initProxy(proxy: network);
     }
 
-    ReceivePort mainToSubReceivePort = ReceivePort();
-    var mainToSubSendPort = mainToSubReceivePort.sendPort;
+    final ReceivePort mainToSubReceivePort = ReceivePort();
+    final mainToSubSendPort = mainToSubReceivePort.sendPort;
     config.subToMainSendPort.send(mainToSubSendPort);
 
-    mainToSubReceivePort.listen((message) async {
+    mainToSubReceivePort.listen((final message) async {
       if (message is String) {
         // this is the msg need to sended.
         if (wsChannel != null) {
@@ -58,22 +57,21 @@ class RelayIsolateWorker {
     wsChannel = await handleWS();
   }
 
-  static void runRelayIsolate(RelayIsolateConfig config) {
-    var worker = RelayIsolateWorker(config: config);
+  static void runRelayIsolate(final RelayIsolateConfig config) {
+    final worker = RelayIsolateWorker(config: config);
     worker.run();
   }
 
   Future<WebSocketChannel?> handleWS() async {
-    String url = config.url;
-    SendPort subToMainSendPort = config.subToMainSendPort;
+    final String url = config.url;
+    final SendPort subToMainSendPort = config.subToMainSendPort;
 
     final wsUrl = Uri.parse(url);
     try {
       print("Begin to connect ${config.url}");
       wsChannel = WebSocketChannel.connect(wsUrl);
-      wsChannel!.stream.listen((message) {
-        subToMainSendPort.send(message);
-      }, onError: (error) async {
+      wsChannel!.stream.listen(subToMainSendPort.send,
+          onError: (final error) async {
         _closeWS(wsChannel);
         wsChannel = null;
         subToMainSendPort.send(RelayIsolateMsgs.DIS_CONNECTED);

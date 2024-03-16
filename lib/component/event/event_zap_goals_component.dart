@@ -1,20 +1,19 @@
-import 'package:convert/convert.dart';
-import 'package:flutter/material.dart';
-import 'package:loure/client/nip75/zap_goals_info.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:provider/provider.dart';
+import "package:convert/convert.dart";
+import "package:flutter/material.dart";
+import "package:loure/client/nip75/zap_goals_info.dart";
+import "package:loure/util/string_util.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/data/event_reactions.dart';
-import 'package:loure/provider/event_reactions_provider.dart';
-import 'package:loure/util/number_format_util.dart';
-import 'package:loure/component/event/event_quote_component.dart';
+import "package:loure/client/event.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/data/event_reactions.dart";
+import "package:loure/provider/event_reactions_provider.dart";
+import "package:loure/util/number_format_util.dart";
+import "package:loure/component/event/event_quote_component.dart";
 
 class EventZapGoalsComponent extends StatefulWidget {
+  EventZapGoalsComponent({required this.event, super.key});
   Event event;
-
-  EventZapGoalsComponent({super.key, required this.event});
 
   @override
   State<StatefulWidget> createState() {
@@ -26,15 +25,15 @@ class _EventZapGoalsComponent extends State<EventZapGoalsComponent> {
   ZapGoalsInfo? zapGoalsInfo;
 
   @override
-  Widget build(BuildContext context) {
-        var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var pollBackgroundColor = hintColor.withOpacity(0.3);
-    var mainColor = themeData.primaryColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final pollBackgroundColor = hintColor.withOpacity(0.3);
+    final mainColor = themeData.primaryColor;
     // log(jsonEncode(widget.event.toJson()));
 
     return Selector<EventReactionsProvider, EventReactions?>(
-      builder: (context, eventReactions, child) {
+      builder: (final context, final eventReactions, final child) {
         // count the poll number.
         int zapNum = 0;
         if (eventReactions != null) {
@@ -49,17 +48,17 @@ class _EventZapGoalsComponent extends State<EventZapGoalsComponent> {
         }
 
         if (zapGoalsInfo!.closedAt != null) {
-          var closeAtDT =
+          final closeAtDT =
               DateTime.fromMillisecondsSinceEpoch(zapGoalsInfo!.closedAt!);
-          var format = FixedDateTimeFormatter("YYYY-MM-DD hh:mm:ss");
+          final format = FixedDateTimeFormatter("YYYY-MM-DD hh:mm:ss");
           list.add(Row(
             children: [Text("${"Close at"} ${format.encode(closeAtDT)}")],
           ));
         }
 
-        double percent = zapNum / zapGoalsInfo!.amount!;
+        final double percent = zapNum / zapGoalsInfo!.amount!;
 
-        var pollItemWidget = Container(
+        final pollItemWidget = Container(
           width: double.maxFinite,
           margin: const EdgeInsets.only(
             top: Base.BASE_PADDING_HALF,
@@ -134,13 +133,13 @@ class _EventZapGoalsComponent extends State<EventZapGoalsComponent> {
           ),
         );
       },
-      selector: (context, provider) {
+      selector: (final context, final provider) {
         return provider.get(widget.event.id);
       },
     );
   }
 
-  Future<void> tapZap(String selectKey) async {
+  Future<void> tapZap(final String selectKey) async {
     // var numStr = await TextInputDialog.show(
     //     context, "Input_Sats_num",
     //     valueCheck: inputCheck);

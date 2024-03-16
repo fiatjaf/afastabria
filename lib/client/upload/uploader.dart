@@ -1,18 +1,17 @@
+import "package:file_picker/file_picker.dart";
+import "package:flutter/material.dart";
+import "package:mime/mime.dart";
+import "package:loure/client/upload/void_cat.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:wechat_assets_picker/wechat_assets_picker.dart";
 
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:mime/mime.dart';
-import 'package:loure/client/upload/void_cat.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-
-import 'package:loure/consts/base64.dart';
-import 'package:loure/consts/image_services.dart';
-import 'package:loure/client/upload/nostr_build_uploader.dart';
-import 'package:loure/client/upload/nostrfiles_dev_uploader.dart';
-import 'package:loure/client/upload/nostrimg_com_uploader.dart';
-import 'package:loure/client/upload/pomf2_lain_la.dart';
+import "package:loure/consts/base64.dart";
+import "package:loure/consts/image_services.dart";
+import "package:loure/client/upload/nostr_build_uploader.dart";
+import "package:loure/client/upload/nostrfiles_dev_uploader.dart";
+import "package:loure/client/upload/nostrimg_com_uploader.dart";
+import "package:loure/client/upload/pomf2_lain_la.dart";
 
 class Uploader {
   // static Future<String?> pickAndUpload(BuildContext context) async {
@@ -31,7 +30,7 @@ class Uploader {
   //   return null;
   // }
 
-  static String getFileType(String filePath) {
+  static String getFileType(final String filePath) {
     var fileType = lookupMimeType(filePath);
     if (StringUtil.isBlank(fileType)) {
       fileType = "image/jpeg";
@@ -40,15 +39,15 @@ class Uploader {
     return fileType!;
   }
 
-  static Future<void> pickAndUpload(BuildContext context) async {
-    var filePath = await pick(context);
+  static Future<void> pickAndUpload(final BuildContext context) async {
+    final filePath = await pick(context);
     if (StringUtil.isNotBlank(filePath)) {
-      var result = await Pomf2LainLa.upload(filePath!);
+      final result = await Pomf2LainLa.upload(filePath!);
       print("result $result");
     }
   }
 
-  static Future<String?> pick(BuildContext context) async {
+  static Future<String?> pick(final BuildContext context) async {
     if (PlatformUtil.isPC() || PlatformUtil.isWeb()) {
       FilePickerResult? result = await FilePicker.platform.pickFiles();
 
@@ -62,21 +61,21 @@ class Uploader {
 
       return null;
     }
-    var assets = await AssetPicker.pickAssets(
+    final assets = await AssetPicker.pickAssets(
       context,
       pickerConfig: const AssetPickerConfig(maxAssets: 1),
     );
 
     if (assets != null && assets.isNotEmpty) {
-      var file = await assets[0].file;
+      final file = await assets[0].file;
       return file!.path;
     }
 
     return null;
   }
 
-  static Future<String?> upload(String localPath,
-      {String? imageService}) async {
+  static Future<String?> upload(final String localPath,
+      {final String? imageService}) async {
     if (imageService == ImageServices.NOSTRIMG_COM) {
       return await NostrimgComUploader.upload(localPath);
     } else if (imageService == ImageServices.POMF2_LAIN_LA) {

@@ -1,9 +1,9 @@
-TrieTree buildTrieTree(List<List<int>> words, List<int>? skips) {
+TrieTree buildTrieTree(final List<List<int>> words, List<int>? skips) {
   skips ??= [];
 
-  var tree = TrieTree(TrieNode())..skips = skips;
+  final tree = TrieTree(TrieNode())..skips = skips;
 
-  for (var word in words) {
+  for (final word in words) {
     tree.root.insertWord(word, skips);
   }
 
@@ -11,20 +11,19 @@ TrieTree buildTrieTree(List<List<int>> words, List<int>? skips) {
 }
 
 class TrieTree {
+  TrieTree(this.root);
   TrieNode root;
   List<int>? skips;
 
-  TrieTree(this.root);
-
-  bool check(String targetStr) {
-    var target = targetStr.codeUnits;
+  bool check(final String targetStr) {
+    final target = targetStr.codeUnits;
     var index = 0;
-    var length = target.length;
+    final length = target.length;
     for (; index < length;) {
       var current = root;
       for (var i = index; i < length; i++) {
-        var char = target[i];
-        var tmpNode = current.find(char);
+        final char = target[i];
+        final tmpNode = current.find(char);
         if (tmpNode != null) {
           current = tmpNode;
           if (current.done) {
@@ -42,32 +41,31 @@ class TrieTree {
 }
 
 class TrieNode {
-  Map<int, TrieNode> children = {};
-  bool done;
-
   TrieNode({
     this.done = false,
   });
+  Map<int, TrieNode> children = {};
+  bool done;
 
-  void insertWord(List<int> word, List<int> skips) {
+  void insertWord(final List<int> word, final List<int> skips) {
     var current = this;
-    for (var char in word) {
+    for (final char in word) {
       current = current.findOrCreate(char, skips);
     }
     current.done = true;
   }
 
-  TrieNode? find(int char) {
+  TrieNode? find(final int char) {
     return children[char];
   }
 
-  TrieNode findOrCreate(int char, List<int> skips) {
+  TrieNode findOrCreate(final int char, final List<int> skips) {
     var child = children[char];
     if (child == null) {
       child = TrieNode();
 
       children[char] = child;
-      for (var skip in skips) {
+      for (final skip in skips) {
         children[skip] = child;
       }
     }

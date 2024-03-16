@@ -1,4 +1,4 @@
-import 'package:loure/client/client_utils/keys.dart';
+import "package:loure/client/client_utils/keys.dart";
 
 /// A single contact for use with [ContactList]
 class Contact {
@@ -10,14 +10,14 @@ class Contact {
   ///
   /// An [ArgumentError] is thrown if [publicKey] is invalid or if [url] is not
   /// a valid relay URL.
-  Contact({required this.publicKey, this.url = '', this.petname = ''}) {
+  Contact({required this.publicKey, this.url = "", this.petname = ""}) {
     if (!keyIsValid(publicKey)) {
-      throw ArgumentError.value(publicKey, 'publicKey', 'Invalid key');
+      throw ArgumentError.value(publicKey, "publicKey", "Invalid key");
     }
     if (url.isNotEmpty &&
         !url.contains(RegExp(
-            r'^(wss?:\/\/)([0-9]{1,3}(?:\.[0-9]{1,3}){3}|[^:]+):?([0-9]{1,5})?$'))) {
-      throw ArgumentError.value(url, 'url', 'Invalid relay address');
+            r"^(wss?:\/\/)([0-9]{1,3}(?:\.[0-9]{1,3}){3}|[^:]+):?([0-9]{1,5})?$"))) {
+      throw ArgumentError.value(url, "url", "Invalid relay address");
     }
   }
 

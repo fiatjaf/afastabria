@@ -1,6 +1,6 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class PcRouterFakeProvider extends ChangeNotifier {
   static int MAX_STACK_NUM = 20;
@@ -8,11 +8,11 @@ class PcRouterFakeProvider extends ChangeNotifier {
   List<RouterFakeInfo> routerFakeInfos = [];
 
   void router<T>(
-    RouterFakeInfo routerFakeInfo, {
-    bool clear = false,
+    final RouterFakeInfo routerFakeInfo, {
+    final bool clear = false,
   }) {
     List<RouterFakeInfo> newList = [];
-    var oldLength = routerFakeInfos.length;
+    final oldLength = routerFakeInfos.length;
 
     if (!clear) {
       if (oldLength < MAX_STACK_NUM - 1) {
@@ -30,7 +30,7 @@ class PcRouterFakeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void remove(RouterFakeInfo info) {
+  void remove(final RouterFakeInfo info) {
     List<RouterFakeInfo> newList = [];
     routerFakeInfos.remove(info);
     newList.addAll(routerFakeInfos);
@@ -40,6 +40,11 @@ class PcRouterFakeProvider extends ChangeNotifier {
 }
 
 class RouterFakeInfo<T> {
+  RouterFakeInfo({
+    this.routerPath,
+    this.arguments,
+    this.buildContent,
+  });
   String? routerPath;
 
   Object? arguments;
@@ -47,10 +52,4 @@ class RouterFakeInfo<T> {
   final Completer<T> completer = Completer<T>();
 
   Widget Function(BuildContext)? buildContent;
-
-  RouterFakeInfo({
-    this.routerPath,
-    this.arguments,
-    this.buildContent,
-  });
 }

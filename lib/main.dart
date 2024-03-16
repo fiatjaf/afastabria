@@ -1,80 +1,79 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_socks_proxy/socks_proxy.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:loure/client/metadata_loader.dart';
-import 'package:loure/client/nostr.dart';
-import 'package:loure/client/relay/relay_pool.dart';
-import 'package:loure/provider/badge_definition_provider.dart';
-import 'package:loure/provider/community_info_provider.dart';
-import 'package:loure/provider/follow_new_event_provider.dart';
-import 'package:loure/provider/mention_me_new_provider.dart';
-import 'package:loure/router/relays/relay_info_router.dart';
-import 'package:loure/router/user/followed_router.dart';
-import 'package:loure/router/user/followed_tags_list_router.dart';
-import 'package:loure/router/user/user_history_contact_list_router.dart';
-import 'package:loure/router/user/user_zap_list_router.dart';
-import 'package:loure/router/web_utils/web_utils_router.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
-import 'package:window_manager/window_manager.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_native_splash/flutter_native_splash.dart";
+import "package:flutter_socks_proxy/socks_proxy.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:loure/client/metadata_loader.dart";
+import "package:loure/client/nostr.dart";
+import "package:loure/client/relay/relay_pool.dart";
+import "package:loure/provider/badge_definition_provider.dart";
+import "package:loure/provider/community_info_provider.dart";
+import "package:loure/provider/follow_new_event_provider.dart";
+import "package:loure/provider/mention_me_new_provider.dart";
+import "package:loure/router/relays/relay_info_router.dart";
+import "package:loure/router/user/followed_router.dart";
+import "package:loure/router/user/followed_tags_list_router.dart";
+import "package:loure/router/user/user_history_contact_list_router.dart";
+import "package:loure/router/user/user_zap_list_router.dart";
+import "package:loure/router/web_utils/web_utils_router.dart";
+import "package:loure/util/platform_util.dart";
+import "package:provider/provider.dart";
+import "package:shared_preferences/shared_preferences.dart";
+import "package:sqflite_common_ffi/sqflite_ffi.dart";
+import "package:sqflite_common_ffi_web/sqflite_ffi_web.dart";
+import "package:window_manager/window_manager.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/colors.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/consts/theme_style.dart';
-import 'package:loure/data/db.dart';
-import 'package:loure/home_component.dart';
-import 'package:loure/provider/badge_provider.dart';
-import 'package:loure/provider/community_approved_provider.dart';
-import 'package:loure/provider/contact_list_provider.dart';
-import 'package:loure/provider/dm_provider.dart';
-import 'package:loure/provider/event_reactions_provider.dart';
-import 'package:loure/provider/filter_provider.dart';
-import 'package:loure/provider/follow_event_provider.dart';
-import 'package:loure/provider/index_provider.dart';
-import 'package:loure/provider/link_preview_data_provider.dart';
-import 'package:loure/provider/list_provider.dart';
-import 'package:loure/provider/mention_me_provider.dart';
-import 'package:loure/provider/pc_router_fake_provider.dart';
-import 'package:loure/provider/notice_provider.dart';
-import 'package:loure/provider/setting_provider.dart';
-import 'package:loure/provider/webview_provider.dart';
-import 'package:loure/router/bookmark/bookmark_router.dart';
-import 'package:loure/router/community/community_detail_router.dart';
-import 'package:loure/router/dm/dm_detail_router.dart';
-import 'package:loure/router/donate/donate_router.dart';
-import 'package:loure/router/event_detail/event_detail_router.dart';
-import 'package:loure/router/filter/filter_router.dart';
-import 'package:loure/router/profile_editor/profile_editor_router.dart';
-import 'package:loure/router/index/index_router.dart';
-import 'package:loure/router/keybackup/key_backup_router.dart';
-import 'package:loure/router/notice/notice_router.dart';
-import 'package:loure/router/qrscanner/qrscanner_router.dart';
-import 'package:loure/router/relays/relays_router.dart';
-import 'package:loure/router/setting/setting_router.dart';
-import 'package:loure/router/tag/tag_detail_router.dart';
-import 'package:loure/router/thread/thread_detail_router.dart';
-import 'package:loure/router/user/followed_communities_router.dart';
-import 'package:loure/router/user/user_contact_list_router.dart';
-import 'package:loure/router/user/user_relays_router.dart';
-import 'package:loure/router/user/user_router.dart';
-import 'package:loure/system_timer.dart';
-import 'package:loure/util/colors_util.dart';
-import 'package:loure/util/media_data_cache.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/consts/colors.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/consts/theme_style.dart";
+import "package:loure/data/db.dart";
+import "package:loure/home_component.dart";
+import "package:loure/provider/badge_provider.dart";
+import "package:loure/provider/community_approved_provider.dart";
+import "package:loure/provider/contact_list_provider.dart";
+import "package:loure/provider/dm_provider.dart";
+import "package:loure/provider/event_reactions_provider.dart";
+import "package:loure/provider/filter_provider.dart";
+import "package:loure/provider/follow_event_provider.dart";
+import "package:loure/provider/index_provider.dart";
+import "package:loure/provider/link_preview_data_provider.dart";
+import "package:loure/provider/list_provider.dart";
+import "package:loure/provider/mention_me_provider.dart";
+import "package:loure/provider/pc_router_fake_provider.dart";
+import "package:loure/provider/notice_provider.dart";
+import "package:loure/provider/setting_provider.dart";
+import "package:loure/provider/webview_provider.dart";
+import "package:loure/router/bookmark/bookmark_router.dart";
+import "package:loure/router/community/community_detail_router.dart";
+import "package:loure/router/dm/dm_detail_router.dart";
+import "package:loure/router/donate/donate_router.dart";
+import "package:loure/router/event_detail/event_detail_router.dart";
+import "package:loure/router/filter/filter_router.dart";
+import "package:loure/router/profile_editor/profile_editor_router.dart";
+import "package:loure/router/index/index_router.dart";
+import "package:loure/router/keybackup/key_backup_router.dart";
+import "package:loure/router/notice/notice_router.dart";
+import "package:loure/router/qrscanner/qrscanner_router.dart";
+import "package:loure/router/relays/relays_router.dart";
+import "package:loure/router/setting/setting_router.dart";
+import "package:loure/router/tag/tag_detail_router.dart";
+import "package:loure/router/thread/thread_detail_router.dart";
+import "package:loure/router/user/followed_communities_router.dart";
+import "package:loure/router/user/user_contact_list_router.dart";
+import "package:loure/router/user/user_relays_router.dart";
+import "package:loure/router/user/user_router.dart";
+import "package:loure/system_timer.dart";
+import "package:loure/util/colors_util.dart";
+import "package:loure/util/media_data_cache.dart";
 
 final Map<String, WidgetBuilder> routes = {};
 
 final RelayPool pool = RelayPool();
 final metadataLoader = MetadataLoader();
 
-Nostr nostr =
-    Nostr("0000000000000000000000000000000000000000000000000000000000000001");
+Nostr nostr = Nostr.empty();
 late SharedPreferences sharedPreferences;
 
 final settingProvider = SettingProvider();
@@ -107,7 +106,7 @@ Future<void> main() async {
   if (!PlatformUtil.isWeb() && PlatformUtil.isPC()) {
     await windowManager.ensureInitialized();
 
-    WindowOptions windowOptions = const WindowOptions(
+    const WindowOptions windowOptions = WindowOptions(
       size: Size(1280, 800),
       center: true,
       backgroundColor: Colors.transparent,
@@ -147,7 +146,7 @@ Future<void> main() async {
   contactListProvider.query();
   followEventProvider.doQuery();
   mentionMeProvider.doQuery();
-  dmProvider.initDMSessions().then((_) {
+  dmProvider.initDMSessions().then((final _) {
     dmProvider.query();
   });
   bookmarkProvider.init();
@@ -180,14 +179,14 @@ class _MyApp extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     // Color mainColor = _getMainColor();
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     //   statusBarColor: mainColor,
     // ));
 
-    var lightTheme = getLightTheme();
-    var darkTheme = getDarkTheme();
+    final lightTheme = getLightTheme();
+    final darkTheme = getDarkTheme();
     ThemeData defaultTheme;
     ThemeData? defaultDarkTheme;
     if (settingProvider.themeStyle == ThemeStyle.LIGHT) {
@@ -200,34 +199,36 @@ class _MyApp extends State<MyApp> {
     }
 
     routes.addAll({
-      RouterPath.INDEX: (context) => IndexRouter(reload: reload),
-      RouterPath.DONATE: (context) => const DonateRouter(),
-      RouterPath.USER: (context) => const UserRouter(),
-      RouterPath.USER_CONTACT_LIST: (context) => const UserContactListRouter(),
-      RouterPath.USER_HISTORY_CONTACT_LIST: (context) =>
+      RouterPath.INDEX: (final context) => IndexRouter(reload: reload),
+      RouterPath.DONATE: (final context) => const DonateRouter(),
+      RouterPath.USER: (final context) => const UserRouter(),
+      RouterPath.USER_CONTACT_LIST: (final context) =>
+          const UserContactListRouter(),
+      RouterPath.USER_HISTORY_CONTACT_LIST: (final context) =>
           const UserHistoryContactListRouter(),
-      RouterPath.USER_ZAP_LIST: (context) => const UserZapListRouter(),
-      RouterPath.USER_RELAYS: (context) => const UserRelayRouter(),
-      RouterPath.DM_DETAIL: (context) => const DMDetailRouter(),
-      RouterPath.THREAD_DETAIL: (context) => const ThreadDetailRouter(),
-      RouterPath.EVENT_DETAIL: (context) => const EventDetailRouter(),
-      RouterPath.TAG_DETAIL: (context) => const TagDetailRouter(),
-      RouterPath.NOTICES: (context) => const NoticeRouter(),
-      RouterPath.KEY_BACKUP: (context) => const KeyBackupRouter(),
-      RouterPath.RELAYS: (context) => const RelaysRouter(),
-      RouterPath.FILTER: (context) => const FilterRouter(),
-      RouterPath.PROFILE_EDITOR: (context) => const ProfileEditorRouter(),
-      RouterPath.SETTING: (context) => SettingRouter(indexReload: reload),
-      RouterPath.QRSCANNER: (context) => const QRScannerRouter(),
-      RouterPath.WEBUTILS: (context) => const WebUtilsRouter(),
-      RouterPath.RELAY_INFO: (context) => const RelayInfoRouter(),
-      RouterPath.FOLLOWED_TAGS_LIST: (context) =>
+      RouterPath.USER_ZAP_LIST: (final context) => const UserZapListRouter(),
+      RouterPath.USER_RELAYS: (final context) => const UserRelayRouter(),
+      RouterPath.DM_DETAIL: (final context) => const DMDetailRouter(),
+      RouterPath.THREAD_DETAIL: (final context) => const ThreadDetailRouter(),
+      RouterPath.EVENT_DETAIL: (final context) => const EventDetailRouter(),
+      RouterPath.TAG_DETAIL: (final context) => const TagDetailRouter(),
+      RouterPath.NOTICES: (final context) => const NoticeRouter(),
+      RouterPath.KEY_BACKUP: (final context) => const KeyBackupRouter(),
+      RouterPath.RELAYS: (final context) => const RelaysRouter(),
+      RouterPath.FILTER: (final context) => const FilterRouter(),
+      RouterPath.PROFILE_EDITOR: (final context) => const ProfileEditorRouter(),
+      RouterPath.SETTING: (final context) => SettingRouter(indexReload: reload),
+      RouterPath.QRSCANNER: (final context) => const QRScannerRouter(),
+      RouterPath.WEBUTILS: (final context) => const WebUtilsRouter(),
+      RouterPath.RELAY_INFO: (final context) => const RelayInfoRouter(),
+      RouterPath.FOLLOWED_TAGS_LIST: (final context) =>
           const FollowedTagsListRouter(),
-      RouterPath.COMMUNITY_DETAIL: (context) => const CommunityDetailRouter(),
-      RouterPath.FOLLOWED_COMMUNITIES: (context) =>
+      RouterPath.COMMUNITY_DETAIL: (final context) =>
+          const CommunityDetailRouter(),
+      RouterPath.FOLLOWED_COMMUNITIES: (final context) =>
           const FollowedCommunitiesRouter(),
-      RouterPath.FOLLOWED: (context) => const FollowedRouter(),
-      RouterPath.BOOKMARK: (context) => const BookmarkRouter(),
+      RouterPath.FOLLOWED: (final context) => const FollowedRouter(),
+      RouterPath.BOOKMARK: (final context) => const BookmarkRouter(),
     });
 
     return MultiProvider(
@@ -328,14 +329,14 @@ class _MyApp extends State<MyApp> {
   }
 
   ThemeData getLightTheme() {
-    Color color500 = _getMainColor();
-    MaterialColor themeColor = ColorList.getThemeColor(color500.value);
+    final Color color500 = _getMainColor();
+    final MaterialColor themeColor = ColorList.getThemeColor(color500.value);
 
     // Color? mainTextColor;
-    Color hintColor = Colors.grey;
-    var scaffoldBackgroundColor = Colors.grey[100];
+    const Color hintColor = Colors.grey;
+    final scaffoldBackgroundColor = Colors.grey[100];
 
-    double baseFontSize = settingProvider.fontSize;
+    final double baseFontSize = settingProvider.fontSize;
 
     var textTheme = TextTheme(
       bodyLarge: TextStyle(fontSize: baseFontSize + 2),
@@ -391,21 +392,21 @@ class _MyApp extends State<MyApp> {
   }
 
   ThemeData getDarkTheme() {
-    Color color500 = _getMainColor();
-    MaterialColor themeColor = ColorList.getThemeColor(color500.value);
+    final Color color500 = _getMainColor();
+    final MaterialColor themeColor = ColorList.getThemeColor(color500.value);
 
     // Color? mainTextColor;
-    Color? topFontColor = Colors.white;
-    Color hintColor = Colors.grey;
+    const Color topFontColor = Colors.white;
+    const Color hintColor = Colors.grey;
 
-    double baseFontSize = settingProvider.fontSize;
+    final double baseFontSize = settingProvider.fontSize;
 
     var textTheme = TextTheme(
       bodyLarge: TextStyle(fontSize: baseFontSize + 2),
       bodyMedium: TextStyle(fontSize: baseFontSize),
       bodySmall: TextStyle(fontSize: baseFontSize - 2),
     );
-    var titleTextStyle = TextStyle(
+    var titleTextStyle = const TextStyle(
       color: topFontColor,
       // color: Colors.black,
     );

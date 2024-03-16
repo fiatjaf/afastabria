@@ -1,23 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:loure/component/nip05_valid_component.dart';
-import 'package:loure/data/metadata.dart';
+import "package:flutter/material.dart";
+import "package:loure/component/nip05_valid_component.dart";
+import "package:loure/data/metadata.dart";
 
-import 'package:loure/client/nip19/nip19.dart';
-import 'package:loure/util/string_util.dart';
+import "package:loure/client/nip19/nip19.dart";
+import "package:loure/util/string_util.dart";
 
 // ignore: must_be_immutable
 class NameComponent extends StatefulWidget {
-  String pubkey;
-  Metadata? metadata;
-  bool showNip05;
-  double? fontSize;
-  Color? fontColor;
-  TextOverflow? textOverflow;
-  int? maxLines;
-
   NameComponent({
-    super.key,
     required this.pubkey,
+    super.key,
     this.metadata,
     this.showNip05 = true,
     this.fontSize,
@@ -25,6 +17,13 @@ class NameComponent extends StatefulWidget {
     this.textOverflow,
     this.maxLines = 3,
   });
+  String pubkey;
+  Metadata? metadata;
+  bool showNip05;
+  double? fontSize;
+  Color? fontColor;
+  TextOverflow? textOverflow;
+  int? maxLines;
 
   @override
   State<StatefulWidget> createState() {
@@ -34,15 +33,15 @@ class NameComponent extends StatefulWidget {
 
 class _NameComponent extends State<NameComponent> {
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
     // var mainColor = themeData.primaryColor;
-    var textSize = themeData.textTheme.bodyMedium!.fontSize;
-    var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+    final textSize = themeData.textTheme.bodyMedium!.fontSize;
+    final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
     Color hintColor = themeData.hintColor;
 
-    var metadata = widget.metadata;
-    String nip19Name = Nip19.encodeSimplePubKey(widget.pubkey);
+    final metadata = widget.metadata;
+    final String nip19Name = Nip19.encodeSimplePubKey(widget.pubkey);
     String displayName = "";
     String name = "";
     if (widget.fontColor != null) {

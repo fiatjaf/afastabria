@@ -1,11 +1,11 @@
-import 'package:flutter/widgets.dart';
+import "package:flutter/widgets.dart";
 
 class NoticeProvider extends ChangeNotifier {
   List<NoticeData> notices = [];
 
   DateTime? readTime;
 
-  void onNotice(String replyAddr, String content) {
+  void onNotice(final String replyAddr, final String content) {
     notices.add(NoticeData(replyAddr, content, DateTime.now()));
     notifyListeners();
   }
@@ -34,11 +34,10 @@ class NoticeProvider extends ChangeNotifier {
 }
 
 class NoticeData {
+  NoticeData(this.url, this.content, this.dateTime);
   final String url;
 
   final String content;
 
   final DateTime dateTime;
-
-  NoticeData(this.url, this.content, this.dateTime);
 }

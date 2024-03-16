@@ -1,48 +1,47 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_font_picker/flutter_font_picker.dart';
-import 'package:google_mlkit_translation/google_mlkit_translation.dart';
-import 'package:local_auth/local_auth.dart';
-import 'package:loure/client/nip02/cust_contact_list.dart';
-import 'package:loure/client/filter.dart';
-import 'package:loure/data/event_mem_box.dart';
-import 'package:loure/router/index/account_manager_component.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/when_stop_function.dart';
-import 'package:provider/provider.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:flutter_font_picker/flutter_font_picker.dart";
+import "package:google_mlkit_translation/google_mlkit_translation.dart";
+import "package:local_auth/local_auth.dart";
+import "package:loure/client/nip02/cust_contact_list.dart";
+import "package:loure/client/filter.dart";
+import "package:loure/data/event_mem_box.dart";
+import "package:loure/router/index/account_manager_component.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/when_stop_function.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/event_kind.dart' as kind;
-import 'package:loure/component/colors_selector_component.dart';
-import 'package:loure/component/confirm_dialog.dart';
-import 'package:loure/component/editor/text_input_dialog.dart';
-import 'package:loure/component/enum_multi_selector_component.dart';
-import 'package:loure/component/enum_selector_component.dart';
-import 'package:loure/component/translate/translate_model_manager.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/consts/image_services.dart';
-import 'package:loure/consts/relay_mode.dart';
-import 'package:loure/consts/theme_style.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/setting_provider.dart';
-import 'package:loure/util/auth_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/router/setting/setting_group_item_component.dart';
-import 'package:loure/router/setting/setting_group_title_component.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/event_kind.dart" as kind;
+import "package:loure/component/colors_selector_component.dart";
+import "package:loure/component/confirm_dialog.dart";
+import "package:loure/component/editor/text_input_dialog.dart";
+import "package:loure/component/enum_multi_selector_component.dart";
+import "package:loure/component/enum_selector_component.dart";
+import "package:loure/component/translate/translate_model_manager.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/consts/image_services.dart";
+import "package:loure/consts/relay_mode.dart";
+import "package:loure/consts/theme_style.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/setting_provider.dart";
+import "package:loure/util/auth_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/router/setting/setting_group_item_component.dart";
+import "package:loure/router/setting/setting_group_title_component.dart";
 
 // ignore: must_be_immutable
 class SettingRouter extends StatefulWidget {
-  Function indexReload;
-
   SettingRouter({
-    super.key,
     required this.indexReload,
+    super.key,
   });
+  Function indexReload;
 
   @override
   State<StatefulWidget> createState() {
@@ -56,13 +55,13 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
-    var settingProvider = Provider.of<SettingProvider>(context);
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+    final settingProvider = Provider.of<SettingProvider>(context);
 
-    var mainColor = themeData.primaryColor;
-    var hintColor = themeData.hintColor;
+    final mainColor = themeData.primaryColor;
+    final hintColor = themeData.hintColor;
 
     initOpenList();
     initCompressList();
@@ -164,7 +163,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     if (StringUtil.isBlank(networkHintText)) {
       networkHintText = "Please input Network";
     }
-    Widget networkWidget = Text(
+    final Widget networkWidget = Text(
       networkHintText!,
       style: TextStyle(
         color: hintColor,
@@ -298,8 +297,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     }
   }
 
-  EnumObj getOpenList(int? value) {
-    for (var o in openList!) {
+  EnumObj getOpenList(final int? value) {
+    for (final o in openList!) {
       if (value == o.value) {
         return o;
       }
@@ -308,8 +307,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     return openList![0];
   }
 
-  EnumObj getOpenListDefault(int? value) {
-    for (var o in openList!) {
+  EnumObj getOpenListDefault(final int? value) {
+    for (final o in openList!) {
       if (value == o.value) {
         return o;
       }
@@ -341,8 +340,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     }
   }
 
-  EnumObj getCompressList(int compress) {
-    for (var eo in compressList!) {
+  EnumObj getCompressList(final int compress) {
+    for (final eo in compressList!) {
       if (eo.value == compress) {
         return eo;
       }
@@ -352,7 +351,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
 
   List<EnumObj>? lockOpenList;
 
-  EnumObj getLockOpenList(int lockOpen) {
+  EnumObj getLockOpenList(final int lockOpen) {
     if (lockOpen == OpenStatus.OPEN) {
       return openList![0];
     }
@@ -363,7 +362,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     List<EnumObj> newLockOpenList = [];
     newLockOpenList.add(openList![1]);
 
-    var localAuth = LocalAuthentication();
+    final localAuth = LocalAuthentication();
     List<BiometricType> availableBiometrics =
         await localAuth.getAvailableBiometrics();
     if (availableBiometrics.isNotEmpty) {
@@ -374,14 +373,14 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
         await EnumSelectorComponent.show(context, newLockOpenList);
     if (resultEnumObj != null) {
       if (resultEnumObj.value == OpenStatus.CLOSE) {
-        bool didAuthenticate = await AuthUtil.authenticate(
+        final bool didAuthenticate = await AuthUtil.authenticate(
             context, "Please authenticate to turn off the privacy lock");
         if (didAuthenticate) {
           settingProvider.lockOpen = resultEnumObj.value;
         }
         settingProvider.lockOpen = resultEnumObj.value;
       } else if (resultEnumObj.value == OpenStatus.OPEN) {
-        bool didAuthenticate = await AuthUtil.authenticate(
+        final bool didAuthenticate = await AuthUtil.authenticate(
             context, "Please authenticate to turn on the privacy lock");
         if (didAuthenticate) {
           settingProvider.lockOpen = resultEnumObj.value;
@@ -409,8 +408,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     }
   }
 
-  EnumObj getDefaultIndex(int? value) {
-    for (var eo in defaultIndexList!) {
+  EnumObj getDefaultIndex(final int? value) {
+    for (final eo in defaultIndexList!) {
       if (eo.value == value) {
         return eo;
       }
@@ -440,7 +439,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     }
   }
 
-  Future<void> pickDefaultTab(List<EnumObj> list) async {
+  Future<void> pickDefaultTab(final List<EnumObj> list) async {
     EnumObj? resultEnumObj = await EnumSelectorComponent.show(context, list);
     if (resultEnumObj != null) {
       settingProvider.defaultTab = resultEnumObj.value;
@@ -448,8 +447,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     }
   }
 
-  EnumObj getDefaultTab(List<EnumObj> list, int? value) {
-    for (var eo in list) {
+  EnumObj getDefaultTab(final List<EnumObj> list, final int? value) {
+    for (final eo in list) {
       if (eo.value == value) {
         return eo;
       }
@@ -477,8 +476,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     }
   }
 
-  EnumObj getThemeStyle(int themeStyle) {
-    for (var eo in themeStyleList!) {
+  EnumObj getThemeStyle(final int themeStyle) {
+    for (final eo in themeStyleList!) {
       if (eo.value == themeStyle) {
         return eo;
       }
@@ -504,7 +503,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     }
   }
 
-  String getFontEnumResult(String? fontFamily) {
+  String getFontEnumResult(final String? fontFamily) {
     if (StringUtil.isNotBlank(fontFamily)) {
       return fontFamily!;
     }
@@ -527,8 +526,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   void pickFont() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => FontPicker(
-          onFontChanged: (PickerFont font) {
+        builder: (final context) => FontPicker(
+          onFontChanged: (final PickerFont font) {
             settingProvider.fontFamily = font.fontFamily;
             resetTheme();
           },
@@ -549,8 +548,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     EnumObj(12.0, "12"),
   ];
 
-  EnumObj getFontSize(double value) {
-    for (var eo in fontSizeList) {
+  EnumObj getFontSize(final double value) {
+    for (final eo in fontSizeList) {
       if (eo.value == value) {
         return eo;
       }
@@ -584,7 +583,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   }
 
   inputNetwork() async {
-    var text = await TextInputDialog.show(
+    final text = await TextInputDialog.show(
       context,
       "${"Please input"} ${"Network"}\nSOCKS5/SOCKS4/PROXY username:password@host:port",
       value: settingProvider.network,
@@ -612,8 +611,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     }
   }
 
-  EnumObj getImageServcie(String? o) {
-    for (var eo in imageServcieList!) {
+  EnumObj getImageServcie(final String? o) {
+    for (final eo in imageServcieList!) {
       if (eo.value == o) {
         return eo;
       }
@@ -658,7 +657,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   CancelFunc? deleteAccountLoadingCancel;
 
   askToDeleteAccount() async {
-    var result = await ConfirmDialog.show(context, "Delete_Account_Tips");
+    final result = await ConfirmDialog.show(context, "Delete_Account_Tips");
     if (result == true) {
       deleteAccountLoadingCancel = BotToast.showLoading();
       try {
@@ -669,10 +668,10 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
         nostr.sendMetadata(Metadata.blank(""));
 
         // use a blank contact list to update it
-        var blankContactList = CustContactList();
+        final blankContactList = CustContactList();
         nostr.sendContactList(blankContactList, "");
 
-        var filter = Filter(authors: [
+        final filter = Filter(authors: [
           nostr.publicKey
         ], kinds: [
           kind.EventKind.TEXT_NOTE,
@@ -688,7 +687,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     }
   }
 
-  onDeletedEventReceive(Event event) {
+  onDeletedEventReceive(final Event event) {
     print(event.toJson());
     waitingDeleteEventBox.add(event);
     whenStop(handleDeleteEvent);
@@ -698,7 +697,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     try {
       List<Event> all = waitingDeleteEventBox.all();
       List<String> ids = [];
-      for (var event in all) {
+      for (final event in all) {
         ids.add(event.id);
 
         if (ids.length > 20) {
@@ -711,7 +710,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
         nostr.deleteEvents(ids);
       }
     } finally {
-      var index = settingProvider.privateKeyIndex;
+      final index = settingProvider.privateKeyIndex;
       if (index != null) {
         AccountManagerComponentState.onLogoutTap(index,
             routerBack: true, context: context);
@@ -728,14 +727,14 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   void initTranslateLanguages() {
     if (translateLanguages == null) {
       translateLanguages = [];
-      for (var tl in TranslateLanguage.values) {
+      for (final tl in TranslateLanguage.values) {
         translateLanguages!.add(EnumObj(tl.bcpCode, tl.bcpCode));
       }
     }
   }
 
-  EnumObj getOpenTranslate(int? value) {
-    for (var o in openList!) {
+  EnumObj getOpenTranslate(final int? value) {
+    for (final o in openList!) {
       if (value == o.value) {
         return o;
       }
@@ -754,11 +753,11 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   }
 
   pickTranslateSource() async {
-    var translateSourceArgs = settingProvider.translateSourceArgs;
+    final translateSourceArgs = settingProvider.translateSourceArgs;
     List<EnumObj> values = [];
     if (StringUtil.isNotBlank(translateSourceArgs)) {
-      var strs = translateSourceArgs!.split(",");
-      for (var str in strs) {
+      final strs = translateSourceArgs!.split(",");
+      for (final str in strs) {
         values.add(EnumObj(str, str));
       }
     }
@@ -766,10 +765,10 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
         context, translateLanguages!, values);
     if (resultEnumObjs != null) {
       List<String> resultStrs = [];
-      for (var value in resultEnumObjs) {
+      for (final value in resultEnumObjs) {
         resultStrs.add(value.value);
       }
-      var text = resultStrs.join(",");
+      final text = resultStrs.join(",");
       await handleTranslateModel(translateSourceArgs: text);
       settingProvider.translateSourceArgs = text;
     }
@@ -799,9 +798,9 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
       List<String> bcpCodes = translateSourceArgs!.split(",");
       bcpCodes.add(translateTarget!);
 
-      var translateModelManager = TranslateModelManager.getInstance();
+      final translateModelManager = TranslateModelManager.getInstance();
       BotToast.showText(text: "Begin_to_download_translate_model");
-      var cancelFunc = BotToast.showLoading();
+      final cancelFunc = BotToast.showLoading();
       try {
         await translateModelManager.checkAndDownloadTargetModel(bcpCodes);
       } finally {
@@ -818,8 +817,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     }
   }
 
-  EnumObj getAutoOpenSensitive(int? value) {
-    for (var o in openList!) {
+  EnumObj getAutoOpenSensitive(final int? value) {
+    for (final o in openList!) {
       if (value == o.value) {
         return o;
       }
@@ -844,8 +843,8 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     }
   }
 
-  getOpenMode(int? value) {
-    for (var o in openList!) {
+  getOpenMode(final int? value) {
+    for (final o in openList!) {
       if (value == o.value) {
         return o;
       }
@@ -877,9 +876,9 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     return relayModes!;
   }
 
-  EnumObj getRelayMode(int? o) {
-    var list = getRelayModes();
-    for (var item in list) {
+  EnumObj getRelayMode(final int? o) {
+    final list = getRelayModes();
+    for (final item in list) {
       if (item.value == o) {
         return item;
       }

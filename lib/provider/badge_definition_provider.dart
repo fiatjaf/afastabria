@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/event_kind.dart';
-import 'package:loure/client/filter.dart';
-import 'package:loure/client/nip58/badge_definition.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/later_function.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/event_kind.dart";
+import "package:loure/client/filter.dart";
+import "package:loure/client/nip58/badge_definition.dart";
+import "package:loure/main.dart";
+import "package:loure/util/later_function.dart";
 
 class BadgeDefinitionProvider extends ChangeNotifier with LaterFunction {
   Map<String, BadgeDefinition> map = {};
 
-  BadgeDefinition? get(String badgeId, String pubkey) {
-    var bd = map[badgeId];
+  BadgeDefinition? get(final String badgeId, final String pubkey) {
+    final bd = map[badgeId];
     if (bd != null) {
       return bd;
     }
@@ -47,13 +47,13 @@ class BadgeDefinitionProvider extends ChangeNotifier with LaterFunction {
     pool.subscribeManyEose(["wss://relay.nostr.band"], [filter],
         onEvent: _onEvent);
 
-    for (var pubkey in _needUpdatePubKeys) {
+    for (final pubkey in _needUpdatePubKeys) {
       _handingPubkeys[pubkey] = 1;
     }
     _needUpdatePubKeys.clear();
   }
 
-  void _onEvent(Event event) {
+  void _onEvent(final Event event) {
     _pendingEvents.add(event);
     later(_laterCallback, null);
   }
@@ -61,12 +61,12 @@ class BadgeDefinitionProvider extends ChangeNotifier with LaterFunction {
   void _handlePendingEvents() {
     bool updated = false;
 
-    for (var event in _pendingEvents) {
-      var bd = BadgeDefinition.loadFromEvent(event);
+    for (final event in _pendingEvents) {
+      final bd = BadgeDefinition.loadFromEvent(event);
       if (bd != null) {
-        var badgeId = "30009:${event.pubKey}:${bd.d}";
+        final badgeId = "30009:${event.pubKey}:${bd.d}";
 
-        var oldBD = map[badgeId];
+        final oldBD = map[badgeId];
         if (oldBD == null || oldBD.updatedAt < bd.updatedAt) {
           map[badgeId] = bd;
           updated = true;

@@ -1,23 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/client/event_kind.dart' as kind;
-import 'package:loure/client/filter.dart';
-import 'package:loure/client/nip58/badge_definition.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/data/event_mem_box.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/badge_definition_provider.dart';
-import 'package:loure/util/later_function.dart';
-import 'package:loure/component/badge_component.dart';
-import 'package:loure/component/badge_detail_dialog.dart';
-import 'package:loure/component/cust_state.dart';
+import "package:loure/client/event_kind.dart" as kind;
+import "package:loure/client/filter.dart";
+import "package:loure/client/nip58/badge_definition.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/data/event_mem_box.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/badge_definition_provider.dart";
+import "package:loure/util/later_function.dart";
+import "package:loure/component/badge_component.dart";
+import "package:loure/component/badge_detail_dialog.dart";
+import "package:loure/component/cust_state.dart";
 
 // ignore: must_be_immutable
 class UserBadgesComponent extends StatefulWidget {
+  UserBadgesComponent({required this.pubkey, super.key});
   String pubkey;
-
-  UserBadgesComponent({super.key, required this.pubkey});
 
   @override
   State<StatefulWidget> createState() {
@@ -28,7 +27,7 @@ class UserBadgesComponent extends StatefulWidget {
 class _UserBadgesComponent extends CustState<UserBadgesComponent>
     with LaterFunction {
   @override
-  Widget doBuild(BuildContext context) {
+  Widget doBuild(final BuildContext context) {
     if (eventMemBox.isEmpty()) {
       return Container();
     }
@@ -37,15 +36,15 @@ class _UserBadgesComponent extends CustState<UserBadgesComponent>
 
     Map<dynamic, int> existMap = {};
 
-    var events = eventMemBox.all();
-    for (var event in events) {
-      for (var tag in event.tags) {
+    final events = eventMemBox.all();
+    for (final event in events) {
+      for (final tag in event.tags) {
         if (tag.length > 1) {
           if (tag[0] == "a") {
-            var badgeId = tag[1];
-            var itemWidget =
-                Selector<BadgeDefinitionProvider, BadgeDefinition?>(
-                    builder: (context, badgeDefinition, child) {
+            final badgeId = tag[1];
+            final itemWidget =
+                Selector<BadgeDefinitionProvider, BadgeDefinition?>(builder:
+                    (final context, final badgeDefinition, final child) {
               if (badgeDefinition == null) {
                 return Container();
               }
@@ -66,7 +65,7 @@ class _UserBadgesComponent extends CustState<UserBadgesComponent>
                   ),
                 ),
               );
-            }, selector: (context, provider) {
+            }, selector: (final context, final provider) {
               return provider.get(badgeId, event.pubKey);
             });
 
@@ -96,15 +95,15 @@ class _UserBadgesComponent extends CustState<UserBadgesComponent>
   EventMemBox eventMemBox = EventMemBox(sortAfterAdd: false);
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     pool.querySingle(
         ["wss://relay.nostr.band"],
         Filter(
             authors: [widget.pubkey],
-            kinds: [kind.EventKind.BADGE_ACCEPT])).then((event) {
+            kinds: [kind.EventKind.BADGE_ACCEPT])).then((final event) {
       if (event == null) return;
 
-      var result = eventMemBox.add(event);
+      final result = eventMemBox.add(event);
       if (result) {
         later(() {
           setState(() {});

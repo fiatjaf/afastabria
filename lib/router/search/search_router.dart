@@ -1,31 +1,31 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:flutter/material.dart';
-import 'package:loure/component/user/metadata_top_component.dart';
-import 'package:loure/data/event_find_util.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/data/metadata_db.dart';
-import 'package:loure/router/search/search_action_item_component.dart';
-import 'package:loure/util/when_stop_function.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:loure/component/user/metadata_top_component.dart";
+import "package:loure/data/event_find_util.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/data/metadata_db.dart";
+import "package:loure/router/search/search_action_item_component.dart";
+import "package:loure/util/when_stop_function.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/nip19/nip19.dart';
-import 'package:loure/component/cust_state.dart';
-import 'package:loure/client/event_kind.dart' as kind;
-import 'package:loure/client/filter.dart';
-import 'package:loure/component/event/event_list_component.dart';
-import 'package:loure/component/event_delete_callback.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/data/event_mem_box.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/setting_provider.dart';
-import 'package:loure/util/load_more_event.dart';
-import 'package:loure/util/pendingevents_later_function.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/nip19/nip19.dart";
+import "package:loure/component/cust_state.dart";
+import "package:loure/client/event_kind.dart" as kind;
+import "package:loure/client/filter.dart";
+import "package:loure/component/event/event_list_component.dart";
+import "package:loure/component/event_delete_callback.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/data/event_mem_box.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/setting_provider.dart";
+import "package:loure/util/load_more_event.dart";
+import "package:loure/util/pendingevents_later_function.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
 
 class SearchRouter extends StatefulWidget {
   const SearchRouter({super.key});
@@ -45,11 +45,11 @@ class _SearchRouter extends CustState<SearchRouter>
   ScrollController scrollController = ScrollController();
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     bindLoadMoreScroll(loadableScrollController);
 
     controller.addListener(() {
-      var hasText = StringUtil.isNotBlank(controller.text);
+      final hasText = StringUtil.isNotBlank(controller.text);
       if (!showSuffix && hasText) {
         setState(() {
           showSuffix = true;
@@ -68,8 +68,8 @@ class _SearchRouter extends CustState<SearchRouter>
   bool showSuffix = false;
 
   @override
-  Widget doBuild(BuildContext context) {
-    var settingProvider = Provider.of<SettingProvider>(context);
+  Widget doBuild(final BuildContext context) {
+    final settingProvider = Provider.of<SettingProvider>(context);
     preBuild();
 
     Widget? suffixWidget;
@@ -87,7 +87,7 @@ class _SearchRouter extends CustState<SearchRouter>
     if (searchAction == null && searchAbles.isNotEmpty) {
       // no searchAction, show searchAbles
       List<Widget> list = [];
-      for (var action in searchAbles) {
+      for (final action in searchAbles) {
         if (action == SearchActions.openPubkey) {
           list.add(SearchActionItemComponent(
               title: "Open User page", onTap: openPubkey));
@@ -117,8 +117,8 @@ class _SearchRouter extends CustState<SearchRouter>
         loadable = false;
         body = ListView.builder(
           controller: scrollController,
-          itemBuilder: (BuildContext context, int index) {
-            var metadata = metadatas[index];
+          itemBuilder: (final BuildContext context, final int index) {
+            final metadata = metadatas[index];
 
             return GestureDetector(
               onTap: () {
@@ -136,8 +136,8 @@ class _SearchRouter extends CustState<SearchRouter>
         loadable = false;
         body = ListView.builder(
           controller: scrollController,
-          itemBuilder: (BuildContext context, int index) {
-            var event = events[index];
+          itemBuilder: (final BuildContext context, final int index) {
+            final event = events[index];
 
             return EventListComponent(
               event: event,
@@ -148,11 +148,11 @@ class _SearchRouter extends CustState<SearchRouter>
         );
       } else if (searchAction == SearchActions.searchPubkeyEvent) {
         loadable = true;
-        var events = eventMemBox.all();
+        final events = eventMemBox.all();
         body = ListView.builder(
           controller: loadableScrollController,
-          itemBuilder: (BuildContext context, int index) {
-            var event = events[index];
+          itemBuilder: (final BuildContext context, final int index) {
+            final event = events[index];
 
             return EventListComponent(
               event: event,
@@ -166,7 +166,7 @@ class _SearchRouter extends CustState<SearchRouter>
     if (body != null) {
       if (loadable != null && PlatformUtil.isTableMode()) {
         body = GestureDetector(
-          onVerticalDragUpdate: (detail) {
+          onVerticalDragUpdate: (final detail) {
             if (loadable == true) {
               loadableScrollController
                   .jumpTo(loadableScrollController.offset - detail.delta.dy);
@@ -214,12 +214,12 @@ class _SearchRouter extends CustState<SearchRouter>
   void doQuery() {
     preQuery();
 
-    var relays = [...nostr.SEARCH_RELAYS];
+    final relays = [...nostr.SEARCH_RELAYS];
     List<Filter> Function(String, List<Filter>)? filterModifier;
 
     if (!eventMemBox.isEmpty()) {
-      var oldestCreatedAts = eventMemBox.oldestCreatedAtByRelay(relays);
-      filterModifier = (url, filters) {
+      final oldestCreatedAts = eventMemBox.oldestCreatedAtByRelay(relays);
+      filterModifier = (final url, final filters) {
         filters[0].until = oldestCreatedAts.createdAtMap[url] ?? until;
         return filters;
       };
@@ -228,9 +228,9 @@ class _SearchRouter extends CustState<SearchRouter>
     pool.querySync(relays, this.filter!, filterModifier: filterModifier);
   }
 
-  void onQueryEvent(Event event) {
-    later(event, (list) {
-      var addResult = eventMemBox.addList(list);
+  void onQueryEvent(final Event event) {
+    later(event, (final list) {
+      final addResult = eventMemBox.addList(list);
       if (addResult) {
         setState(() {});
       }
@@ -250,7 +250,7 @@ class _SearchRouter extends CustState<SearchRouter>
     List<String>? authors;
     if (StringUtil.isNotBlank(value) && value.indexOf("npub") == 0) {
       try {
-        var result = Nip19.decode(value);
+        final result = Nip19.decode(value);
         authors = [result];
       } catch (e) {
         log(e.toString());
@@ -271,7 +271,7 @@ class _SearchRouter extends CustState<SearchRouter>
   }
 
   void hideKeyBoard() {
-    FocusScopeNode currentFocus = FocusScope.of(context);
+    final FocusScopeNode currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
       FocusManager.instance.primaryFocus?.unfocus();
     }
@@ -289,14 +289,14 @@ class _SearchRouter extends CustState<SearchRouter>
     disposeWhenStop();
   }
 
-  onDeletedCallback(Event event) {
+  onDeletedCallback(final Event event) {
     eventMemBox.delete(event.id);
     setState(() {});
   }
 
   openPubkey() {
     hideKeyBoard();
-    var text = controller.text;
+    final text = controller.text;
     if (StringUtil.isNotBlank(text)) {
       String pubkey = text;
       if (Nip19.isPubkey(text)) {
@@ -309,7 +309,7 @@ class _SearchRouter extends CustState<SearchRouter>
 
   openNoteId() {
     hideKeyBoard();
-    var text = controller.text;
+    final text = controller.text;
     if (StringUtil.isNotBlank(text)) {
       String noteId = text;
       if (Nip19.isNoteId(text)) {
@@ -327,7 +327,7 @@ class _SearchRouter extends CustState<SearchRouter>
     metadatas.clear();
     searchAction = SearchActions.searchMetadataFromCache;
 
-    var text = controller.text;
+    final text = controller.text;
     if (text.length >= 2) {
       final list = await MetadataDB.search(text);
 
@@ -344,9 +344,9 @@ class _SearchRouter extends CustState<SearchRouter>
     events.clear();
     searchAction = SearchActions.searchEventFromCache;
 
-    var text = controller.text;
+    final text = controller.text;
     if (StringUtil.isNotBlank(text)) {
-      var list = EventFindUtil.findEvent(text);
+      final list = EventFindUtil.findEvent(text);
       setState(() {
         events = list;
       });
@@ -363,7 +363,7 @@ class _SearchRouter extends CustState<SearchRouter>
     searchAction = null;
     searchAbles.clear();
 
-    var text = controller.text;
+    final text = controller.text;
     if (text == lastText) {
       return;
     }

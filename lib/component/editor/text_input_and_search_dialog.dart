@@ -1,14 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/platform_util.dart';
+import "package:flutter/material.dart";
+import "package:loure/main.dart";
+import "package:loure/util/platform_util.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/router/index/index_app_bar.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/component/editor/text_input_dialog_inner_component.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/router/index/index_app_bar.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/component/editor/text_input_dialog_inner_component.dart";
 
 class TextInputAndSearchDialog extends StatefulWidget {
+  TextInputAndSearchDialog(
+    this.searchTabName,
+    this.title,
+    this.searchWidget, {
+    super.key,
+    this.hintText,
+    this.value,
+    this.valueCheck,
+  });
   String searchTabName;
 
   String title;
@@ -21,23 +30,14 @@ class TextInputAndSearchDialog extends StatefulWidget {
 
   bool Function(BuildContext, String)? valueCheck;
 
-  TextInputAndSearchDialog(
-    this.searchTabName,
-    this.title,
-    this.searchWidget, {super.key, 
-    this.hintText,
-    this.value,
-    this.valueCheck,
-  });
-
-  static Future<String?> show(BuildContext context, String searchTabName,
-      String title, Widget searchWidget,
-      {String? value,
-      String? hintText,
-      bool Function(BuildContext, String)? valueCheck}) async {
+  static Future<String?> show(final BuildContext context,
+      final String searchTabName, final String title, final Widget searchWidget,
+      {final String? value,
+      final String? hintText,
+      final bool Function(BuildContext, String)? valueCheck}) async {
     return await showDialog<String>(
         context: context,
-        builder: (context) {
+        builder: (final context) {
           return TextInputAndSearchDialog(
             searchTabName,
             StringUtil.breakWord(title),
@@ -66,17 +66,17 @@ class _TextInputAndSearchDialog extends State<TextInputAndSearchDialog>
   }
 
   @override
-  Widget build(BuildContext context) {
-        var themeData = Theme.of(context);
-    var cardColro = themeData.cardColor;
-    var mainColor = themeData.primaryColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColro = themeData.cardColor;
+    final mainColor = themeData.primaryColor;
 
     double mainHeight = 266;
     if (PlatformUtil.isTableMode()) {
       mainHeight = mediaDataCache.size.height / 2;
     }
 
-    var textInputWidget = TextInputDialogInnerComponent(
+    final textInputWidget = TextInputDialogInnerComponent(
       widget.title,
       hintText: widget.hintText,
       value: widget.value,
@@ -117,7 +117,7 @@ class _TextInputAndSearchDialog extends State<TextInputAndSearchDialog>
       ),
     ));
 
-    var main = Container(
+    final main = Container(
       color: cardColro,
       child: Column(
         mainAxisSize: MainAxisSize.min,

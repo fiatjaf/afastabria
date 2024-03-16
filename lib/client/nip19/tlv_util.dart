@@ -1,18 +1,18 @@
 class TLVUtil {
   static TLVData? readTLVEntry(
-    List<int> data, {
-    int startIndex = 0,
+    final List<int> data, {
+    final int startIndex = 0,
   }) {
-    var dataLength = data.length;
+    final dataLength = data.length;
     if (dataLength < startIndex + 2) {
       return null;
     }
 
-    var typ = data[startIndex];
-    var length = data[startIndex + 1];
+    final typ = data[startIndex];
+    final length = data[startIndex + 1];
 
     if (dataLength >= startIndex + 2 + length) {
-      var d = data.sublist(startIndex + 2, startIndex + 2 + length);
+      final d = data.sublist(startIndex + 2, startIndex + 2 + length);
 
       return TLVData(typ, length, d);
     }
@@ -20,8 +20,9 @@ class TLVUtil {
     return null;
   }
 
-  static writeTLVEntry(List<int> buf, int typ, List<int> data) {
-    var length = data.length;
+  static writeTLVEntry(
+      final List<int> buf, final int typ, final List<int> data) {
+    final length = data.length;
     buf.add(typ);
     buf.add(length);
     buf.addAll(data);
@@ -29,13 +30,12 @@ class TLVUtil {
 }
 
 class TLVData {
+  TLVData(this.typ, this.length, this.data);
   int typ;
 
   int length;
 
   List<int> data;
-
-  TLVData(this.typ, this.length, this.data);
 }
 
 class TLVType {

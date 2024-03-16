@@ -1,19 +1,19 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/util/router_util.dart';
+import "package:loure/util/router_util.dart";
 
 class Appbar4Stack extends StatefulWidget {
+  Appbar4Stack({
+    super.key,
+    this.title,
+    this.backgroundColor,
+    this.action,
+  });
   Widget? title;
 
   Color? backgroundColor;
 
   Widget? action;
-
-  Appbar4Stack({super.key, 
-    this.title,
-    this.backgroundColor,
-    this.action,
-  });
 
   @override
   State<StatefulWidget> createState() {
@@ -25,8 +25,8 @@ class _Appbar4Stack extends State<Appbar4Stack> {
   double height = 46;
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
     var backgroundColor = widget.backgroundColor;
     backgroundColor ??= themeData.appBarTheme.backgroundColor;
 

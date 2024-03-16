@@ -1,23 +1,22 @@
-import 'dart:isolate';
+import "dart:isolate";
 
-import 'package:loure/client/event.dart';
+import "package:loure/client/event.dart";
 
 /// An event check isolate. There are some test code, it may be deleted by some reason.
 class EventSignChecker {
+  EventSignChecker._internal({required this.workernum});
   final int workernum;
 
   Function(EventSignCheckArg)? onEventSignChecked;
 
-  EventSignChecker._internal({required this.workernum});
-
-  static EventSignChecker init(int workerNum) {
-    var checker = EventSignChecker._internal(workernum: workerNum);
+  static EventSignChecker init(final int workerNum) {
+    final checker = EventSignChecker._internal(workernum: workerNum);
     checker._run();
     return checker;
   }
 
-  void checkEvent(EventSignCheckArg arg) {
-    var sp = _sendPorts[_index];
+  void checkEvent(final EventSignCheckArg arg) {
+    final sp = _sendPorts[_index];
     sp.send(arg);
 
     _index++;
@@ -32,8 +31,8 @@ class EventSignChecker {
 
   void _run() {
     for (var i = 0; i < workernum; i++) {
-      ReceivePort subToMainReceivePort = ReceivePort();
-      var subToMainSendPort = subToMainReceivePort.sendPort;
+      final ReceivePort subToMainReceivePort = ReceivePort();
+      final subToMainSendPort = subToMainReceivePort.sendPort;
       // list sub to main message
       subToMainListener(subToMainReceivePort);
       // run a sub isolate
@@ -41,8 +40,8 @@ class EventSignChecker {
     }
   }
 
-  void subToMainListener(ReceivePort receivePort) {
-    receivePort.listen((message) {
+  void subToMainListener(final ReceivePort receivePort) {
+    receivePort.listen((final message) {
       if (message is SendPort) {
         _sendPorts.add(message);
         _length = _sendPorts.length;
@@ -57,15 +56,15 @@ class EventSignChecker {
     });
   }
 
-  void eventSignCheckWorker(SendPort subToMainSendPort) {
-    ReceivePort mainToSubReceivePort = ReceivePort();
-    var mainToSubSendPort = mainToSubReceivePort.sendPort;
+  void eventSignCheckWorker(final SendPort subToMainSendPort) {
+    final ReceivePort mainToSubReceivePort = ReceivePort();
+    final mainToSubSendPort = mainToSubReceivePort.sendPort;
     subToMainSendPort.send(mainToSubSendPort);
 
-    mainToSubReceivePort.listen((message) {
+    mainToSubReceivePort.listen((final message) {
       if (message is EventSignCheckArg) {
         // this is an event need checked
-        if (message.event.isValid && message.event.isSigned) {
+        if (message.event.isValid) {
           // check success, send it back.
           print("message check success!");
           subToMainSendPort.send(message);
@@ -78,12 +77,11 @@ class EventSignChecker {
 }
 
 class EventSignCheckArg {
-  String subId;
-
-  Event event;
-
   EventSignCheckArg({
     required this.subId,
     required this.event,
   });
+  String subId;
+
+  Event event;
 }

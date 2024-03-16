@@ -1,11 +1,18 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/component/editor/text_input_dialog_inner_component.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/component/editor/text_input_dialog_inner_component.dart";
 
 class TextInputDialog extends StatefulWidget {
+  TextInputDialog(
+    this.title, {
+    super.key,
+    this.hintText,
+    this.value,
+    this.valueCheck,
+  });
   String title;
 
   String? hintText;
@@ -14,25 +21,18 @@ class TextInputDialog extends StatefulWidget {
 
   bool Function(BuildContext, String)? valueCheck;
 
-  TextInputDialog(
-    this.title, {super.key, 
-    this.hintText,
-    this.value,
-    this.valueCheck,
-  });
-
   @override
   State<StatefulWidget> createState() {
     return _TextInputDialog();
   }
 
-  static Future<String?> show(BuildContext context, String title,
-      {String? value,
-      String? hintText,
-      bool Function(BuildContext, String)? valueCheck}) async {
+  static Future<String?> show(final BuildContext context, final String title,
+      {final String? value,
+      final String? hintText,
+      final bool Function(BuildContext, String)? valueCheck}) async {
     return await showDialog<String>(
         context: context,
-        builder: (context) {
+        builder: (final context) {
           return TextInputDialog(
             StringUtil.breakWord(title),
             hintText: hintText,
@@ -45,8 +45,8 @@ class TextInputDialog extends StatefulWidget {
 
 class _TextInputDialog extends State<TextInputDialog> {
   @override
-  Widget build(BuildContext context) {
-    var main = TextInputDialogInnerComponent(
+  Widget build(final BuildContext context) {
+    final main = TextInputDialogInnerComponent(
       widget.title,
       hintText: widget.hintText,
       value: widget.value,

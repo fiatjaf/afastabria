@@ -1,17 +1,17 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:loure/client/client_utils/keys.dart';
-import 'package:loure/main.dart';
-import 'package:http/http.dart' as http;
+import "dart:convert";
+import "package:flutter/material.dart";
+import "package:loure/client/client_utils/keys.dart";
+import "package:loure/main.dart";
+import "package:http/http.dart" as http;
 
-import 'package:loure/component/name_component.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/component/image_component.dart';
-import 'package:loure/component/webview_router.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/client/relay/relay_info.dart';
+import "package:loure/component/name_component.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/component/image_component.dart";
+import "package:loure/component/webview_router.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/client/relay/relay_info.dart";
 
 class RelayInfoRouter extends StatefulWidget {
   const RelayInfoRouter({super.key});
@@ -33,14 +33,14 @@ class RelayInfoRouterState extends State<RelayInfoRouter> {
   void initState() {
     super.initState();
 
-    var url = RouterUtil.routerArgs(context);
+    final url = RouterUtil.routerArgs(context);
     if (url == null || url is! String) {
       RouterUtil.back(context);
       return;
     }
 
-    http.get(Uri.parse(url).replace(scheme: 'https'),
-        headers: {'Accept': 'application/nostr+json'}).then((response) {
+    http.get(Uri.parse(url).replace(scheme: "https"),
+        headers: {"Accept": "application/nostr+json"}).then((final response) {
       this.setState(() {
         this.url = url;
         this.info = RelayInfo.fromJson(jsonDecode(response.body) as Map);
@@ -53,11 +53,11 @@ class RelayInfoRouterState extends State<RelayInfoRouter> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     if (this.info == null) return Container();
 
-    var themeData = Theme.of(context);
-    var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+    final themeData = Theme.of(context);
+    final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
     // var mainColor = themeData.primaryColor;
 
     List<Widget> list = [];
@@ -95,7 +95,7 @@ class RelayInfoRouterState extends State<RelayInfoRouter> {
           child: FutureBuilder(
             future: ownerFuture,
             initialData: Metadata.blank(this.info!.pubKey),
-            builder: (context, snapshot) {
+            builder: (final context, final snapshot) {
               final metadata = snapshot.data;
 
               Widget? imageWidget;
@@ -105,7 +105,7 @@ class RelayInfoRouterState extends State<RelayInfoRouter> {
                   width: IMAGE_WIDTH,
                   height: IMAGE_WIDTH,
                   fit: BoxFit.cover,
-                  placeholder: (context, url) =>
+                  placeholder: (final context, final url) =>
                       const CircularProgressIndicator(),
                 );
               }
@@ -162,7 +162,7 @@ class RelayInfoRouterState extends State<RelayInfoRouter> {
     ));
 
     List<Widget> nipWidgets = [];
-    for (var nip in this.info!.nips) {
+    for (final nip in this.info!.nips) {
       nipWidgets.add(NipComponent(nip: nip));
     }
     list.add(RelayInfoItemComponent(
@@ -208,18 +208,17 @@ class RelayInfoRouterState extends State<RelayInfoRouter> {
 
 // ignore: must_be_immutable
 class RelayInfoItemComponent extends StatelessWidget {
+  RelayInfoItemComponent({
+    required this.title,
+    required this.child,
+    super.key,
+  });
   String title;
 
   Widget child;
 
-  RelayInfoItemComponent({
-    super.key,
-    required this.title,
-    required this.child,
-  });
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     List<Widget> list = [];
 
     list.add(
@@ -259,14 +258,13 @@ class RelayInfoItemComponent extends StatelessWidget {
 
 // ignore: must_be_immutable
 class NipComponent extends StatelessWidget {
+  NipComponent({required this.nip, super.key});
   dynamic nip;
 
-  NipComponent({super.key, required this.nip});
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
 
     var nipStr = nip.toString();
     if (nipStr == "1") {
@@ -291,7 +289,7 @@ class NipComponent extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        var url =
+        final url =
             "https://github.com/nostr-protocol/nips/blob/master/$nipStr.md";
         WebViewRouter.open(context, url);
       },

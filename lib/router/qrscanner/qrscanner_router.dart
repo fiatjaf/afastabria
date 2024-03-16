@@ -1,9 +1,9 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import "package:flutter/material.dart";
+import "package:qr_code_scanner/qr_code_scanner.dart";
 
-import 'package:loure/util/router_util.dart';
+import "package:loure/util/router_util.dart";
 
 class QRScannerRouter extends StatefulWidget {
   const QRScannerRouter({super.key});
@@ -15,7 +15,7 @@ class QRScannerRouter extends StatefulWidget {
 }
 
 class _QRScannerRouter extends State<QRScannerRouter> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  final GlobalKey qrKey = GlobalKey(debugLabel: "QR");
   Barcode? result;
   QRViewController? controller;
 
@@ -32,7 +32,7 @@ class _QRScannerRouter extends State<QRScannerRouter> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Scaffold(
       body: QRView(
         key: qrKey,
@@ -43,9 +43,9 @@ class _QRScannerRouter extends State<QRScannerRouter> {
 
   bool scanComplete = false;
 
-  void _onQRViewCreated(QRViewController controller) {
+  void _onQRViewCreated(final QRViewController controller) {
     this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
+    controller.scannedDataStream.listen((final scanData) {
       if (!scanComplete) {
         scanComplete = true;
         RouterUtil.back(context, scanData.code);

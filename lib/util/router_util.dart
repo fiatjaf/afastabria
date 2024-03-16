@@ -1,25 +1,25 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/material.dart';
-import 'package:loure/component/pc_router_fake.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/platform_util.dart';
+import "package:flutter/material.dart";
+import "package:loure/component/pc_router_fake.dart";
+import "package:loure/main.dart";
+import "package:loure/util/platform_util.dart";
 
-import 'package:loure/provider/pc_router_fake_provider.dart';
+import "package:loure/provider/pc_router_fake_provider.dart";
 
 class RouterUtil {
-  static Future<T?> router<T>(BuildContext context, String pageName,
-      [Object? arguments]) async {
+  static Future<T?> router<T>(final BuildContext context, final String pageName,
+      [final Object? arguments]) async {
     if (!PlatformUtil.isTableMode()) {
       return Navigator.of(context).pushNamed<T>(pageName, arguments: arguments);
     } else {
       bool clear = false;
-      var parentRouterFake = PcRouterFake.of(context);
+      final parentRouterFake = PcRouterFake.of(context);
       if (parentRouterFake == null) {
         // means this request is from home, globals, search or dms, just to clean stack and push
         clear = true;
       }
-      var routerFakeInfo =
+      final routerFakeInfo =
           RouterFakeInfo<T>(routerPath: pageName, arguments: arguments);
       pcRouterFakeProvider.router<T>(routerFakeInfo, clear: clear);
 
@@ -28,30 +28,31 @@ class RouterUtil {
   }
 
   static Future<T?> push<T extends Object?>(
-      BuildContext context, MaterialPageRoute<T> route) {
+      final BuildContext context, final MaterialPageRoute<T> route) {
     if (!PlatformUtil.isTableMode()) {
       return Navigator.of(context).push(route);
     } else {
       bool clear = false;
-      var parentRouterFake = PcRouterFake.of(context);
+      final parentRouterFake = PcRouterFake.of(context);
       if (parentRouterFake == null) {
         // means this request is from home, globals, search or dms, just to clean stack and push
         clear = true;
       }
-      var routerFakeInfo = RouterFakeInfo<T>(buildContent: route.buildContent);
+      final routerFakeInfo =
+          RouterFakeInfo<T>(buildContent: route.buildContent);
       pcRouterFakeProvider.router<T>(routerFakeInfo, clear: clear);
 
       return routerFakeInfo.completer.future;
     }
   }
 
-  static Object? routerArgs(BuildContext context) {
+  static Object? routerArgs(final BuildContext context) {
     RouteSettings? setting = ModalRoute.of(context)?.settings;
     if (setting != null) {
       if (!PlatformUtil.isTableMode()) {
         return setting.arguments;
       } else {
-        var fake = PcRouterFake.of(context);
+        final fake = PcRouterFake.of(context);
         if (fake != null) {
           return fake.info.arguments;
         }
@@ -60,17 +61,17 @@ class RouterUtil {
     return null;
   }
 
-  static void back(BuildContext context, [Object? returnObj]) {
-    NavigatorState ns = Navigator.of(context);
+  static void back(final BuildContext context, [final Object? returnObj]) {
+    final NavigatorState ns = Navigator.of(context);
 
-    var parentRouterFake = PcRouterFake.of(context);
+    final parentRouterFake = PcRouterFake.of(context);
     if (parentRouterFake == null) {
       if (ns.canPop()) {
         ns.pop(returnObj);
       }
     } else {
       // handle pop result
-      var info = parentRouterFake.info;
+      final info = parentRouterFake.info;
       pcRouterFakeProvider.remove(info);
       info.completer.complete(returnObj);
     }

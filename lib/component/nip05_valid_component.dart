@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/data/metadata.dart';
+import "package:loure/data/metadata.dart";
 
 // ignore: must_be_immutable
 class Nip05ValidComponent extends StatefulWidget {
+  Nip05ValidComponent({required this.metadata, super.key});
   Metadata metadata;
-
-  Nip05ValidComponent({super.key, required this.metadata});
 
   @override
   State<StatefulWidget> createState() {
@@ -24,15 +23,15 @@ class Nip05ValidComponentState extends State<Nip05ValidComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
-    var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
+    final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
 
     return FutureBuilder(
       future: this.nip05ValidFuture,
       initialData: null,
-      builder: (context, snapshot) {
+      builder: (final context, final snapshot) {
         if (snapshot.data == null) {
           return const SizedBox(
             width: 0,

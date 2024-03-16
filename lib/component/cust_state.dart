@@ -1,17 +1,17 @@
-import 'dart:async';
+import "dart:async";
 
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 abstract class CustState<T extends StatefulWidget> extends State<T> {
   bool isInited = false;
 
   @override
-  Widget build(BuildContext context) {
-    Widget w = doBuild(context);
+  Widget build(final BuildContext context) {
+    final Widget w = doBuild(context);
 
     if (!isInited) {
       isInited = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((final _) {
         this.onReady(context);
       });
     }
@@ -19,9 +19,9 @@ abstract class CustState<T extends StatefulWidget> extends State<T> {
     return w;
   }
 
-  Widget doBuild(BuildContext context);
+  Widget doBuild(final BuildContext context);
 
-  Future<void> onReady(BuildContext context);
+  Future<void> onReady(final BuildContext context);
 
   // @override
   // void dispose() {

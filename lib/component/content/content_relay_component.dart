@@ -1,29 +1,28 @@
-import 'package:flutter/material.dart';
-import 'package:loure/main.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:loure/main.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/client/relay/relay_pool.dart';
-import 'package:loure/component/confirm_dialog.dart';
-import 'package:loure/client/relay/relay.dart';
-import 'package:loure/consts/base.dart';
+import "package:loure/client/relay/relay_pool.dart";
+import "package:loure/component/confirm_dialog.dart";
+import "package:loure/client/relay/relay.dart";
+import "package:loure/consts/base.dart";
 
 // ignore: must_be_immutable
 class ContentRelayComponent extends StatelessWidget {
+  ContentRelayComponent(this.addr, {super.key});
   String addr;
 
-  ContentRelayComponent(this.addr, {super.key});
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
     Color? cardColor = themeData.cardColor;
     if (cardColor == Colors.white) {
       cardColor = Colors.grey[300];
     }
-    var fontSize = themeData.textTheme.bodyMedium!.fontSize;
+    final fontSize = themeData.textTheme.bodyMedium!.fontSize;
 
     return Selector<RelayPool, RelayStatus?>(
-        builder: (context, relayStatus, client) {
+        builder: (final context, final relayStatus, final client) {
       List<Widget> list = [
         Icon(
           Icons.cloud,
@@ -64,7 +63,7 @@ class ContentRelayComponent extends StatelessWidget {
       if (relayStatus == null) {
         main = GestureDetector(
           onTap: () async {
-            var result =
+            final result =
                 await ConfirmDialog.show(context, "Add this relay to local");
             if (result == true) {
               nostr.relayList.add(addr, true, true);
@@ -75,7 +74,7 @@ class ContentRelayComponent extends StatelessWidget {
       }
 
       return main;
-    }, selector: (context, provider) {
+    }, selector: (final context, final provider) {
       return provider.getRelayStatus(addr);
     });
   }

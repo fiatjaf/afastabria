@@ -1,27 +1,27 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/component/editor/text_input_dialog.dart';
-import 'package:loure/component/name_component.dart';
-import 'package:loure/component/point_component.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/provider/setting_provider.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/client/nostr.dart';
+import "package:loure/component/editor/text_input_dialog.dart";
+import "package:loure/component/name_component.dart";
+import "package:loure/component/point_component.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/provider/setting_provider.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/client/nostr.dart";
 
-import 'package:loure/client/client_utils/keys.dart';
-import 'package:loure/client/nip19/nip19.dart';
-import 'package:loure/component/confirm_dialog.dart';
-import 'package:loure/component/image_component.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/data/dm_session_info_db.dart';
-import 'package:loure/data/event_db.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/router/index/index_drawer_content.dart';
+import "package:loure/client/client_utils/keys.dart";
+import "package:loure/client/nip19/nip19.dart";
+import "package:loure/component/confirm_dialog.dart";
+import "package:loure/component/image_component.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/data/dm_session_info_db.dart";
+import "package:loure/data/event_db.dart";
+import "package:loure/main.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/router/index/index_drawer_content.dart";
 
 class AccountManagerComponent extends StatefulWidget {
   const AccountManagerComponent({super.key});
@@ -34,13 +34,13 @@ class AccountManagerComponent extends StatefulWidget {
 
 class AccountManagerComponentState extends State<AccountManagerComponent> {
   @override
-  Widget build(BuildContext context) {
-    var settingProvider = Provider.of<SettingProvider>(context);
-    var privateKeyMap = settingProvider.privateKeyMap;
+  Widget build(final BuildContext context) {
+    final settingProvider = Provider.of<SettingProvider>(context);
+    final privateKeyMap = settingProvider.privateKeyMap;
 
-    var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var btnTextColor = themeData.textTheme.bodyMedium!.color;
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final btnTextColor = themeData.textTheme.bodyMedium!.color;
 
     List<Widget> list = [];
     list.add(Container(
@@ -63,8 +63,8 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
       ),
     ));
 
-    privateKeyMap.forEach((key, value) {
-      var index = int.tryParse(key);
+    privateKeyMap.forEach((final key, final value) {
+      final index = int.tryParse(key);
       if (index == null) {
         log("parse index key error");
         return;
@@ -74,7 +74,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
         privateKey: value,
         isCurrent: settingProvider.privateKeyIndex == index,
         onLoginTap: onLoginTap,
-        onLogoutTap: (index) {
+        onLogoutTap: (final index) {
           onLogoutTap(index, context: context);
         },
       ));
@@ -117,14 +117,14 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
         context, "Input_account_private_key",
         valueCheck: addAccountCheck);
     if (StringUtil.isNotBlank(privateKey)) {
-      var result = await ConfirmDialog.show(context, "Add_account_and_login");
+      final result = await ConfirmDialog.show(context, "Add_account_and_login");
       if (result == true) {
         if (Nip19.isPrivateKey(privateKey!)) {
           privateKey = Nip19.decode(privateKey);
         }
         // logout current and login new
-        var oldIndex = settingProvider.privateKeyIndex;
-        var newIndex = settingProvider.addAndChangePrivateKey(privateKey);
+        final oldIndex = settingProvider.privateKeyIndex;
+        final newIndex = settingProvider.addAndChangePrivateKey(privateKey);
         if (oldIndex != newIndex) {
           clearCurrentMemInfo();
           doLogin();
@@ -136,7 +136,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
     }
   }
 
-  bool addAccountCheck(BuildContext p1, String privateKey) {
+  bool addAccountCheck(final BuildContext p1, String privateKey) {
     if (StringUtil.isNotBlank(privateKey)) {
       if (Nip19.isPrivateKey(privateKey)) {
         privateKey = Nip19.decode(privateKey);
@@ -158,7 +158,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
     nostr = Nostr(settingProvider.privateKey!);
   }
 
-  void onLoginTap(int index) {
+  void onLoginTap(final int index) {
     if (settingProvider.privateKeyIndex != index) {
       clearCurrentMemInfo();
 
@@ -176,9 +176,9 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
     }
   }
 
-  static void onLogoutTap(int index,
-      {bool routerBack = true, BuildContext? context}) {
-    var oldIndex = settingProvider.privateKeyIndex;
+  static void onLogoutTap(final int index,
+      {final bool routerBack = true, final BuildContext? context}) {
+    final oldIndex = settingProvider.privateKeyIndex;
     clearLocalData(index);
 
     if (oldIndex == index) {
@@ -212,7 +212,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
     bookmarkProvider.clear();
   }
 
-  static void clearLocalData(int index) {
+  static void clearLocalData(final int index) {
     // remove private key
     settingProvider.removeKey(index);
     // clear local db
@@ -224,21 +224,20 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
 
 // ignore: must_be_immutable
 class AccountManagerItemComponent extends StatefulWidget {
+  AccountManagerItemComponent({
+    required this.isCurrent,
+    required this.index,
+    required this.privateKey,
+    super.key,
+    this.onLoginTap,
+    this.onLogoutTap,
+  }) : this.publicKey = getPublicKey(privateKey);
   bool isCurrent;
   int index;
   String privateKey;
   String publicKey;
   Function(int)? onLoginTap;
   Function(int)? onLogoutTap;
-
-  AccountManagerItemComponent({
-    super.key,
-    required this.isCurrent,
-    required this.index,
-    required this.privateKey,
-    this.onLoginTap,
-    this.onLogoutTap,
-  }) : this.publicKey = getPublicKey(privateKey);
 
   @override
   State<StatefulWidget> createState() {
@@ -260,8 +259,8 @@ class AccountManagerItemComponentState
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
     // var hintColor = themeData.hintColor;
     Color? cardColor = themeData.cardColor;
     if (cardColor == Colors.white) {
@@ -271,13 +270,13 @@ class AccountManagerItemComponentState
     return FutureBuilder(
         future: this.metadataFuture,
         initialData: Metadata.blank(widget.publicKey),
-        builder: (context, snapshot) {
+        builder: (final context, final snapshot) {
           final metadata = snapshot.data!;
 
-          Color currentColor = Colors.green;
+          const Color currentColor = Colors.green;
           List<Widget> list = [];
 
-          var nip19PubKey = Nip19.encodePubKey(metadata.pubkey);
+          final nip19PubKey = Nip19.encodePubKey(metadata.pubkey);
 
           Widget? imageWidget;
           if (metadata.picture != "") {
@@ -286,7 +285,8 @@ class AccountManagerItemComponentState
               width: IMAGE_WIDTH,
               height: IMAGE_WIDTH,
               fit: BoxFit.cover,
-              placeholder: (context, url) => const CircularProgressIndicator(),
+              placeholder: (final context, final url) =>
+                  const CircularProgressIndicator(),
             );
           }
 

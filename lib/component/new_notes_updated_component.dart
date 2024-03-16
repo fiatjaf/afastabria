@@ -1,18 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:loure/consts/base.dart';
+import "package:flutter/material.dart";
+import "package:loure/consts/base.dart";
 
 // ignore: must_be_immutable
 class NewNotesUpdatedComponent extends StatelessWidget {
+  NewNotesUpdatedComponent({required this.num, super.key, this.onTap});
   int num;
 
   Function? onTap;
 
-  NewNotesUpdatedComponent({super.key, required this.num, this.onTap});
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
     Color? textColor = Colors.white;
 
     return GestureDetector(

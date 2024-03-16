@@ -1,6 +1,6 @@
-import 'package:loure/util/platform_util.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
+import "package:loure/util/platform_util.dart";
+import "package:sqflite/sqflite.dart";
+import "package:path/path.dart";
 
 class DB {
   static const _VERSION = 1;
@@ -12,12 +12,12 @@ class DB {
     String path = _dbName;
 
     if (!PlatformUtil.isWeb()) {
-      var databasesPath = await getDatabasesPath();
+      final databasesPath = await getDatabasesPath();
       path = join(databasesPath, _dbName);
     }
 
     _database = await openDatabase(path, version: _VERSION,
-        onCreate: (Database db, int version) async {
+        onCreate: (final Database db, final int version) async {
       // init db
       db.execute(
           "create table metadata(pubkey TEXT not null primary key, event text not null);");
@@ -36,7 +36,7 @@ class DB {
     });
   }
 
-  static DatabaseExecutor getDB(DatabaseExecutor? db) {
+  static DatabaseExecutor getDB(final DatabaseExecutor? db) {
     if (db != null) {
       return db;
     }

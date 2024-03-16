@@ -1,18 +1,17 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/data/metadata.dart';
-import 'package:loure/main.dart';
-import 'package:loure/component/image_component.dart';
+import "package:loure/data/metadata.dart";
+import "package:loure/main.dart";
+import "package:loure/component/image_component.dart";
 
 class UserPicComponent extends StatefulWidget {
-  final String pubkey;
-  final double width;
-
   const UserPicComponent({
-    super.key,
     required this.pubkey,
     required this.width,
+    super.key,
   });
+  final String pubkey;
+  final double width;
 
   @override
   State<StatefulWidget> createState() {
@@ -22,11 +21,11 @@ class UserPicComponent extends StatefulWidget {
 
 class UserPicComponentState extends State<UserPicComponent> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return FutureBuilder(
       future: metadataLoader.load(widget.pubkey),
       initialData: Metadata.blank(widget.pubkey),
-      builder: (context, snapshot) {
+      builder: (final context, final snapshot) {
         final metadata = snapshot.data!;
 
         Widget? imageWidget;
@@ -36,7 +35,8 @@ class UserPicComponentState extends State<UserPicComponent> {
             width: widget.width,
             height: widget.width,
             fit: BoxFit.cover,
-            placeholder: (context, url) => const CircularProgressIndicator(),
+            placeholder: (final context, final url) =>
+                const CircularProgressIndicator(),
           );
         }
 

@@ -1,9 +1,17 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/string_util.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/util/string_util.dart";
 
 class SettingGroupItemComponent extends StatelessWidget {
+  SettingGroupItemComponent({
+    required this.name,
+    super.key,
+    this.nameColor,
+    this.value,
+    this.child,
+    this.onTap,
+  });
   String name;
 
   Color? nameColor;
@@ -14,19 +22,11 @@ class SettingGroupItemComponent extends StatelessWidget {
 
   Function? onTap;
 
-  SettingGroupItemComponent({super.key, 
-    required this.name,
-    this.nameColor,
-    this.value,
-    this.child,
-    this.onTap,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var fontSize = themeData.textTheme.bodyMedium!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final fontSize = themeData.textTheme.bodyMedium!.fontSize;
 
     if (child == null && StringUtil.isNotBlank(value)) {
       child = Text(
@@ -41,7 +41,7 @@ class SettingGroupItemComponent extends StatelessWidget {
 
     child ??= Container();
 
-    Widget nameWidget = Text(
+    final Widget nameWidget = Text(
       name,
       style: TextStyle(
         fontWeight: FontWeight.bold,

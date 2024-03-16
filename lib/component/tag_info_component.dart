@@ -1,24 +1,24 @@
-import 'package:flutter/material.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/contact_list_provider.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/contact_list_provider.dart";
+import "package:loure/util/router_util.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/consts/base.dart';
+import "package:loure/consts/base.dart";
 
 class TagInfoComponent extends StatefulWidget {
+  TagInfoComponent({
+    required this.tag,
+    super.key,
+    this.height = 80,
+    this.jumpable = false,
+  });
   final String tag;
 
   final double height;
 
   bool jumpable;
-
-  TagInfoComponent({super.key, 
-    required this.tag,
-    this.height = 80,
-    this.jumpable = false,
-  });
 
   @override
   State<StatefulWidget> createState() {
@@ -28,12 +28,12 @@ class TagInfoComponent extends StatefulWidget {
 
 class _TagInfoComponent extends State<TagInfoComponent> {
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
-    var bodyLargeFontSize = themeData.textTheme.bodyLarge!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
+    final bodyLargeFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
-    var main = Container(
+    final main = Container(
       height: widget.height,
       color: cardColor,
       alignment: Alignment.center,
@@ -48,7 +48,8 @@ class _TagInfoComponent extends State<TagInfoComponent> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Selector<ContactListProvider, bool>(builder: (context, exist, child) {
+          Selector<ContactListProvider, bool>(
+              builder: (final context, final exist, final child) {
             IconData iconData = Icons.star_border;
             Color? color;
             if (exist) {
@@ -71,7 +72,7 @@ class _TagInfoComponent extends State<TagInfoComponent> {
                 ),
               ),
             );
-          }, selector: (context, provider) {
+          }, selector: (final context, final provider) {
             return provider.containTag(widget.tag);
           }),
         ],

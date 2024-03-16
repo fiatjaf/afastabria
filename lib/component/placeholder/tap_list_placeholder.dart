@@ -1,22 +1,22 @@
-import 'dart:math';
+import "dart:math";
 
-import 'package:flutter/material.dart';
-import 'package:loure/component/placeholder/tap_placeholder.dart';
+import "package:flutter/material.dart";
+import "package:loure/component/placeholder/tap_placeholder.dart";
 
 class TapListPlaceholder extends StatelessWidget {
   const TapListPlaceholder({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
 
-    var random = Random();
-    double width = 40;
+    final random = Random();
+    const double width = 40;
 
     List<Widget> list = [];
     for (var i = 0; i < 60; i++) {
-      var rndWidth = random.nextDouble() * width + 20;
+      final rndWidth = random.nextDouble() * width + 20;
       list.add(TapPlaceholder(width: rndWidth, color: hintColor));
     }
 

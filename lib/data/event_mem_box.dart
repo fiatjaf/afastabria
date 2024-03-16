@@ -1,18 +1,18 @@
-import 'package:loure/client/event.dart';
-import 'package:loure/util/find_event_interface.dart';
+import "package:loure/client/event.dart";
+import "package:loure/util/find_event_interface.dart";
 
 /// a memory event box
 /// use to hold event received from relay and offer event List to ui
 class EventMemBox implements FindEventInterface {
+  EventMemBox({this.sortAfterAdd = true});
   final List<Event> _eventList = [];
   final Map<String, Event> _idMap = {};
   bool sortAfterAdd;
-  EventMemBox({this.sortAfterAdd = true});
 
   @override
-  List<Event> findEvent(String str, {int? limit = 5}) {
+  List<Event> findEvent(final String str, {final int? limit = 5}) {
     List<Event> list = [];
-    for (var event in _eventList) {
+    for (final event in _eventList) {
       if (event.content.contains(str)) {
         list.add(event);
 
@@ -39,15 +39,16 @@ class EventMemBox implements FindEventInterface {
   }
 
   // find event oldest createdAt by relay
-  OldestCreatedAtByRelayResult oldestCreatedAtByRelay(List<String> relayURLs,
-      [int? initTime]) {
-    OldestCreatedAtByRelayResult result = OldestCreatedAtByRelayResult();
+  OldestCreatedAtByRelayResult oldestCreatedAtByRelay(
+      final List<String> relayURLs,
+      [final int? initTime]) {
+    final OldestCreatedAtByRelayResult result = OldestCreatedAtByRelayResult();
 
-    var length = _eventList.length;
+    final length = _eventList.length;
     for (var index = length - 1; index > -1; index--) {
-      var event = _eventList[index];
-      for (var source in event.sources) {
-        var idx = relayURLs.indexOf(source);
+      final event = _eventList[index];
+      for (final source in event.sources) {
+        final idx = relayURLs.indexOf(source);
         if (idx != -1) {
           // log("$source findCreatedAt $length $index ${length - index}");
           result.createdAtMap[source] = event.createdAt;
@@ -61,16 +62,16 @@ class EventMemBox implements FindEventInterface {
     }
 
     if (relayURLs.length > 0 && initTime != null) {
-      for (var url in relayURLs) {
+      for (final url in relayURLs) {
         result.createdAtMap[url] = initTime;
       }
     }
 
     // count av createdAt
-    var it = result.createdAtMap.values;
-    var relayNum = it.length;
+    final it = result.createdAtMap.values;
+    final relayNum = it.length;
     double counter = 0;
-    for (var value in it) {
+    for (final value in it) {
       counter += value;
     }
     result.avCreatedAt = counter ~/ relayNum;
@@ -79,24 +80,24 @@ class EventMemBox implements FindEventInterface {
   }
 
   void sort() {
-    _eventList.sort((event1, event2) {
+    _eventList.sort((final event1, final event2) {
       return event2.createdAt - event1.createdAt;
     });
   }
 
-  bool delete(String id) {
+  bool delete(final String id) {
     if (_idMap[id] == null) {
       return false;
     }
 
     _idMap.remove(id);
-    _eventList.removeWhere((element) => element.id == id);
+    _eventList.removeWhere((final element) => element.id == id);
 
     return true;
   }
 
-  bool add(Event event) {
-    var oldEvent = _idMap[event.id];
+  bool add(final Event event) {
+    final oldEvent = _idMap[event.id];
     if (oldEvent != null) {
       if (event.sources.isNotEmpty &&
           !oldEvent.sources.contains(event.sources.first)) {
@@ -113,10 +114,10 @@ class EventMemBox implements FindEventInterface {
     return true;
   }
 
-  bool addList(List<Event> list) {
+  bool addList(final List<Event> list) {
     bool added = false;
-    for (var event in list) {
-      var oldEvent = _idMap[event.id];
+    for (final event in list) {
+      final oldEvent = _idMap[event.id];
       if (oldEvent == null) {
         _idMap[event.id] = event;
         _eventList.add(event);
@@ -136,8 +137,8 @@ class EventMemBox implements FindEventInterface {
     return added;
   }
 
-  void addBox(EventMemBox b) {
-    var all = b.all();
+  void addBox(final EventMemBox b) {
+    final all = b.all();
     addList(all);
   }
 
@@ -153,9 +154,9 @@ class EventMemBox implements FindEventInterface {
     return _eventList;
   }
 
-  List<Event> listByPubkey(String pubkey) {
+  List<Event> listByPubkey(final String pubkey) {
     List<Event> list = [];
-    for (var event in _eventList) {
+    for (final event in _eventList) {
       if (event.pubKey == pubkey) {
         list.add(event);
       }
@@ -163,8 +164,8 @@ class EventMemBox implements FindEventInterface {
     return list;
   }
 
-  List<Event> suList(int start, int limit) {
-    var length = _eventList.length;
+  List<Event> suList(final int start, final int limit) {
+    final length = _eventList.length;
     if (start > length) {
       return [];
     }
@@ -174,7 +175,7 @@ class EventMemBox implements FindEventInterface {
     return _eventList.sublist(start, limit);
   }
 
-  Event? get(int index) {
+  Event? get(final int index) {
     if (_eventList.length < index) {
       return null;
     }

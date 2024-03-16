@@ -1,22 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_placeholder_textlines/placeholder_lines.dart';
+import "package:flutter/material.dart";
+import "package:flutter_placeholder_textlines/placeholder_lines.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/component/placeholder/event_top_placeholder.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/component/placeholder/event_top_placeholder.dart";
 
 class EventPlaceholder extends StatelessWidget {
   const EventPlaceholder({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
-    var cardColor = themeData.cardColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+    final cardColor = themeData.cardColor;
 
-    var textLineMagin = const EdgeInsets.only(bottom: 3);
+    const textLineMagin = EdgeInsets.only(bottom: 3);
 
-    var main = Column(
+    final main = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.baseline,
       textBaseline: TextBaseline.alphabetic,

@@ -1,19 +1,19 @@
-import 'dart:convert';
-import 'dart:developer';
+import "dart:convert";
+import "dart:developer";
 
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/zap/zap_num_util.dart';
-import 'package:loure/util/number_format_util.dart';
-import 'package:loure/util/spider_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/component/event/reaction_event_item_component.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/zap/zap_num_util.dart";
+import "package:loure/util/number_format_util.dart";
+import "package:loure/util/spider_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/component/event/reaction_event_item_component.dart";
 
 // ignore: must_be_immutable
 class ZapEventMainComponent extends StatefulWidget {
+  ZapEventMainComponent({required this.event, super.key});
   Event event;
-  ZapEventMainComponent({super.key, required this.event});
 
   @override
   State<StatefulWidget> createState() {
@@ -35,9 +35,9 @@ class _ZapEventMainComponent extends State<ZapEventMainComponent> {
 
   void parseSenderPubkey() {
     String? zapRequestEventStr;
-    for (var tag in widget.event.tags) {
+    for (final tag in widget.event.tags) {
       if (tag.length > 1) {
-        var key = tag[0];
+        final key = tag[0];
         if (key == "description") {
           zapRequestEventStr = tag[1];
         }
@@ -46,8 +46,8 @@ class _ZapEventMainComponent extends State<ZapEventMainComponent> {
 
     if (StringUtil.isNotBlank(zapRequestEventStr)) {
       try {
-        var eventJson = jsonDecode(zapRequestEventStr!);
-        var zapRequestEvent = Event.fromJson(eventJson);
+        final eventJson = jsonDecode(zapRequestEventStr!);
+        final zapRequestEvent = Event.fromJson(eventJson);
         senderPubkey = zapRequestEvent.pubKey;
       } catch (e) {
         log("jsonDecode zapRequest error ${e.toString()}");
@@ -58,7 +58,7 @@ class _ZapEventMainComponent extends State<ZapEventMainComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     if (StringUtil.isBlank(senderPubkey)) {
       return Container();
     }
@@ -67,10 +67,10 @@ class _ZapEventMainComponent extends State<ZapEventMainComponent> {
       parseSenderPubkey();
     }
 
-    var zapNum = ZapNumUtil.getNumFromZapEvent(widget.event);
-    String zapNumStr = NumberFormatUtil.format(zapNum);
+    final zapNum = ZapNumUtil.getNumFromZapEvent(widget.event);
+    final String zapNumStr = NumberFormatUtil.format(zapNum);
 
-    var text = "zaped $zapNumStr sats";
+    final text = "zaped $zapNumStr sats";
 
     return ReactionEventItemComponent(
         pubkey: senderPubkey!, text: text, createdAt: widget.event.createdAt);

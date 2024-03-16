@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:loure/router/filter/filter_block_component.dart';
-import 'package:loure/router/filter/filter_dirtyword_component.dart';
+import "package:flutter/material.dart";
+import "package:loure/router/filter/filter_block_component.dart";
+import "package:loure/router/filter/filter_dirtyword_component.dart";
 
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/router/index/index_app_bar.dart';
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/router/index/index_app_bar.dart";
 
 class FilterRouter extends StatefulWidget {
   const FilterRouter({super.key});
@@ -26,10 +26,10 @@ class _FilterRouter extends State<FilterRouter>
   }
 
   @override
-  Widget build(BuildContext context) {
-        var themeData = Theme.of(context);
-    var titleTextColor = themeData.appBarTheme.titleTextStyle!.color;
-    var titleTextStyle = TextStyle(
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final titleTextColor = themeData.appBarTheme.titleTextStyle!.color;
+    final titleTextStyle = TextStyle(
       fontWeight: FontWeight.bold,
       color: titleTextColor,
     );

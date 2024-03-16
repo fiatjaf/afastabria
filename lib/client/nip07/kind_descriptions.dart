@@ -1,8 +1,8 @@
-import 'package:loure/util/string_util.dart';
+import "package:loure/util/string_util.dart";
 
 class KindDescriptions {
-  static String getDes(int kind) {
-    var des = _kds[kind];
+  static String getDes(final int kind) {
+    final des = _kds[kind];
     if (StringUtil.isNotBlank(des)) {
       return des!;
     }

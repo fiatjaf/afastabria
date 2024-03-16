@@ -1,35 +1,26 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:screenshot/screenshot.dart';
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:screenshot/screenshot.dart";
 
-import 'package:loure/main.dart';
-import 'package:loure/provider/community_approved_provider.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/client/event_kind.dart';
-import 'package:loure/client/event.dart';
-import 'package:loure/client/event_relation.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/component/event/event_bitcion_icon_component.dart';
-import 'package:loure/component/event/event_main_component.dart';
+import "package:loure/main.dart";
+import "package:loure/provider/community_approved_provider.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/client/event_kind.dart";
+import "package:loure/client/event.dart";
+import "package:loure/client/event_relation.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/component/event/event_bitcion_icon_component.dart";
+import "package:loure/component/event/event_main_component.dart";
 
 // ignore: must_be_immutable
 class EventListComponent extends StatefulWidget {
-  Event event;
-  String? pagePubkey;
-  bool jumpable;
-  bool showVideo;
-  bool imageListMode;
-  bool showDetailBtn;
-  bool showLongContent;
-  bool showCommunity;
-
   EventListComponent({
-    super.key,
     required this.event,
+    super.key,
     this.pagePubkey,
     this.jumpable = true,
     this.showVideo = false,
@@ -38,6 +29,14 @@ class EventListComponent extends StatefulWidget {
     this.showLongContent = false,
     this.showCommunity = true,
   });
+  Event event;
+  String? pagePubkey;
+  bool jumpable;
+  bool showVideo;
+  bool imageListMode;
+  bool showDetailBtn;
+  bool showLongContent;
+  bool showCommunity;
 
   @override
   State<StatefulWidget> createState() {
@@ -49,10 +48,10 @@ class _EventListComponent extends State<EventListComponent> {
   ScreenshotController screenshotController = ScreenshotController();
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
-    var eventRelation = EventRelation.fromEvent(widget.event);
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
+    final eventRelation = EventRelation.fromEvent(widget.event);
 
     Widget main = Screenshot(
       controller: screenshotController,
@@ -91,14 +90,14 @@ class _EventListComponent extends State<EventListComponent> {
       );
     }
 
-    Widget approvedWrap = Selector<CommunityApprovedProvider, bool>(
-        builder: (context, approved, child) {
+    final Widget approvedWrap = Selector<CommunityApprovedProvider, bool>(
+        builder: (final context, final approved, final child) {
       if (approved) {
         return main;
       }
 
       return Container();
-    }, selector: (context, provider) {
+    }, selector: (final context, final provider) {
       return provider.check(widget.event.pubKey, widget.event.id,
           aId: eventRelation.aId);
     });
@@ -118,8 +117,8 @@ class _EventListComponent extends State<EventListComponent> {
       // try to find target event
       if (widget.event.content.contains("\"pubkey\"")) {
         try {
-          var jsonMap = jsonDecode(widget.event.content);
-          var repostEvent = Event.fromJson(jsonMap);
+          final jsonMap = jsonDecode(widget.event.content);
+          final repostEvent = Event.fromJson(jsonMap);
           RouterUtil.router(context, RouterPath.THREAD_DETAIL, repostEvent);
           return;
         } catch (e) {
@@ -127,9 +126,9 @@ class _EventListComponent extends State<EventListComponent> {
         }
       }
 
-      var eventRelation = EventRelation.fromEvent(widget.event);
+      final eventRelation = EventRelation.fromEvent(widget.event);
       if (StringUtil.isNotBlank(eventRelation.rootId)) {
-        var event = nostr.idIndex[eventRelation.rootId!];
+        final event = nostr.idIndex[eventRelation.rootId!];
         if (event != null) {
           RouterUtil.router(context, RouterPath.THREAD_DETAIL, event);
           return;

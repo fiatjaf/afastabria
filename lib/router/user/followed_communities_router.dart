@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:loure/client/aid.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/provider/contact_list_provider.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:loure/client/aid.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/provider/contact_list_provider.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/client/nip02/cust_contact_list.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/router_util.dart';
+import "package:loure/client/nip02/cust_contact_list.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/main.dart";
+import "package:loure/util/router_util.dart";
 
 class FollowedCommunitiesRouter extends StatefulWidget {
   const FollowedCommunitiesRouter({super.key});
@@ -22,9 +22,9 @@ class _FollowedCommunitiesRouter extends State<FollowedCommunitiesRouter> {
   CustContactList? contactList;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     if (contactList == null) {
-      var arg = RouterUtil.routerArgs(context);
+      final arg = RouterUtil.routerArgs(context);
       if (arg != null) {
         contactList = arg as CustContactList;
       }
@@ -34,20 +34,20 @@ class _FollowedCommunitiesRouter extends State<FollowedCommunitiesRouter> {
       return Container();
     }
 
-    var themeData = Theme.of(context);
-    var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
-    var hintColor = themeData.hintColor;
+    final themeData = Theme.of(context);
+    final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+    final hintColor = themeData.hintColor;
 
-    var communitiesList = contactList!.followedCommunitiesList().toList();
+    final communitiesList = contactList!.followedCommunitiesList().toList();
 
-    var main = ListView.builder(
-      itemBuilder: (context, index) {
-        var id = AId.fromString(communitiesList[index]);
+    final main = ListView.builder(
+      itemBuilder: (final context, final index) {
+        final id = AId.fromString(communitiesList[index]);
         if (id == null) {
           return Container();
         }
 
-        var item = Container(
+        final item = Container(
           padding: const EdgeInsets.only(
             left: Base.BASE_PADDING,
             right: Base.BASE_PADDING,
@@ -68,7 +68,7 @@ class _FollowedCommunitiesRouter extends State<FollowedCommunitiesRouter> {
                 Text(id.identifier),
                 Expanded(child: Container()),
                 Selector<ContactListProvider, bool>(
-                    builder: (context, exist, child) {
+                    builder: (final context, final exist, final child) {
                   IconData iconData = Icons.star_border;
                   Color? color;
                   if (exist) {
@@ -92,7 +92,7 @@ class _FollowedCommunitiesRouter extends State<FollowedCommunitiesRouter> {
                       ),
                     ),
                   );
-                }, selector: (context, provider) {
+                }, selector: (final context, final provider) {
                   return provider.containCommunity(id.toTag());
                 })
               ])),

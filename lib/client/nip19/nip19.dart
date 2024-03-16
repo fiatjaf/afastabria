@@ -1,5 +1,5 @@
-import 'package:bech32/bech32.dart';
-import 'package:hex/hex.dart';
+import "package:bech32/bech32.dart";
+import "package:hex/hex.dart";
 
 class Hrps {
   static const String PUBLIC_KEY = "npub";
@@ -18,7 +18,7 @@ class Nip19 {
   //   return Bech32.encode(Hrps.PUBLIC_KEY, data);
   // }
 
-  static bool isKey(String hrp, String str) {
+  static bool isKey(final String hrp, final String str) {
     if (str.indexOf(hrp) == 0) {
       return true;
     } else {
@@ -26,11 +26,11 @@ class Nip19 {
     }
   }
 
-  static bool isPubkey(String str) {
+  static bool isPubkey(final String str) {
     return isKey(Hrps.PUBLIC_KEY, str);
   }
 
-  static String encodePubKey(String pubkey) {
+  static String encodePubKey(final String pubkey) {
     // var data = HEX.decode(pubKey);
     // data = _convertBits(data, 8, 5, true);
 
@@ -40,9 +40,9 @@ class Nip19 {
     return _encodeKey(Hrps.PUBLIC_KEY, pubkey);
   }
 
-  static String encodeSimplePubKey(String pubKey) {
-    var code = encodePubKey(pubKey);
-    var length = code.length;
+  static String encodeSimplePubKey(final String pubKey) {
+    final code = encodePubKey(pubKey);
+    final length = code.length;
     return "${code.substring(0, 6)}:${code.substring(length - 6)}";
   }
 
@@ -51,11 +51,11 @@ class Nip19 {
   //   var data = Bech32.convertBits(res.words, 5, 8, false);
   //   return hex.encode(data).substring(0, 64);
   // }
-  static String decode(String npub) {
+  static String decode(final String npub) {
     try {
-      var decoder = Bech32Decoder();
-      var bech32Result = decoder.convert(npub);
-      var data = convertBits(bech32Result.data, 5, 8, false);
+      final decoder = Bech32Decoder();
+      final bech32Result = decoder.convert(npub);
+      final data = convertBits(bech32Result.data, 5, 8, false);
       return HEX.encode(data);
     } catch (e) {
       print("Nip19 decode error ${e.toString()}");
@@ -63,38 +63,39 @@ class Nip19 {
     }
   }
 
-  static String _encodeKey(String hrp, String key) {
+  static String _encodeKey(final String hrp, final String key) {
     var data = HEX.decode(key);
     data = convertBits(data, 8, 5, true);
 
-    var encoder = Bech32Encoder();
-    Bech32 input = Bech32(hrp, data);
+    final encoder = Bech32Encoder();
+    final Bech32 input = Bech32(hrp, data);
     return encoder.convert(input);
   }
 
-  static bool isPrivateKey(String str) {
+  static bool isPrivateKey(final String str) {
     return isKey(Hrps.PRIVATE_KEY, str);
   }
 
-  static String encodePrivateKey(String pubkey) {
+  static String encodePrivateKey(final String pubkey) {
     return _encodeKey(Hrps.PRIVATE_KEY, pubkey);
   }
 
-  static bool isNoteId(String str) {
+  static bool isNoteId(final String str) {
     return isKey(Hrps.NOTE_ID, str);
   }
 
-  static String encodeNoteId(String id) {
+  static String encodeNoteId(final String id) {
     return _encodeKey(Hrps.NOTE_ID, id);
   }
 
-  static List<int> convertBits(List<int> data, int from, int to, bool pad) {
+  static List<int> convertBits(
+      final List<int> data, final int from, final int to, final bool pad) {
     var acc = 0;
     var bits = 0;
-    var result = <int>[];
-    var maxv = (1 << to) - 1;
+    final result = <int>[];
+    final maxv = (1 << to) - 1;
 
-    for (var v in data) {
+    for (final v in data) {
       if (v < 0 || (v >> from) != 0) {
         throw Exception();
       }
@@ -111,9 +112,9 @@ class Nip19 {
         result.add((acc << (to - bits)) & maxv);
       }
     } else if (bits >= from) {
-      throw InvalidPadding('illegal zero padding');
+      throw InvalidPadding("illegal zero padding");
     } else if (((acc << (to - bits)) & maxv) != 0) {
-      throw InvalidPadding('non zero');
+      throw InvalidPadding("non zero");
     }
 
     return result;

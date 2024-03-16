@@ -1,5 +1,4 @@
-
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class ColorList {
   static List<Color> ALL_COLOR = [
@@ -13,7 +12,7 @@ class ColorList {
     Colors.red[700]!,
   ];
 
-  static MaterialColor getThemeColor(int colorValue) {
+  static MaterialColor getThemeColor(final int colorValue) {
     var i = 0;
     Color checkedColor = ALL_COLOR[i++];
     if (colorValue == checkedColor.value) {

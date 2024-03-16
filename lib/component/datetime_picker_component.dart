@@ -1,35 +1,34 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:numberpicker/numberpicker.dart';
-import 'package:table_calendar/table_calendar.dart';
+import "package:flutter/material.dart";
+import "package:intl/intl.dart";
+import "package:numberpicker/numberpicker.dart";
+import "package:table_calendar/table_calendar.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/router_util.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/util/router_util.dart";
 
 // ignore: must_be_immutable
 class DatetimePickerComponent extends StatefulWidget {
+  DatetimePickerComponent({
+    required this.showDate,
+    required this.showHour,
+    super.key,
+    this.dateTime,
+  });
   DateTime? dateTime;
 
   bool showDate;
 
   bool showHour;
 
-  DatetimePickerComponent({
-    super.key,
-    this.dateTime,
-    required this.showDate,
-    required this.showHour,
-  });
-
   static Future<DateTime?> show(
-    BuildContext context, {
-    DateTime? dateTime,
-    bool showDate = true,
-    bool showHour = true,
+    final BuildContext context, {
+    final DateTime? dateTime,
+    final bool showDate = true,
+    final bool showHour = true,
   }) async {
     return await showDialog(
       context: context,
-      builder: (context) {
+      builder: (final context) {
         return DatetimePickerComponent(
           dateTime: dateTime,
           showDate: showDate,
@@ -68,19 +67,19 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
-    var mainColor = themeData.appBarTheme.backgroundColor;
-    var bigTextSize = themeData.textTheme.bodyLarge!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
+    final mainColor = themeData.appBarTheme.backgroundColor;
+    final bigTextSize = themeData.textTheme.bodyLarge!.fontSize;
 
-    var now = DateTime.now();
-    var calendarFirstDay = now.add(const Duration(days: -3650));
-    var calendarLastDay = now.add(const Duration(days: 3650));
+    final now = DateTime.now();
+    final calendarFirstDay = now.add(const Duration(days: -3650));
+    final calendarLastDay = now.add(const Duration(days: 3650));
 
-    var titleDateFormat = DateFormat("MMM yyyy");
+    final titleDateFormat = DateFormat("MMM yyyy");
 
-    var datePicker = Container(
+    final datePicker = Container(
       margin: const EdgeInsets.only(
         bottom: Base.BASE_PADDING,
       ),
@@ -105,7 +104,7 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
             lastDay: calendarLastDay,
             focusedDay: _selectedDay,
             headerVisible: false,
-            selectedDayPredicate: (d) {
+            selectedDayPredicate: (final d) {
               return isSameDay(d, _selectedDay);
             },
             calendarStyle: CalendarStyle(
@@ -121,13 +120,14 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
                 color: null,
               ),
             ),
-            onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
+            onDaySelected:
+                (final DateTime selectedDay, final DateTime focusedDay) {
               print(selectedDay);
               setState(() {
                 _selectedDay = selectedDay;
               });
             },
-            onPageChanged: (dateTime) {
+            onPageChanged: (final dateTime) {
               setState(() {
                 _currentDay = dateTime;
                 _selectedDay = dateTime;
@@ -139,14 +139,14 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
       ),
     );
 
-    var timeTitleTextStyle = TextStyle(
+    final timeTitleTextStyle = TextStyle(
       fontSize: bigTextSize,
       fontWeight: FontWeight.bold,
     );
-    var timePicker = Row(
+    final timePicker = Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        buildNumberPicker("Hour", 0, 23, hour, (value) {
+        buildNumberPicker("Hour", 0, 23, hour, (final value) {
           setState(() {
             hour = value;
           });
@@ -155,7 +155,7 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
           ":",
           style: timeTitleTextStyle,
         ),
-        buildNumberPicker("Minute", 0, 59, minute, (value) {
+        buildNumberPicker("Minute", 0, 59, minute, (final value) {
           setState(() {
             minute = value;
           });
@@ -191,7 +191,7 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
       ),
     ));
 
-    var main = Container(
+    final main = Container(
       color: scaffoldBackgroundColor,
       padding: const EdgeInsets.all(Base.BASE_PADDING),
       child: Column(
@@ -228,8 +228,13 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
     RouterUtil.back(context);
   }
 
-  Widget buildNumberPicker(String title, int min, int max, int value,
-      Function(int) onChange, TextStyle textStyle) {
+  Widget buildNumberPicker(
+      final String title,
+      final int min,
+      final int max,
+      final int value,
+      final Function(int) onChange,
+      final TextStyle textStyle) {
     return Expanded(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -251,7 +256,7 @@ class _DatetimePickerComponent extends State<DatetimePickerComponent> {
   }
 
   void confirm() {
-    var dateTime = DateTime(
+    final dateTime = DateTime(
         _selectedDay.year, _selectedDay.month, _selectedDay.day, hour, minute);
     RouterUtil.back(context, dateTime);
   }

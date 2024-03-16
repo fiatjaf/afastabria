@@ -1,14 +1,13 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import "package:flutter/material.dart";
+import "package:video_player/video_player.dart";
 
-import 'package:loure/consts/base.dart';
+import "package:loure/consts/base.dart";
 
 class ContentVideoComponent extends StatefulWidget {
+  ContentVideoComponent({required this.url, super.key});
   String url;
-
-  ContentVideoComponent({super.key, required this.url});
 
   @override
   State<StatefulWidget> createState() {
@@ -24,19 +23,19 @@ class _ContentVideoComponent extends State<ContentVideoComponent> {
     super.initState();
     if (widget.url.indexOf("http") == 0) {
       _controller = VideoPlayerController.network(widget.url)
-        ..initialize().then((_) {
+        ..initialize().then((final _) {
           setState(() {});
         });
     } else {
       _controller = VideoPlayerController.file(File(widget.url))
-        ..initialize().then((_) {
+        ..initialize().then((final _) {
           setState(() {});
         });
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     List<Widget> list = [];
 
     return Container(
@@ -65,9 +64,8 @@ class _ContentVideoComponent extends State<ContentVideoComponent> {
 }
 
 class ControlsOverlay extends StatefulWidget {
+  const ControlsOverlay({required this.controller, super.key});
   final VideoPlayerController controller;
-
-  const ControlsOverlay({super.key, required this.controller});
 
   @override
   State<StatefulWidget> createState() {
@@ -107,7 +105,7 @@ class _ControlsOverlay extends State<ControlsOverlay> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Stack(
       children: <Widget>[
         AnimatedSwitcher(
@@ -122,7 +120,7 @@ class _ControlsOverlay extends State<ControlsOverlay> {
                       Icons.play_arrow,
                       color: Colors.white,
                       size: 100.0,
-                      semanticLabel: 'Play',
+                      semanticLabel: "Play",
                     ),
                   ),
                 ),
@@ -137,16 +135,16 @@ class _ControlsOverlay extends State<ControlsOverlay> {
           alignment: Alignment.topLeft,
           child: PopupMenuButton<Duration>(
             initialValue: controller.value.captionOffset,
-            tooltip: 'Caption Offset',
-            onSelected: (Duration delay) {
+            tooltip: "Caption Offset",
+            onSelected: (final Duration delay) {
               controller.setCaptionOffset(delay);
             },
-            itemBuilder: (BuildContext context) {
+            itemBuilder: (final BuildContext context) {
               return <PopupMenuItem<Duration>>[
                 for (final Duration offsetDuration in _exampleCaptionOffsets)
                   PopupMenuItem<Duration>(
                     value: offsetDuration,
-                    child: Text('${offsetDuration.inMilliseconds}ms'),
+                    child: Text("${offsetDuration.inMilliseconds}ms"),
                   )
               ];
             },
@@ -158,7 +156,7 @@ class _ControlsOverlay extends State<ControlsOverlay> {
                 vertical: 12,
                 horizontal: 16,
               ),
-              child: Text('${controller.value.captionOffset.inMilliseconds}ms'),
+              child: Text("${controller.value.captionOffset.inMilliseconds}ms"),
             ),
           ),
         ),
@@ -166,16 +164,16 @@ class _ControlsOverlay extends State<ControlsOverlay> {
           alignment: Alignment.topRight,
           child: PopupMenuButton<double>(
             initialValue: controller.value.playbackSpeed,
-            tooltip: 'Playback speed',
-            onSelected: (double speed) {
+            tooltip: "Playback speed",
+            onSelected: (final double speed) {
               controller.setPlaybackSpeed(speed);
             },
-            itemBuilder: (BuildContext context) {
+            itemBuilder: (final BuildContext context) {
               return <PopupMenuItem<double>>[
                 for (final double speed in _examplePlaybackRates)
                   PopupMenuItem<double>(
                     value: speed,
-                    child: Text('${speed}x'),
+                    child: Text("${speed}x"),
                   )
               ];
             },
@@ -187,7 +185,7 @@ class _ControlsOverlay extends State<ControlsOverlay> {
                 vertical: 12,
                 horizontal: 16,
               ),
-              child: Text('${controller.value.playbackSpeed}x'),
+              child: Text("${controller.value.playbackSpeed}x"),
             ),
           ),
         ),

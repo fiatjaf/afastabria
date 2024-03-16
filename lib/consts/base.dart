@@ -1,4 +1,4 @@
-import 'package:loure/util/hash_util.dart';
+import "package:loure/util/hash_util.dart";
 
 class Base {
   static const APP_NAME = "loure";

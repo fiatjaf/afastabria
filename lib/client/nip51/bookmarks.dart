@@ -1,4 +1,4 @@
-import 'package:loure/client/event_relation.dart';
+import "package:loure/client/event_relation.dart";
 
 class Bookmarks {
   List<BookmarkItem> privateItems = [];
@@ -6,13 +6,12 @@ class Bookmarks {
 }
 
 class BookmarkItem {
-  String key;
-  String value;
-
   BookmarkItem({
     required this.key,
     required this.value,
   });
+  String key;
+  String value;
 
   List<String> toJson() {
     List<String> list = [];
@@ -21,10 +20,10 @@ class BookmarkItem {
     return list;
   }
 
-  static BookmarkItem getFromEventReactions(EventRelation eventRelation) {
+  static BookmarkItem getFromEventReactions(final EventRelation eventRelation) {
     var key = "e";
     var value = eventRelation.id;
-    var aId = eventRelation.aId;
+    final aId = eventRelation.aId;
     if (aId != null) {
       key = "a";
       value = aId.toTag();

@@ -1,8 +1,9 @@
-import 'package:encrypt/encrypt.dart';
+import "package:encrypt/encrypt.dart";
 
 class EncryptUtil {
   // AES128 CBC pkcs7padding iv util8 base64
-  static String aesEncrypt(String plainText, String keyStr, String ivStr) {
+  static String aesEncrypt(
+      final String plainText, final String keyStr, final String ivStr) {
     final key = Key.fromUtf8(keyStr);
     final iv = IV.fromUtf8(ivStr);
 
@@ -12,7 +13,8 @@ class EncryptUtil {
     return encrypted.base64;
   }
 
-  static String aesEncryptBytes(List<int> input, String keyStr, String ivStr) {
+  static String aesEncryptBytes(
+      final List<int> input, final String keyStr, final String ivStr) {
     final key = Key.fromUtf8(keyStr);
     final iv = IV.fromUtf8(ivStr);
 
@@ -22,7 +24,8 @@ class EncryptUtil {
     return encrypted.base64;
   }
 
-  static String aesDecrypt(String str, String keyStr, String ivStr) {
+  static String aesDecrypt(
+      final String str, final String keyStr, final String ivStr) {
     final key = Key.fromUtf8(keyStr);
     final iv = IV.fromUtf8(ivStr);
 

@@ -1,8 +1,10 @@
-import 'package:loure/util/string_util.dart';
-import 'package:loure/client/event.dart';
-import 'package:loure/client/event_kind.dart' as kind;
+import "package:loure/util/string_util.dart";
+import "package:loure/client/event.dart";
+import "package:loure/client/event_kind.dart" as kind;
 
 class BadgeDefinition {
+  BadgeDefinition(this.pubkey, this.d, this.updatedAt,
+      {this.name, this.description, this.image, this.thumb});
   final String pubkey;
 
   final String d;
@@ -17,11 +19,8 @@ class BadgeDefinition {
 
   final int updatedAt;
 
-  BadgeDefinition(this.pubkey, this.d, this.updatedAt,
-      {this.name, this.description, this.image, this.thumb});
-
-  static BadgeDefinition? loadFromEvent(Event event) {
-    String pubkey = event.pubKey;
+  static BadgeDefinition? loadFromEvent(final Event event) {
+    final String pubkey = event.pubKey;
     String? d;
     String? name;
     String? description;
@@ -29,10 +28,10 @@ class BadgeDefinition {
     String? thumb;
 
     if (event.kind == kind.EventKind.BADGE_DEFINITION) {
-      for (var tag in event.tags) {
+      for (final tag in event.tags) {
         if (tag.length > 1) {
-          var key = tag[0];
-          var value = tag[1];
+          final key = tag[0];
+          final value = tag[1];
           if (key == "d") {
             d = value;
           } else if (key == "name") {

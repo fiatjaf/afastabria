@@ -1,28 +1,13 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:http/http.dart' as http;
+import "package:http/http.dart" as http;
 
-import 'package:loure/client/event.dart';
+import "package:loure/client/event.dart";
 
 class Metadata {
-  late Event? event;
-  late String pubkey;
-
-  String? name;
-  String? displayName;
-  String? picture;
-  String? banner;
-  String? website;
-  String? about;
-  String? nip05;
-  String? lud16;
-  String? lud06;
-
-  bool? nip05valid;
-
   Metadata(
     this.event, {
-    String? pubkey,
+    final String? pubkey,
     this.name,
     this.displayName,
     this.picture,
@@ -42,26 +27,40 @@ class Metadata {
 
   Metadata.blank(this.pubkey);
 
-  Metadata.fromEvent(Event event) {
+  Metadata.fromEvent(final Event event) {
     // ignore: prefer_initializing_formals
     this.event = event;
     this.pubkey = event.pubKey;
 
     try {
       final json = jsonDecode(event.content);
-      this.name = json['name'];
-      this.displayName = json['display_name'];
-      this.picture = json['picture'];
-      this.banner = json['banner'];
-      this.website = json['website'];
-      this.about = json['about'];
-      this.nip05 = json['nip05'];
-      this.lud16 = json['lud16'];
-      this.lud06 = json['lud06'];
+      this.name = json["name"];
+      this.displayName = json["display_name"];
+      this.picture = json["picture"];
+      this.banner = json["banner"];
+      this.website = json["website"];
+      this.about = json["about"];
+      this.nip05 = json["nip05"];
+      this.lud16 = json["lud16"];
+      this.lud06 = json["lud06"];
     } catch (err) {
       /***/
     }
   }
+  late Event? event;
+  late String pubkey;
+
+  String? name;
+  String? displayName;
+  String? picture;
+  String? banner;
+  String? website;
+  String? about;
+  String? nip05;
+  String? lud16;
+  String? lud06;
+
+  bool? nip05valid;
 
   bool isBlank() {
     return this.event == null;
@@ -69,15 +68,15 @@ class Metadata {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['display_name'] = displayName;
-    data['picture'] = picture;
-    data['banner'] = banner;
-    data['website'] = website;
-    data['about'] = about;
-    data['nip05'] = nip05;
-    data['lud16'] = lud16;
-    data['lud06'] = lud06;
+    data["name"] = name;
+    data["display_name"] = displayName;
+    data["picture"] = picture;
+    data["banner"] = banner;
+    data["website"] = website;
+    data["about"] = about;
+    data["nip05"] = nip05;
+    data["lud16"] = lud16;
+    data["lud06"] = lud06;
     return data;
   }
 
@@ -93,12 +92,12 @@ class Metadata {
       host = spl[1];
     }
 
-    var url = "https://$host/.well-known/nostr.json?name=$name";
+    final url = "https://$host/.well-known/nostr.json?name=$name";
 
     try {
       final response = await http.get(Uri.parse(url));
       final res = jsonDecode(response.body) as Map;
-      return res['names'][name] == this.pubkey;
+      return res["names"][name] == this.pubkey;
     } catch (e) {
       return false;
     }

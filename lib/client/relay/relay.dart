@@ -1,14 +1,17 @@
-import 'dart:convert';
-import 'dart:developer';
-import 'dart:async';
+import "dart:convert";
+import "dart:developer";
+import "dart:async";
 
-import 'package:loure/main.dart';
-import 'package:loure/client/event.dart';
-import 'package:loure/client/filter.dart';
-import 'package:loure/client/relay/util.dart';
-import 'package:loure/client/relay/relay_info.dart';
+import "package:loure/main.dart";
+import "package:loure/client/event.dart";
+import "package:loure/client/filter.dart";
+import "package:loure/client/relay/util.dart";
+import "package:loure/client/relay/relay_info.dart";
 
 abstract class Relay {
+  Relay(this.url, this.relayStatus, this.assumeValid, this.makeAuthEvent) {
+    this.url = RelayUtil.normalizeURL(url);
+  }
   late String url;
   final RelayStatus relayStatus;
   final bool assumeValid;
@@ -22,10 +25,6 @@ abstract class Relay {
   int serial = 0;
   String? challenge;
 
-  Relay(this.url, this.relayStatus, this.assumeValid, this.makeAuthEvent) {
-    this.url = RelayUtil.normalizeURL(url);
-  }
-
   Future<bool> connect() async {
     try {
       return await doConnect();
@@ -37,12 +36,12 @@ abstract class Relay {
   }
 
   Subscription subscribe(
-    List<Filter> filters, {
-    Function(Event)? onEvent,
-    Function()? onEose,
-    Function(String)? onClose,
+    final List<Filter> filters, {
+    final Function(Event)? onEvent,
+    final Function()? onEose,
+    final Function(String)? onClose,
     String? id,
-    bool Function(String?)? intercept,
+    final bool Function(String?)? intercept,
   }) {
     if (filters.isEmpty) {
       throw ArgumentError("No filters given", "filters");
@@ -54,9 +53,9 @@ abstract class Relay {
       this,
       id,
       filters,
-      onEvent ?? (Event evt) => log("$evt from $url::$id"),
+      onEvent ?? (final Event evt) => log("$evt from $url::$id"),
       onEose ?? () => log("eose from $url::$id"),
-      onClose ?? (String msg) => log("closed $url::$id with $msg"),
+      onClose ?? (final String msg) => log("closed $url::$id with $msg"),
       intercept,
     );
     _subscriptions[sub.id] = sub;
@@ -64,8 +63,10 @@ abstract class Relay {
     return sub;
   }
 
-  Subscription subscribeEose(List<Filter> filters,
-      {Function(Event)? onEvent, Function(String)? onClose, String? id}) {
+  Subscription subscribeEose(final List<Filter> filters,
+      {final Function(Event)? onEvent,
+      final Function(String)? onClose,
+      final String? id}) {
     Subscription? internalSub;
     final sub = this.subscribe(filters,
         id: id,
@@ -76,23 +77,23 @@ abstract class Relay {
     return sub;
   }
 
-  void onMessage(String rawMessage) {
-    var subId = RelayUtil.getSubscriptionId(rawMessage);
-    var sub = this._subscriptions[subId];
+  void onMessage(final String rawMessage) {
+    final subId = RelayUtil.getSubscriptionId(rawMessage);
+    final sub = this._subscriptions[subId];
     if (sub != null && sub.intercept != null) {
-      var interrupt = sub.intercept!(RelayUtil.getEventId(rawMessage));
+      final interrupt = sub.intercept!(RelayUtil.getEventId(rawMessage));
       if (interrupt) {
         return;
       }
     }
 
     try {
-      var message = jsonDecode(rawMessage);
+      final message = jsonDecode(rawMessage);
       switch (message[0]) {
-        case 'OK':
+        case "OK":
           final id = message[1] as String;
 
-          nostr.idIndex.update(id, (Event evt) {
+          nostr.idIndex.update(id, (final Event evt) {
             evt.sources.add(this.url);
             return evt;
           });
@@ -104,9 +105,9 @@ abstract class Relay {
                 .complete(OK(message[2] as bool, (message[3] ?? "") as String));
           }
           break;
-        case 'EVENT':
+        case "EVENT":
           final subId = message[1] as String;
-          var sub = this._subscriptions[subId];
+          final sub = this._subscriptions[subId];
           if (sub == null) {
             return;
           }
@@ -130,19 +131,19 @@ abstract class Relay {
             sub.onEvent(event);
           }
           break;
-        case 'EOSE':
+        case "EOSE":
           final subId = message[1] as String;
-          var sub = this._subscriptions[subId];
+          final sub = this._subscriptions[subId];
           if (sub != null) {
             sub.eose();
           }
           break;
-        case 'NOTICE':
+        case "NOTICE":
           noticeProvider.onNotice(this.url, message[1] as String);
           break;
-        case 'CLOSED':
+        case "CLOSED":
           final subId = message[1] as String;
-          var sub = this._subscriptions[subId];
+          final sub = this._subscriptions[subId];
           if (sub != null) {
             final reason = message[2] as String;
             if (reason.startsWith("auth-required: ") &&
@@ -168,7 +169,7 @@ abstract class Relay {
             }
           }
           break;
-        case 'AUTH':
+        case "AUTH":
           this.challenge = message[1] as String;
           break;
       }
@@ -179,7 +180,7 @@ abstract class Relay {
 
   Future<bool> doConnect();
 
-  Future<OK> publish(Event event) async {
+  Future<OK> publish(final Event event) async {
     final completer = Completer<OK>();
     this._published[event.id] = completer;
     this.send(["EVENT", event.toJson()]);
@@ -191,13 +192,13 @@ abstract class Relay {
     return completer.future;
   }
 
-  void send(List<dynamic> message);
+  void send(final List<dynamic> message);
 
   Future<void> disconnect();
 
   bool _waitingReconnect = false;
 
-  void onError(String errMsg, {bool reconnect = false}) {
+  void onError(final String errMsg, {final bool reconnect = false}) {
     print("relay error $errMsg");
     relayStatus.error++;
     relayStatus.connected = ConnState.UN_CONNECT;
@@ -215,13 +216,13 @@ abstract class Relay {
     }
   }
 
-  void saveQuery(Subscription subscription) {
+  void saveQuery(final Subscription subscription) {
     _subscriptions[subscription.id] = subscription;
   }
 
-  bool checkAndCompleteQuery(String id) {
+  bool checkAndCompleteQuery(final String id) {
     // all subscription should be close
-    var sub = _subscriptions.remove(id);
+    final sub = _subscriptions.remove(id);
     if (sub != null) {
       send(["CLOSE", id]);
       return true;
@@ -229,7 +230,7 @@ abstract class Relay {
     return false;
   }
 
-  bool checkQuery(String id) {
+  bool checkQuery(final String id) {
     return _subscriptions[id] != null;
   }
 
@@ -239,6 +240,8 @@ abstract class Relay {
 }
 
 class Subscription {
+  Subscription(this._relay, this.id, this.filters, this.onEvent, this.onEose,
+      this.onClose, this.intercept);
   final Relay _relay;
   final String id;
   final List<Filter> filters;
@@ -250,12 +253,9 @@ class Subscription {
   bool hasEosed = false;
   bool hasAuthed = false;
 
-  Subscription(this._relay, this.id, this.filters, this.onEvent, this.onEose,
-      this.onClose, this.intercept);
-
   void fire() {
     List<dynamic> json = ["REQ", this.id];
-    for (Filter filter in this.filters) {
+    for (final Filter filter in this.filters) {
       json.add(filter.toJson());
     }
     this._relay.send(json);
@@ -268,7 +268,7 @@ class Subscription {
     }
   }
 
-  void close(String reason) {
+  void close(final String reason) {
     this._relay.send(["CLOSE", this.id]);
     this.eose();
     this.onClose(reason);
@@ -276,8 +276,8 @@ class Subscription {
 }
 
 class RelayStatus {
-  String addr;
   RelayStatus(this.addr);
+  String addr;
   int connected = ConnState.UN_CONNECT;
 
   // bool noteAble = true;
@@ -290,10 +290,9 @@ class RelayStatus {
 }
 
 class OK {
+  OK(this.ok, this.message);
   final bool ok;
   final String message;
-
-  OK(this.ok, this.message);
 }
 
 class ConnState {

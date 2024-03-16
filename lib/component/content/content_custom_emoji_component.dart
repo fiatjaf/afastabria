@@ -1,16 +1,15 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/component/image_component.dart';
+import "package:loure/component/image_component.dart";
 
 class ContentCustomEmojiComponent extends StatelessWidget {
+  const ContentCustomEmojiComponent({required this.imagePath, super.key});
   final String imagePath;
 
-  const ContentCustomEmojiComponent({super.key, required this.imagePath});
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     // var themeData = Theme.of(context);
     // var fontSize = themeData.textTheme.bodyMedium!.fontSize;
     if (imagePath.indexOf("http") == 0) {
@@ -21,7 +20,7 @@ class ContentCustomEmojiComponent extends StatelessWidget {
           // width: fontSize! * 2,
           imageUrl: imagePath,
           // fit: imageBoxFix,
-          placeholder: (context, url) => Container(),
+          placeholder: (final context, final url) => Container(),
         ),
       );
     } else {

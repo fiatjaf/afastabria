@@ -1,16 +1,16 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:flutter/material.dart';
-import 'package:loure/router/tag/topic_map.dart';
+import "package:flutter/material.dart";
+import "package:loure/router/tag/topic_map.dart";
 
-import 'package:loure/client/event_kind.dart';
-import 'package:loure/client/event.dart';
-import 'package:loure/client/nip02/contact.dart';
-import 'package:loure/client/nip02/cust_contact_list.dart';
-import 'package:loure/client/filter.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/provider/data_util.dart';
+import "package:loure/client/event_kind.dart";
+import "package:loure/client/event.dart";
+import "package:loure/client/nip02/contact.dart";
+import "package:loure/client/nip02/cust_contact_list.dart";
+import "package:loure/client/filter.dart";
+import "package:loure/main.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/provider/data_util.dart";
 
 class ContactListProvider extends ChangeNotifier {
   Event? _event;
@@ -21,10 +21,10 @@ class ContactListProvider extends ChangeNotifier {
     String? pubkey;
     pubkey = nostr.publicKey;
 
-    var str = sharedPreferences.getString(DataKey.CONTACT_LISTS);
+    final str = sharedPreferences.getString(DataKey.CONTACT_LISTS);
     print("str $str");
     if (str != null && str != "") {
-      var jsonMap = jsonDecode(str);
+      final jsonMap = jsonDecode(str);
 
       if (jsonMap is Map<String, dynamic>) {
         String? eventStr;
@@ -35,7 +35,7 @@ class ContactListProvider extends ChangeNotifier {
         }
 
         if (eventStr != null) {
-          var eventMap = jsonDecode(eventStr);
+          final eventMap = jsonDecode(eventStr);
           this._event = Event.fromJson(eventMap);
           this._contactList = CustContactList.fromJson(this._event!.tags);
           this.content = this._event!.content;
@@ -49,27 +49,27 @@ class ContactListProvider extends ChangeNotifier {
   }
 
   void clearCurrentContactList() {
-    var pubkey = nostr.publicKey;
-    var str = sharedPreferences.getString(DataKey.CONTACT_LISTS);
+    final pubkey = nostr.publicKey;
+    final str = sharedPreferences.getString(DataKey.CONTACT_LISTS);
     if (StringUtil.isNotBlank(str)) {
-      var jsonMap = jsonDecode(str!);
+      final jsonMap = jsonDecode(str!);
       if (jsonMap is Map) {
         jsonMap.remove(pubkey);
 
-        var jsonStr = jsonEncode(jsonMap);
+        final jsonStr = jsonEncode(jsonMap);
         sharedPreferences.setString(DataKey.CONTACT_LISTS, jsonStr);
       }
     }
   }
 
   void query() {
-    var filter = Filter(
+    final filter = Filter(
         kinds: [EventKind.CONTACT_LIST], limit: 1, authors: [nostr.publicKey]);
 
     pool.subscribeManyEose(nostr.CONTACT_RELAYS, [filter], onEvent: _onEvent);
   }
 
-  void _onEvent(Event e) {
+  void _onEvent(final Event e) {
     if (e.kind == EventKind.CONTACT_LIST) {
       if (_event == null || e.createdAt > _event!.createdAt) {
         _event = e;
@@ -82,21 +82,21 @@ class ContactListProvider extends ChangeNotifier {
     }
   }
 
-  void _saveAndNotify({bool notify = true}) {
-    var eventJsonMap = _event!.toJson();
-    var eventJsonStr = jsonEncode(eventJsonMap);
+  void _saveAndNotify({final bool notify = true}) {
+    final eventJsonMap = _event!.toJson();
+    final eventJsonStr = jsonEncode(eventJsonMap);
 
-    var pubkey = nostr.publicKey;
+    final pubkey = nostr.publicKey;
     Map<String, dynamic>? allJsonMap;
 
-    var str = sharedPreferences.getString(DataKey.CONTACT_LISTS);
+    final str = sharedPreferences.getString(DataKey.CONTACT_LISTS);
     if (str != "") {
       allJsonMap = jsonDecode(str!);
     }
     allJsonMap ??= {};
 
     allJsonMap[pubkey] = eventJsonStr;
-    var jsonStr = jsonEncode(allJsonMap);
+    final jsonStr = jsonEncode(allJsonMap);
 
     sharedPreferences.setString(DataKey.CONTACT_LISTS, jsonStr);
 
@@ -110,21 +110,21 @@ class ContactListProvider extends ChangeNotifier {
     return _contactList!.total();
   }
 
-  void addContact(Contact contact) {
+  void addContact(final Contact contact) {
     _contactList!.add(contact);
     _event = nostr.sendContactList(_contactList!, content);
 
     _saveAndNotify();
   }
 
-  void removeContact(String pubKey) {
+  void removeContact(final String pubKey) {
     _contactList!.remove(pubKey);
     _event = nostr.sendContactList(_contactList!, content);
 
     _saveAndNotify();
   }
 
-  void updateContacts(CustContactList contactList) {
+  void updateContacts(final CustContactList contactList) {
     _contactList = contactList;
     _event = nostr.sendContactList(contactList, content);
 
@@ -137,7 +137,7 @@ class ContactListProvider extends ChangeNotifier {
     return _contactList!.list();
   }
 
-  Contact? getContact(String pubKey) {
+  Contact? getContact(final String pubKey) {
     return _contactList!.get(pubKey);
   }
 
@@ -150,11 +150,11 @@ class ContactListProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool containTag(String tag) {
-    var list = TopicMap.getList(tag);
+  bool containTag(final String tag) {
+    final list = TopicMap.getList(tag);
     if (list != null) {
-      for (var t in list) {
-        var exist = _contactList!.containsTag(t);
+      for (final t in list) {
+        final exist = _contactList!.containsTag(t);
         if (exist) {
           return true;
         }
@@ -165,14 +165,14 @@ class ContactListProvider extends ChangeNotifier {
     }
   }
 
-  void addTag(String tag) {
+  void addTag(final String tag) {
     _contactList!.addTag(tag);
     _event = nostr.sendContactList(_contactList!, content);
 
     _saveAndNotify();
   }
 
-  void removeTag(String tag) {
+  void removeTag(final String tag) {
     _contactList!.removeTag(tag);
     _event = nostr.sendContactList(_contactList!, content);
 
@@ -187,18 +187,18 @@ class ContactListProvider extends ChangeNotifier {
     return _contactList!.tagList();
   }
 
-  bool containCommunity(String id) {
+  bool containCommunity(final String id) {
     return _contactList!.containsCommunity(id);
   }
 
-  void addCommunity(String tag) {
+  void addCommunity(final String tag) {
     _contactList!.addCommunity(tag);
     _event = nostr.sendContactList(_contactList!, content);
 
     _saveAndNotify();
   }
 
-  void removeCommunity(String tag) {
+  void removeCommunity(final String tag) {
     _contactList!.removeCommunity(tag);
     _event = nostr.sendContactList(_contactList!, content);
 
@@ -213,7 +213,7 @@ class ContactListProvider extends ChangeNotifier {
     return _contactList!.followedCommunitiesList();
   }
 
-  void updateRelaysContent(String relaysContent) {
+  void updateRelaysContent(final String relaysContent) {
     content = relaysContent;
     _event = nostr.sendContactList(_contactList!, content);
 

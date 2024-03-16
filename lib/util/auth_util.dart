@@ -1,13 +1,14 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/widgets.dart';
-import 'package:local_auth/local_auth.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/widgets.dart";
+import "package:local_auth/local_auth.dart";
 
 class AuthUtil {
-  static Future<bool> authenticate(BuildContext context, String reason,
-      {bool showFail = true}) async {
-    var localAuth = LocalAuthentication();
+  static Future<bool> authenticate(
+      final BuildContext context, final String reason,
+      {final bool showFail = true}) async {
+    final localAuth = LocalAuthentication();
     try {
-      bool didAuthenticate = await localAuth.authenticate(
+      final bool didAuthenticate = await localAuth.authenticate(
         localizedReason: reason,
       );
       if (!didAuthenticate && showFail) {

@@ -1,46 +1,46 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/consts/index_taps.dart';
+import "package:loure/consts/index_taps.dart";
 
 class IndexProvider extends ChangeNotifier {
-  int _currentTap = IndexTaps.FOLLOW;
-
-  int get currentTap => _currentTap;
-
-  IndexProvider({int? indexTap}) {
+  IndexProvider({final int? indexTap}) {
     if (indexTap != null) {
       _currentTap = indexTap;
     }
   }
+  int _currentTap = IndexTaps.FOLLOW;
 
-  void setCurrentTap(int v) {
+  int get currentTap => _currentTap;
+
+  void setCurrentTap(final int v) {
     _currentTap = v;
     notifyListeners();
   }
 
   TabController? _followTabController;
 
-  void setFollowTabController(TabController? followTabController) {
+  void setFollowTabController(final TabController? followTabController) {
     _followTabController = followTabController;
   }
 
   ScrollController? _followPostsScrollController;
 
   void setFollowPostsScrollController(
-      ScrollController? followPostsScrollController) {
+      final ScrollController? followPostsScrollController) {
     _followPostsScrollController = followPostsScrollController;
   }
 
   ScrollController? _followScrollController;
 
-  void setFollowScrollController(ScrollController? followScrollController) {
+  void setFollowScrollController(
+      final ScrollController? followScrollController) {
     _followScrollController = followScrollController;
   }
 
   ScrollController? _mentionedScrollController;
 
   void setMentionedScrollController(
-      ScrollController? mentionedScrollController) {
+      final ScrollController? mentionedScrollController) {
     _mentionedScrollController = mentionedScrollController;
   }
 
@@ -61,19 +61,19 @@ class IndexProvider extends ChangeNotifier {
 
   TabController? _globalTabController;
 
-  void setGlobalTabController(TabController? globalTabController) {
+  void setGlobalTabController(final TabController? globalTabController) {
     _globalTabController = globalTabController;
   }
 
   ScrollController? _eventScrollController;
 
-  void setEventScrollController(ScrollController? eventScrollController) {
+  void setEventScrollController(final ScrollController? eventScrollController) {
     _eventScrollController = eventScrollController;
   }
 
   ScrollController? _userScrollController;
 
-  void setUserScrollController(ScrollController? userScrollController) {
+  void setUserScrollController(final ScrollController? userScrollController) {
     _userScrollController = userScrollController;
   }
 

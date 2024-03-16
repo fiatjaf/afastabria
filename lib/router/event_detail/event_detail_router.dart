@@ -1,19 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:loure/main.dart';
-import 'package:provider/provider.dart';
-import 'package:widget_size/widget_size.dart';
+import "package:flutter/material.dart";
+import "package:loure/main.dart";
+import "package:provider/provider.dart";
+import "package:widget_size/widget_size.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/event_kind.dart' as kind;
-import 'package:loure/component/event/event_list_component.dart';
-import 'package:loure/component/event/event_load_list_component.dart';
-import 'package:loure/component/event/reaction_event_list_component.dart';
-import 'package:loure/component/event/zap_event_list_component.dart';
-import 'package:loure/data/event_reactions.dart';
-import 'package:loure/provider/event_reactions_provider.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/router/thread/thread_detail_router.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/event_kind.dart" as kind;
+import "package:loure/component/event/event_list_component.dart";
+import "package:loure/component/event/event_load_list_component.dart";
+import "package:loure/component/event/reaction_event_list_component.dart";
+import "package:loure/component/event/zap_event_list_component.dart";
+import "package:loure/data/event_reactions.dart";
+import "package:loure/provider/event_reactions_provider.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/router/thread/thread_detail_router.dart";
 
 class EventDetailRouter extends StatefulWidget {
   const EventDetailRouter({super.key});
@@ -48,7 +48,7 @@ class _EventDetailRouter extends State<EventDetailRouter> {
       }
     });
 
-    var arg = RouterUtil.routerArgs(context);
+    final arg = RouterUtil.routerArgs(context);
     if (arg != null) {
       if (arg is Event) {
         this.eventFuture = Future.value(arg);
@@ -64,15 +64,15 @@ class _EventDetailRouter extends State<EventDetailRouter> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
 
     Widget? appBarTitle;
     if (showTitle) {
       appBarTitle = FutureBuilder(
         future: this.eventFuture,
         initialData: null,
-        builder: (context, snapshot) {
+        builder: (final context, final snapshot) {
           if (snapshot.data != null) {
             return ThreadDetailRouter.detailAppBarTitle(
                 snapshot.data!, themeData);
@@ -86,7 +86,7 @@ class _EventDetailRouter extends State<EventDetailRouter> {
     final mainEventWidget = FutureBuilder(
       future: eventFuture,
       initialData: null,
-      builder: (context, snapshot) {
+      builder: (final context, final snapshot) {
         if (snapshot.data == null) {
           return const EventLoadListComponent();
         } else {
@@ -100,7 +100,7 @@ class _EventDetailRouter extends State<EventDetailRouter> {
     );
 
     final mainWidget = Selector<EventReactionsProvider, EventReactions?>(
-      builder: (context, eventReactions, child) {
+      builder: (final context, final eventReactions, final child) {
         if (eventReactions == null) {
           return mainEventWidget;
         }
@@ -110,23 +110,23 @@ class _EventDetailRouter extends State<EventDetailRouter> {
         allEvent.addAll(eventReactions.reposts);
         allEvent.addAll(eventReactions.likes);
         allEvent.addAll(eventReactions.zaps);
-        allEvent.sort((event1, event2) {
+        allEvent.sort((final event1, final event2) {
           return event2.createdAt - event1.createdAt;
         });
 
         Widget main = ListView.builder(
           controller: _controller,
-          itemBuilder: (context, index) {
+          itemBuilder: (final context, final index) {
             if (index == 0) {
               return WidgetSize(
                 child: mainEventWidget,
-                onChange: (size) {
+                onChange: (final size) {
                   rootEventHeight = size.height;
                 },
               );
             }
 
-            var event = allEvent[index - 1];
+            final event = allEvent[index - 1];
             if (event.kind == kind.EventKind.ZAP) {
               return ZapEventListComponent(event: event);
             } else if (event.kind == kind.EventKind.TEXT_NOTE) {
@@ -145,7 +145,7 @@ class _EventDetailRouter extends State<EventDetailRouter> {
 
         if (PlatformUtil.isTableMode()) {
           main = GestureDetector(
-            onVerticalDragUpdate: (detail) {
+            onVerticalDragUpdate: (final detail) {
               _controller.jumpTo(_controller.offset - detail.delta.dy);
             },
             behavior: HitTestBehavior.translucent,
@@ -155,10 +155,10 @@ class _EventDetailRouter extends State<EventDetailRouter> {
 
         return main;
       },
-      selector: (context, provider) {
+      selector: (final context, final provider) {
         return this.eventId == null ? null : provider.get(this.eventId!);
       },
-      shouldRebuild: (previous, next) {
+      shouldRebuild: (final previous, final next) {
         if ((previous == null && next != null) ||
             (previous != null &&
                 next != null &&

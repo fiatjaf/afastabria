@@ -1,20 +1,21 @@
-import 'dart:io';
-import 'dart:typed_data';
+import "dart:io";
+import "dart:typed_data";
 
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:path_provider/path_provider.dart';
+import "package:image_gallery_saver/image_gallery_saver.dart";
+import "package:path_provider/path_provider.dart";
 
-import 'package:loure/util/string_util.dart';
+import "package:loure/util/string_util.dart";
 
 class StoreUtil {
   static Future<String> getBasePath() async {
-    Directory appDocDir = await getApplicationDocumentsDirectory();
+    final Directory appDocDir = await getApplicationDocumentsDirectory();
     return appDocDir.path;
   }
 
-  static Future<String> saveBS2TempFile(String extension, List<int> uint8list,
-      {String? randFolderName, String? filename}) async {
-    var tempDir = await getTemporaryDirectory();
+  static Future<String> saveBS2TempFile(
+      final String extension, final List<int> uint8list,
+      {final String? randFolderName, final String? filename}) async {
+    final tempDir = await getTemporaryDirectory();
     var folderPath = tempDir.path;
     if (StringUtil.isNotBlank(randFolderName)) {
       folderPath = "$folderPath/${randFolderName!}";
@@ -25,18 +26,19 @@ class StoreUtil {
       tempFilePath = "$folderPath/${filename!}.$extension";
     }
 
-    var tempFile = File(tempFilePath);
+    final tempFile = File(tempFilePath);
     await tempFile.writeAsBytes(uint8list);
 
     return tempFilePath;
   }
 
-  static Future<void> save2File(String filepath, List<int> uint8list) async {
-    var tempFile = File(filepath);
+  static Future<void> save2File(
+      final String filepath, final List<int> uint8list) async {
+    final tempFile = File(filepath);
     await tempFile.writeAsBytes(uint8list);
   }
 
-  static String bytesToShowStr(int bytesLength) {
+  static String bytesToShowStr(final int bytesLength) {
     double bl = bytesLength.toDouble();
     if (bl < 1024) {
       return "$bl B";
@@ -60,20 +62,20 @@ class StoreUtil {
     return "";
   }
 
-  static void checkAndCreateDir(String dirPath) {
-    var dir = Directory(dirPath);
+  static void checkAndCreateDir(final String dirPath) {
+    final dir = Directory(dirPath);
     if (!dir.existsSync()) {
       dir.createSync();
     }
   }
 
-  static bool checkDir(String dirPath) {
-    var dir = Directory(dirPath);
+  static bool checkDir(final String dirPath) {
+    final dir = Directory(dirPath);
     return dir.existsSync();
   }
 
-  static String? getfileType(String path) {
-    var index = path.lastIndexOf(".");
+  static String? getfileType(final String path) {
+    final index = path.lastIndexOf(".");
     if (index == -1) {
       return null;
     }
@@ -81,8 +83,8 @@ class StoreUtil {
     var n = path.substring(index);
     n = n.toLowerCase();
 
-    var strs = n.split("?");
-    var s = strs[0];
+    final strs = n.split("?");
+    final s = strs[0];
 
     if (s == ".png" ||
         s == ".jpg" ||
@@ -97,8 +99,9 @@ class StoreUtil {
     }
   }
 
-  static Future saveBS2Gallery(String extension, Uint8List uint8list) async {
-    var tempPath = await StoreUtil.saveBS2TempFile(extension, uint8list);
+  static Future saveBS2Gallery(
+      final String extension, final Uint8List uint8list) async {
+    final tempPath = await StoreUtil.saveBS2TempFile(extension, uint8list);
     return await ImageGallerySaver.saveFile(tempPath);
   }
 }

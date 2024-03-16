@@ -1,20 +1,20 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/client/nip58/badge_definition.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/component/image_component.dart';
+import "package:loure/client/nip58/badge_definition.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/component/image_component.dart";
 
 class BedgeComponent extends StatelessWidget {
+  BedgeComponent({
+    required this.badgeDefinition,
+    super.key,
+  });
   static const double IMAGE_WIDTH = 28;
 
   BadgeDefinition badgeDefinition;
 
-  BedgeComponent({super.key, 
-    required this.badgeDefinition,
-  });
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     var imagePath = badgeDefinition.thumb;
     if (StringUtil.isBlank(imagePath)) {
       imagePath = badgeDefinition.image;
@@ -27,11 +27,12 @@ class BedgeComponent extends StatelessWidget {
         width: IMAGE_WIDTH,
         height: IMAGE_WIDTH,
         fit: BoxFit.cover,
-        placeholder: (context, url) => const CircularProgressIndicator(),
+        placeholder: (final context, final url) =>
+            const CircularProgressIndicator(),
       );
     }
 
-    var main = Container(
+    final main = Container(
       alignment: Alignment.center,
       height: IMAGE_WIDTH,
       width: IMAGE_WIDTH,

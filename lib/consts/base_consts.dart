@@ -4,11 +4,10 @@ class OpenStatus {
 }
 
 class EnumObj {
-  final dynamic value;
-  final String name;
-
   EnumObj(
     this.value,
     this.name,
   );
+  final dynamic value;
+  final String name;
 }

@@ -1,25 +1,13 @@
-import 'package:loure/client/event.dart';
+import "package:loure/client/event.dart";
 
 class LongFormInfo {
-  String? title;
-
-  String? image;
-
-  String? summary;
-
-  int? publishedAt;
-
-  List<String> topics = [];
-
-  List<String> as = [];
-
-  LongFormInfo.fromEvent(Event event) {
-    var length = event.tags.length;
+  LongFormInfo.fromEvent(final Event event) {
+    final length = event.tags.length;
     for (var i = 0; i < length; i++) {
-      var tag = event.tags[i];
-      var tagLength = tag.length;
+      final tag = event.tags[i];
+      final tagLength = tag.length;
       if (tagLength > 1) {
-        var value = tag[1];
+        final value = tag[1];
         if (tag[0] == "title") {
           title = value;
         } else if (tag[0] == "summary") {
@@ -36,4 +24,15 @@ class LongFormInfo {
       }
     }
   }
+  String? title;
+
+  String? image;
+
+  String? summary;
+
+  int? publishedAt;
+
+  List<String> topics = [];
+
+  List<String> as = [];
 }

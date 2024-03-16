@@ -1,22 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:loure/client/nip58/badge_definition.dart';
+import "package:flutter/material.dart";
+import "package:loure/client/nip58/badge_definition.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/component/badge_detail_component.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/component/badge_detail_component.dart";
 
 class BadgeDetailDialog extends StatefulWidget {
+  BadgeDetailDialog({
+    required this.badgeDefinition,
+    super.key,
+  });
   BadgeDefinition badgeDefinition;
 
-  BadgeDetailDialog({super.key, 
-    required this.badgeDefinition,
-  });
-
   static Future<bool?> show(
-      BuildContext context, BadgeDefinition badgeDefinition) async {
+      final BuildContext context, final BadgeDefinition badgeDefinition) async {
     return await showDialog<bool>(
       context: context,
-      builder: (context) {
+      builder: (final context) {
         return BadgeDetailDialog(
           badgeDefinition: badgeDefinition,
         );
@@ -32,7 +32,7 @@ class BadgeDetailDialog extends StatefulWidget {
 
 class _BadgeDetailDialog extends State<BadgeDetailDialog> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black.withOpacity(0.2),
       body: FocusScope(

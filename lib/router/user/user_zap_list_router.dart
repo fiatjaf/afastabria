@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/component/event/zap_event_list_component.dart';
-import 'package:loure/util/router_util.dart';
+import "package:loure/client/event.dart";
+import "package:loure/component/event/zap_event_list_component.dart";
+import "package:loure/util/router_util.dart";
 
 class UserZapListRouter extends StatefulWidget {
   const UserZapListRouter({super.key});
@@ -17,10 +17,9 @@ class _UserZapListRouter extends State<UserZapListRouter> {
   List<Event>? zapList;
 
   @override
-  Widget build(BuildContext context) {
-    
+  Widget build(final BuildContext context) {
     if (zapList == null) {
-      var arg = RouterUtil.routerArgs(context);
+      final arg = RouterUtil.routerArgs(context);
       if (arg != null) {
         zapList = arg as List<Event>;
       }
@@ -30,8 +29,8 @@ class _UserZapListRouter extends State<UserZapListRouter> {
       return Container();
     }
 
-    var themeData = Theme.of(context);
-    var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+    final themeData = Theme.of(context);
+    final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
     return Scaffold(
       appBar: AppBar(
@@ -53,8 +52,8 @@ class _UserZapListRouter extends State<UserZapListRouter> {
         ),
       ),
       body: ListView.builder(
-        itemBuilder: (context, index) {
-          var zapEvent = zapList![index];
+        itemBuilder: (final context, final index) {
+          final zapEvent = zapList![index];
           return ZapEventListComponent(event: zapEvent);
         },
         itemCount: zapList!.length,

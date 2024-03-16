@@ -1,8 +1,8 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:loure/util/string_util.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:loure/util/string_util.dart";
 
-import 'package:loure/consts/base.dart';
+import "package:loure/consts/base.dart";
 
 class ZapGoalInputController {
   TextEditingController goalAmountController = TextEditingController();
@@ -20,7 +20,7 @@ class ZapGoalInputController {
     return tags;
   }
 
-  bool checkInput(BuildContext context) {
+  bool checkInput(final BuildContext context) {
     print("goal input call");
     if (StringUtil.isBlank(goalAmountController.text)) {
       print("checked is blank!");
@@ -28,7 +28,7 @@ class ZapGoalInputController {
       return false;
     }
     if (StringUtil.isNotBlank(goalAmountController.text)) {
-      var num = int.tryParse(goalAmountController.text);
+      final num = int.tryParse(goalAmountController.text);
       if (num == null) {
         BotToast.showText(text: "Number parse error");
         return false;
@@ -41,9 +41,8 @@ class ZapGoalInputController {
 
 // ignore: must_be_immutable
 class ZapGoalInputComponent extends StatefulWidget {
+  ZapGoalInputComponent({required this.zapGoalInputController, super.key});
   ZapGoalInputController zapGoalInputController;
-
-  ZapGoalInputComponent({super.key, required this.zapGoalInputController});
 
   @override
   State<StatefulWidget> createState() {
@@ -58,12 +57,12 @@ class _ZapGoalInputComponent extends State<ZapGoalInputComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     // var themeData = Theme.of(context);
     // var mainColor = themeData.primaryColor;
     List<Widget> list = [];
 
-    Widget inputWidget = TextField(
+    final Widget inputWidget = TextField(
       controller: widget.zapGoalInputController.goalAmountController,
       decoration: const InputDecoration(
         hintText: "Goal Amount In Sats",

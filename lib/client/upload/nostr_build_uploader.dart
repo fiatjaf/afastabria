@@ -1,6 +1,6 @@
-import 'package:dio/dio.dart';
+import "package:dio/dio.dart";
 
-import 'package:loure/consts/base64.dart';
+import "package:loure/consts/base64.dart";
 
 class NostrBuildUploader {
   static var dio = Dio();
@@ -33,10 +33,11 @@ class NostrBuildUploader {
 
   static const String UPLOAD_ACTION = "https://nostr.build/api/v2/upload/files";
 
-  static Future<String?> upload(String filePath, {String? fileName}) async {
+  static Future<String?> upload(final String filePath,
+      {final String? fileName}) async {
     MultipartFile? multipartFile;
     if (BASE64.check(filePath)) {
-      var bytes = BASE64.toData(filePath);
+      final bytes = BASE64.toData(filePath);
       multipartFile = MultipartFile.fromBytes(
         bytes,
         filename: fileName,
@@ -48,9 +49,9 @@ class NostrBuildUploader {
       );
     }
 
-    var formData = FormData.fromMap({"file": multipartFile});
-    var response = await dio.post(UPLOAD_ACTION, data: formData);
-    var body = response.data;
+    final formData = FormData.fromMap({"file": multipartFile});
+    final response = await dio.post(UPLOAD_ACTION, data: formData);
+    final body = response.data;
     if (body is Map<String, dynamic> && body["status"] == "success") {
       return body["data"][0]["url"];
     }

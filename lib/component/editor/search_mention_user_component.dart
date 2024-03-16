@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/client/nip19/nip19.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/data/metadata_db.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/util/when_stop_function.dart';
-import 'package:loure/component/image_component.dart';
-import 'package:loure/component/editor/search_mention_component.dart';
+import "package:loure/client/nip19/nip19.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/data/metadata_db.dart";
+import "package:loure/main.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/util/when_stop_function.dart";
+import "package:loure/component/image_component.dart";
+import "package:loure/component/editor/search_mention_component.dart";
 
 class SearchMentionUserComponent extends StatefulWidget {
   const SearchMentionUserComponent({super.key});
@@ -25,8 +25,8 @@ class _SearchMentionUserComponent extends State<SearchMentionUserComponent>
   double itemWidth = 50;
 
   @override
-  Widget build(BuildContext context) {
-    var contentWidth = mediaDataCache.size.width - 4 * Base.BASE_PADDING;
+  Widget build(final BuildContext context) {
+    final contentWidth = mediaDataCache.size.width - 4 * Base.BASE_PADDING;
     itemWidth = (contentWidth - 10) / 2;
 
     return SearchMentionComponent(
@@ -37,7 +37,7 @@ class _SearchMentionUserComponent extends State<SearchMentionUserComponent>
 
   Widget resultBuild() {
     List<Widget> userWidgetList = [];
-    for (var metadata in metadatas) {
+    for (final metadata in metadatas) {
       userWidgetList.add(SearchMentionUserItemComponent(
         metadata: metadata,
         width: itemWidth,
@@ -64,7 +64,7 @@ class _SearchMentionUserComponent extends State<SearchMentionUserComponent>
 
   List<Metadata> metadatas = [];
 
-  void handleSearch(String text) async {
+  void handleSearch(final String text) async {
     metadatas.clear();
 
     if (text.length >= 2) {
@@ -77,22 +77,21 @@ class _SearchMentionUserComponent extends State<SearchMentionUserComponent>
 }
 
 class SearchMentionUserItemComponent extends StatelessWidget {
+  const SearchMentionUserItemComponent({
+    required this.metadata,
+    required this.width,
+    super.key,
+  });
   static const double IMAGE_WIDTH = 36;
   final Metadata metadata;
   final double width;
 
-  const SearchMentionUserItemComponent({
-    super.key,
-    required this.metadata,
-    required this.width,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
     // var mainColor = themeData.primaryColor;
-    var cardColor = themeData.cardColor;
-    Color hintColor = themeData.hintColor;
+    final cardColor = themeData.cardColor;
+    final Color hintColor = themeData.hintColor;
 
     Widget? imageWidget;
     if (StringUtil.isNotBlank(metadata.picture)) {
@@ -101,11 +100,12 @@ class SearchMentionUserItemComponent extends StatelessWidget {
         width: IMAGE_WIDTH,
         height: IMAGE_WIDTH,
         fit: BoxFit.cover,
-        placeholder: (context, url) => const CircularProgressIndicator(),
+        placeholder: (final context, final url) =>
+            const CircularProgressIndicator(),
       );
     }
 
-    String nip19Name = Nip19.encodeSimplePubKey(metadata.pubkey);
+    final String nip19Name = Nip19.encodeSimplePubKey(metadata.pubkey);
     String displayName = nip19Name;
     String name = "";
     if (StringUtil.isNotBlank(metadata.displayName)) {
@@ -115,7 +115,7 @@ class SearchMentionUserItemComponent extends StatelessWidget {
       name = metadata.name!;
     }
 
-    var main = Container(
+    final main = Container(
       width: width,
       color: cardColor,
       padding: const EdgeInsets.all(Base.BASE_PADDING_HALF),

@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:loure/main.dart';
+import "package:flutter/material.dart";
+import "package:loure/main.dart";
 
-import 'package:loure/component/user/metadata_component.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
+import "package:loure/component/user/metadata_component.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
 
 class FollowedRouter extends StatefulWidget {
   const FollowedRouter({super.key});
@@ -42,18 +42,18 @@ class _FollowedRouter extends State<FollowedRouter> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     if (this.metadataFutures == null) {
       return Container();
     }
 
-    var themeData = Theme.of(context);
-    var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+    final themeData = Theme.of(context);
+    final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
-    var listView = ListView.builder(
+    final listView = ListView.builder(
       controller: scrollController,
-      itemBuilder: (context, index) {
-        var pubkey = pubkeys![index];
+      itemBuilder: (final context, final index) {
+        final pubkey = pubkeys![index];
         if (StringUtil.isBlank(pubkey)) {
           return Container();
         }
@@ -63,7 +63,7 @@ class _FollowedRouter extends State<FollowedRouter> {
           child: FutureBuilder(
             future: this.metadataFutures![index],
             initialData: Metadata.blank(pubkey),
-            builder: (context, snapshot) {
+            builder: (final context, final snapshot) {
               return GestureDetector(
                 onTap: () {
                   RouterUtil.router(context, RouterPath.USER, pubkey);
@@ -82,7 +82,7 @@ class _FollowedRouter extends State<FollowedRouter> {
       itemCount: pubkeys!.length,
     );
 
-    var main = Scaffold(
+    final main = Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
@@ -106,7 +106,7 @@ class _FollowedRouter extends State<FollowedRouter> {
 
     if (PlatformUtil.isTableMode()) {
       return GestureDetector(
-        onVerticalDragUpdate: (detail) {
+        onVerticalDragUpdate: (final detail) {
           scrollController.jumpTo(scrollController.offset - detail.delta.dy);
         },
         behavior: HitTestBehavior.translucent,

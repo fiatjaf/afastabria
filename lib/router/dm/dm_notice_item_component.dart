@@ -1,38 +1,38 @@
-import 'package:flutter/material.dart';
-import 'package:get_time_ago/get_time_ago.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/notice_provider.dart';
+import "package:flutter/material.dart";
+import "package:get_time_ago/get_time_ago.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/notice_provider.dart";
 
-import 'package:loure/component/point_component.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
+import "package:loure/component/point_component.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
 
 class DMNoticeItemComponent extends StatelessWidget {
+  DMNoticeItemComponent({
+    required this.newestNotice,
+    super.key,
+    this.hasNewMessage = false,
+  });
   static const double IMAGE_WIDTH = 34;
 
   NoticeData newestNotice;
 
   bool hasNewMessage;
 
-  DMNoticeItemComponent({super.key, 
-    required this.newestNotice,
-    this.hasNewMessage = false,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
-    var hintColor = themeData.hintColor;
-    var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
+    final hintColor = themeData.hintColor;
+    final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
 
     var content = newestNotice.content;
     content = content.replaceAll("\r", " ");
     content = content.replaceAll("\n", " ");
 
-    var leftWidget = Container(
+    final leftWidget = Container(
       margin: const EdgeInsets.only(top: 4),
       child: Container(
         width: IMAGE_WIDTH,
@@ -64,7 +64,7 @@ class DMNoticeItemComponent extends StatelessWidget {
       ));
     }
 
-    var main = Container(
+    final main = Container(
       padding: const EdgeInsets.all(Base.BASE_PADDING),
       decoration: BoxDecoration(
           border: Border(

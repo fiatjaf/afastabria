@@ -1,23 +1,23 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/main.dart';
+import "package:device_info_plus/device_info_plus.dart";
+import "package:flutter/material.dart";
+import "package:flutter/foundation.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/main.dart";
 
 class PlatformUtil {
   static BaseDeviceInfo? deviceInfo;
 
   static bool _isTable = false;
 
-  static Future<void> init(BuildContext context) async {
+  static Future<void> init(final BuildContext context) async {
     if (deviceInfo == null) {
-      var deviceInfoPlus = DeviceInfoPlugin();
+      final deviceInfoPlus = DeviceInfoPlugin();
       deviceInfo = await deviceInfoPlus.deviceInfo;
     }
 
-    var size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     if (!isWeb() &&
         Platform.isIOS &&
         deviceInfo != null &&

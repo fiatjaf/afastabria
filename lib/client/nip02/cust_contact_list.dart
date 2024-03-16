@@ -1,26 +1,22 @@
-import 'package:loure/client/nip02/contact.dart';
+import "package:loure/client/nip02/contact.dart";
 
 class CustContactList {
-  final Map<String, Contact> _contacts;
-  final Map<String, int> _followedTags;
-  final Map<String, int> _followedCommunitys;
-
   CustContactList()
       : _contacts = {},
         _followedTags = {},
         _followedCommunitys = {};
 
-  factory CustContactList.fromJson(List<List<String>> tags) {
+  factory CustContactList.fromJson(final List<List<String>> tags) {
     Map<String, Contact> contacts = {};
     Map<String, int> followedTags = {};
     Map<String, int> followedCommunitys = {};
-    for (var tag in tags) {
-      var length = tag.length;
+    for (final tag in tags) {
+      final length = tag.length;
       if (length == 0) {
         continue;
       }
 
-      var t = tag[0];
+      final t = tag[0];
       if (t == "p") {
         String url = "";
         String petname = "";
@@ -33,10 +29,10 @@ class CustContactList {
         final contact = Contact(publicKey: tag[1], url: url, petname: petname);
         contacts[contact.publicKey] = contact;
       } else if (t == "t" && length > 1) {
-        var tagName = tag[1];
+        final tagName = tag[1];
         followedTags[tagName] = 1;
       } else if (t == "a" && length > 1) {
-        var id = tag[1];
+        final id = tag[1];
         followedCommunitys[id] = 1;
       }
     }
@@ -45,30 +41,33 @@ class CustContactList {
 
   CustContactList._(
       this._contacts, this._followedTags, this._followedCommunitys);
+  final Map<String, Contact> _contacts;
+  final Map<String, int> _followedTags;
+  final Map<String, int> _followedCommunitys;
 
   List<List<String>> toTags() {
     List<List<String>> result = [];
-    for (Contact contact in _contacts.values) {
+    for (final Contact contact in _contacts.values) {
       result.add(["p", contact.publicKey, contact.url, contact.petname]);
     }
-    for (var followedTag in _followedTags.keys) {
+    for (final followedTag in _followedTags.keys) {
       result.add(["t", followedTag]);
     }
-    for (var id in _followedCommunitys.keys) {
+    for (final id in _followedCommunitys.keys) {
       result.add(["a", id]);
     }
     return result;
   }
 
-  void add(Contact contact) {
+  void add(final Contact contact) {
     _contacts[contact.publicKey] = contact;
   }
 
-  Contact? get(String publicKey) {
+  Contact? get(final String publicKey) {
     return _contacts[publicKey];
   }
 
-  Contact? remove(String publicKey) {
+  Contact? remove(final String publicKey) {
     return _contacts.remove(publicKey);
   }
 
@@ -88,15 +87,15 @@ class CustContactList {
     _contacts.clear();
   }
 
-  bool containsTag(String tagName) {
+  bool containsTag(final String tagName) {
     return _followedTags.containsKey(tagName);
   }
 
-  void addTag(String tagName) {
+  void addTag(final String tagName) {
     _followedTags[tagName] = 1;
   }
 
-  void removeTag(String tagName) {
+  void removeTag(final String tagName) {
     _followedTags.remove(tagName);
   }
 
@@ -108,15 +107,15 @@ class CustContactList {
     return _followedTags.keys;
   }
 
-  bool containsCommunity(String id) {
+  bool containsCommunity(final String id) {
     return _followedCommunitys.containsKey(id);
   }
 
-  void addCommunity(String id) {
+  void addCommunity(final String id) {
     _followedCommunitys[id] = 1;
   }
 
-  void removeCommunity(String id) {
+  void removeCommunity(final String id) {
     _followedCommunitys.remove(id);
   }
 

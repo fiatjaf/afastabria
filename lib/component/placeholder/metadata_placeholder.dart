@@ -1,19 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_placeholder_textlines/placeholder_lines.dart';
+import "package:flutter/material.dart";
+import "package:flutter_placeholder_textlines/placeholder_lines.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/component/placeholder/metadata_top_placeholder.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/component/placeholder/metadata_top_placeholder.dart";
 
 class MetadataPlaceholder extends StatelessWidget {
   const MetadataPlaceholder({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
 
-    var textLineMagin = const EdgeInsets.only(bottom: 6);
+    const textLineMagin = EdgeInsets.only(bottom: 6);
 
     List<Widget> mainList = [];
 

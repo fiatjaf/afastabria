@@ -1,8 +1,8 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:loure/util/string_util.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:loure/util/string_util.dart";
 
-import 'package:loure/consts/base.dart';
+import "package:loure/consts/base.dart";
 
 class PollInputController {
   TextEditingController minValueController = TextEditingController();
@@ -17,9 +17,9 @@ class PollInputController {
 
   List<List<String>> getTags() {
     List<List<String>> tags = [];
-    var length = pollOptionControllers.length;
+    final length = pollOptionControllers.length;
     for (var i = 0; i < length; i++) {
-      var pollPotion = pollOptionControllers[i];
+      final pollPotion = pollOptionControllers[i];
       tags.add(["poll_option", "$i", pollPotion.text]);
     }
     if (StringUtil.isNotBlank(maxValueController.text)) {
@@ -32,23 +32,23 @@ class PollInputController {
     return tags;
   }
 
-  bool checkInput(BuildContext context) {
+  bool checkInput(final BuildContext context) {
     if (StringUtil.isNotBlank(maxValueController.text)) {
-      var num = int.tryParse(maxValueController.text);
+      final num = int.tryParse(maxValueController.text);
       if (num == null) {
         BotToast.showText(text: "Number parse error");
         return false;
       }
     }
     if (StringUtil.isNotBlank(minValueController.text)) {
-      var num = int.tryParse(minValueController.text);
+      final num = int.tryParse(minValueController.text);
       if (num == null) {
         BotToast.showText(text: "Number parse error");
         return false;
       }
     }
 
-    for (var pollOptionController in pollOptionControllers) {
+    for (final pollOptionController in pollOptionControllers) {
       if (StringUtil.isBlank(pollOptionController.text)) {
         BotToast.showText(text: "Input can not be null");
         return false;
@@ -61,9 +61,8 @@ class PollInputController {
 
 // ignore: must_be_immutable
 class PollInputComponent extends StatefulWidget {
+  PollInputComponent({required this.pollInputController, super.key});
   PollInputController pollInputController;
-
-  PollInputComponent({super.key, required this.pollInputController});
 
   @override
   State<StatefulWidget> createState() {
@@ -83,9 +82,9 @@ class _PollInputComponent extends State<PollInputComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
     List<Widget> list = [];
 
     bool delAble = false;
@@ -93,7 +92,7 @@ class _PollInputComponent extends State<PollInputComponent> {
       delAble = true;
     }
 
-    for (var controller in widget.pollInputController.pollOptionControllers) {
+    for (final controller in widget.pollInputController.pollOptionControllers) {
       Widget inputWidget = TextField(
         controller: controller,
         decoration: const InputDecoration(
@@ -183,7 +182,7 @@ class _PollInputComponent extends State<PollInputComponent> {
     setState(() {});
   }
 
-  void delPollOption(TextEditingController controller) {
+  void delPollOption(final TextEditingController controller) {
     widget.pollInputController.pollOptionControllers.remove(controller);
     setState(() {});
   }

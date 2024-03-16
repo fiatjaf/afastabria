@@ -1,20 +1,20 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/component/event/zap_event_main_component.dart';
+import "package:loure/client/event.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/component/event/zap_event_main_component.dart";
 
 class ZapEventListComponent extends StatefulWidget {
+  ZapEventListComponent({
+    required this.event,
+    super.key,
+    this.jumpable = true,
+  });
   Event event;
 
   bool jumpable;
-
-  ZapEventListComponent({super.key, 
-    required this.event,
-    this.jumpable = true,
-  });
 
   @override
   State<StatefulWidget> createState() {
@@ -24,11 +24,11 @@ class ZapEventListComponent extends StatefulWidget {
 
 class _ZapEventListComponent extends State<ZapEventListComponent> {
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
 
-    var main = Container(
+    final main = Container(
       color: cardColor,
       margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
       padding: const EdgeInsets.only(

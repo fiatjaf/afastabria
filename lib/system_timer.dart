@@ -1,4 +1,4 @@
-import 'dart:async';
+import "dart:async";
 
 class SystemTimer {
   static int counter = 0;
@@ -9,7 +9,7 @@ class SystemTimer {
     if (timer != null) {
       timer!.cancel();
     }
-    timer = Timer.periodic(const Duration(seconds: 15), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 15), (final timer) {
       try {
         runTask();
         counter++;

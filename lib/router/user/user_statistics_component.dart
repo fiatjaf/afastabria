@@ -1,27 +1,26 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:loure/client/relay/relay_pool.dart';
-import 'package:loure/provider/contact_list_provider.dart';
-import 'package:provider/provider.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:loure/client/relay/relay_pool.dart";
+import "package:loure/provider/contact_list_provider.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/event_kind.dart' as kind;
-import 'package:loure/client/nip02/cust_contact_list.dart';
-import 'package:loure/client/filter.dart';
-import 'package:loure/client/zap/zap_num_util.dart';
-import 'package:loure/component/cust_state.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/data/event_mem_box.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/number_format_util.dart';
-import 'package:loure/util/router_util.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/event_kind.dart" as kind;
+import "package:loure/client/nip02/cust_contact_list.dart";
+import "package:loure/client/filter.dart";
+import "package:loure/client/zap/zap_num_util.dart";
+import "package:loure/component/cust_state.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/data/event_mem_box.dart";
+import "package:loure/main.dart";
+import "package:loure/util/number_format_util.dart";
+import "package:loure/util/router_util.dart";
 
 // ignore: must_be_immutable
 class UserStatisticsComponent extends StatefulWidget {
+  UserStatisticsComponent({required this.pubkey, super.key});
   String pubkey;
-
-  UserStatisticsComponent({super.key, required this.pubkey});
 
   @override
   State<StatefulWidget> createState() {
@@ -48,7 +47,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
   String? pubkey;
 
   @override
-  Widget doBuild(BuildContext context) {
+  Widget doBuild(final BuildContext context) {
     if (pubkey != null && pubkey != widget.pubkey) {
       // arg changed! reset
       this.contactListEvent = null;
@@ -72,15 +71,15 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     List<Widget> list = [];
 
     if (isLocal) {
-      list.add(
-          Selector<ContactListProvider, int>(builder: (context, num_, child) {
+      list.add(Selector<ContactListProvider, int>(
+          builder: (final context, final num_, final child) {
         return UserStatisticsItemComponent(
           num: num_,
           name: "Following",
           onTap: onFollowingTap,
           onLongPressStart: onLongPressStart,
         );
-      }, selector: (context, provider) {
+      }, selector: (final context, final provider) {
         return provider.total();
       }));
     } else {
@@ -92,10 +91,11 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     }
 
     if (isLocal) {
-      list.add(Selector<RelayPool, int>(builder: (context, num_, child) {
+      list.add(Selector<RelayPool, int>(
+          builder: (final context, final num_, final child) {
         return UserStatisticsItemComponent(
             num: num_, name: "Relays", onTap: onRelaysTap);
-      }, selector: (context, provider) {
+      }, selector: (final context, final provider) {
         return provider.relayStatusMap.length;
       }));
     } else {
@@ -121,14 +121,14 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     ));
 
     if (isLocal) {
-      list.add(
-          Selector<ContactListProvider, int>(builder: (context, num_, child) {
+      list.add(Selector<ContactListProvider, int>(
+          builder: (final context, final num_, final child) {
         return UserStatisticsItemComponent(
           num: num_,
           name: "Followed Tags",
           onTap: onFollowedTagsTap,
         );
-      }, selector: (context, provider) {
+      }, selector: (final context, final provider) {
         return provider.totalFollowedTags();
       }));
     } else {
@@ -142,14 +142,14 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     }
 
     if (isLocal) {
-      list.add(
-          Selector<ContactListProvider, int>(builder: (context, num_, child) {
+      list.add(Selector<ContactListProvider, int>(
+          builder: (final context, final num_, final child) {
         return UserStatisticsItemComponent(
           num: num_,
           name: "Followed Communities",
           onTap: onFollowedCommunitiesTap,
         );
-      }, selector: (context, provider) {
+      }, selector: (final context, final provider) {
         return provider.totalfollowedCommunities();
       }));
     } else {
@@ -176,14 +176,14 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
 
   EventMemBox? localContactBox;
 
-  void onLongPressStart(LongPressStartDetails d) {
+  void onLongPressStart(final LongPressStartDetails d) {
     localContactBox = EventMemBox(sortAfterAdd: false);
     pool
         .querySingle(
             nostr.CONTACT_RELAYS,
             Filter(
                 authors: [widget.pubkey], kinds: [kind.EventKind.CONTACT_LIST]))
-        .then((event) {
+        .then((final event) {
       if (event != null) {
         localContactBox!.add(event);
       }
@@ -192,7 +192,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     if (!isLocal) {
       doQuery();
     }
@@ -242,7 +242,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     if (contactList != null) {
       RouterUtil.router(context, RouterPath.USER_CONTACT_LIST, contactList);
     } else if (isLocal) {
-      var cl = contactListProvider.contactList;
+      final cl = contactListProvider.contactList;
       if (cl != null) {
         RouterUtil.router(context, RouterPath.USER_CONTACT_LIST, cl);
       }
@@ -253,7 +253,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     if (contactList != null) {
       RouterUtil.router(context, RouterPath.FOLLOWED_TAGS_LIST, contactList);
     } else if (isLocal) {
-      var cl = contactListProvider.contactList;
+      final cl = contactListProvider.contactList;
       if (cl != null) {
         RouterUtil.router(context, RouterPath.FOLLOWED_TAGS_LIST, cl);
       }
@@ -302,10 +302,10 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     if (zapEventBox == null) {
       zapEventBox = EventMemBox(sortAfterAdd: false);
       // pull zap event
-      var filter =
+      final filter =
           Filter(kinds: [kind.EventKind.ZAP], p: [widget.pubkey], limit: 1);
-      pool
-          .querySingle(["wss://relay.nostr.band"], filter).then((Event? event) {
+      pool.querySingle(["wss://relay.nostr.band"], filter).then(
+          (final Event? event) {
         if (event == null) return;
         if (event.kind == kind.EventKind.ZAP && zapEventBox!.add(event)) {
           setState(() {
@@ -318,7 +318,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     } else {
       // Router to vist list
       zapEventBox!.sort();
-      var list = zapEventBox!.all();
+      final list = zapEventBox!.all();
       RouterUtil.router(context, RouterPath.USER_ZAP_LIST, list);
     }
   }
@@ -343,7 +343,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     if (contactList != null) {
       RouterUtil.router(context, RouterPath.FOLLOWED_COMMUNITIES, contactList);
     } else if (isLocal) {
-      var cl = contactListProvider.contactList;
+      final cl = contactListProvider.contactList;
       if (cl != null) {
         RouterUtil.router(context, RouterPath.FOLLOWED_COMMUNITIES, cl);
       }
@@ -353,26 +353,25 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
 
 // ignore: must_be_immutable
 class UserStatisticsItemComponent extends StatelessWidget {
+  UserStatisticsItemComponent({
+    required this.num,
+    required this.name,
+    required this.onTap,
+    super.key,
+    this.formatNum = false,
+    this.onLongPressStart,
+  });
   int? num;
   String name;
   Function onTap;
   bool formatNum;
   Function(LongPressStartDetails)? onLongPressStart;
 
-  UserStatisticsItemComponent({
-    super.key,
-    required this.num,
-    required this.name,
-    required this.onTap,
-    this.formatNum = false,
-    this.onLongPressStart,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var fontSize = themeData.textTheme.bodySmall!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final fontSize = themeData.textTheme.bodySmall!.fontSize;
 
     List<Widget> list = [];
     if (num != null) {

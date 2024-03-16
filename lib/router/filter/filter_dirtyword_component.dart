@@ -1,11 +1,11 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/filter_provider.dart';
-import 'package:provider/provider.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/filter_provider.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/string_util.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/util/string_util.dart";
 
 class FilterDirtywordComponent extends StatefulWidget {
   const FilterDirtywordComponent({super.key});
@@ -20,12 +20,12 @@ class _FilterDirtywordComponent extends State<FilterDirtywordComponent> {
   TextEditingController controller = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
-        var filterProvider = Provider.of<FilterProvider>(context);
-    var dirtywordList = filterProvider.dirtywordList;
+  Widget build(final BuildContext context) {
+    final filterProvider = Provider.of<FilterProvider>(context);
+    final dirtywordList = filterProvider.dirtywordList;
 
     List<Widget> list = [];
-    for (var dirtyword in dirtywordList) {
+    for (final dirtyword in dirtywordList) {
       list.add(FilterDirtywordItemComponent(word: dirtyword));
     }
 
@@ -77,9 +77,8 @@ class _FilterDirtywordComponent extends State<FilterDirtywordComponent> {
 
 // ignore: must_be_immutable
 class FilterDirtywordItemComponent extends StatefulWidget {
+  FilterDirtywordItemComponent({required this.word, super.key});
   String word;
-
-  FilterDirtywordItemComponent({super.key, required this.word});
 
   @override
   State<StatefulWidget> createState() {
@@ -92,11 +91,11 @@ class _FilterDirtywordItemComponent
   bool showDel = false;
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
-    var mainColor = themeData.primaryColor;
-    var fontColor = themeData.appBarTheme.titleTextStyle!.color;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
+    final mainColor = themeData.primaryColor;
+    final fontColor = themeData.appBarTheme.titleTextStyle!.color;
 
     List<Widget> list = [
       GestureDetector(

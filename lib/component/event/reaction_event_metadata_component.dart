@@ -1,20 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/router_util.dart';
+import "package:flutter/material.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/main.dart";
+import "package:loure/util/router_util.dart";
 
-import 'package:loure/data/metadata.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/component/image_component.dart';
-import 'package:loure/component/simple_name_component.dart';
+import "package:loure/data/metadata.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/component/image_component.dart";
+import "package:loure/component/simple_name_component.dart";
 
 class ReactionEventMetadataComponent extends StatefulWidget {
-  final String pubkey;
-
   const ReactionEventMetadataComponent({
-    super.key,
     required this.pubkey,
+    super.key,
   });
+  final String pubkey;
 
   @override
   State<StatefulWidget> createState() {
@@ -27,16 +26,17 @@ class ReactionEventMetadataComponentState
   static const double IMAGE_WIDTH = 20;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return FutureBuilder(
         future: metadataLoader.load(widget.pubkey),
         initialData: Metadata.blank(widget.pubkey),
-        builder: (context, snapshot) {
+        builder: (final context, final snapshot) {
           final metadata = snapshot.data;
 
           List<Widget> list = [];
 
-          var name = SimpleNameComponent.getSimpleName(widget.pubkey, metadata);
+          final name =
+              SimpleNameComponent.getSimpleName(widget.pubkey, metadata);
 
           Widget? imageWidget;
           if (metadata != null) {
@@ -46,7 +46,7 @@ class ReactionEventMetadataComponentState
                 width: IMAGE_WIDTH,
                 height: IMAGE_WIDTH,
                 fit: BoxFit.cover,
-                placeholder: (context, url) =>
+                placeholder: (final context, final url) =>
                     const CircularProgressIndicator(),
               );
             }

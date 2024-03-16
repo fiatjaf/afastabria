@@ -1,22 +1,22 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/consts/base.dart';
+import "package:loure/consts/base.dart";
 
 class SearchActionItemComponent extends StatelessWidget {
+  SearchActionItemComponent({
+    required this.title,
+    required this.onTap,
+    super.key,
+  });
   String title;
 
   Function onTap;
 
-  SearchActionItemComponent({super.key, 
-    required this.title,
-    required this.onTap,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var fontSize = themeData.textTheme.bodyLarge!.fontSize;
-    var hintColor = themeData.hintColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final fontSize = themeData.textTheme.bodyLarge!.fontSize;
+    final hintColor = themeData.hintColor;
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,

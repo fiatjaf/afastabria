@@ -1,22 +1,21 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/provider/pc_router_fake_provider.dart';
+import "package:loure/provider/pc_router_fake_provider.dart";
 
 class PcRouterFake extends InheritedWidget {
-  RouterFakeInfo info;
-
   PcRouterFake({
-    super.key,
     required super.child,
     required this.info,
+    super.key,
   });
+  RouterFakeInfo info;
 
-  static PcRouterFake? of(BuildContext context) {
+  static PcRouterFake? of(final BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<PcRouterFake>();
   }
 
   @override
-  bool updateShouldNotify(covariant PcRouterFake oldWidget) {
+  bool updateShouldNotify(covariant final PcRouterFake oldWidget) {
     return false;
   }
 }

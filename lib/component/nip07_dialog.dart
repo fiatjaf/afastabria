@@ -1,31 +1,30 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:flutter/material.dart';
-import 'package:loure/client/nip07/kind_descriptions.dart';
-import 'package:loure/client/nip07/nip07_methods.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/string_util.dart';
+import "package:flutter/material.dart";
+import "package:loure/client/nip07/kind_descriptions.dart";
+import "package:loure/client/nip07/nip07_methods.dart";
+import "package:loure/main.dart";
+import "package:loure/util/string_util.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/router_util.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/util/router_util.dart";
 
 // ignore: must_be_immutable
 class NIP07Dialog extends StatefulWidget {
+  NIP07Dialog({
+    required this.method,
+    super.key,
+    this.content,
+  });
   String method;
 
   String? content;
 
-  NIP07Dialog({
-    super.key,
-    required this.method,
-    this.content,
-  });
-
-  static Future<bool?> show(BuildContext context, String method,
-      {String? content}) async {
+  static Future<bool?> show(final BuildContext context, final String method,
+      {final String? content}) async {
     return await showDialog<bool>(
       context: context,
-      builder: (context) {
+      builder: (final context) {
         return NIP07Dialog(
           method: method,
           content: content,
@@ -42,12 +41,12 @@ class NIP07Dialog extends StatefulWidget {
 
 class _NIP07Dialog extends State<NIP07Dialog> {
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
     // var mainColor = themeData.primaryColor;
-    var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
-    Color cardColor = themeData.cardColor;
-    var hintColor = themeData.hintColor;
+    final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+    final Color cardColor = themeData.cardColor;
+    final hintColor = themeData.hintColor;
 
     List<Widget> list = [];
     list.add(
@@ -83,9 +82,9 @@ class _NIP07Dialog extends State<NIP07Dialog> {
       methodDesc = "Sign Event";
       try {
         if (StringUtil.isNotBlank(widget.content)) {
-          var jsonObj = jsonDecode(widget.content!);
-          var eventKind = jsonObj["kind"];
-          var kindDesc = KindDescriptions.getDes(eventKind);
+          final jsonObj = jsonDecode(widget.content!);
+          final eventKind = jsonObj["kind"];
+          final kindDesc = KindDescriptions.getDes(eventKind);
           methodDesc += ": $kindDesc";
         }
       } catch (e) {}
@@ -165,7 +164,7 @@ class _NIP07Dialog extends State<NIP07Dialog> {
       ]),
     ));
 
-    var main = Container(
+    final main = Container(
       padding: const EdgeInsets.all(20),
       constraints: BoxConstraints(maxHeight: mediaDataCache.size.height * 0.85),
       decoration: BoxDecoration(

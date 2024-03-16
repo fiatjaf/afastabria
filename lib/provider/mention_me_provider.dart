@@ -1,21 +1,20 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/client/event_kind.dart';
-import 'package:loure/client/event.dart';
-import 'package:loure/client/filter.dart';
-import 'package:loure/client/relay/relay_pool.dart';
-import 'package:loure/data/event_mem_box.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/pendingevents_later_function.dart';
+import "package:loure/client/event_kind.dart";
+import "package:loure/client/event.dart";
+import "package:loure/client/filter.dart";
+import "package:loure/client/relay/relay_pool.dart";
+import "package:loure/data/event_mem_box.dart";
+import "package:loure/main.dart";
+import "package:loure/util/pendingevents_later_function.dart";
 
 class MentionMeProvider extends ChangeNotifier with PendingEventsLaterFunction {
-  late int _initTime;
-  late EventMemBox eventBox;
-
   MentionMeProvider() {
     _initTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     eventBox = EventMemBox();
   }
+  late int _initTime;
+  late EventMemBox eventBox;
 
   void refresh() {
     _initTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
@@ -25,8 +24,8 @@ class MentionMeProvider extends ChangeNotifier with PendingEventsLaterFunction {
     mentionMeNewProvider.clear();
   }
 
-  void deleteEvent(String id) {
-    var result = eventBox.delete(id);
+  void deleteEvent(final String id) {
+    final result = eventBox.delete(id);
     if (result) {
       notifyListeners();
     }
@@ -38,7 +37,7 @@ class MentionMeProvider extends ChangeNotifier with PendingEventsLaterFunction {
 
   ManySubscriptionHandle? subHandle;
 
-  void doQuery({int? until}) {
+  void doQuery({final int? until}) {
     if (this.subHandle != null) {
       this.subHandle!.close();
     }
@@ -57,12 +56,12 @@ class MentionMeProvider extends ChangeNotifier with PendingEventsLaterFunction {
       p: [nostr.publicKey],
     );
 
-    var relays = [...nostr.relayList.read];
+    final relays = [...nostr.relayList.read];
     List<Filter> Function(String, List<Filter>)? filterModifier;
 
     if (!this.eventBox.isEmpty()) {
-      var oldestCreatedAts = this.eventBox.oldestCreatedAtByRelay(relays);
-      filterModifier = (url, filters) {
+      final oldestCreatedAts = this.eventBox.oldestCreatedAtByRelay(relays);
+      filterModifier = (final url, final filters) {
         filters[0].until = oldestCreatedAts.createdAtMap[url] ?? until;
         return filters;
       };
@@ -71,9 +70,9 @@ class MentionMeProvider extends ChangeNotifier with PendingEventsLaterFunction {
     pool.querySync(relays, filter, filterModifier: filterModifier);
   }
 
-  void onEvent(Event event) {
-    later(event, (list) {
-      var result = eventBox.addList(list);
+  void onEvent(final Event event) {
+    later(event, (final list) {
+      final result = eventBox.addList(list);
       if (result) {
         notifyListeners();
       }
@@ -86,7 +85,7 @@ class MentionMeProvider extends ChangeNotifier with PendingEventsLaterFunction {
   }
 
   void mergeNewEvent() {
-    var allEvents = mentionMeNewProvider.eventMemBox.all();
+    final allEvents = mentionMeNewProvider.eventMemBox.all();
 
     eventBox.addList(allEvents);
     eventBox.sort();

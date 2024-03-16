@@ -1,15 +1,15 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:loure/data/custom_emoji.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:loure/data/custom_emoji.dart";
 
-import 'package:loure/client/upload/uploader.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/component/content/content_custom_emoji_component.dart';
+import "package:loure/client/upload/uploader.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/main.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/component/content/content_custom_emoji_component.dart";
 
 class CustomEmojiAddDialog extends StatefulWidget {
   const CustomEmojiAddDialog({super.key});
@@ -19,10 +19,10 @@ class CustomEmojiAddDialog extends StatefulWidget {
     return _CustomEmojiAddDialog();
   }
 
-  static Future<CustomEmoji?> show(BuildContext context) async {
+  static Future<CustomEmoji?> show(final BuildContext context) async {
     return await showDialog<CustomEmoji>(
       context: context,
-      builder: (context) {
+      builder: (final context) {
         return const CustomEmojiAddDialog();
       },
     );
@@ -39,11 +39,11 @@ class _CustomEmojiAddDialog extends State<CustomEmojiAddDialog> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    Color cardColor = themeData.cardColor;
-    var mainColor = themeData.primaryColor;
-    var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final Color cardColor = themeData.cardColor;
+    final mainColor = themeData.primaryColor;
+    final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
     List<Widget> list = [];
 
@@ -95,9 +95,7 @@ class _CustomEmojiAddDialog extends State<CustomEmojiAddDialog> {
       child: Ink(
         decoration: BoxDecoration(color: mainColor),
         child: InkWell(
-          onTap: () {
-            _onConfirm();
-          },
+          onTap: _onConfirm,
           highlightColor: mainColor.withOpacity(0.2),
           child: Container(
             color: mainColor,
@@ -115,7 +113,7 @@ class _CustomEmojiAddDialog extends State<CustomEmojiAddDialog> {
       ),
     ));
 
-    var main = Container(
+    final main = Container(
       padding: const EdgeInsets.all(Base.BASE_PADDING),
       decoration: BoxDecoration(
         color: cardColor,
@@ -164,7 +162,7 @@ class _CustomEmojiAddDialog extends State<CustomEmojiAddDialog> {
   String? filepath;
 
   Future<void> _onConfirm() async {
-    var text = controller.text;
+    final text = controller.text;
     if (StringUtil.isBlank(text)) {
       BotToast.showText(text: "Input can not be null");
       return;
@@ -175,9 +173,9 @@ class _CustomEmojiAddDialog extends State<CustomEmojiAddDialog> {
       return;
     }
 
-    var cancel = BotToast.showLoading();
+    final cancel = BotToast.showLoading();
     try {
-      var imagePath = await Uploader.upload(
+      final imagePath = await Uploader.upload(
         filepath!,
         imageService: settingProvider.imageService,
       );

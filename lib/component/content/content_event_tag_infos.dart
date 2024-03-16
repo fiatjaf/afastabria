@@ -1,15 +1,11 @@
-import 'package:loure/client/event.dart';
+import "package:loure/client/event.dart";
 
 class ContentEventTagInfos {
-  Map<String, String> emojiMap = {};
-  Map<String, int> tagMap = {};
-  List<MapEntry<String, int>> tagEntryInfos = [];
-
-  ContentEventTagInfos.fromEvent(Event event) {
-    for (var tag in event.tags) {
+  ContentEventTagInfos.fromEvent(final Event event) {
+    for (final tag in event.tags) {
       if (tag.length > 1) {
-        var key = tag[0];
-        var value = tag[1];
+        final key = tag[0];
+        final value = tag[1];
         if (key == "emoji" && tag.length > 2) {
           // emojiMap[":${tag[1]}:"] = tag[2];
           emojiMap[tag[1]] = tag[2];
@@ -21,9 +17,12 @@ class ContentEventTagInfos {
 
     if (tagMap.isNotEmpty) {
       tagEntryInfos = tagMap.entries.toList();
-      tagEntryInfos.sort((entry0, entry1) {
+      tagEntryInfos.sort((final entry0, final entry1) {
         return entry1.value - entry0.value;
       });
     }
   }
+  Map<String, String> emojiMap = {};
+  Map<String, int> tagMap = {};
+  List<MapEntry<String, int>> tagEntryInfos = [];
 }

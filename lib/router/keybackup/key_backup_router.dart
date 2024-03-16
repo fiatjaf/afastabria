@@ -1,11 +1,11 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:loure/client/nip19/nip19.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/main.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:loure/client/nip19/nip19.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/main.dart";
 
-import 'package:loure/component/appbar4stack.dart';
+import "package:loure/component/appbar4stack.dart";
 
 class KeyBackupRouter extends StatefulWidget {
   const KeyBackupRouter({super.key});
@@ -23,7 +23,7 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
 
   List<CheckboxItem>? checkboxItems;
 
-  void initCheckBoxItems(BuildContext context) {
+  void initCheckBoxItems(final BuildContext context) {
     if (checkboxItems == null) {
       checkboxItems = [];
       checkboxItems!.add(CheckboxItem(
@@ -36,15 +36,15 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
-    var mainColor = themeData.primaryColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
+    final mainColor = themeData.primaryColor;
 
     initCheckBoxItems(context);
 
     Color? appbarBackgroundColor = Colors.transparent;
-    var appBar = Appbar4Stack(
+    final appBar = Appbar4Stack(
       backgroundColor: appbarBackgroundColor,
       // title: appbarTitle,
     );
@@ -68,7 +68,7 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
       ),
     ));
 
-    for (var item in checkboxItems!) {
+    for (final item in checkboxItems!) {
       list.add(checkboxView(item));
     }
 
@@ -137,14 +137,14 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
     );
   }
 
-  Widget checkboxView(CheckboxItem item) {
+  Widget checkboxView(final CheckboxItem item) {
     return InkWell(
       child: Row(
         children: <Widget>[
           Checkbox(
             value: item.value,
             activeColor: Colors.blue,
-            onChanged: (bool? val) {
+            onChanged: (final bool? val) {
               if (val != null) {
                 setState(() {
                   item.value = val;
@@ -170,7 +170,7 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
   }
 
   bool checkTips() {
-    for (var item in checkboxItems!) {
+    for (final item in checkboxItems!) {
       if (!item.value) {
         BotToast.showText(text: "Please check the tips");
         return false;
@@ -193,22 +193,21 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
       return;
     }
 
-    var pk = nostr.privateKey;
-    var nip19Key = Nip19.encodePrivateKey(pk);
+    final pk = nostr.privateKey;
+    final nip19Key = Nip19.encodePrivateKey(pk);
     doCopy(nip19Key);
   }
 
-  void doCopy(String key) {
-    Clipboard.setData(ClipboardData(text: key)).then((_) {
+  void doCopy(final String key) {
+    Clipboard.setData(ClipboardData(text: key)).then((final _) {
       BotToast.showText(text: "key has been copy");
     });
   }
 }
 
 class CheckboxItem {
+  CheckboxItem(this.name, this.value);
   String name;
 
   bool value;
-
-  CheckboxItem(this.name, this.value);
 }

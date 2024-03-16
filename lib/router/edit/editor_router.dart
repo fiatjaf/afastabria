@@ -1,32 +1,41 @@
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill;
-import 'package:intl/intl.dart';
-import 'package:loure/client/aid.dart';
-import 'package:loure/component/editor/lnbc_embed_builder.dart';
-import 'package:loure/component/editor/mention_event_embed_builder.dart';
-import 'package:loure/component/editor/mention_user_embed_builder.dart';
-import 'package:loure/component/editor/pic_embed_builder.dart';
-import 'package:loure/component/editor/tag_embed_builder.dart';
-import 'package:loure/component/editor/video_embed_builder.dart';
-import 'package:loure/component/editor/zap_goal_input_component.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/main.dart';
-import 'package:loure/router/index/index_app_bar.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:pointycastle/ecc/api.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:flutter_quill/flutter_quill.dart" as quill;
+import "package:intl/intl.dart";
+import "package:loure/client/aid.dart";
+import "package:loure/component/editor/lnbc_embed_builder.dart";
+import "package:loure/component/editor/mention_event_embed_builder.dart";
+import "package:loure/component/editor/mention_user_embed_builder.dart";
+import "package:loure/component/editor/pic_embed_builder.dart";
+import "package:loure/component/editor/tag_embed_builder.dart";
+import "package:loure/component/editor/video_embed_builder.dart";
+import "package:loure/component/editor/zap_goal_input_component.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/main.dart";
+import "package:loure/router/index/index_app_bar.dart";
+import "package:loure/util/router_util.dart";
+import "package:pointycastle/ecc/api.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/event_kind.dart' as kind;
-import 'package:loure/component/cust_state.dart';
-import 'package:loure/component/editor/custom_emoji_embed_builder.dart';
-import 'package:loure/component/editor/editor_mixin.dart';
-import 'package:loure/component/editor/poll_input_component.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/router/edit/editor_notify_item_component.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/event_kind.dart" as kind;
+import "package:loure/component/cust_state.dart";
+import "package:loure/component/editor/custom_emoji_embed_builder.dart";
+import "package:loure/component/editor/editor_mixin.dart";
+import "package:loure/component/editor/poll_input_component.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/router/edit/editor_notify_item_component.dart";
 
 // ignore: must_be_immutable
 class EditorRouter extends StatefulWidget {
+  EditorRouter({
+    required this.tags,
+    required this.tagsAddedWhenSend,
+    required this.tagPs,
+    super.key,
+    this.agreement,
+    this.pubkey,
+    this.initEmbeds,
+  });
   static double appbarHeight = 56;
 
   // dm arg
@@ -39,30 +48,20 @@ class EditorRouter extends StatefulWidget {
   List<List<String>> tagPs = [];
   List<quill.BlockEmbed>? initEmbeds;
 
-  EditorRouter({
-    super.key,
-    required this.tags,
-    required this.tagsAddedWhenSend,
-    required this.tagPs,
-    this.agreement,
-    this.pubkey,
-    this.initEmbeds,
-  });
-
   static Future<Event?> open(
-    BuildContext context, {
+    final BuildContext context, {
     List<List<String>>? tags,
     List<List<String>>? tagsAddedWhenSend,
     List<List<String>>? tagPs,
-    ECDHBasicAgreement? agreement,
-    String? pubkey,
-    List<quill.BlockEmbed>? initEmbeds,
+    final ECDHBasicAgreement? agreement,
+    final String? pubkey,
+    final List<quill.BlockEmbed>? initEmbeds,
   }) {
     tags ??= [];
     tagsAddedWhenSend ??= [];
     tagPs ??= [];
 
-    var editor = EditorRouter(
+    final editor = EditorRouter(
       tags: tags,
       tagsAddedWhenSend: tagsAddedWhenSend,
       tagPs: tagPs,
@@ -71,7 +70,7 @@ class EditorRouter extends StatefulWidget {
       initEmbeds: initEmbeds,
     );
 
-    return RouterUtil.push(context, MaterialPageRoute(builder: (context) {
+    return RouterUtil.push(context, MaterialPageRoute(builder: (final context) {
       return editor;
     }));
     // return Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -97,35 +96,35 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
   }
 
   @override
-  Widget doBuild(BuildContext context) {
+  Widget doBuild(final BuildContext context) {
     if (notifyItems == null) {
       notifyItems = [];
-      for (var tagP in widget.tagPs) {
+      for (final tagP in widget.tagPs) {
         if (tagP.length > 1) {
           notifyItems!.add(EditorNotifyItem(pubkey: tagP[1]));
         }
       }
     }
 
-    var themeData = Theme.of(context);
-    var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
+    final themeData = Theme.of(context);
+    final scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
     // var mainColor = themeData.primaryColor;
-    var hintColor = themeData.hintColor;
-    var textColor = themeData.textTheme.bodyMedium!.color;
-    var fontSize = themeData.textTheme.bodyMedium!.fontSize;
-    var largeTextSize = themeData.textTheme.bodyLarge!.fontSize;
+    final hintColor = themeData.hintColor;
+    final textColor = themeData.textTheme.bodyMedium!.color;
+    final fontSize = themeData.textTheme.bodyMedium!.fontSize;
+    final largeTextSize = themeData.textTheme.bodyLarge!.fontSize;
 
     List<Widget> list = [];
 
     if (widget.tags.isNotEmpty) {
-      for (var tag in widget.tags) {
+      for (final tag in widget.tags) {
         if (tag.length > 1) {
-          var tagName = tag[0];
-          var tagValue = tag[1];
+          final tagName = tag[0];
+          final tagValue = tag[1];
 
           if (tagName == "a") {
             // this note is add to community
-            var aid = AId.fromString(tagValue);
+            final aid = AId.fromString(tagValue);
             if (aid != null &&
                 aid.kind == kind.EventKind.COMMUNITY_DEFINITION) {
               list.add(Container(
@@ -164,11 +163,11 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
         (editorNotifyItems.isNotEmpty)) {
       List<Widget> tagPsWidgets = [];
       tagPsWidgets.add(const Text("Notify:"));
-      for (var item in notifyItems!) {
+      for (final item in notifyItems!) {
         tagPsWidgets.add(EditorNotifyItemComponent(item: item));
       }
-      for (var editorNotifyItem in editorNotifyItems) {
-        var exist = notifyItems!.any((element) {
+      for (final editorNotifyItem in editorNotifyItems) {
+        final exist = notifyItems!.any((final element) {
           return element.pubkey == editorNotifyItem.pubkey;
         });
         if (!exist) {
@@ -194,7 +193,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
     }
 
     if (publishAt != null) {
-      var dateFormate = DateFormat("yyyy-MM-dd HH:mm");
+      final dateFormate = DateFormat("yyyy-MM-dd HH:mm");
 
       list.add(GestureDetector(
         onTap: selectedTime,
@@ -217,7 +216,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
       ));
     }
 
-    Widget quillWidget = quill.QuillEditor(
+    final Widget quillWidget = quill.QuillEditor(
       configurations: quill.QuillEditorConfigurations(
         placeholder: "What's happening",
         embedBuilders: [
@@ -243,7 +242,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
       focusNode: focusNode,
     );
     List<Widget> editorList = [];
-    var editorInputWidget = Container(
+    final editorInputWidget = Container(
       margin: const EdgeInsets.only(bottom: Base.BASE_PADDING),
       child: quillWidget,
     );
@@ -325,7 +324,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     if (widget.initEmbeds != null && widget.initEmbeds!.isNotEmpty) {
       {
         final index = editorController.selection.baseOffset;
@@ -336,7 +335,7 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
         editorController.moveCursorToPosition(index + 1);
       }
 
-      for (var embed in widget.initEmbeds!) {
+      for (final embed in widget.initEmbeds!) {
         final index = editorController.selection.baseOffset;
         final length = editorController.selection.extentOffset - index;
 
@@ -353,13 +352,13 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
       bool updated = false;
       Map<String, int> mentionUserMap = {};
 
-      var delta = editorController.document.toDelta();
-      var operations = delta.toList();
-      for (var operation in operations) {
+      final delta = editorController.document.toDelta();
+      final operations = delta.toList();
+      for (final operation in operations) {
         if (operation.key == "insert") {
           if (operation.data is Map) {
-            var m = operation.data as Map;
-            var value = m["mentionUser"];
+            final m = operation.data as Map;
+            final value = m["mentionUser"];
             if (StringUtil.isNotBlank(value)) {
               mentionUserMap[value] = 1;
             }
@@ -368,18 +367,19 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
       }
 
       List<EditorNotifyItem> needDeleds = [];
-      for (var item in editorNotifyItems) {
-        var exist = mentionUserMap.remove(item.pubkey);
+      for (final item in editorNotifyItems) {
+        final exist = mentionUserMap.remove(item.pubkey);
         if (exist == null) {
           updated = true;
           needDeleds.add(item);
         }
       }
-      editorNotifyItems.removeWhere((element) => needDeleds.contains(element));
+      editorNotifyItems
+          .removeWhere((final element) => needDeleds.contains(element));
 
       if (mentionUserMap.isNotEmpty) {
-        var entries = mentionUserMap.entries;
-        for (var entry in entries) {
+        final entries = mentionUserMap.entries;
+        for (final entry in entries) {
           updated = true;
           editorNotifyItems.add(EditorNotifyItem(pubkey: entry.key));
         }
@@ -392,9 +392,9 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
   }
 
   Future<void> documentSave() async {
-    var cancelFunc = BotToast.showLoading();
+    final cancelFunc = BotToast.showLoading();
     try {
-      var event = await doDocumentSave();
+      final event = await doDocumentSave();
       if (event == null) {
         BotToast.showText(text: "Send_fail");
         return;
@@ -439,14 +439,14 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
 
     List<List<String>> list = [];
     list.addAll(widget.tagsAddedWhenSend);
-    for (var item in notifyItems!) {
+    for (final item in notifyItems!) {
       if (item.selected) {
         list.add(["p", item.pubkey]);
       }
     }
 
-    for (var editorNotifyItem in editorNotifyItems) {
-      var exist = notifyItems!.any((element) {
+    for (final editorNotifyItem in editorNotifyItems) {
+      final exist = notifyItems!.any((final element) {
         return element.pubkey == editorNotifyItem.pubkey;
       });
       if (!exist) {

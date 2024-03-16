@@ -1,23 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:loure/component/keep_alive_cust_state.dart';
-import 'package:loure/data/event_mem_box.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/mention_me_new_provider.dart';
-import 'package:loure/provider/mention_me_provider.dart';
-import 'package:loure/util/load_more_event.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:loure/component/keep_alive_cust_state.dart";
+import "package:loure/data/event_mem_box.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/mention_me_new_provider.dart";
+import "package:loure/provider/mention_me_provider.dart";
+import "package:loure/util/load_more_event.dart";
+import "package:loure/util/string_util.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/client/event_kind.dart' as kind;
-import 'package:loure/component/badge_award_component.dart';
-import 'package:loure/component/event/event_list_component.dart';
-import 'package:loure/component/event/zap_event_list_component.dart';
-import 'package:loure/component/new_notes_updated_component.dart';
-import 'package:loure/component/placeholder/event_list_placeholder.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/provider/setting_provider.dart';
-import 'package:loure/util/platform_util.dart';
+import "package:loure/client/event_kind.dart" as kind;
+import "package:loure/component/badge_award_component.dart";
+import "package:loure/component/event/event_list_component.dart";
+import "package:loure/component/event/zap_event_list_component.dart";
+import "package:loure/component/new_notes_updated_component.dart";
+import "package:loure/component/placeholder/event_list_placeholder.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/provider/setting_provider.dart";
+import "package:loure/util/platform_util.dart";
 
 class MentionMeRouter extends StatefulWidget {
   const MentionMeRouter({super.key});
@@ -39,11 +39,11 @@ class _MentionMeRouter extends KeepAliveCustState<MentionMeRouter>
   }
 
   @override
-  Widget doBuild(BuildContext context) {
-    var settingProvider = Provider.of<SettingProvider>(context);
-    var mentionMeProvider = Provider.of<MentionMeProvider>(context);
-    var eventBox = mentionMeProvider.eventBox;
-    var events = eventBox.all();
+  Widget doBuild(final BuildContext context) {
+    final settingProvider = Provider.of<SettingProvider>(context);
+    final mentionMeProvider = Provider.of<MentionMeProvider>(context);
+    final eventBox = mentionMeProvider.eventBox;
+    final events = eventBox.all();
     if (events.isEmpty) {
       return EventListPlaceholder(
         onRefresh: () {
@@ -54,10 +54,10 @@ class _MentionMeRouter extends KeepAliveCustState<MentionMeRouter>
     indexProvider.setMentionedScrollController(_controller);
     preBuild();
 
-    var main = ListView.builder(
+    final main = ListView.builder(
       controller: _controller,
-      itemBuilder: (BuildContext context, int index) {
-        var event = events[index];
+      itemBuilder: (final BuildContext context, final int index) {
+        final event = events[index];
         if (event.kind == kind.EventKind.ZAP &&
             StringUtil.isBlank(event.content)) {
           return ZapEventListComponent(event: event);
@@ -82,7 +82,7 @@ class _MentionMeRouter extends KeepAliveCustState<MentionMeRouter>
 
     if (PlatformUtil.isTableMode()) {
       ri = GestureDetector(
-        onVerticalDragUpdate: (detail) {
+        onVerticalDragUpdate: (final detail) {
           _controller.jumpTo(_controller.offset - detail.delta.dy);
         },
         behavior: HitTestBehavior.translucent,
@@ -94,7 +94,7 @@ class _MentionMeRouter extends KeepAliveCustState<MentionMeRouter>
     stackList.add(Positioned(
       top: Base.BASE_PADDING,
       child: Selector<MentionMeNewProvider, int>(
-        builder: (context, newEventNum, child) {
+        builder: (final context, final newEventNum, final child) {
           if (newEventNum <= 0) {
             return Container();
           }
@@ -107,7 +107,7 @@ class _MentionMeRouter extends KeepAliveCustState<MentionMeRouter>
             },
           );
         },
-        selector: (context, provider) {
+        selector: (final context, final provider) {
           return provider.eventMemBox.length();
         },
       ),
@@ -130,5 +130,5 @@ class _MentionMeRouter extends KeepAliveCustState<MentionMeRouter>
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {}
+  Future<void> onReady(final BuildContext context) async {}
 }

@@ -1,21 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:get_time_ago/get_time_ago.dart';
+import "package:flutter/material.dart";
+import "package:get_time_ago/get_time_ago.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/component/event/reaction_event_metadata_component.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/component/event/reaction_event_metadata_component.dart";
 
 class ReactionEventItemComponent extends StatefulWidget {
+  ReactionEventItemComponent({
+    required this.pubkey,
+    required this.text,
+    required this.createdAt,
+    super.key,
+  });
   String pubkey;
 
   String text;
 
   int createdAt;
-
-  ReactionEventItemComponent({super.key, 
-    required this.pubkey,
-    required this.text,
-    required this.createdAt,
-  });
 
   @override
   State<StatefulWidget> createState() {
@@ -25,9 +25,9 @@ class ReactionEventItemComponent extends StatefulWidget {
 
 class _ReactionEventItemComponent extends State<ReactionEventItemComponent> {
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
 
     List<Widget> list = [];
 

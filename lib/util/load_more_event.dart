@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:loure/data/event_mem_box.dart';
+import "package:flutter/material.dart";
+import "package:loure/data/event_mem_box.dart";
 
 mixin LoadMoreEvent {
   // load more where still left 20 item.
@@ -9,17 +9,17 @@ mixin LoadMoreEvent {
 
   EventMemBox getEventBox();
 
-  void bindLoadMoreScroll(ScrollController scrollController) {
+  void bindLoadMoreScroll(final ScrollController scrollController) {
     scrollController.addListener(() {
       loadMoreScrollCallback(scrollController);
     });
   }
 
-  void loadMoreScrollCallback(ScrollController scrollController) {
-    var maxScrollExtent = scrollController.position.maxScrollExtent;
-    var offset = scrollController.offset;
+  void loadMoreScrollCallback(final ScrollController scrollController) {
+    final maxScrollExtent = scrollController.position.maxScrollExtent;
+    final offset = scrollController.offset;
 
-    var leftNum = (1 - (offset / maxScrollExtent)) * itemLength;
+    final leftNum = (1 - (offset / maxScrollExtent)) * itemLength;
     // print("maxScrollExtent $maxScrollExtent offset $offset");
     // print("itemLength $itemLength leftNum $leftNum");
     if (leftNum < loadMoreItemLeftNum) {
@@ -36,15 +36,15 @@ mixin LoadMoreEvent {
 
   // this function should be call by user in the build function
   void preBuild() {
-    var eventMemBox = getEventBox();
+    final eventMemBox = getEventBox();
     itemLength = eventMemBox.length();
   }
 
   // this function call by scroll listener
   void loadMore() {
     // print("touch loadMore");
-    var eventMemBox = getEventBox();
-    var now = DateTime.now();
+    final eventMemBox = getEventBox();
+    final now = DateTime.now();
     // check if query just now
     if (queryTime != null &&
         now.millisecondsSinceEpoch - queryTime!.millisecondsSinceEpoch <
@@ -53,7 +53,7 @@ mixin LoadMoreEvent {
     }
     // print("do loadMore");
 
-    var currentLength = eventMemBox.length();
+    final currentLength = eventMemBox.length();
     if (currentLength - beginQueryNum == 0) {
       forceUserLimit = true;
     } else {
@@ -61,7 +61,7 @@ mixin LoadMoreEvent {
     }
 
     // query from the oldest event createdAt
-    var oldestEvent = eventMemBox.oldestEvent;
+    final oldestEvent = eventMemBox.oldestEvent;
     if (oldestEvent != null) {
       until = oldestEvent.createdAt;
     }
@@ -71,7 +71,7 @@ mixin LoadMoreEvent {
 
   // this function should be call by user in the doQuery
   void preQuery() {
-    var eventMemBox = getEventBox();
+    final eventMemBox = getEventBox();
     beginQueryNum = eventMemBox.length();
     queryTime = DateTime.now();
   }

@@ -1,18 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/provider/contact_list_provider.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/provider/contact_list_provider.dart";
+import "package:loure/util/string_util.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/client/nip172/community_info.dart';
-import 'package:loure/main.dart';
-import 'package:loure/component/content/content_component.dart';
-import 'package:loure/component/image_component.dart';
+import "package:loure/client/nip172/community_info.dart";
+import "package:loure/main.dart";
+import "package:loure/component/content/content_component.dart";
+import "package:loure/component/image_component.dart";
 
 class CommunityInfoComponent extends StatefulWidget {
+  const CommunityInfoComponent({required this.info, super.key});
   final CommunityInfo info;
-
-  const CommunityInfoComponent({super.key, required this.info});
 
   @override
   State<StatefulWidget> createState() {
@@ -24,9 +23,9 @@ class _CommunityInfoComponent extends State<CommunityInfoComponent> {
   static const double IMAGE_WIDTH = 40;
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
 
     Widget? imageWidget;
     if (StringUtil.isNotBlank(widget.info.image)) {
@@ -35,12 +34,13 @@ class _CommunityInfoComponent extends State<CommunityInfoComponent> {
         width: IMAGE_WIDTH,
         height: IMAGE_WIDTH,
         fit: BoxFit.cover,
-        placeholder: (context, url) => const CircularProgressIndicator(),
+        placeholder: (final context, final url) =>
+            const CircularProgressIndicator(),
       );
     }
 
-    Widget followBtn =
-        Selector<ContactListProvider, bool>(builder: (context, exist, child) {
+    final Widget followBtn = Selector<ContactListProvider, bool>(
+        builder: (final context, final exist, final child) {
       IconData iconData = Icons.star_border;
       Color? color;
       if (exist) {
@@ -67,7 +67,7 @@ class _CommunityInfoComponent extends State<CommunityInfoComponent> {
           ),
         ),
       );
-    }, selector: (context, provider) {
+    }, selector: (final context, final provider) {
       return provider.containCommunity(widget.info.aId.toTag());
     });
 

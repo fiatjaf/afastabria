@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:loure/main.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:loure/main.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/client/relay/relay.dart';
-import 'package:loure/client/relay/relay_metadata.dart';
-import 'package:loure/client/relay/relay_pool.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/router_util.dart';
+import "package:loure/client/relay/relay.dart";
+import "package:loure/client/relay/relay_metadata.dart";
+import "package:loure/client/relay/relay_pool.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/util/router_util.dart";
 
 class UserRelayRouter extends StatefulWidget {
   const UserRelayRouter({super.key});
@@ -20,24 +20,24 @@ class UserRelayRouter extends StatefulWidget {
 class _UserRelayRouter extends State<UserRelayRouter> {
   List<RelayMetadata>? relays;
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
 
     if (relays == null) {
       relays = [];
-      var arg = RouterUtil.routerArgs(context);
+      final arg = RouterUtil.routerArgs(context);
       if (arg != null && arg is List<dynamic>) {
-        for (var tag in arg) {
+        for (final tag in arg) {
           if (tag is List<dynamic>) {
-            var length = tag.length;
+            final length = tag.length;
             bool write = true;
             bool read = true;
             if (length > 1) {
-              var name = tag[0];
-              var value = tag[1];
+              final name = tag[0];
+              final value = tag[1];
               if (name == "r") {
                 if (length > 2) {
-                  var operType = tag[2];
+                  final operType = tag[2];
                   if (operType == "read") {
                     write = false;
                   } else if (operType == "write") {
@@ -71,15 +71,15 @@ class _UserRelayRouter extends State<UserRelayRouter> {
           top: Base.BASE_PADDING,
         ),
         child: ListView.builder(
-          itemBuilder: (context, index) {
-            var relayMetadata = relays![index];
+          itemBuilder: (final context, final index) {
+            final relayMetadata = relays![index];
             return Selector<RelayPool, RelayStatus?>(
-                builder: (context, relayStatus, child) {
+                builder: (final context, final relayStatus, final child) {
               return RelayMetadataComponent(
                 relayMetadata: relayMetadata,
                 addAble: relayStatus == null,
               );
-            }, selector: (context, provider) {
+            }, selector: (final context, final provider) {
               return provider.getRelayStatus(relayMetadata.addr);
             });
           },
@@ -92,19 +92,18 @@ class _UserRelayRouter extends State<UserRelayRouter> {
 
 // ignore: must_be_immutable
 class RelayMetadataComponent extends StatelessWidget {
+  RelayMetadataComponent(
+      {required this.relayMetadata, super.key, this.addAble = true});
   RelayMetadata relayMetadata;
 
   bool addAble;
 
-  RelayMetadataComponent(
-      {super.key, required this.relayMetadata, this.addAble = true});
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
-    var hintColor = themeData.hintColor;
-    var bodySmallFontSize = themeData.textTheme.bodySmall!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
+    final hintColor = themeData.hintColor;
+    final bodySmallFontSize = themeData.textTheme.bodySmall!.fontSize;
 
     Widget rightBtn = Container();
     if (addAble) {

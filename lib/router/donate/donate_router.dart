@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_inapp_purchase/flutter_inapp_purchase.dart';
+import "package:flutter/material.dart";
+import "package:flutter_inapp_purchase/flutter_inapp_purchase.dart";
 
-import 'package:loure/component/appbar4stack.dart';
-import 'package:loure/component/cust_state.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/coffee_ids.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/string_util.dart';
+import "package:loure/component/appbar4stack.dart";
+import "package:loure/component/cust_state.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/coffee_ids.dart";
+import "package:loure/main.dart";
+import "package:loure/util/string_util.dart";
 
 class DonateRouter extends StatefulWidget {
   const DonateRouter({super.key});
@@ -19,15 +19,14 @@ class DonateRouter extends StatefulWidget {
 
 class _DonateRouter extends CustState<DonateRouter> {
   @override
-  Widget doBuild(BuildContext context) {
-    
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
-    var mainColor = themeData.primaryColor;
-    var hintColor = themeData.hintColor;
+  Widget doBuild(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
+    final mainColor = themeData.primaryColor;
+    final hintColor = themeData.hintColor;
 
     Color? appbarBackgroundColor = Colors.transparent;
-    var appBar = Appbar4Stack(
+    final appBar = Appbar4Stack(
       backgroundColor: appbarBackgroundColor,
       title: const Text(
         "Donate",
@@ -136,14 +135,14 @@ class _DonateRouter extends CustState<DonateRouter> {
   String price10 = "";
 
   Future<void> updateIAPItems() async {
-    var list = await FlutterInappPurchase.instance.getProducts([
+    final list = await FlutterInappPurchase.instance.getProducts([
       CoffeeIds.COFFEE1,
       CoffeeIds.COFFEE2,
       CoffeeIds.COFFEE5,
       CoffeeIds.COFFEE10
     ]);
     print(list);
-    for (var item in list) {
+    for (final item in list) {
       if (StringUtil.isNotBlank(item.price) &&
           item.productId == CoffeeIds.COFFEE1) {
         price1 = item.localizedPrice!;
@@ -161,36 +160,35 @@ class _DonateRouter extends CustState<DonateRouter> {
     setState(() {});
   }
 
-  Future<void> buy(String id) async {
+  Future<void> buy(final String id) async {
     await FlutterInappPurchase.instance.requestPurchase(id);
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     updateIAPItems();
   }
 }
 
 class DonateBtn extends StatelessWidget {
+  DonateBtn({
+    required this.name,
+    required this.onTap,
+    required this.price,
+    super.key,
+  });
   String name;
 
   Function onTap;
 
   String price;
 
-  DonateBtn({
-    super.key,
-    required this.name,
-    required this.onTap,
-    required this.price,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var textColor = themeData.textTheme.bodyMedium!.color;
-    var largeTextSize = themeData.textTheme.bodyLarge!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final textColor = themeData.textTheme.bodyMedium!.color;
+    final largeTextSize = themeData.textTheme.bodyLarge!.fontSize;
 
     return Container(
       margin: const EdgeInsets.only(

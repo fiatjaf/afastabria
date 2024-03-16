@@ -431,7 +431,7 @@ packages:
     source: hosted
     version: "3.3.1"
   flutter_chat_types:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_chat_types
       sha256: e285b588f6d19d907feb1f6d912deaf22e223656769c34093b64e1c59b094fb9
@@ -774,7 +774,7 @@ packages:
     source: hosted
     version: "3.2.1"
   http_parser:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http_parser
       sha256: "2aa08ce0341cc9b354a498388e30986515406668dbcc4f7c950c3e715496693b"
@@ -1006,7 +1006,7 @@ packages:
     source: hosted
     version: "1.2.0"
   markdown:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       name: markdown
       sha256: "8e332924094383133cee218b676871f42db2514f1f6ac617b6cf6152a7faab8e"

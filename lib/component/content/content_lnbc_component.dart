@@ -1,24 +1,22 @@
+import "package:flutter/material.dart";
+import "package:loure/util/lightning_util.dart";
 
-import 'package:flutter/material.dart';
-import 'package:loure/util/lightning_util.dart';
-
-import 'package:loure/client/zap/zap_num_util.dart';
-import 'package:loure/consts/base.dart';
+import "package:loure/client/zap/zap_num_util.dart";
+import "package:loure/consts/base.dart";
 
 class ContentLnbcComponent extends StatelessWidget {
+  ContentLnbcComponent({required this.lnbc, super.key});
   String lnbc;
 
-  ContentLnbcComponent({super.key, required this.lnbc});
-
   @override
-  Widget build(BuildContext context) {
-        var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var cardColor = themeData.cardColor;
-    double largeFontSize = 20;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final cardColor = themeData.cardColor;
+    const double largeFontSize = 20;
 
     var numStr = "Any";
-    var num = ZapNumUtil.getNumFromStr(lnbc);
+    final num = ZapNumUtil.getNumFromStr(lnbc);
     if (num > 0) {
       numStr = num.toString();
     }
@@ -79,13 +77,13 @@ class ContentLnbcComponent extends StatelessWidget {
                   margin: const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
                   child: Text(
                     numStr,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: largeFontSize,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-                Text(
+                const Text(
                   "sats",
                   style: TextStyle(
                     fontSize: largeFontSize,

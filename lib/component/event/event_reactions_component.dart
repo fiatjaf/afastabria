@@ -1,36 +1,43 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill;
-import 'package:loure/client/nip51/bookmarks.dart';
-import 'package:loure/component/enum_selector_component.dart';
-import 'package:loure/component/zap_gen_dialog.dart';
-import 'package:provider/provider.dart';
-import 'package:screenshot/screenshot.dart';
-import 'package:share_plus/share_plus.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_quill/flutter_quill.dart" as quill;
+import "package:loure/client/nip51/bookmarks.dart";
+import "package:loure/component/enum_selector_component.dart";
+import "package:loure/component/zap_gen_dialog.dart";
+import "package:provider/provider.dart";
+import "package:screenshot/screenshot.dart";
+import "package:share_plus/share_plus.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/event_relation.dart';
-import 'package:loure/client/nip19/nip19.dart';
-import 'package:loure/client/zap/zap_action.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/data/event_reactions.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/event_reactions_provider.dart';
-import 'package:loure/router/edit/editor_router.dart';
-import 'package:loure/util/number_format_util.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/store_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/component/editor/cust_embed_types.dart';
-import 'package:loure/component/event_delete_callback.dart';
-import 'package:loure/component/event_reply_callback.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/event_relation.dart";
+import "package:loure/client/nip19/nip19.dart";
+import "package:loure/client/zap/zap_action.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/data/event_reactions.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/event_reactions_provider.dart";
+import "package:loure/router/edit/editor_router.dart";
+import "package:loure/util/number_format_util.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/store_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/component/editor/cust_embed_types.dart";
+import "package:loure/component/event_delete_callback.dart";
+import "package:loure/component/event_reply_callback.dart";
 
 // ignore: must_be_immutable
 class EventReactionsComponent extends StatefulWidget {
+  EventReactionsComponent({
+    required this.screenshotController,
+    required this.event,
+    required this.eventRelation,
+    super.key,
+    this.showDetailBtn = true,
+  });
   ScreenshotController screenshotController;
 
   Event event;
@@ -38,14 +45,6 @@ class EventReactionsComponent extends StatefulWidget {
   EventRelation eventRelation;
 
   bool showDetailBtn;
-
-  EventReactionsComponent({
-    super.key,
-    required this.screenshotController,
-    required this.event,
-    required this.eventRelation,
-    this.showDetailBtn = true,
-  });
 
   @override
   State<StatefulWidget> createState() {
@@ -57,17 +56,17 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
   List<Event>? myLikeEvents;
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var fontSize = themeData.textTheme.bodySmall!.fontSize!;
-    var mediumFontSize = themeData.textTheme.bodyMedium!.fontSize;
-    var popFontStyle = TextStyle(
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final fontSize = themeData.textTheme.bodySmall!.fontSize!;
+    final mediumFontSize = themeData.textTheme.bodyMedium!.fontSize;
+    final popFontStyle = TextStyle(
       fontSize: mediumFontSize,
     );
 
     return Selector<EventReactionsProvider, EventReactions?>(
-      builder: (context, eventReactions, child) {
+      builder: (final context, final eventReactions, final child) {
         int replyNum = 0;
         int repostNum = 0;
         int likeNum = 0;
@@ -109,7 +108,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
               Expanded(
                 child: PopupMenuButton<String>(
                   tooltip: "Boost",
-                  itemBuilder: (context) {
+                  itemBuilder: (final context) {
                     return [
                       const PopupMenuItem(
                         value: "boost",
@@ -141,7 +140,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
               Expanded(
                 child: PopupMenuButton<int>(
                   tooltip: "Zap",
-                  itemBuilder: (context) {
+                  itemBuilder: (final context) {
                     return [
                       PopupMenuItem(
                         value: 10,
@@ -229,8 +228,8 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
               Expanded(
                 child: PopupMenuButton<String>(
                   tooltip: "More",
-                  itemBuilder: (context) {
-                    var bookmarkItem = BookmarkItem.getFromEventReactions(
+                  itemBuilder: (final context) {
+                    final bookmarkItem = BookmarkItem.getFromEventReactions(
                         widget.eventRelation);
 
                     List<PopupMenuEntry<String>> list = [
@@ -329,10 +328,10 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
           ),
         );
       },
-      selector: (context, provider) {
+      selector: (final context, final provider) {
         return provider.get(widget.event.id);
       },
-      shouldRebuild: (previous, next) {
+      shouldRebuild: (final previous, final next) {
         if ((previous == null && next != null) ||
             (previous != null &&
                 next != null &&
@@ -348,37 +347,37 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
     );
   }
 
-  void onPopupSelected(String value) {
+  void onPopupSelected(final String value) {
     if (value == "copyEvent") {
-      var text = jsonEncode(widget.event.toJson());
+      final text = jsonEncode(widget.event.toJson());
       _doCopy(text);
     } else if (value == "copyPubkey") {
-      var text = Nip19.encodePubKey(widget.event.pubKey);
+      final text = Nip19.encodePubKey(widget.event.pubKey);
       _doCopy(text);
     } else if (value == "copyId") {
-      var text = Nip19.encodeNoteId(widget.event.id);
+      final text = Nip19.encodeNoteId(widget.event.id);
       _doCopy(text);
     } else if (value == "detail") {
       RouterUtil.router(context, RouterPath.EVENT_DETAIL, widget.event);
     } else if (value == "share") {
       onShareTap();
     } else if (value == "addToPrivateBookmark") {
-      var item = BookmarkItem.getFromEventReactions(widget.eventRelation);
+      final item = BookmarkItem.getFromEventReactions(widget.eventRelation);
       bookmarkProvider.addPrivateBookmark(item);
     } else if (value == "addToPublicBookmark") {
-      var item = BookmarkItem.getFromEventReactions(widget.eventRelation);
+      final item = BookmarkItem.getFromEventReactions(widget.eventRelation);
       bookmarkProvider.addPublicBookmark(item);
     } else if (value == "removeFromPrivateBookmark") {
-      var item = BookmarkItem.getFromEventReactions(widget.eventRelation);
+      final item = BookmarkItem.getFromEventReactions(widget.eventRelation);
       bookmarkProvider.removePrivateBookmark(item.value);
     } else if (value == "removeFromPublicBookmark") {
-      var item = BookmarkItem.getFromEventReactions(widget.eventRelation);
+      final item = BookmarkItem.getFromEventReactions(widget.eventRelation);
       bookmarkProvider.removePublicBookmark(item.value);
     } else if (value == "broadcast") {
       bookmarkProvider.saveBookmarks();
     } else if (value == "source") {
       List<EnumObj> list = [];
-      for (var source in widget.event.sources) {
+      for (final source in widget.event.sources) {
         list.add(EnumObj(source, source));
       }
       EnumSelectorComponent.show(context, list);
@@ -388,7 +387,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
       nostr.deleteEvent(widget.event.id);
       followEventProvider.deleteEvent(widget.event.id);
       mentionMeProvider.deleteEvent(widget.event.id);
-      var deleteCallback = EventDeleteCallback.of(context);
+      final deleteCallback = EventDeleteCallback.of(context);
       if (deleteCallback != null) {
         deleteCallback.onDelete(widget.event);
       }
@@ -396,8 +395,8 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
     }
   }
 
-  void _doCopy(String text) {
-    Clipboard.setData(ClipboardData(text: text)).then((_) {
+  void _doCopy(final String text) {
+    Clipboard.setData(ClipboardData(text: text)).then((final _) {
       BotToast.showText(text: "Copy success");
     });
   }
@@ -405,12 +404,12 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
   @override
   void dispose() {
     super.dispose();
-    var id = widget.event.id;
+    final id = widget.event.id;
     eventReactionsProvider.removePending(id);
   }
 
   Future<void> onCommmentTap() async {
-    var er = widget.eventRelation;
+    final er = widget.eventRelation;
     List<List<String>> tags = [];
     List<List<String>> tagsAddedWhenSend = [];
     String relayAddr = "";
@@ -426,7 +425,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
     List<List<String>> tagPs = [];
     tagPs.add(["p", widget.event.pubKey]);
     if (er.tagPList.isNotEmpty) {
-      for (var p in er.tagPList) {
+      for (final p in er.tagPList) {
         tagPs.add(["p", p]);
       }
     }
@@ -438,23 +437,23 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
       tags.add(["e", er.rootId ?? "", relayAddr, "root"]);
     }
 
-    var event = await EditorRouter.open(context,
+    final event = await EditorRouter.open(context,
         tags: tags, tagsAddedWhenSend: tagsAddedWhenSend, tagPs: tagPs);
     if (event != null) {
       eventReactionsProvider.addEventAndHandle(event);
-      var callback = EventReplyCallback.of(context);
+      final callback = EventReplyCallback.of(context);
       if (callback != null) {
         callback.onReply(event);
       }
     }
   }
 
-  Future<void> onRepostTap(String value) async {
+  Future<void> onRepostTap(final String value) async {
     if (value == "boost") {
       nostr.sendRepost(widget.event.id);
       eventReactionsProvider.addRepost(widget.event.id);
     } else if (value == "quote") {
-      var event = await EditorRouter.open(context, initEmbeds: [
+      final event = await EditorRouter.open(context, initEmbeds: [
         quill.CustomBlockEmbed(CustEmbedTypes.mention_event, widget.event.id)
       ]);
       print(event);
@@ -464,20 +463,20 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
   void onLikeTap() {
     if (myLikeEvents == null || myLikeEvents!.isEmpty) {
       // like
-      var likeEvent = nostr.sendLike(widget.event.id);
+      final likeEvent = nostr.sendLike(widget.event.id);
       if (likeEvent != null) {
         eventReactionsProvider.addLike(widget.event.id, likeEvent);
       }
     } else {
       // delete like
-      for (var event in myLikeEvents!) {
+      for (final event in myLikeEvents!) {
         nostr.deleteEvent(event.id);
       }
       eventReactionsProvider.deleteLike(widget.event.id);
     }
   }
 
-  Future<void> onZapSelect(int sats) async {
+  Future<void> onZapSelect(final int sats) async {
     if (sats < 0) {
       genZap();
     } else {
@@ -487,17 +486,17 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
   }
 
   void onShareTap() {
-    widget.screenshotController.capture().then((Uint8List? imageData) async {
+    widget.screenshotController
+        .capture()
+        .then((final Uint8List? imageData) async {
       if (imageData != null) {
-        var tempFile = await StoreUtil.saveBS2TempFile(
+        final tempFile = await StoreUtil.saveBS2TempFile(
           "png",
           imageData,
         );
         Share.shareXFiles([XFile(tempFile)]);
       }
-    }).catchError((onError) {
-      print(onError);
-    });
+    }).catchError(print);
   }
 
   void genZap() {
@@ -507,6 +506,15 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
 
 // ignore: must_be_immutable
 class EventReactionNumComponent extends StatelessWidget {
+  EventReactionNumComponent({
+    required this.iconData,
+    required this.num,
+    required this.color,
+    required this.fontSize,
+    super.key,
+    this.onTap,
+    this.onLongPress,
+  });
   IconData iconData;
 
   int num;
@@ -519,26 +527,16 @@ class EventReactionNumComponent extends StatelessWidget {
 
   double fontSize;
 
-  EventReactionNumComponent({
-    super.key,
-    required this.iconData,
-    required this.num,
-    this.onTap,
-    this.onLongPress,
-    required this.color,
-    required this.fontSize,
-  });
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     Widget? main;
-    var iconWidget = Icon(
+    final iconWidget = Icon(
       iconData,
       size: 14,
       color: color,
     );
     if (num != 0) {
-      String numStr = NumberFormatUtil.format(num);
+      final String numStr = NumberFormatUtil.format(num);
 
       main = Row(
         mainAxisSize: MainAxisSize.min,

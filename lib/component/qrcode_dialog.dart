@@ -1,31 +1,31 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:bot_toast/bot_toast.dart';
-import 'package:pretty_qr_code/pretty_qr_code.dart';
-import 'package:share_plus/share_plus.dart';
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:bot_toast/bot_toast.dart";
+import "package:pretty_qr_code/pretty_qr_code.dart";
+import "package:share_plus/share_plus.dart";
 
-import 'package:loure/client/nip19/nip19.dart';
-import 'package:loure/component/name_component.dart';
-import 'package:loure/component/user/metadata_top_component.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/main.dart';
-import 'package:screenshot/screenshot.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/store_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/component/image_component.dart';
+import "package:loure/client/nip19/nip19.dart";
+import "package:loure/component/name_component.dart";
+import "package:loure/component/user/metadata_top_component.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/main.dart";
+import "package:screenshot/screenshot.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/store_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/component/image_component.dart";
 
 // ignore: must_be_immutable
 class QrcodeDialog extends StatefulWidget {
+  QrcodeDialog({required this.pubkey, super.key});
   String pubkey;
 
-  QrcodeDialog({super.key, required this.pubkey});
-
-  static Future<String?> show(BuildContext context, String pubkey) async {
+  static Future<String?> show(
+      final BuildContext context, final String pubkey) async {
     return await showDialog<String>(
         context: context,
-        builder: (context) {
+        builder: (final context) {
           return QrcodeDialog(
             pubkey: pubkey,
           );
@@ -52,17 +52,17 @@ class _QrcodeDialog extends State<QrcodeDialog> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    Color cardColor = themeData.cardColor;
-    var hintColor = themeData.hintColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final Color cardColor = themeData.cardColor;
+    final hintColor = themeData.hintColor;
 
     List<Widget> list = [];
-    var nip19Pubkey = Nip19.encodePubKey(widget.pubkey);
-    Widget topWidget = FutureBuilder(
+    final nip19Pubkey = Nip19.encodePubKey(widget.pubkey);
+    final Widget topWidget = FutureBuilder(
       future: this.metadataFuture,
       initialData: Metadata.blank(widget.pubkey),
-      builder: (context, snapshot) {
+      builder: (final context, final snapshot) {
         final metadata = snapshot.data;
 
         Widget? imageWidget;
@@ -72,11 +72,12 @@ class _QrcodeDialog extends State<QrcodeDialog> {
             width: IMAGE_WIDTH,
             height: IMAGE_WIDTH,
             fit: BoxFit.cover,
-            placeholder: (context, url) => const CircularProgressIndicator(),
+            placeholder: (final context, final url) =>
+                const CircularProgressIndicator(),
           );
         }
 
-        Widget userImageWidget = Container(
+        final Widget userImageWidget = Container(
           alignment: Alignment.center,
           height: IMAGE_WIDTH,
           width: IMAGE_WIDTH,
@@ -88,7 +89,7 @@ class _QrcodeDialog extends State<QrcodeDialog> {
           child: imageWidget,
         );
 
-        Widget userNameWidget = NameComponent(
+        final Widget userNameWidget = NameComponent(
           pubkey: widget.pubkey,
           metadata: metadata,
         );
@@ -149,7 +150,7 @@ class _QrcodeDialog extends State<QrcodeDialog> {
       ),
     ));
 
-    var main = Stack(
+    final main = Stack(
       children: [
         Screenshot(
           controller: screenshotController,
@@ -203,23 +204,21 @@ class _QrcodeDialog extends State<QrcodeDialog> {
     );
   }
 
-  void _doCopy(String text) {
-    Clipboard.setData(ClipboardData(text: text)).then((_) {
+  void _doCopy(final String text) {
+    Clipboard.setData(ClipboardData(text: text)).then((final _) {
       BotToast.showText(text: "key_has_been_copy");
     });
   }
 
   void onShareTap() {
-    screenshotController.capture().then((Uint8List? imageData) async {
+    screenshotController.capture().then((final Uint8List? imageData) async {
       if (imageData != null) {
-        var tempFile = await StoreUtil.saveBS2TempFile(
+        final tempFile = await StoreUtil.saveBS2TempFile(
           "png",
           imageData,
         );
         Share.shareXFiles([XFile(tempFile)]);
       }
-    }).catchError((onError) {
-      print(onError);
-    });
+    }).catchError(print);
   }
 }

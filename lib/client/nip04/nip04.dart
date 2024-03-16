@@ -1,32 +1,32 @@
-import 'dart:convert';
-import 'dart:math';
-import 'dart:typed_data';
+import "dart:convert";
+import "dart:math";
+import "dart:typed_data";
 
-import 'package:convert/convert.dart';
-import 'package:pointycastle/export.dart';
+import "package:convert/convert.dart";
+import "package:pointycastle/export.dart";
 
 class NIP04 {
   static var secp256k1 = ECDomainParameters("secp256k1");
 
-  static ECDHBasicAgreement getAgreement(String sk) {
-    var skD0 = BigInt.parse(sk, radix: 16);
-    var privateKey = ECPrivateKey(skD0, secp256k1);
+  static ECDHBasicAgreement getAgreement(final String sk) {
+    final skD0 = BigInt.parse(sk, radix: 16);
+    final privateKey = ECPrivateKey(skD0, secp256k1);
 
-    var agreement = ECDHBasicAgreement();
+    final agreement = ECDHBasicAgreement();
     agreement.init(privateKey);
 
     return agreement;
   }
 
-  static String encrypt(
-      String message, ECDHBasicAgreement agreement, String pk) {
-    var pubKey = getPubKey(pk);
-    var agreementD0 = agreement.calculateAgreement(pubKey);
-    var enctyptKey = agreementD0.toRadixString(16).padLeft(64, "0");
+  static String encrypt(final String message,
+      final ECDHBasicAgreement agreement, final String pk) {
+    final pubKey = getPubKey(pk);
+    final agreementD0 = agreement.calculateAgreement(pubKey);
+    final enctyptKey = agreementD0.toRadixString(16).padLeft(64, "0");
 
     final random = Random.secure();
-    var ivData =
-        Uint8List.fromList(List<int>.generate(16, (i) => random.nextInt(256)));
+    final ivData = Uint8List.fromList(
+        List<int>.generate(16, (final i) => random.nextInt(256)));
     // var iv = "UeAMaJl5Hj6IZcot7zLfmQ==";
     // var ivData = base64.decode(iv);
 
@@ -40,24 +40,24 @@ class NIP04 {
 
     // print(cipherCbc.algorithmName);
 
-    var result = cipherCbc.process(Uint8List.fromList(utf8.encode(message)));
+    final result = cipherCbc.process(Uint8List.fromList(utf8.encode(message)));
 
     return "${base64.encode(result)}?iv=${base64.encode(ivData)}";
   }
 
   static String decrypt(
-      String message, ECDHBasicAgreement agreement, String pk) {
-    var strs = message.split("?iv=");
+      String message, final ECDHBasicAgreement agreement, final String pk) {
+    final strs = message.split("?iv=");
     if (strs.length != 2) {
       return "";
     }
     message = strs[0];
-    var iv = strs[1];
-    var ivData = base64.decode(iv);
+    final iv = strs[1];
+    final ivData = base64.decode(iv);
 
-    var pubKey = getPubKey(pk);
-    var agreementD0 = agreement.calculateAgreement(pubKey);
-    var encryptKey = agreementD0.toRadixString(16).padLeft(64, "0");
+    final pubKey = getPubKey(pk);
+    final agreementD0 = agreement.calculateAgreement(pubKey);
+    final encryptKey = agreementD0.toRadixString(16).padLeft(64, "0");
 
     // var encrypter = Encrypter(AES(
     //     Key(Uint8List.fromList(hex.decode(encryptKey))),
@@ -72,37 +72,37 @@ class NIP04 {
         null);
     cipherCbc.init(false, paramsCbc);
 
-    var result = cipherCbc.process(base64.decode(message));
+    final result = cipherCbc.process(base64.decode(message));
 
     return utf8.decode(result);
   }
 
-  static ECPublicKey getPubKey(String pk) {
+  static ECPublicKey getPubKey(final String pk) {
     // BigInt x = BigInt.parse(pk, radix: 16);
-    BigInt x =
-        BigInt.parse(hex.encode(hex.decode(pk.padLeft(64, '0'))), radix: 16);
+    final BigInt x =
+        BigInt.parse(hex.encode(hex.decode(pk.padLeft(64, "0"))), radix: 16);
     BigInt? y;
     try {
       y = liftX(x);
     } on Error {
       print("error in handle pubKey");
     }
-    ECPoint endPoint = secp256k1.curve.createPoint(x, y!);
+    final ECPoint endPoint = secp256k1.curve.createPoint(x, y!);
     return ECPublicKey(endPoint, secp256k1);
   }
 
   static var curveP = BigInt.parse(
-      'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F',
+      "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F",
       radix: 16);
 
   // helper methods:
   // liftX returns Y for this X
-  static BigInt liftX(BigInt x) {
+  static BigInt liftX(final BigInt x) {
     if (x >= curveP) {
       throw Error();
     }
-    var ySq = (x.modPow(BigInt.from(3), curveP) + BigInt.from(7)) % curveP;
-    var y = ySq.modPow((curveP + BigInt.one) ~/ BigInt.from(4), curveP);
+    final ySq = (x.modPow(BigInt.from(3), curveP) + BigInt.from(7)) % curveP;
+    final y = ySq.modPow((curveP + BigInt.one) ~/ BigInt.from(4), curveP);
     if (y.modPow(BigInt.two, curveP) != ySq) {
       throw Error();
     }
@@ -111,7 +111,8 @@ class NIP04 {
 
   static String generate16RandomHexChars() {
     final random = Random.secure();
-    final randomBytes = List<int>.generate(16, (i) => random.nextInt(256));
+    final randomBytes =
+        List<int>.generate(16, (final i) => random.nextInt(256));
     return hex.encode(randomBytes);
   }
 }

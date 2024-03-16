@@ -1,28 +1,28 @@
-import 'package:flutter/material.dart';
-import 'package:loure/client/relay/relay_pool.dart';
-import 'package:widget_size/widget_size.dart';
+import "package:flutter/material.dart";
+import "package:loure/client/relay/relay_pool.dart";
+import "package:widget_size/widget_size.dart";
 
-import 'package:loure/client/aid.dart';
-import 'package:loure/client/event.dart';
-import 'package:loure/client/event_relation.dart';
-import 'package:loure/client/filter.dart';
-import 'package:loure/component/cust_state.dart';
-import 'package:loure/component/event/event_list_component.dart';
-import 'package:loure/component/event/event_load_list_component.dart';
-import 'package:loure/component/event_reply_callback.dart';
-import 'package:loure/component/simple_name_component.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/data/event_mem_box.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/pendingevents_later_function.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/client/event_kind.dart' as kind;
-import 'package:loure/util/string_util.dart';
-import 'package:loure/util/when_stop_function.dart';
-import 'package:loure/router/thread/thread_detail_event.dart';
-import 'package:loure/router/thread/thread_detail_event_main_component.dart';
-import 'package:loure/router/thread/thread_detail_item_component.dart';
+import "package:loure/client/aid.dart";
+import "package:loure/client/event.dart";
+import "package:loure/client/event_relation.dart";
+import "package:loure/client/filter.dart";
+import "package:loure/component/cust_state.dart";
+import "package:loure/component/event/event_list_component.dart";
+import "package:loure/component/event/event_load_list_component.dart";
+import "package:loure/component/event_reply_callback.dart";
+import "package:loure/component/simple_name_component.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/data/event_mem_box.dart";
+import "package:loure/main.dart";
+import "package:loure/util/pendingevents_later_function.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/client/event_kind.dart" as kind;
+import "package:loure/util/string_util.dart";
+import "package:loure/util/when_stop_function.dart";
+import "package:loure/router/thread/thread_detail_event.dart";
+import "package:loure/router/thread/thread_detail_event_main_component.dart";
+import "package:loure/router/thread/thread_detail_item_component.dart";
 
 class ThreadDetailRouter extends StatefulWidget {
   const ThreadDetailRouter({super.key});
@@ -32,11 +32,12 @@ class ThreadDetailRouter extends StatefulWidget {
     return _ThreadDetailRouter();
   }
 
-  static Widget detailAppBarTitle(Event event, ThemeData themeData) {
-    var bodyLargeFontSize = themeData.textTheme.bodyLarge!.fontSize;
+  static Widget detailAppBarTitle(
+      final Event event, final ThemeData themeData) {
+    final bodyLargeFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
     List<Widget> appBarTitleList = [];
-    var nameComponent = SimpleNameComponent(
+    final nameComponent = SimpleNameComponent(
       pubkey: event.pubKey,
       textStyle: TextStyle(
         fontSize: bodyLargeFontSize,
@@ -92,7 +93,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
     });
 
     if (this.sourceEvent == null) {
-      var obj = RouterUtil.routerArgs(context);
+      final obj = RouterUtil.routerArgs(context);
       if (obj != null && obj is Event) {
         this.sourceEvent = obj;
       }
@@ -103,7 +104,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
 
       this.initFromArgs();
     } else {
-      var obj = RouterUtil.routerArgs(context);
+      final obj = RouterUtil.routerArgs(context);
       if (obj != null && obj is Event) {
         if (obj.id != sourceEvent!.id) {
           // arg change! reset.
@@ -122,7 +123,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
   GlobalKey sourceEventKey = GlobalKey();
 
   void initFromArgs() {
-    var eventRelation = EventRelation.fromEvent(sourceEvent!);
+    final eventRelation = EventRelation.fromEvent(sourceEvent!);
     this.rootId = eventRelation.rootId;
 
     if (eventRelation.aId != null &&
@@ -149,7 +150,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
       }
     }
 
-    this.rootEventFuture!.then((Event? rootEvent) {
+    this.rootEventFuture!.then((final Event? rootEvent) {
       // if (rootEvent != null && StringUtil.isNotBlank(eventRelation.dTag)) {
       //   aId = AId(
       //       kind: rootEvent!.kind,
@@ -159,14 +160,14 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
 
       // load replies from cache and avoid blank page
       {
-        var eventReactions =
+        final eventReactions =
             eventReactionsProvider.get(this.sourceEvent!.id, avoidPull: true);
         if (eventReactions != null && eventReactions.replies.isNotEmpty) {
           box.addList(eventReactions.replies);
         }
       }
       if (this.rootId != null && this.rootId != this.sourceEvent!.id) {
-        var eventReactions =
+        final eventReactions =
             eventReactionsProvider.get(this.rootId!, avoidPull: true);
         if (eventReactions != null && eventReactions.replies.isNotEmpty) {
           box.addList(eventReactions.replies);
@@ -179,7 +180,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
 
       if (rootEvent != null) {
         // check if the rootEvent isn't rootEvent
-        var newRelation = EventRelation.fromEvent(rootEvent);
+        final newRelation = EventRelation.fromEvent(rootEvent);
         String? newRootId;
         if (newRelation.rootId != null) {
           newRootId = newRelation.rootId;
@@ -199,8 +200,8 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
   }
 
   @override
-  Widget doBuild(BuildContext context) {
-    var themeData = Theme.of(context);
+  Widget doBuild(final BuildContext context) {
+    final themeData = Theme.of(context);
     // var bodyLargeFontSize = themeData.textTheme.bodyLarge!.fontSize;
     // var titleTextColor = themeData.appBarTheme.titleTextStyle!.color;
     // var cardColor = themeData.cardColor;
@@ -212,7 +213,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
       appBarTitle = FutureBuilder(
           future: this.rootEventFuture,
           initialData: null,
-          builder: (context, snapshot) {
+          builder: (final context, final snapshot) {
             final rootEvent = snapshot.data;
             if (rootEvent != null) {
               return ThreadDetailRouter.detailAppBarTitle(rootEvent, themeData);
@@ -222,10 +223,10 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
           });
     }
 
-    Widget rootEventWidget = FutureBuilder(
+    final Widget rootEventWidget = FutureBuilder(
       future: this.rootEventFuture,
       initialData: null,
-      builder: (context, snapshot) {
+      builder: (final context, final snapshot) {
         final rootEvent = snapshot.data;
         if (rootEvent == null) {
           return const EventLoadListComponent();
@@ -245,19 +246,19 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
 
     mainList.add(WidgetSize(
       child: rootEventWidget,
-      onChange: (size) {
+      onChange: (final size) {
         rootEventHeight = size.height;
       },
     ));
 
-    for (var item in this.rootSubList!) {
+    for (final item in this.rootSubList!) {
       // if (item.event.kind == kind.EventKind.ZAP &&
       //     StringUtil.isBlank(item.event.content)) {
       //   continue;
       // }
 
-      var totalLevelNum = item.totalLevelNum;
-      var needWidth = (totalLevelNum - 1) *
+      final totalLevelNum = item.totalLevelNum;
+      final needWidth = (totalLevelNum - 1) *
               (Base.BASE_PADDING +
                   ThreadDetailItemMainComponent.BORDER_LEFT_WIDTH) +
           ThreadDetailItemMainComponent.EVENT_MAIN_MIN_WIDTH;
@@ -291,7 +292,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
 
     if (PlatformUtil.isTableMode()) {
       main = GestureDetector(
-        onVerticalDragUpdate: (detail) {
+        onVerticalDragUpdate: (final detail) {
           _controller.jumpTo(_controller.offset - detail.delta.dy);
         },
         behavior: HitTestBehavior.translucent,
@@ -326,7 +327,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     this.subscribeReplies();
   }
 
@@ -338,7 +339,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
     replyKinds.remove(kind.EventKind.REPOST);
 
     // query sub events
-    var filter = this.aId == null
+    final filter = this.aId == null
         ? Filter(
             e: [this.rootId!],
             kinds: replyKinds,
@@ -348,44 +349,44 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
             kinds: replyKinds,
           );
 
-    this.repliesSubHandle = pool
-        .subscribeMany(nostr.relayList.read, [filter], onEvent: onEvent);
+    this.repliesSubHandle =
+        pool.subscribeMany(nostr.relayList.read, [filter], onEvent: onEvent);
   }
 
-  void onEvent(Event event) {
+  void onEvent(final Event event) {
     if (event.kind == kind.EventKind.ZAP && StringUtil.isBlank(event.content)) {
       return;
     }
 
-    later(event, (list) {
+    later(event, (final list) {
       box.addList(list);
       listToTree();
       eventReactionsProvider.onEvents(list);
     }, null);
   }
 
-  void listToTree({bool refresh = true}) {
+  void listToTree({final bool refresh = true}) {
     // event in box had been sorted. The last one is the oldest.
-    var all = box.all();
-    var length = all.length;
+    final all = box.all();
+    final length = all.length;
     List<ThreadDetailEvent> rootSubList = [];
     // key - id, value - item
     Map<String, ThreadDetailEvent> itemMap = {};
     for (var i = length - 1; i > -1; i--) {
-      var event = all[i];
-      var item = ThreadDetailEvent(event: event);
+      final event = all[i];
+      final item = ThreadDetailEvent(event: event);
       itemMap[event.id] = item;
     }
 
     for (var i = length - 1; i > -1; i--) {
-      var event = all[i];
-      var relation = EventRelation.fromEvent(event);
-      var item = itemMap[event.id]!;
+      final event = all[i];
+      final relation = EventRelation.fromEvent(event);
+      final item = itemMap[event.id]!;
 
       if (relation.replyId == null) {
         rootSubList.add(item);
       } else {
-        var replyItem = itemMap[relation.replyId];
+        final replyItem = itemMap[relation.replyId];
         if (replyItem == null) {
           rootSubList.add(item);
         } else {
@@ -395,7 +396,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
     }
 
     this.rootSubList = rootSubList;
-    for (var rootSub in this.rootSubList!) {
+    for (final rootSub in this.rootSubList!) {
       rootSub.handleTotalLevelNum(0);
     }
 
@@ -420,7 +421,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
     disposeLater();
   }
 
-  onReplyCallback(Event event) {
+  onReplyCallback(final Event event) {
     onEvent(event);
   }
 }

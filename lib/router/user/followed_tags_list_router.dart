@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:loure/component/tag_info_component.dart';
-import 'package:loure/consts/base.dart';
+import "package:flutter/material.dart";
+import "package:loure/component/tag_info_component.dart";
+import "package:loure/consts/base.dart";
 
-import 'package:loure/client/nip02/cust_contact_list.dart';
-import 'package:loure/util/router_util.dart';
+import "package:loure/client/nip02/cust_contact_list.dart";
+import "package:loure/util/router_util.dart";
 
 class FollowedTagsListRouter extends StatefulWidget {
   const FollowedTagsListRouter({super.key});
@@ -18,9 +18,9 @@ class _FollowedTagsListRouter extends State<FollowedTagsListRouter> {
   CustContactList? contactList;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     if (contactList == null) {
-      var arg = RouterUtil.routerArgs(context);
+      final arg = RouterUtil.routerArgs(context);
       if (arg != null) {
         contactList = arg as CustContactList;
       }
@@ -30,10 +30,10 @@ class _FollowedTagsListRouter extends State<FollowedTagsListRouter> {
       return Container();
     }
 
-        var themeData = Theme.of(context);
-    var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+    final themeData = Theme.of(context);
+    final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
-    var tagList = contactList!.tagList().toList();
+    final tagList = contactList!.tagList().toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -60,8 +60,8 @@ class _FollowedTagsListRouter extends State<FollowedTagsListRouter> {
           childAspectRatio: 3,
           crossAxisSpacing: Base.BASE_PADDING_HALF,
         ),
-        itemBuilder: (context, index) {
-          var tag = tagList[index];
+        itemBuilder: (final context, final index) {
+          final tag = tagList[index];
 
           return TagInfoComponent(
             tag: tag,

@@ -1,12 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:loure/component/event/event_main_component.dart';
-import 'package:loure/main.dart';
-import 'package:loure/router/thread/thread_detail_event.dart';
-import 'package:screenshot/screenshot.dart';
+import "package:flutter/material.dart";
+import "package:loure/component/event/event_main_component.dart";
+import "package:loure/main.dart";
+import "package:loure/router/thread/thread_detail_event.dart";
+import "package:screenshot/screenshot.dart";
 
-import 'package:loure/consts/base.dart';
+import "package:loure/consts/base.dart";
 
 class ThreadDetailItemMainComponent extends StatefulWidget {
+  ThreadDetailItemMainComponent({
+    required this.item,
+    required this.totalMaxWidth,
+    required this.sourceEventId,
+    required this.sourceEventKey,
+    super.key,
+  });
   static double BORDER_LEFT_WIDTH = 2;
 
   static double EVENT_MAIN_MIN_WIDTH = 200;
@@ -19,13 +26,6 @@ class ThreadDetailItemMainComponent extends StatefulWidget {
 
   GlobalKey sourceEventKey;
 
-  ThreadDetailItemMainComponent({super.key, 
-    required this.item,
-    required this.totalMaxWidth,
-    required this.sourceEventId,
-    required this.sourceEventKey,
-  });
-
   @override
   State<StatefulWidget> createState() {
     return _ThreadDetailItemMainComponent();
@@ -37,12 +37,12 @@ class _ThreadDetailItemMainComponent
   ScreenshotController screenshotController = ScreenshotController();
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var cardColor = themeData.cardColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final cardColor = themeData.cardColor;
 
-    var currentMainEvent = EventMainComponent(
+    final currentMainEvent = EventMainComponent(
       screenshotController: screenshotController,
       event: widget.item.event,
       showReplying: false,
@@ -54,7 +54,7 @@ class _ThreadDetailItemMainComponent
 
     List<Widget> list = [];
     var currentWidth = mediaDataCache.size.width;
-    var leftWidth = (widget.item.currentLevel - 1) *
+    final leftWidth = (widget.item.currentLevel - 1) *
         (Base.BASE_PADDING + ThreadDetailItemMainComponent.BORDER_LEFT_WIDTH);
     currentWidth = mediaDataCache.size.width - leftWidth;
     if (currentWidth < ThreadDetailItemMainComponent.EVENT_MAIN_MIN_WIDTH) {
@@ -68,7 +68,7 @@ class _ThreadDetailItemMainComponent
 
     if (widget.item.subItems.isNotEmpty) {
       List<Widget> subWidgets = [];
-      for (var subItem in widget.item.subItems) {
+      for (final subItem in widget.item.subItems) {
         subWidgets.add(
           Container(
             child: ThreadDetailItemMainComponent(

@@ -1,28 +1,27 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:flutter/material.dart';
-import 'package:get_time_ago/get_time_ago.dart';
+import "package:flutter/material.dart";
+import "package:get_time_ago/get_time_ago.dart";
 
-import 'package:loure/client/event_kind.dart';
-import 'package:loure/component/name_component.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/client/event.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/component/image_component.dart';
+import "package:loure/client/event_kind.dart";
+import "package:loure/component/name_component.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/main.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/client/event.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/component/image_component.dart";
 
 class EventTopComponent extends StatefulWidget {
-  final Event event;
-  final String? pagePubkey;
-
   const EventTopComponent({
-    super.key,
     required this.event,
+    super.key,
     this.pagePubkey,
   });
+  final Event event;
+  final String? pagePubkey;
 
   @override
   State<StatefulWidget> createState() {
@@ -45,11 +44,11 @@ class EventTopComponentState extends State<EventTopComponent> {
 
     // if this is the zap event, change the pubkey from the zap tag info
     if (widget.event.kind == EventKind.ZAP) {
-      for (var tag in widget.event.tags) {
+      for (final tag in widget.event.tags) {
         if (tag[0] == "description" && widget.event.tags.length > 1) {
-          var description = tag[1];
-          var jsonMap = jsonDecode(description);
-          var sourceEvent = Event.fromJson(jsonMap);
+          final description = tag[1];
+          final jsonMap = jsonDecode(description);
+          final sourceEvent = Event.fromJson(jsonMap);
           if (StringUtil.isNotBlank(sourceEvent.pubKey)) {
             this.pubkey = sourceEvent.pubKey;
           }
@@ -61,19 +60,19 @@ class EventTopComponentState extends State<EventTopComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     if (this.pubkey == null) return Container();
 
-    var themeData = Theme.of(context);
-    var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+    final themeData = Theme.of(context);
+    final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
 
     return FutureBuilder(
       future: this.metadataFuture,
       initialData: Metadata.blank(this.pubkey!),
-      builder: (context, snapshot) {
+      builder: (final context, final snapshot) {
         final metadata = snapshot.data;
 
-        var themeData = Theme.of(context);
+        final themeData = Theme.of(context);
 
         Widget? imageWidget;
         if (metadata != null) {
@@ -83,7 +82,8 @@ class EventTopComponentState extends State<EventTopComponent> {
               width: IMAGE_WIDTH,
               height: IMAGE_WIDTH,
               fit: BoxFit.cover,
-              placeholder: (context, url) => const CircularProgressIndicator(),
+              placeholder: (final context, final url) =>
+                  const CircularProgressIndicator(),
             );
           }
         }
@@ -145,7 +145,7 @@ class EventTopComponentState extends State<EventTopComponent> {
     );
   }
 
-  Widget jumpWrap(Widget c) {
+  Widget jumpWrap(final Widget c) {
     return GestureDetector(
       onTap: () {
         // disable jump when in same user page.

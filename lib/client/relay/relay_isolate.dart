@@ -1,21 +1,21 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:isolate';
+import "dart:async";
+import "dart:convert";
+import "dart:isolate";
 
-import 'package:loure/main.dart';
-import 'package:loure/client/event.dart';
+import "package:loure/main.dart";
+import "package:loure/client/event.dart";
 
-import 'package:loure/client/relay/relay.dart';
-import 'package:loure/client/relay/relay_isolate_worker.dart';
+import "package:loure/client/relay/relay.dart";
+import "package:loure/client/relay/relay_isolate_worker.dart";
 
 // The real relay, which is run in other isolate.
 // It can move jsonDecode and event id check and sign check from main Isolate
 class RelayIsolate extends Relay {
   RelayIsolate(
-    String url,
-    RelayStatus relayStatus, {
-    bool assumeValid = true,
-    Event Function(List<List<String>>)? makeAuthEvent,
+    final String url,
+    final RelayStatus relayStatus, {
+    final bool assumeValid = true,
+    final Event Function(List<List<String>>)? makeAuthEvent,
   }) : super(url, relayStatus, assumeValid, makeAuthEvent);
 
   Isolate? isolate;
@@ -81,7 +81,7 @@ class RelayIsolate extends Relay {
   }
 
   @override
-  send(List message) {
+  send(final List message) {
     if (mainToSubSendPort != null &&
         relayStatus.connected == ConnState.CONNECTED) {
       final encoded = jsonEncode(message);
@@ -90,8 +90,8 @@ class RelayIsolate extends Relay {
     }
   }
 
-  void subToMainListener(ReceivePort receivePort) {
-    receivePort.listen((message) {
+  void subToMainListener(final ReceivePort receivePort) {
+    receivePort.listen((final message) {
       if (message is int) {
         // this is const msg.
         // print("msg is $message $url");
@@ -112,7 +112,7 @@ class RelayIsolate extends Relay {
     });
   }
 
-  void _relayConnectComplete(bool result) {
+  void _relayConnectComplete(final bool result) {
     if (relayConnectResultComplete != null) {
       relayConnectResultComplete!.complete(result);
       relayConnectResultComplete = null;
@@ -128,15 +128,14 @@ class RelayIsolate extends Relay {
 }
 
 class RelayIsolateConfig {
-  final String url;
-  final SendPort subToMainSendPort;
-  String? network;
-
   RelayIsolateConfig({
     required this.url,
     required this.subToMainSendPort,
     this.network,
   });
+  final String url;
+  final SendPort subToMainSendPort;
+  String? network;
 }
 
 class RelayIsolateMsgs {

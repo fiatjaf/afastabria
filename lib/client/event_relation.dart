@@ -1,50 +1,29 @@
-import 'package:loure/client/aid.dart';
-import 'package:loure/client/nip19/nip19.dart';
-import 'package:loure/client/nip19/nip19_tlv.dart';
+import "package:loure/client/aid.dart";
+import "package:loure/client/nip19/nip19.dart";
+import "package:loure/client/nip19/nip19_tlv.dart";
 
-import 'package:loure/client/event.dart';
+import "package:loure/client/event.dart";
 
 /// This class is designed for get the relation from event, but it seam to used for get tagInfo from event before event_main display.
 class EventRelation {
-  late String id;
-
-  late String pubkey;
-
-  List<String> tagPList = [];
-  List<String> tagEList = [];
-
-  String? rootId;
-  String? rootRelayAddr;
-  String? replyId;
-  String? replyRelayAddr;
-  String? subject;
-
-  bool warning = false;
-
-  AId? aId;
-
-  String? zapraiser;
-
-  String? dTag;
-
-  EventRelation.fromEvent(Event event) {
+  EventRelation.fromEvent(final Event event) {
     id = event.id;
     pubkey = event.pubKey;
 
     Map<String, int> pMap = {};
-    var length = event.tags.length;
+    final length = event.tags.length;
     for (var i = 0; i < length; i++) {
-      var tag = event.tags[i];
+      final tag = event.tags[i];
 
-      var mentionStr = "#[$i]";
+      final mentionStr = "#[$i]";
       if (event.content.contains(mentionStr)) {
         continue;
       }
 
-      var tagLength = tag.length;
+      final tagLength = tag.length;
       if (tagLength > 1) {
-        var tagKey = tag[0];
-        var value = tag[1];
+        final tagKey = tag[0];
+        final value = tag[1];
         if (tagKey == "p") {
           // check if is Text Note References
           var nip19Str = "nostr:${Nip19.encodePubKey(value)}";
@@ -60,7 +39,7 @@ class EventRelation {
         } else if (tagKey == "e") {
           tagEList.add(value);
           if (tagLength > 3) {
-            var marker = tag[3];
+            final marker = tag[3];
             if (marker == "root") {
               rootId = value;
               rootRelayAddr = tag[2];
@@ -83,7 +62,7 @@ class EventRelation {
       }
     }
 
-    var tagELength = tagEList.length;
+    final tagELength = tagEList.length;
     if (tagELength == 1 && rootId == null && replyId == null) {
       rootId = tagEList[0];
     } else if (tagELength > 1) {
@@ -92,14 +71,14 @@ class EventRelation {
         replyId = tagEList.last;
       } else if (rootId != null && replyId == null) {
         for (var i = tagELength - 1; i > -1; i--) {
-          var id = tagEList[i];
+          final id = tagEList[i];
           if (id != rootId) {
             replyId = id;
           }
         }
       } else if (rootId == null && replyId != null) {
         for (var i = 0; i < tagELength; i++) {
-          var id = tagEList[i];
+          final id = tagEList[i];
           if (id != replyId) {
             rootId = id;
           }
@@ -117,4 +96,24 @@ class EventRelation {
     pMap.remove(event.pubKey);
     tagPList.addAll(pMap.keys);
   }
+  late String id;
+
+  late String pubkey;
+
+  List<String> tagPList = [];
+  List<String> tagEList = [];
+
+  String? rootId;
+  String? rootRelayAddr;
+  String? replyId;
+  String? replyRelayAddr;
+  String? subject;
+
+  bool warning = false;
+
+  AId? aId;
+
+  String? zapraiser;
+
+  String? dTag;
 }

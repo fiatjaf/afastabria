@@ -1,15 +1,14 @@
+import "package:markdown/markdown.dart" as md;
 
-import 'package:markdown/markdown.dart' as md;
-
-import 'package:loure/component/content/markdown/markdown_mention_event_element_builder.dart';
+import "package:loure/component/content/markdown/markdown_mention_event_element_builder.dart";
 
 class MarkdownMentionEventInlineSyntax extends md.InlineSyntax {
-  MarkdownMentionEventInlineSyntax() : super('nostr:note[a-zA-Z0-9]+');
+  MarkdownMentionEventInlineSyntax() : super("nostr:note[a-zA-Z0-9]+");
 
   @override
-  bool onMatch(md.InlineParser parser, Match match) {
+  bool onMatch(final md.InlineParser parser, final Match match) {
     // var text = match.input.substring(match.start, match.end);
-    var text = match[0]!;
+    final text = match[0]!;
     final element =
         md.Element.text(MarkdownMentionEventElementBuilder.TAG, text);
     parser.addNode(element);

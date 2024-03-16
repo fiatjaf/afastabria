@@ -1,32 +1,31 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_placeholder_textlines/placeholder_lines.dart';
+import "package:flutter/material.dart";
+import "package:flutter_placeholder_textlines/placeholder_lines.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/component/user/metadata_top_component.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/main.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/component/user/metadata_top_component.dart";
 
 class MetadataTopPlaceholder extends StatelessWidget {
+  const MetadataTopPlaceholder({super.key});
   static const double IMAGE_BORDER = 4;
 
   static const double IMAGE_WIDTH = 80;
 
   static const double HALF_IMAGE_WIDTH = 40;
 
-  const MetadataTopPlaceholder({super.key});
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
-    var maxWidth = mediaDataCache.size.width;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
+    final maxWidth = mediaDataCache.size.width;
     var bannerHeight = maxWidth / 3;
     if (PlatformUtil.isTableMode()) {
       bannerHeight =
           MetadataTopComponent.getPcBannerHeight(mediaDataCache.size.height);
     }
-    var textSize = themeData.textTheme.bodyMedium!.fontSize;
+    final textSize = themeData.textTheme.bodyMedium!.fontSize;
 
     List<Widget> topBtnList = [
       Expanded(
@@ -44,7 +43,7 @@ class MetadataTopPlaceholder extends StatelessWidget {
       ),
     ));
 
-    Widget userNameComponent = Container(
+    final Widget userNameComponent = Container(
       // height: 40,
       width: 120,
       margin: const EdgeInsets.only(
@@ -91,7 +90,7 @@ class MetadataTopPlaceholder extends StatelessWidget {
       ),
     ));
 
-    Widget userImageWidget = Container(
+    final Widget userImageWidget = Container(
       alignment: Alignment.center,
       height: IMAGE_WIDTH,
       width: IMAGE_WIDTH,

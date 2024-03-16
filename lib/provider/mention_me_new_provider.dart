@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/event_kind.dart';
-import 'package:loure/client/filter.dart';
-import 'package:loure/client/relay/relay_pool.dart';
-import 'package:loure/data/event_mem_box.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/pendingevents_later_function.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/event_kind.dart";
+import "package:loure/client/filter.dart";
+import "package:loure/client/relay/relay_pool.dart";
+import "package:loure/data/event_mem_box.dart";
+import "package:loure/main.dart";
+import "package:loure/util/pendingevents_later_function.dart";
 
 class MentionMeNewProvider extends ChangeNotifier
     with PendingEventsLaterFunction {
@@ -22,7 +22,7 @@ class MentionMeNewProvider extends ChangeNotifier
             ? mentionMeProvider.lastTime()
             : _localSince;
 
-    var filter = Filter(
+    final filter = Filter(
       since: _localSince! + 1,
       kinds: [
         EventKind.TEXT_NOTE,
@@ -35,13 +35,13 @@ class MentionMeNewProvider extends ChangeNotifier
       p: [nostr.publicKey],
     );
 
-    this.subHandle = pool
-        .subscribeMany(["wss://relay.nostr.band"], [filter], onEvent: (event) {
+    this.subHandle = pool.subscribeMany(["wss://relay.nostr.band"], [filter],
+        onEvent: (final event) {
       later(event, handleEvents, null);
     });
   }
 
-  handleEvents(List<Event> events) {
+  handleEvents(final List<Event> events) {
     eventMemBox.addList(events);
     _localSince = eventMemBox.newestEvent!.createdAt;
     notifyListeners();

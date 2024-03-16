@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:loure/client/aid.dart';
-import 'package:loure/client/event.dart';
-import 'package:loure/client/filter.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/later_function.dart';
-import 'package:loure/client/event_kind.dart';
+import "package:flutter/material.dart";
+import "package:loure/client/aid.dart";
+import "package:loure/client/event.dart";
+import "package:loure/client/filter.dart";
+import "package:loure/main.dart";
+import "package:loure/util/later_function.dart";
+import "package:loure/client/event_kind.dart";
 
 class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
   final Map<String, int> _approvedMap = {};
@@ -13,7 +13,7 @@ class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
 
   List<Event> pendingEvents = [];
 
-  bool check(String pubkey, String eid, {AId? aId}) {
+  bool check(final String pubkey, final String eid, {final AId? aId}) {
     if (_approvedMap[eid] != null || aId == null) {
       return true;
     }
@@ -41,8 +41,8 @@ class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
     if (pendingEvents.isNotEmpty) {
       bool updated = false;
 
-      for (var e in pendingEvents) {
-        var eid = getEId(e);
+      for (final e in pendingEvents) {
+        final eid = getEId(e);
         if (eid != null) {
           if (_approvedMap[eid] == null) {
             updated = true;
@@ -59,18 +59,18 @@ class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
     }
   }
 
-  void onEvent(Event? event) {
+  void onEvent(final Event? event) {
     if (event == null) return;
     pendingEvents.add(event);
     later(laterFunction, null);
   }
 
-  String? getEId(Event e) {
-    var tags = e.tags;
-    for (var tag in tags) {
+  String? getEId(final Event e) {
+    final tags = e.tags;
+    for (final tag in tags) {
       if (tag.length > 1) {
-        var key = tag[0];
-        var value = tag[1];
+        final key = tag[0];
+        final value = tag[1];
 
         if (key == "e") {
           return value;

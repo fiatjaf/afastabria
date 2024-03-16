@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:loure/client/upload/uploader.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/router_util.dart';
+import "package:flutter/material.dart";
+import "package:loure/client/upload/uploader.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/router_util.dart";
 
-import 'package:loure/component/appbar4stack.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/main.dart';
+import "package:loure/component/appbar4stack.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/main.dart";
 
 class ProfileEditorRouter extends StatefulWidget {
   const ProfileEditorRouter({super.key});
@@ -32,7 +32,7 @@ class ProfileEditorRouterState extends State<ProfileEditorRouter> {
   void initState() {
     super.initState();
 
-    metadataLoader.load(nostr.publicKey).then((metadata) {
+    metadataLoader.load(nostr.publicKey).then((final metadata) {
       this.displayNameController.text = metadata.displayName ?? "";
       this.nameController.text = metadata.name ?? "";
       this.aboutController.text = metadata.about ?? "";
@@ -46,13 +46,13 @@ class ProfileEditorRouterState extends State<ProfileEditorRouter> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
     // var mainColor = themeData.primaryColor;
-    var textColor = themeData.textTheme.bodyMedium!.color;
+    final textColor = themeData.textTheme.bodyMedium!.color;
 
-    var submitBtn = TextButton(
+    final submitBtn = TextButton(
       onPressed: profileSave,
       style: const ButtonStyle(),
       child: Text(
@@ -65,7 +65,7 @@ class ProfileEditorRouterState extends State<ProfileEditorRouter> {
     );
 
     Color? appbarBackgroundColor = Colors.transparent;
-    var appBar = Appbar4Stack(
+    final appBar = Appbar4Stack(
       backgroundColor: appbarBackgroundColor,
       // title: appbarTitle,
       action: Container(
@@ -74,8 +74,8 @@ class ProfileEditorRouterState extends State<ProfileEditorRouter> {
       ),
     );
 
-    var margin = const EdgeInsets.only(bottom: Base.BASE_PADDING);
-    var padding = const EdgeInsets.only(left: 20, right: 20);
+    const margin = EdgeInsets.only(bottom: Base.BASE_PADDING);
+    const padding = EdgeInsets.only(left: 20, right: 20);
 
     List<Widget> list = [];
 
@@ -222,14 +222,14 @@ class ProfileEditorRouterState extends State<ProfileEditorRouter> {
   }
 
   Future<void> pickPicture() async {
-    var filepath = await pickImageAndUpload();
+    final filepath = await pickImageAndUpload();
     if (filepath != null && filepath != "") {
       this.pictureController.text = filepath;
     }
   }
 
   Future<void> pickBanner() async {
-    var filepath = await pickImageAndUpload();
+    final filepath = await pickImageAndUpload();
     if (filepath != null && filepath != "") {
       this.bannerController.text = filepath;
     }
@@ -240,7 +240,7 @@ class ProfileEditorRouterState extends State<ProfileEditorRouter> {
       return null;
     }
 
-    var filepath = await Uploader.pick(context);
+    final filepath = await Uploader.pick(context);
     if (filepath != null && filepath != "") {
       return await Uploader.upload(
         filepath,

@@ -1,18 +1,17 @@
-import 'package:screenshot/screenshot.dart';
-import 'package:flutter/material.dart';
+import "package:screenshot/screenshot.dart";
+import "package:flutter/material.dart";
 
-import 'package:loure/component/event/event_main_component.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/client/event.dart';
-import 'package:loure/consts/base.dart';
+import "package:loure/component/event/event_main_component.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/main.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/client/event.dart";
+import "package:loure/consts/base.dart";
 
 // ignore: must_be_immutable
 class GlobalEventItemComponent extends StatefulWidget {
+  GlobalEventItemComponent({required this.eventId, super.key});
   String eventId;
-
-  GlobalEventItemComponent({super.key, required this.eventId});
 
   @override
   State<StatefulWidget> createState() {
@@ -33,15 +32,15 @@ class _GlobalEventItemComponent extends State<GlobalEventItemComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var cardColor = themeData.cardColor;
-    var hintColor = themeData.hintColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final cardColor = themeData.cardColor;
+    final hintColor = themeData.hintColor;
 
     return FutureBuilder(
         future: this.eventFuture,
         initialData: null,
-        builder: (context, snapshot) {
+        builder: (final context, final snapshot) {
           final event = snapshot.data;
           if (event == null) {
             return Container(
@@ -59,7 +58,7 @@ class _GlobalEventItemComponent extends State<GlobalEventItemComponent> {
             );
           }
 
-          var main = Screenshot(
+          final main = Screenshot(
             controller: screenshotController,
             child: Container(
               color: cardColor,

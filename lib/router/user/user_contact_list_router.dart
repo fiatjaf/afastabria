@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/client/nip02/cust_contact_list.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/router/user/user_contact_list_component.dart';
+import "package:loure/client/nip02/cust_contact_list.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/router/user/user_contact_list_component.dart";
 
 class UserContactListRouter extends StatefulWidget {
   const UserContactListRouter({super.key});
@@ -17,10 +17,9 @@ class _UserContactListRouter extends State<UserContactListRouter> {
   CustContactList? contactList;
 
   @override
-  Widget build(BuildContext context) {
-    
+  Widget build(final BuildContext context) {
     if (contactList == null) {
-      var arg = RouterUtil.routerArgs(context);
+      final arg = RouterUtil.routerArgs(context);
       if (arg != null) {
         contactList = arg as CustContactList;
       }
@@ -29,8 +28,8 @@ class _UserContactListRouter extends State<UserContactListRouter> {
       RouterUtil.back(context);
       return Container();
     }
-    var themeData = Theme.of(context);
-    var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+    final themeData = Theme.of(context);
+    final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
     return Scaffold(
       appBar: AppBar(

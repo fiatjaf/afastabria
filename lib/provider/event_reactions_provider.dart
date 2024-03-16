@@ -1,28 +1,27 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/filter.dart';
-import 'package:loure/data/event_reactions.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/later_function.dart';
-import 'package:loure/util/when_stop_function.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/filter.dart";
+import "package:loure/data/event_reactions.dart";
+import "package:loure/main.dart";
+import "package:loure/util/later_function.dart";
+import "package:loure/util/when_stop_function.dart";
 
 class EventReactionsProvider extends ChangeNotifier
     with LaterFunction, WhenStopFunction {
-  int update_time = 1000 * 60 * 10;
-
-  final Map<String, EventReactions> _eventReactionsMap = {};
-
   EventReactionsProvider() {
     laterTimeMS = 2000;
     whenStopMS = 500;
   }
+  int update_time = 1000 * 60 * 10;
+
+  final Map<String, EventReactions> _eventReactionsMap = {};
 
   List<EventReactions> allReactions() {
     return _eventReactionsMap.values.toList();
   }
 
-  void addRepost(String id) {
+  void addRepost(final String id) {
     var er = _eventReactionsMap[id];
     if (er != null) {
       er = er.clone();
@@ -32,7 +31,7 @@ class EventReactionsProvider extends ChangeNotifier
     }
   }
 
-  void addLike(String id, Event likeEvent) {
+  void addLike(final String id, final Event likeEvent) {
     var er = _eventReactionsMap[id];
     if (er != null) {
       er = er.clone();
@@ -42,12 +41,12 @@ class EventReactionsProvider extends ChangeNotifier
     }
   }
 
-  void deleteLike(String id) {
+  void deleteLike(final String id) {
     var er = _eventReactionsMap[id];
     if (er != null) {
       er = er.clone();
       if (er.myLikeEvents != null) {
-        var length = er.myLikeEvents!.length;
+        final length = er.myLikeEvents!.length;
         er.likeNum -= length;
       } else {
         er.likeNum--;
@@ -63,7 +62,7 @@ class EventReactionsProvider extends ChangeNotifier
   //   whenStop(laterFunc);
   // }
 
-  EventReactions? get(String id, {bool avoidPull = false}) {
+  EventReactions? get(final String id, {final bool avoidPull = false}) {
     var er = _eventReactionsMap[id];
     if (er == null) {
       if (avoidPull) {
@@ -78,7 +77,7 @@ class EventReactionsProvider extends ChangeNotifier
       er = EventReactions(id);
       _eventReactionsMap[id] = er;
     } else {
-      var now = DateTime.now();
+      final now = DateTime.now();
       // check dataTime if need to update
       if (now.millisecondsSinceEpoch - er.dataTime.millisecondsSinceEpoch >
           update_time) {
@@ -111,19 +110,19 @@ class EventReactionsProvider extends ChangeNotifier
     _pendingIds.clear();
     pool
         .querySync(nostr.relayList.read, Filter(e: _pendingIds.keys.toList()))
-        .then((evts) => onEvents(evts.toList()));
+        .then((final evts) => onEvents(evts.toList()));
   }
 
-  void addEventAndHandle(Event event) {
+  void addEventAndHandle(final Event event) {
     onEvent(event);
     laterFunc();
   }
 
-  void onEvent(Event event) {
+  void onEvent(final Event event) {
     _pendingEvents.add(event);
   }
 
-  void onEvents(List<Event> events) {
+  void onEvents(final List<Event> events) {
     _pendingEvents.addAll(events);
   }
 
@@ -132,12 +131,12 @@ class EventReactionsProvider extends ChangeNotifier
   void _handleEvent() {
     bool updated = false;
 
-    for (var event in _pendingEvents) {
-      for (var tag in event.tags) {
+    for (final event in _pendingEvents) {
+      for (final tag in event.tags) {
         if (tag.length > 1) {
-          var tagType = tag[0];
+          final tagType = tag[0];
           if (tagType == "e") {
-            var id = tag[1];
+            final id = tag[1];
             var er = _eventReactionsMap[id];
             if (er == null) {
               er = EventReactions(id);
@@ -161,7 +160,7 @@ class EventReactionsProvider extends ChangeNotifier
     }
   }
 
-  void removePending(String id) {
+  void removePending(final String id) {
     _pendingIds.remove(id);
   }
 

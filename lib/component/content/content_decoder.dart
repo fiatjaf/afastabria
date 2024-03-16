@@ -1,26 +1,25 @@
+import "package:flutter/material.dart";
+import "package:loure/client/event_kind.dart";
+import "package:loure/component/content/content_event_tag_infos.dart";
 
-import 'package:flutter/material.dart';
-import 'package:loure/client/event_kind.dart';
-import 'package:loure/component/content/content_event_tag_infos.dart';
-
-import 'package:loure/client/event.dart';
-import 'package:loure/client/nip19/nip19.dart';
-import 'package:loure/client/nip19/nip19_tlv.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/base64.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/component/event/event_quote_component.dart';
-import 'package:loure/component/translate/line_translate_component.dart';
-import 'package:loure/component/content/content_custom_emoji_component.dart';
-import 'package:loure/component/content/content_image_component.dart';
-import 'package:loure/component/content/content_link_component.dart';
-import 'package:loure/component/content/content_link_pre_component.dart';
-import 'package:loure/component/content/content_lnbc_component.dart';
-import 'package:loure/component/content/content_mention_user_component.dart';
-import 'package:loure/component/content/content_relay_component.dart';
-import 'package:loure/component/content/content_tag_component.dart';
-import 'package:loure/component/content/content_video_component.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/nip19/nip19.dart";
+import "package:loure/client/nip19/nip19_tlv.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/base64.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/component/event/event_quote_component.dart";
+import "package:loure/component/translate/line_translate_component.dart";
+import "package:loure/component/content/content_custom_emoji_component.dart";
+import "package:loure/component/content/content_image_component.dart";
+import "package:loure/component/content/content_link_component.dart";
+import "package:loure/component/content/content_link_pre_component.dart";
+import "package:loure/component/content/content_lnbc_component.dart";
+import "package:loure/component/content/content_mention_user_component.dart";
+import "package:loure/component/content/content_relay_component.dart";
+import "package:loure/component/content/content_tag_component.dart";
+import "package:loure/component/content/content_video_component.dart";
 
 class ContentDecoder {
   static const OTHER_LIGHTNING = "lightning=";
@@ -43,7 +42,7 @@ class ContentDecoder {
 
   static const int NOTEID_LENGTH = 63;
 
-  static String _addToHandledStr(String handledStr, String subStr) {
+  static String _addToHandledStr(final String handledStr, final String subStr) {
     if (StringUtil.isBlank(handledStr)) {
       return subStr;
     } else {
@@ -51,7 +50,8 @@ class ContentDecoder {
     }
   }
 
-  static String _closeHandledStr(String handledStr, List<dynamic> inlines) {
+  static String _closeHandledStr(
+      final String handledStr, final List<dynamic> inlines) {
     if (StringUtil.isNotBlank(handledStr)) {
       // inlines.add(Text(handledStr));
       inlines.add(handledStr);
@@ -59,8 +59,9 @@ class ContentDecoder {
     return "";
   }
 
-  static void _closeInlines(List<dynamic> inlines, List<Widget> list,
-      {Function? textOnTap}) {
+  static void _closeInlines(
+      final List<dynamic> inlines, final List<Widget> list,
+      {final Function? textOnTap}) {
     if (inlines.isNotEmpty) {
       if (inlines.length == 1) {
         if (inlines[0] is String) {
@@ -103,19 +104,19 @@ class ContentDecoder {
     content = content.trim();
     content = content.replaceAll("\r\n", "\n");
     content = content.replaceAll("\n\n", "\n");
-    var strs = content.split("\n");
+    final strs = content.split("\n");
 
-    ContentDecoderInfo info = ContentDecoderInfo();
-    for (var str in strs) {
+    final ContentDecoderInfo info = ContentDecoderInfo();
+    for (final str in strs) {
       List<dynamic> inlines = [];
-      String handledStr = "";
+      const String handledStr = "";
 
-      var subStrs = str.split(" ");
+      final subStrs = str.split(" ");
       info.strs.add(subStrs);
-      for (var subStr in subStrs) {
+      for (final subStr in subStrs) {
         if (subStr.indexOf("http") == 0) {
           // link, image, video etc
-          var pathType = getPathType(subStr);
+          final pathType = getPathType(subStr);
           if (pathType == "image") {
             info.imageNum++;
           }
@@ -129,14 +130,14 @@ class ContentDecoder {
   @Deprecated(
       "This method had bean Deprecated, it should insteaded by ContentComponent")
   static List<Widget> decode(
-    BuildContext context,
+    final BuildContext context,
     String? content,
-    Event? event, {
-    Function? textOnTap,
-    bool showImage = true,
-    bool showVideo = false,
-    bool showLinkPreview = true,
-    bool imageListMode = false,
+    final Event? event, {
+    final Function? textOnTap,
+    final bool showImage = true,
+    final bool showVideo = false,
+    final bool showLinkPreview = true,
+    final bool imageListMode = false,
   }) {
     if (StringUtil.isBlank(content) && event != null) {
       content = event.content;
@@ -144,13 +145,13 @@ class ContentDecoder {
     List<Widget> list = [];
     List<String> imageList = [];
 
-    var decodeInfo = _decodeTest(content!);
+    final decodeInfo = _decodeTest(content!);
     ContentEventTagInfos? tagInfos;
     if (event != null) {
       tagInfos = ContentEventTagInfos.fromEvent(event);
     }
 
-    for (var subStrs in decodeInfo.strs) {
+    for (final subStrs in decodeInfo.strs) {
       List<dynamic> inlines = [];
       String handledStr = "";
 
@@ -163,14 +164,14 @@ class ContentDecoder {
       for (var subStr in subStrs) {
         if (subStr.indexOf("http") == 0) {
           // link, image, video etc
-          var pathType = getPathType(subStr);
+          final pathType = getPathType(subStr);
           if (pathType == "image") {
             if (showImage) {
               imageList.add(subStr);
               if (imageListMode && decodeInfo.imageNum > 1) {
                 // inline
                 handledStr = handledStr.trim();
-                var imagePlaceholder = Container(
+                final imagePlaceholder = Container(
                   margin: const EdgeInsets.only(left: 4),
                   child: const Icon(
                     Icons.image,
@@ -179,9 +180,9 @@ class ContentDecoder {
                 );
                 if (StringUtil.isBlank(handledStr) && inlines.isEmpty) {
                   // add to pre line
-                  var listLength = list.length;
+                  final listLength = list.length;
                   if (listLength > 0) {
-                    var lastListWidget = list[listLength - 1];
+                    final lastListWidget = list[listLength - 1];
                     List<InlineSpan> spans = [];
                     if (lastListWidget is SelectableText) {
                       if (lastListWidget.data != null) {
@@ -213,8 +214,8 @@ class ContentDecoder {
                 // block
                 handledStr = _closeHandledStr(handledStr, inlines);
                 _closeInlines(inlines, list, textOnTap: textOnTap);
-                var imageIndex = imageList.length - 1;
-                var imageWidget = ContentImageComponent(
+                final imageIndex = imageList.length - 1;
+                final imageWidget = ContentImageComponent(
                   imageUrl: subStr,
                   imageList: imageList,
                   imageIndex: imageIndex,
@@ -231,7 +232,7 @@ class ContentDecoder {
               // block
               handledStr = _closeHandledStr(handledStr, inlines);
               _closeInlines(inlines, list, textOnTap: textOnTap);
-              var w = ContentVideoComponent(url: subStr);
+              final w = ContentVideoComponent(url: subStr);
               list.add(w);
             } else {
               // inline
@@ -257,7 +258,7 @@ class ContentDecoder {
               //   );
               //   list.add(w);
               // } else {
-              var w = ContentLinkPreComponent(
+              final w = ContentLinkPreComponent(
                 link: subStr,
               );
               list.add(w);
@@ -290,13 +291,13 @@ class ContentDecoder {
             key = Nip19.decode(key);
             handledStr = _closeHandledStr(handledStr, inlines);
             _closeInlines(inlines, list, textOnTap: textOnTap);
-            var widget = EventQuoteComponent(
+            final widget = EventQuoteComponent(
               id: key,
               showVideo: showVideo,
             );
             list.add(widget);
           } else if (NIP19Tlv.isNprofile(key)) {
-            var nprofile = NIP19Tlv.decodeNprofile(key);
+            final nprofile = NIP19Tlv.decodeNprofile(key);
             if (nprofile != null) {
               // inline
               // mention user
@@ -306,7 +307,7 @@ class ContentDecoder {
               handledStr = _addToHandledStr(handledStr, subStr);
             }
           } else if (NIP19Tlv.isNrelay(key)) {
-            var nrelay = NIP19Tlv.decodeNrelay(key);
+            final nrelay = NIP19Tlv.decodeNrelay(key);
             if (nrelay != null) {
               // inline
               handledStr = _closeHandledStr(handledStr, inlines);
@@ -315,12 +316,12 @@ class ContentDecoder {
               handledStr = _addToHandledStr(handledStr, subStr);
             }
           } else if (NIP19Tlv.isNevent(key)) {
-            var nevent = NIP19Tlv.decodeNevent(key);
+            final nevent = NIP19Tlv.decodeNevent(key);
             if (nevent != null) {
               // block
               handledStr = _closeHandledStr(handledStr, inlines);
               _closeInlines(inlines, list, textOnTap: textOnTap);
-              var widget = EventQuoteComponent(
+              final widget = EventQuoteComponent(
                 id: nevent.id,
                 showVideo: showVideo,
               );
@@ -329,14 +330,14 @@ class ContentDecoder {
               handledStr = _addToHandledStr(handledStr, subStr);
             }
           } else if (NIP19Tlv.isNaddr(key)) {
-            var naddr = NIP19Tlv.decodeNaddr(key);
+            final naddr = NIP19Tlv.decodeNaddr(key);
             if (naddr != null) {
               if (StringUtil.isNotBlank(naddr.id) &&
                   naddr.kind == EventKind.TEXT_NOTE) {
                 // block
                 handledStr = _closeHandledStr(handledStr, inlines);
                 _closeInlines(inlines, list, textOnTap: textOnTap);
-                var widget = EventQuoteComponent(
+                final widget = EventQuoteComponent(
                   id: naddr.id,
                   showVideo: showVideo,
                 );
@@ -372,7 +373,7 @@ class ContentDecoder {
           key = Nip19.decode(key);
           handledStr = _closeHandledStr(handledStr, inlines);
           _closeInlines(inlines, list, textOnTap: textOnTap);
-          var widget = EventQuoteComponent(
+          final widget = EventQuoteComponent(
             id: key,
             showVideo: showVideo,
           );
@@ -381,37 +382,37 @@ class ContentDecoder {
           // block
           handledStr = _closeHandledStr(handledStr, inlines);
           _closeInlines(inlines, list, textOnTap: textOnTap);
-          var w = ContentLnbcComponent(lnbc: subStr);
+          final w = ContentLnbcComponent(lnbc: subStr);
           list.add(w);
         } else if (subStr.indexOf(LIGHTNING) == 0) {
           // block
           handledStr = _closeHandledStr(handledStr, inlines);
           _closeInlines(inlines, list, textOnTap: textOnTap);
-          var w = ContentLnbcComponent(lnbc: subStr);
+          final w = ContentLnbcComponent(lnbc: subStr);
           list.add(w);
         } else if (subStr.contains(OTHER_LIGHTNING)) {
           // block
           handledStr = _closeHandledStr(handledStr, inlines);
           _closeInlines(inlines, list, textOnTap: textOnTap);
-          var w = ContentLnbcComponent(lnbc: subStr);
+          final w = ContentLnbcComponent(lnbc: subStr);
           list.add(w);
         } else if (subStr.indexOf("#[") == 0 &&
             subStr.length > 3 &&
             event != null) {
           // mention
-          var endIndex = subStr.indexOf("]");
-          var indexStr = subStr.substring(2, endIndex);
-          var index = int.tryParse(indexStr);
+          final endIndex = subStr.indexOf("]");
+          final indexStr = subStr.substring(2, endIndex);
+          final index = int.tryParse(indexStr);
           if (index != null && event.tags.length > index) {
-            var tag = event.tags[index];
+            final tag = event.tags[index];
             if (tag.length > 1) {
-              var tagType = tag[0];
+              final tagType = tag[0];
               if (tagType == "e") {
                 // block
                 // mention event
                 handledStr = _closeHandledStr(handledStr, inlines);
                 _closeInlines(inlines, list, textOnTap: textOnTap);
-                var widget = EventQuoteComponent(
+                final widget = EventQuoteComponent(
                   id: tag[1],
                   showVideo: showVideo,
                 );
@@ -433,11 +434,11 @@ class ContentDecoder {
           // inline
           // tag
           var extralStr = "";
-          var length = subStr.length;
+          final length = subStr.length;
           if (tagInfos != null) {
-            for (var hashtagInfo in tagInfos.tagEntryInfos) {
-              var hashtag = hashtagInfo.key;
-              var hashtagLength = hashtagInfo.value;
+            for (final hashtagInfo in tagInfos.tagEntryInfos) {
+              final hashtag = hashtagInfo.key;
+              final hashtagLength = hashtagInfo.value;
               if (subStr.indexOf(hashtag) == 1) {
                 // dua to tagEntryInfos is sorted, so this is the match hashtag
                 if (hashtagLength > 0 && length > hashtagLength) {
@@ -456,13 +457,13 @@ class ContentDecoder {
             handledStr = _addToHandledStr(handledStr, extralStr);
           }
         } else {
-          var length = subStr.length;
+          final length = subStr.length;
           if (length > 2) {
             if (subStr.substring(0, 1) == ":" &&
                 subStr.substring(length - 1) == ":" &&
                 tagInfos != null) {
-              var emojiKey = subStr.substring(1, length - 1);
-              var imagePath = tagInfos.emojiMap[emojiKey];
+              final emojiKey = subStr.substring(1, length - 1);
+              final imagePath = tagInfos.emojiMap[emojiKey];
               // var imagePath = tagInfos.emojiMap[subStr];
               if (StringUtil.isNotBlank(imagePath)) {
                 handledStr = _closeHandledStr(handledStr, inlines);
@@ -484,7 +485,7 @@ class ContentDecoder {
       // showImageList in bottom
       List<Widget> imageWidgetList = [];
       var index = 0;
-      for (var image in imageList) {
+      for (final image in imageList) {
         imageWidgetList.add(SliverToBoxAdapter(
           child: Container(
             margin: const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
@@ -525,7 +526,7 @@ class ContentDecoder {
 
     var strs = path.split("?");
     strs = strs[0].split("#");
-    var index = strs[0].lastIndexOf(".");
+    final index = strs[0].lastIndexOf(".");
     if (index == -1) {
       return null;
     }

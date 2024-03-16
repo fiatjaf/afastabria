@@ -1,24 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:loure/util/string_util.dart';
+import "package:flutter/material.dart";
+import "package:loure/util/string_util.dart";
 
 class ContentStrLinkComponent extends StatelessWidget {
+  ContentStrLinkComponent(
+      {required this.str,
+      required this.onTap,
+      super.key,
+      this.showUnderline = true});
   bool showUnderline;
 
   String str;
 
   Function onTap;
 
-  ContentStrLinkComponent(
-      {super.key,
-      required this.str,
-      required this.onTap,
-      this.showUnderline = true});
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
-    var fontSize = themeData.textTheme.bodyMedium!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
+    final fontSize = themeData.textTheme.bodyMedium!.fontSize;
 
     return GestureDetector(
       onTap: () {

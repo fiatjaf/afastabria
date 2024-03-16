@@ -1,20 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:google_mlkit_language_id/google_mlkit_language_id.dart';
-import 'package:google_mlkit_translation/google_mlkit_translation.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:google_mlkit_language_id/google_mlkit_language_id.dart";
+import "package:google_mlkit_translation/google_mlkit_translation.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/setting_provider.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/component/cust_state.dart';
+import "package:loure/consts/base_consts.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/setting_provider.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/component/cust_state.dart";
 
 class LineTranslateComponent extends StatefulWidget {
+  LineTranslateComponent(this.inlines, {super.key, this.textOnTap});
   List<dynamic> inlines;
 
   Function? textOnTap;
-
-  LineTranslateComponent(this.inlines, {super.key, this.textOnTap});
 
   @override
   State<StatefulWidget> createState() {
@@ -36,16 +35,16 @@ class _LineTranslateComponent extends CustState<LineTranslateComponent> {
   bool showSource = false;
 
   @override
-  Widget doBuild(BuildContext context) {
-    var settingProvider = Provider.of<SettingProvider>(context);
-    var themeData = Theme.of(context);
-    var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
-    var fontSize = themeData.textTheme.bodyMedium!.fontSize;
-    var iconWidgetWidth = fontSize! + 4;
-    var hintColor = themeData.hintColor;
+  Widget doBuild(final BuildContext context) {
+    final settingProvider = Provider.of<SettingProvider>(context);
+    final themeData = Theme.of(context);
+    final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+    final fontSize = themeData.textTheme.bodyMedium!.fontSize;
+    final iconWidgetWidth = fontSize! + 4;
+    final hintColor = themeData.hintColor;
 
     if (isInited) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((final _) {
         checkAndTranslate();
       });
     }
@@ -62,9 +61,9 @@ class _LineTranslateComponent extends CustState<LineTranslateComponent> {
           color: hintColor,
         ),
       );
-      for (var inline in widget.inlines) {
+      for (final inline in widget.inlines) {
         if (inline is String) {
-          var targetInline = targetTextMap[inline];
+          final targetInline = targetTextMap[inline];
           if (StringUtil.isNotBlank(targetInline)) {
             spans.add(TextSpan(text: "$targetInline "));
 
@@ -85,7 +84,7 @@ class _LineTranslateComponent extends CustState<LineTranslateComponent> {
         }
       }
 
-      var iconBtn = WidgetSpan(
+      final iconBtn = WidgetSpan(
         child: GestureDetector(
           onTap: () {
             setState(() {
@@ -114,7 +113,7 @@ class _LineTranslateComponent extends CustState<LineTranslateComponent> {
       spans.add(iconBtn);
     } else {
       // no translate
-      for (var inline in widget.inlines) {
+      for (final inline in widget.inlines) {
         if (inline is String) {
           spans.add(TextSpan(text: "$inline "));
         } else {
@@ -134,14 +133,14 @@ class _LineTranslateComponent extends CustState<LineTranslateComponent> {
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     checkAndTranslate();
   }
 
   Future<void> checkAndTranslate() async {
     var newSourceText = "";
 
-    for (var inline in widget.inlines) {
+    for (final inline in widget.inlines) {
       if (inline is String) {
         newSourceText += inline;
       }
@@ -174,7 +173,7 @@ class _LineTranslateComponent extends CustState<LineTranslateComponent> {
       }
     }
 
-    var translateTarget = settingProvider.translateTarget;
+    final translateTarget = settingProvider.translateTarget;
     if (StringUtil.isBlank(translateTarget)) {
       return;
     }
@@ -194,7 +193,7 @@ class _LineTranslateComponent extends CustState<LineTranslateComponent> {
           await languageIdentifier.identifyPossibleLanguages(newSourceText);
 
       if (possibleLanguages.isNotEmpty) {
-        var pl = possibleLanguages[0];
+        final pl = possibleLanguages[0];
         if (!settingProvider.translateSourceArgsCheck(pl.languageTag)) {
           if (targetTextMap.isNotEmpty) {
             // set targetText to null
@@ -212,9 +211,9 @@ class _LineTranslateComponent extends CustState<LineTranslateComponent> {
         onDeviceTranslator = OnDeviceTranslator(
             sourceLanguage: sourceLanguage!, targetLanguage: targetLanguage!);
 
-        for (var inline in widget.inlines) {
+        for (final inline in widget.inlines) {
           if (inline is String) {
-            var result = await onDeviceTranslator.translateText(inline);
+            final result = await onDeviceTranslator.translateText(inline);
             if (StringUtil.isNotBlank(result)) {
               targetTextMap[inline] = result;
             }

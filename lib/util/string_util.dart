@@ -1,23 +1,23 @@
 class StringUtil {
-  static bool isNotBlank(String? str) {
+  static bool isNotBlank(final String? str) {
     if (str != null && str != "") {
       return true;
     }
     return false;
   }
 
-  static bool isBlank(String? str) {
+  static bool isBlank(final String? str) {
     return !isNotBlank(str);
   }
 
-  static String breakWord(String word) {
+  static String breakWord(final String word) {
     if (word.isEmpty) {
       return word;
     }
-    String breakWord = '';
-    for (var element in word.runes) {
+    String breakWord = "";
+    for (final element in word.runes) {
       breakWord += String.fromCharCode(element);
-      breakWord += '\u200B';
+      breakWord += "\u200B";
     }
     return breakWord;
   }

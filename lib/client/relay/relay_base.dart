@@ -1,16 +1,16 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:web_socket_channel/web_socket_channel.dart';
+import "package:web_socket_channel/web_socket_channel.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/relay/relay.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/relay/relay.dart";
 
 class RelayBase extends Relay {
   RelayBase(
-    String url,
-    RelayStatus relayStatus, {
-    bool assumeValid = true,
-    Event Function(List<List<String>>)? makeAuthEvent,
+    final String url,
+    final RelayStatus relayStatus, {
+    final bool assumeValid = true,
+    final Event Function(List<List<String>>)? makeAuthEvent,
   }) : super(url, relayStatus, assumeValid, makeAuthEvent);
 
   WebSocketChannel? _wsChannel;
@@ -29,9 +29,9 @@ class RelayBase extends Relay {
       _wsChannel = WebSocketChannel.connect(wsUrl);
       await _wsChannel!.ready;
 
-      _wsChannel!.stream.listen((message) {
+      _wsChannel!.stream.listen((final message) {
         onMessage(jsonDecode(message));
-      }, onError: (error) async {
+      }, onError: (final error) async {
         print(error);
         onError("Websocket error $url", reconnect: true);
       }, onDone: () {
@@ -49,7 +49,7 @@ class RelayBase extends Relay {
   }
 
   @override
-  send(List<dynamic> message) {
+  send(final List<dynamic> message) {
     if (_wsChannel != null && relayStatus.connected == ConnState.CONNECTED) {
       try {
         final encoded = jsonEncode(message);

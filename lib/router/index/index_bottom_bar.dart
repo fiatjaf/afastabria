@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:loure/provider/index_provider.dart';
-import 'package:provider/provider.dart';
+import "package:flutter/material.dart";
+import "package:loure/provider/index_provider.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/main.dart';
+import "package:loure/main.dart";
 
 class IndexBottomBar extends StatefulWidget {
-  static const double HEIGHT = 50;
-
   const IndexBottomBar({super.key});
+  static const double HEIGHT = 50;
 
   @override
   State<StatefulWidget> createState() {
@@ -17,10 +16,10 @@ class IndexBottomBar extends StatefulWidget {
 
 class _IndexBottomBar extends State<IndexBottomBar> {
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var indexProvider = Provider.of<IndexProvider>(context);
-    var currentTap = indexProvider.currentTap;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final indexProvider = Provider.of<IndexProvider>(context);
+    final currentTap = indexProvider.currentTap;
 
     List<Widget> list = [];
 
@@ -99,28 +98,28 @@ class _IndexBottomBar extends State<IndexBottomBar> {
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {}
+  Future<void> onReady(final BuildContext context) async {}
 }
 
 class IndexBottomBarButton extends StatelessWidget {
+  IndexBottomBarButton({
+    required this.iconData,
+    required this.index,
+    required this.selected,
+    super.key,
+    this.onTap,
+    this.onDoubleTap,
+  });
   final IconData iconData;
   final int index;
   final bool selected;
   final Function(int)? onTap;
   Function? onDoubleTap;
 
-  IndexBottomBarButton({super.key, 
-    required this.iconData,
-    required this.index,
-    required this.selected,
-    this.onTap,
-    this.onDoubleTap,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
     // var settingProvider = Provider.of<SettingProvider>(context);
     // var bottomIconColor = settingProvider.bottomIconColor;
 

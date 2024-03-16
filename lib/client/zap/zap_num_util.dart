@@ -1,16 +1,16 @@
-import 'package:loure/client/event_kind.dart' as kind;
-import 'package:loure/util/spider_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/client/event.dart';
+import "package:loure/client/event_kind.dart" as kind;
+import "package:loure/util/spider_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/client/event.dart";
 
 class ZapNumUtil {
-  static int getNumFromZapEvent(Event event) {
+  static int getNumFromZapEvent(final Event event) {
     if (event.kind == kind.EventKind.ZAP) {
-      for (var tag in event.tags) {
+      for (final tag in event.tags) {
         if (tag.length > 1) {
-          var tagType = tag[0];
+          final tagType = tag[0];
           if (tagType == "bolt11") {
-            var zapStr = tag[1];
+            final zapStr = tag[1];
             return getNumFromStr(zapStr);
           }
         }
@@ -20,14 +20,14 @@ class ZapNumUtil {
     return 0;
   }
 
-  static int getNumFromStr(String zapStr) {
-    var numStr = SpiderUtil.subUntil(zapStr, "lnbc", "1p");
+  static int getNumFromStr(final String zapStr) {
+    final numStr = SpiderUtil.subUntil(zapStr, "lnbc", "1p");
     if (StringUtil.isNotBlank(numStr)) {
-      var numStrLength = numStr.length;
+      final numStrLength = numStr.length;
       if (numStrLength > 1) {
-        var lastStr = numStr.substring(numStr.length - 1);
-        var pureNumStr = numStr.substring(0, numStr.length - 1);
-        var pureNum = int.tryParse(pureNumStr);
+        final lastStr = numStr.substring(numStr.length - 1);
+        final pureNumStr = numStr.substring(0, numStr.length - 1);
+        final pureNum = int.tryParse(pureNumStr);
         if (pureNum != null) {
           if (lastStr == "p") {
             return (pureNum * 0.0001).round();

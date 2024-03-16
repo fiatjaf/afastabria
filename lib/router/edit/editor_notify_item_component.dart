@@ -1,21 +1,19 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/data/metadata.dart';
-import 'package:loure/main.dart';
-import 'package:loure/component/simple_name_component.dart';
-import 'package:loure/consts/base.dart';
+import "package:loure/data/metadata.dart";
+import "package:loure/main.dart";
+import "package:loure/component/simple_name_component.dart";
+import "package:loure/consts/base.dart";
 
 class EditorNotifyItem {
+  EditorNotifyItem({required this.pubkey, this.selected = true});
   String pubkey;
   bool selected;
-
-  EditorNotifyItem({required this.pubkey, this.selected = true});
 }
 
 class EditorNotifyItemComponent extends StatefulWidget {
+  const EditorNotifyItemComponent({required this.item, super.key});
   final EditorNotifyItem item;
-
-  const EditorNotifyItemComponent({super.key, required this.item});
 
   @override
   State<StatefulWidget> createState() {
@@ -33,18 +31,18 @@ class EditorNotifyItemComponentState extends State<EditorNotifyItemComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
-    var textColor = themeData.appBarTheme.titleTextStyle!.color;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
+    final textColor = themeData.appBarTheme.titleTextStyle!.color;
 
     List<Widget> list = [];
     list.add(
       FutureBuilder(
         future: this.metadataFuture,
         initialData: Metadata.blank(widget.item.pubkey),
-        builder: (context, snapshot) {
-          String name = SimpleNameComponent.getSimpleName(
+        builder: (final context, final snapshot) {
+          final String name = SimpleNameComponent.getSimpleName(
               widget.item.pubkey, snapshot.data);
           return Text(
             name,
@@ -59,7 +57,7 @@ class EditorNotifyItemComponentState extends State<EditorNotifyItemComponent> {
       height: 24,
       child: Checkbox(
         value: widget.item.selected,
-        onChanged: (value) {
+        onChanged: (final value) {
           setState(() {
             widget.item.selected = !widget.item.selected;
           });

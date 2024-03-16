@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:loure/util/router_util.dart';
+import "package:flutter/material.dart";
+import "package:loure/util/router_util.dart";
 
 class ConfirmDialog {
-  static Future<bool?> show(BuildContext context, String content) async {
+  static Future<bool?> show(
+      final BuildContext context, final String content) async {
     return await showDialog<bool>(
         context: context,
-        builder: (context) {
+        builder: (final context) {
           return AlertDialog(
             title: const Text("Notice"),
             content: Text(content),

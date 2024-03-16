@@ -1,28 +1,28 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/colors.dart';
-import 'package:loure/util/router_util.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/consts/colors.dart";
+import "package:loure/util/router_util.dart";
 
 class ColorSelectorComponent extends StatelessWidget {
   const ColorSelectorComponent({super.key});
 
-  static Future<Color?> show(BuildContext context) async {
+  static Future<Color?> show(final BuildContext context) async {
     return await showDialog(
       context: context,
-      builder: (context) {
+      builder: (final context) {
         return const ColorSelectorComponent();
       },
     );
   }
 
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
 
     List<Widget> widgets = [];
     for (var i = 0; i < ColorList.ALL_COLOR.length; i++) {
-      var c = ColorList.ALL_COLOR[i];
+      final c = ColorList.ALL_COLOR[i];
       widgets.add(SliverToBoxAdapter(
         child: ColorSelectorItemComponent(
           color: c,
@@ -31,7 +31,7 @@ class ColorSelectorComponent extends StatelessWidget {
       ));
     }
 
-    Widget main = Container(
+    final Widget main = Container(
         width: double.infinity,
         height: 100,
         padding: const EdgeInsets.only(
@@ -78,21 +78,21 @@ class ColorSelectorComponent extends StatelessWidget {
 }
 
 class ColorSelectorItemComponent extends StatelessWidget {
+  // final bool isLast;
+
+  const ColorSelectorItemComponent({
+    required this.color,
+    super.key,
+    // this.isLast = false,
+  });
   static const double HEIGHT = 44;
 
   final Color color;
 
-  // final bool isLast;
-
-  const ColorSelectorItemComponent({super.key, 
-    required this.color,
-    // this.isLast = false,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var dividerColor = themeData.dividerColor;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final dividerColor = themeData.dividerColor;
 
     return GestureDetector(
       onTap: () {

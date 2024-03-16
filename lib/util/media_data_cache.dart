@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 class MediaDataCache {
   late Size size;
 
   late EdgeInsets padding;
 
-  void update(BuildContext context) {
-    var mediaData = MediaQuery.of(context);
+  void update(final BuildContext context) {
+    final mediaData = MediaQuery.of(context);
     size = mediaData.size;
     padding = mediaData.padding;
   }

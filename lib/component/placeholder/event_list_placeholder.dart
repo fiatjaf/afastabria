@@ -1,17 +1,16 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/component/placeholder/event_placeholder.dart';
+import "package:loure/component/placeholder/event_placeholder.dart";
 
 // ignore: must_be_immutable
 class EventListPlaceholder extends StatelessWidget {
+  EventListPlaceholder({super.key, this.onRefresh});
   Function? onRefresh;
 
-  EventListPlaceholder({super.key, this.onRefresh});
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return ListView.builder(
-      itemBuilder: (BuildContext context, int index) {
+      itemBuilder: (final BuildContext context, final int index) {
         return const EventPlaceholder();
       },
       itemCount: 10,

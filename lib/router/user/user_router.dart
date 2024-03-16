@@ -1,22 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:loure/client/client_utils/keys.dart';
-import 'package:loure/data/metadata.dart';
+import "package:flutter/material.dart";
+import "package:loure/client/client_utils/keys.dart";
+import "package:loure/data/metadata.dart";
 
-import 'package:loure/client/relay/relay_pool.dart';
-import 'package:loure/component/simple_name_component.dart';
-import 'package:loure/client/event_kind.dart';
-import 'package:loure/client/filter.dart';
-import 'package:loure/component/appbar4stack.dart';
-import 'package:loure/component/cust_state.dart';
-import 'package:loure/component/event/event_list_component.dart';
-import 'package:loure/component/user/metadata_component.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/data/event_mem_box.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/load_more_event.dart';
-import 'package:loure/util/pendingevents_later_function.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/router/user/user_statistics_component.dart';
+import "package:loure/client/relay/relay_pool.dart";
+import "package:loure/component/simple_name_component.dart";
+import "package:loure/client/event_kind.dart";
+import "package:loure/client/filter.dart";
+import "package:loure/component/appbar4stack.dart";
+import "package:loure/component/cust_state.dart";
+import "package:loure/component/event/event_list_component.dart";
+import "package:loure/component/user/metadata_component.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/data/event_mem_box.dart";
+import "package:loure/main.dart";
+import "package:loure/util/load_more_event.dart";
+import "package:loure/util/pendingevents_later_function.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/router/user/user_statistics_component.dart";
 
 class UserRouter extends StatefulWidget {
   const UserRouter({super.key});
@@ -54,7 +54,7 @@ class UserRouterState extends CustState<UserRouter>
       var showTitle = false;
       var showAppbarBG = false;
 
-      var offset = this._controller.offset;
+      final offset = this._controller.offset;
       if (offset > showTitleHeight) {
         showTitle = true;
       }
@@ -77,12 +77,12 @@ class UserRouterState extends CustState<UserRouter>
         return;
       }
 
-      var events = followEventProvider.eventsByPubkey(pubkey!);
+      final events = followEventProvider.eventsByPubkey(pubkey!);
       if (events.isNotEmpty) {
         box.addList(events);
       }
     } else {
-      var arg = RouterUtil.routerArgs(context);
+      final arg = RouterUtil.routerArgs(context);
       if (arg != null && arg is String) {
         if (arg != pubkey) {
           // arg change! reset.
@@ -99,24 +99,24 @@ class UserRouterState extends CustState<UserRouter>
   }
 
   @override
-  Widget doBuild(BuildContext context) {
+  Widget doBuild(final BuildContext context) {
     if (this.metadataFuture == null) {
       return Container();
     }
 
-    var paddingTop = mediaDataCache.padding.top;
-    var maxWidth = mediaDataCache.size.width;
+    final paddingTop = mediaDataCache.padding.top;
+    final maxWidth = mediaDataCache.size.width;
 
     showTitleHeight = maxWidth / 3 + 50;
     showAppbarBGHeight = showTitleHeight + 100;
 
-    var themeData = Theme.of(context);
+    final themeData = Theme.of(context);
     // var cardColor = themeData.cardColor;
 
     return FutureBuilder(
       future: this.metadataFuture,
       initialData: Metadata.blank(this.pubkey!),
-      builder: (context, snapshot) {
+      builder: (final context, final snapshot) {
         final metadata = snapshot.data;
 
         Color? appbarBackgroundColor = Colors.transparent;
@@ -125,7 +125,7 @@ class UserRouterState extends CustState<UserRouter>
         }
         Widget? appbarTitle;
         if (showTitle) {
-          String displayName =
+          final String displayName =
               SimpleNameComponent.getSimpleName(pubkey!, metadata);
 
           appbarTitle = Container(
@@ -141,15 +141,16 @@ class UserRouterState extends CustState<UserRouter>
             ),
           );
         }
-        var appBar = Appbar4Stack(
+        final appBar = Appbar4Stack(
           backgroundColor: appbarBackgroundColor,
           title: appbarTitle,
         );
 
-        Widget main = NestedScrollView(
+        final Widget main = NestedScrollView(
           key: globalKey,
           controller: _controller,
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          headerSliverBuilder:
+              (final BuildContext context, final bool innerBoxIsScrolled) {
             return <Widget>[
               SliverToBoxAdapter(
                 child: MetadataComponent(
@@ -173,8 +174,8 @@ class UserRouterState extends CustState<UserRouter>
             removeTop: true,
             context: context,
             child: ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                var event = box.get(index);
+              itemBuilder: (final BuildContext context, final int index) {
+                final event = box.get(index);
                 if (event == null) {
                   return null;
                 }
@@ -209,19 +210,19 @@ class UserRouterState extends CustState<UserRouter>
   ManySubscriptionHandle? subHandle;
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     doQuery();
 
     if (globalKey.currentState != null) {
-      var controller = globalKey.currentState!.innerController;
+      final controller = globalKey.currentState!.innerController;
       controller.addListener(() {
         loadMoreScrollCallback(controller);
       });
     }
   }
 
-  void onEvent(event) {
-    later(event, (list) {
+  void onEvent(final event) {
+    later(event, (final list) {
       box.addList(list);
       setState(() {});
     }, null);
@@ -242,19 +243,19 @@ class UserRouterState extends CustState<UserRouter>
     preQuery();
 
     // load event from relay
-    var filter = Filter(
+    final filter = Filter(
       kinds: EventKind.SUPPORTED_EVENTS,
       until: until,
       authors: [pubkey!],
       limit: queryLimit,
     );
 
-    var relays = ["wss://relay.nostr.band"];
+    final relays = ["wss://relay.nostr.band"];
     List<Filter> Function(String, List<Filter>)? filterModifier;
 
     if (!this.box.isEmpty()) {
-      var oldestCreatedAts = this.box.oldestCreatedAtByRelay(relays);
-      filterModifier = (url, filters) {
+      final oldestCreatedAts = this.box.oldestCreatedAtByRelay(relays);
+      filterModifier = (final url, final filters) {
         filters[0].until = oldestCreatedAts.createdAtMap[url] ?? until;
         return filters;
       };

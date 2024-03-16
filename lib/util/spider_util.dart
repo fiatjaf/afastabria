@@ -1,12 +1,13 @@
 class SpiderUtil {
-  static String subUntil(String content, String before, String end) {
-    var beforeLength = before.length;
-    var index = content.indexOf(before);
+  static String subUntil(
+      final String content, final String before, final String end) {
+    final beforeLength = before.length;
+    final index = content.indexOf(before);
     if (index < 0) {
       return "";
     }
 
-    var index2 = content.indexOf(end, index + beforeLength);
+    final index2 = content.indexOf(end, index + beforeLength);
     if (index2 <= 0) {
       return "";
     }

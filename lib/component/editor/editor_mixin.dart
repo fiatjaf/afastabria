@@ -1,43 +1,43 @@
-import 'dart:convert';
-import 'dart:developer';
+import "dart:convert";
+import "dart:developer";
 
-import 'package:pointycastle/ecc/api.dart';
-import 'package:auto_size_text_field/auto_size_text_field.dart';
-import 'package:bot_toast/bot_toast.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill;
-import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
+import "package:pointycastle/ecc/api.dart";
+import "package:auto_size_text_field/auto_size_text_field.dart";
+import "package:bot_toast/bot_toast.dart";
+import "package:emoji_picker_flutter/emoji_picker_flutter.dart";
+import "package:flutter/material.dart";
+import "package:flutter_quill/flutter_quill.dart" as quill;
+import "package:google_fonts/google_fonts.dart";
+import "package:image_picker/image_picker.dart";
+import "package:provider/provider.dart";
 
-import 'package:loure/component/datetime_picker_component.dart';
-import 'package:loure/component/editor/zap_goal_input_component.dart';
-import 'package:loure/component/webview_router.dart';
-import 'package:loure/provider/list_provider.dart';
-import 'package:loure/sendbox/sendbox.dart';
-import 'package:loure/client/event.dart';
-import 'package:loure/client/event_kind.dart';
-import 'package:loure/client/nip04/nip04.dart';
-import 'package:loure/client/nip19/nip19.dart';
-import 'package:loure/client/nip19/nip19_tlv.dart';
-import 'package:loure/client/upload/uploader.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/data/custom_emoji.dart';
-import 'package:loure/main.dart';
-import 'package:loure/router/index/index_app_bar.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/component/content/content_decoder.dart';
-import 'package:loure/component/image_component.dart';
-import 'package:loure/component/editor/cust_embed_types.dart';
-import 'package:loure/component/editor/custom_emoji_add_dialog.dart';
-import 'package:loure/component/editor/gen_lnbc_component.dart';
-import 'package:loure/component/editor/poll_input_component.dart';
-import 'package:loure/component/editor/search_mention_event_component.dart';
-import 'package:loure/component/editor/search_mention_user_component.dart';
-import 'package:loure/component/editor/text_input_and_search_dialog.dart';
-import 'package:loure/component/editor/text_input_dialog.dart';
+import "package:loure/component/datetime_picker_component.dart";
+import "package:loure/component/editor/zap_goal_input_component.dart";
+import "package:loure/component/webview_router.dart";
+import "package:loure/provider/list_provider.dart";
+import "package:loure/sendbox/sendbox.dart";
+import "package:loure/client/event.dart";
+import "package:loure/client/event_kind.dart";
+import "package:loure/client/nip04/nip04.dart";
+import "package:loure/client/nip19/nip19.dart";
+import "package:loure/client/nip19/nip19_tlv.dart";
+import "package:loure/client/upload/uploader.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/data/custom_emoji.dart";
+import "package:loure/main.dart";
+import "package:loure/router/index/index_app_bar.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/component/content/content_decoder.dart";
+import "package:loure/component/image_component.dart";
+import "package:loure/component/editor/cust_embed_types.dart";
+import "package:loure/component/editor/custom_emoji_add_dialog.dart";
+import "package:loure/component/editor/gen_lnbc_component.dart";
+import "package:loure/component/editor/poll_input_component.dart";
+import "package:loure/component/editor/search_mention_event_component.dart";
+import "package:loure/component/editor/search_mention_user_component.dart";
+import "package:loure/component/editor/text_input_and_search_dialog.dart";
+import "package:loure/component/editor/text_input_dialog.dart";
 
 mixin EditorMixin {
   quill.QuillController editorController = quill.QuillController.basic();
@@ -73,13 +73,13 @@ mixin EditorMixin {
   }
 
   Widget buildEditorBtns({
-    bool showShadow = true,
-    double? height = IndexAppBar.height,
+    final bool showShadow = true,
+    final double? height = IndexAppBar.height,
   }) {
-    var themeData = Theme.of(getContext());
-    var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
+    final themeData = Theme.of(getContext());
+    final scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
     // var hintColor = themeData.hintColor;
-    var mainColor = themeData.primaryColor;
+    final mainColor = themeData.primaryColor;
 
     List<Widget> inputBtnList = [];
     if (!PlatformUtil.isWeb()) {
@@ -221,14 +221,14 @@ mixin EditorMixin {
   }
 
   Widget buildEmojiSelector() {
-    var themeData = Theme.of(getContext());
-    var mainColor = themeData.primaryColor;
-    var bgColor = themeData.scaffoldBackgroundColor;
+    final themeData = Theme.of(getContext());
+    final mainColor = themeData.primaryColor;
+    final bgColor = themeData.scaffoldBackgroundColor;
 
     return SizedBox(
       height: 260,
       child: EmojiPicker(
-        onEmojiSelected: (Category? category, Emoji emoji) {
+        onEmojiSelected: (final Category? category, final Emoji emoji) {
           emojiInsert(emoji);
         },
         onBackspacePressed: null,
@@ -255,7 +255,7 @@ mixin EditorMixin {
           emojiTextStyle:
               PlatformUtil.isWeb() ? GoogleFonts.notoColorEmoji() : null,
           noRecents: const Text(
-            'No Recents',
+            "No Recents",
             style: TextStyle(fontSize: 14, color: Colors.black26),
             textAlign: TextAlign.center,
           ), // Needs to be const Widget
@@ -277,7 +277,7 @@ mixin EditorMixin {
     updateUI();
   }
 
-  void emojiInsert(Emoji emoji) {
+  void emojiInsert(final Emoji emoji) {
     final index = editorController.selection.baseOffset;
     final length = editorController.selection.extentOffset - index;
     editorController.replaceText(
@@ -287,16 +287,16 @@ mixin EditorMixin {
   }
 
   Future<void> pickImage() async {
-    var filepath = await Uploader.pick(getContext());
+    final filepath = await Uploader.pick(getContext());
     _imageSubmitted(filepath);
   }
 
-  void _imageSubmitted(String? value) {
+  void _imageSubmitted(final String? value) {
     if (value != null && value.isNotEmpty) {
       final index = editorController.selection.baseOffset;
       final length = editorController.selection.extentOffset - index;
 
-      var fileType = ContentDecoder.getPathType(value);
+      final fileType = ContentDecoder.getPathType(value);
       if (fileType == "image") {
         editorController.replaceText(
             index, length, quill.BlockEmbed.image(value), null);
@@ -312,7 +312,7 @@ mixin EditorMixin {
   }
 
   Future<void> takeAPhoto() async {
-    ImagePicker picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
     final XFile? photo = await picker.pickImage(source: ImageSource.camera);
     if (photo != null) {
       _imageSubmitted(photo.path);
@@ -320,7 +320,7 @@ mixin EditorMixin {
   }
 
   Future<void> tackAVideo() async {
-    ImagePicker picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
     final XFile? photo = await picker.pickVideo(source: ImageSource.camera);
     if (photo != null) {
       _imageSubmitted(photo.path);
@@ -328,7 +328,7 @@ mixin EditorMixin {
   }
 
   Future<void> _inputMentionEvent() async {
-    var context = getContext();
+    final context = getContext();
     var value = await TextInputAndSearchDialog.show(
       context,
       "Search",
@@ -345,7 +345,7 @@ mixin EditorMixin {
     }
   }
 
-  void _submitMentionEvent(String? value) {
+  void _submitMentionEvent(final String? value) {
     if (value != null && value.isNotEmpty) {
       final index = editorController.selection.baseOffset;
       final length = editorController.selection.extentOffset - index;
@@ -358,7 +358,7 @@ mixin EditorMixin {
   }
 
   Future<void> _inputMentionUser() async {
-    var context = getContext();
+    final context = getContext();
     var value = await TextInputAndSearchDialog.show(
       context,
       "Search",
@@ -375,7 +375,7 @@ mixin EditorMixin {
     }
   }
 
-  void _submitMentionUser(String? value) {
+  void _submitMentionUser(final String? value) {
     if (value != null && value.isNotEmpty) {
       final index = editorController.selection.baseOffset;
       final length = editorController.selection.extentOffset - index;
@@ -388,8 +388,8 @@ mixin EditorMixin {
   }
 
   Future<void> _inputLnbc() async {
-    var context = getContext();
-    var value = await TextInputAndSearchDialog.show(
+    final context = getContext();
+    final value = await TextInputAndSearchDialog.show(
       context,
       "Input Sats num",
       "Please input lnbc text",
@@ -401,7 +401,7 @@ mixin EditorMixin {
     }
   }
 
-  void _lnbcSubmitted(String? value) {
+  void _lnbcSubmitted(final String? value) {
     if (value != null && value.isNotEmpty) {
       final index = editorController.selection.baseOffset;
       final length = editorController.selection.extentOffset - index;
@@ -414,15 +414,15 @@ mixin EditorMixin {
   }
 
   Future<void> _inputTag() async {
-    var context = getContext();
-    var value = await TextInputDialog.show(context, "Please_input_Topic_text",
+    final context = getContext();
+    final value = await TextInputDialog.show(context, "Please_input_Topic_text",
         valueCheck: baseInputCheck, hintText: "Topic");
     if (StringUtil.isNotBlank(value)) {
       _submitTag(value);
     }
   }
 
-  bool baseInputCheck(BuildContext context, String value) {
+  bool baseInputCheck(final BuildContext context, final String value) {
     if (value.contains(" ")) {
       BotToast.showText(text: "Text can't contain blank space");
       return false;
@@ -434,7 +434,7 @@ mixin EditorMixin {
     return true;
   }
 
-  void _submitTag(String? value) {
+  void _submitTag(final String? value) {
     if (value != null && value.isNotEmpty) {
       final index = editorController.selection.baseOffset;
       final length = editorController.selection.extentOffset - index;
@@ -447,37 +447,37 @@ mixin EditorMixin {
   }
 
   Future<Event?> doDocumentSave() async {
-    var context = getContext();
+    final context = getContext();
     // dm agreement
-    var agreement = getAgreement();
+    final agreement = getAgreement();
     // dm pubkey
-    var pubkey = getPubkey();
+    final pubkey = getPubkey();
 
     // customEmoji map
     Map<String, int> customEmojiMap = {};
-    var tags = [...getTags()];
-    var tagsAddedWhenSend = [...getTagsAddedWhenSend()];
+    final tags = [...getTags()];
+    final tagsAddedWhenSend = [...getTagsAddedWhenSend()];
 
     if (inputPoll) {
-      var checkResult = pollInputController.checkInput(context);
+      final checkResult = pollInputController.checkInput(context);
       if (!checkResult) {
         return null;
       }
     }
     if (inputZapGoal) {
-      var checkResult = zapGoalInputController.checkInput(context);
+      final checkResult = zapGoalInputController.checkInput(context);
       if (!checkResult) {
         return null;
       }
     }
 
-    var delta = editorController.document.toDelta();
-    var operations = delta.toList();
+    final delta = editorController.document.toDelta();
+    final operations = delta.toList();
     String result = "";
-    for (var operation in operations) {
+    for (final operation in operations) {
       if (operation.key == "insert") {
         if (operation.data is Map) {
-          var m = operation.data as Map;
+          final m = operation.data as Map;
           var value = m["image"];
           if (StringUtil.isBlank(value)) {
             value = m["video"];
@@ -485,7 +485,7 @@ mixin EditorMixin {
           if (StringUtil.isNotBlank(value) && value is String) {
             if (value.indexOf("http") != 0) {
               // this is a local image, update it first
-              var imagePath = await Uploader.upload(
+              final imagePath = await Uploader.upload(
                 value,
                 imageService: settingProvider.imageService,
               );
@@ -533,8 +533,8 @@ mixin EditorMixin {
             if (!_lastIsLineEnd(result)) {
               result += " ";
             }
-            var nevent = Nevent(id: value);
-            var mentionEvent = nostr.idIndex[value];
+            final nevent = Nevent(id: value);
+            final mentionEvent = nostr.idIndex[value];
             if (mentionEvent != null) {
               nevent.author = mentionEvent.pubKey;
               nevent.relays = mentionEvent.sources.take(3);
@@ -567,7 +567,7 @@ mixin EditorMixin {
     allTags.addAll(tags);
     allTags.addAll(tagsAddedWhenSend);
 
-    var subject = subjectController.text;
+    final subject = subjectController.text;
     if (StringUtil.isNotBlank(subject)) {
       allTags.add(["subject", subject]);
     }
@@ -586,13 +586,13 @@ mixin EditorMixin {
     } else if (inputPoll) {
       // poll event
       // get poll tag from PollInputComponentn
-      var pollTags = pollInputController.getTags();
+      final pollTags = pollInputController.getTags();
       allTags.addAll(pollTags);
       event = Event.finalize(nostr.privateKey, EventKind.POLL, allTags, result,
           publishAt: publishAt);
     } else if (inputZapGoal) {
       // zap goal event
-      var extralTags = zapGoalInputController.getTags();
+      final extralTags = zapGoalInputController.getTags();
       allTags.addAll(extralTags);
       event = Event.finalize(
           nostr.privateKey, EventKind.ZAP_GOALS, allTags, result,
@@ -614,7 +614,7 @@ mixin EditorMixin {
     return event;
   }
 
-  String handleInlineValue(String result, String value) {
+  String handleInlineValue(String result, final String value) {
     if (!_lastIsSpace(result) && !_lastIsLineEnd(result)) {
       result += " ";
     }
@@ -622,7 +622,7 @@ mixin EditorMixin {
     return result;
   }
 
-  String handleBlockValue(String result, String value) {
+  String handleBlockValue(String result, final String value) {
     if (!_lastIsLineEnd(result)) {
       result += "\n";
     }
@@ -630,24 +630,24 @@ mixin EditorMixin {
     return result;
   }
 
-  bool _lastIsSpace(String str) {
+  bool _lastIsSpace(final String str) {
     if (StringUtil.isBlank(str)) {
       return true;
     }
 
-    var length = str.length;
+    final length = str.length;
     if (str[length - 1] == " ") {
       return true;
     }
     return false;
   }
 
-  bool _lastIsLineEnd(String str) {
+  bool _lastIsLineEnd(final String str) {
     if (StringUtil.isBlank(str)) {
       return true;
     }
 
-    var length = str.length;
+    final length = str.length;
     if (str[length - 1] == "\n") {
       return true;
     }
@@ -655,14 +655,14 @@ mixin EditorMixin {
   }
 
   void _inputPoll() {
-    var targetValue = !inputPoll;
+    final targetValue = !inputPoll;
     _resetOthersInput();
     inputPoll = targetValue;
     updateUI();
   }
 
   void _inputGoal() {
-    var targetValue = !inputZapGoal;
+    final targetValue = !inputZapGoal;
     _resetOthersInput();
     inputZapGoal = targetValue;
     updateUI();
@@ -686,13 +686,13 @@ mixin EditorMixin {
   }
 
   Future<void> addCustomEmoji() async {
-    var emoji = await CustomEmojiAddDialog.show(getContext());
+    final emoji = await CustomEmojiAddDialog.show(getContext());
     if (emoji != null) {
       emojiProvider.addCustomEmoji(emoji);
     }
   }
 
-  void addEmojiToEditor(CustomEmoji emoji) {
+  void addEmojiToEditor(final CustomEmoji emoji) {
     final index = editorController.selection.baseOffset;
     final length = editorController.selection.extentOffset - index;
 
@@ -708,26 +708,26 @@ mixin EditorMixin {
   double emojiBtnWidth = 60;
 
   Widget buildEmojiListsWidget() {
-    var context = getContext();
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
-    var labelUnSelectColor = themeData.dividerColor;
+    final context = getContext();
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
+    final labelUnSelectColor = themeData.dividerColor;
 
     return Container(
       height: 260,
       padding: const EdgeInsets.only(left: Base.BASE_PADDING_HALF),
       width: double.infinity,
       child: Selector<EmojiProvider, Event?>(
-        builder: (context, emojiEvent, child) {
-          var emojiLists = emojiProvider.emojis(emojiEvent);
+        builder: (final context, final emojiEvent, final child) {
+          final emojiLists = emojiProvider.emojis(emojiEvent);
 
           List<Widget> tabBarList = [];
           List<Widget> tabBarViewList = [];
 
-          var length = emojiLists.length;
+          final length = emojiLists.length;
           for (var index = 0; index < length; index++) {
-            var emojiList = emojiLists[index];
-            var isCustomEmoji = index == 0;
+            final emojiList = emojiLists[index];
+            final isCustomEmoji = index == 0;
 
             tabBarList.add(Text(
               emojiList.key,
@@ -739,7 +739,7 @@ mixin EditorMixin {
             ));
           }
 
-          var findMoreBtn = GestureDetector(
+          final findMoreBtn = GestureDetector(
             onTap: () {
               WebViewRouter.open(context, "https://emojis-iota.vercel.app/");
             },
@@ -780,22 +780,20 @@ mixin EditorMixin {
             ),
           );
         },
-        selector: (context, provider) {
+        selector: (final context, final provider) {
           return provider.getEmojiEvent();
         },
       ),
     );
   }
 
-  Widget buildEmojiListWidget(List<CustomEmoji> emojis,
-      {bool isCustomEmoji = false}) {
+  Widget buildEmojiListWidget(final List<CustomEmoji> emojis,
+      {final bool isCustomEmoji = false}) {
     List<Widget> list = [];
 
     if (isCustomEmoji) {
       list.add(GestureDetector(
-        onTap: () {
-          addCustomEmoji();
-        },
+        onTap: addCustomEmoji,
         child: SizedBox(
           width: emojiBtnWidth,
           height: emojiBtnWidth,
@@ -807,7 +805,7 @@ mixin EditorMixin {
       ));
     }
 
-    for (var emoji in emojis) {
+    for (final emoji in emojis) {
       list.add(GestureDetector(
         onTap: () {
           addEmojiToEditor(emoji);
@@ -820,13 +818,13 @@ mixin EditorMixin {
           alignment: Alignment.center,
           child: ImageComponent(
             imageUrl: emoji.filepath,
-            placeholder: (context, url) => Container(),
+            placeholder: (final context, final url) => Container(),
           ),
         ),
       ));
     }
 
-    var main = SingleChildScrollView(
+    final main = SingleChildScrollView(
       child: Wrap(
         // runAlignment: WrapAlignment.center,
         runSpacing: Base.BASE_PADDING_HALF,
@@ -862,9 +860,9 @@ mixin EditorMixin {
   }
 
   Widget buildTitleWidget() {
-    var themeData = Theme.of(getContext());
-    var fontSize = themeData.textTheme.bodyLarge!.fontSize;
-    var hintColor = themeData.hintColor;
+    final themeData = Theme.of(getContext());
+    final fontSize = themeData.textTheme.bodyLarge!.fontSize;
+    final hintColor = themeData.hintColor;
 
     return Container(
       // color: Colors.red,
@@ -897,7 +895,7 @@ mixin EditorMixin {
   DateTime? publishAt;
 
   Future<void> selectedTime() async {
-    var dt = await DatetimePickerComponent.show(getContext(),
+    final dt = await DatetimePickerComponent.show(getContext(),
         dateTime: publishAt ?? DateTime.now());
     publishAt = dt;
     updateUI();

@@ -1,19 +1,19 @@
-import 'package:provider/provider.dart';
+import "package:provider/provider.dart";
 
-import 'package:flutter/material.dart';
-import 'package:loure/component/user/metadata_top_component.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/provider/index_provider.dart';
-import 'package:loure/provider/webview_provider.dart';
-import 'package:loure/router/user/user_statistics_component.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/main.dart';
-import 'package:loure/router/edit/editor_router.dart';
-import 'package:loure/router/index/account_manager_component.dart';
+import "package:flutter/material.dart";
+import "package:loure/component/user/metadata_top_component.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/provider/index_provider.dart";
+import "package:loure/provider/webview_provider.dart";
+import "package:loure/router/user/user_statistics_component.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/main.dart";
+import "package:loure/router/edit/editor_router.dart";
+import "package:loure/router/index/account_manager_component.dart";
 
 class IndexDrawerContnetComponnent extends StatefulWidget {
   const IndexDrawerContnetComponnent({super.key});
@@ -38,15 +38,15 @@ class _IndexDrawerContnetComponnent
   }
 
   @override
-  Widget build(BuildContext context) {
-    var indexProvider = Provider.of<IndexProvider>(context);
+  Widget build(final BuildContext context) {
+    final indexProvider = Provider.of<IndexProvider>(context);
 
-    var pubkey = nostr.publicKey;
-    var paddingTop = mediaDataCache.padding.top;
-    var themeData = Theme.of(context);
-    var mainColor = themeData.primaryColor;
-    var cardColor = themeData.cardColor;
-    var hintColor = themeData.hintColor;
+    final pubkey = nostr.publicKey;
+    final paddingTop = mediaDataCache.padding.top;
+    final themeData = Theme.of(context);
+    final mainColor = themeData.primaryColor;
+    final cardColor = themeData.cardColor;
+    final hintColor = themeData.hintColor;
     List<Widget> list = [];
 
     list.add(
@@ -54,7 +54,7 @@ class _IndexDrawerContnetComponnent
         FutureBuilder(
           future: this.metadataFuture,
           initialData: Metadata.blank(pubkey),
-          builder: (context, snapshot) {
+          builder: (final context, final snapshot) {
             return MetadataTopComponent(
               pubkey: pubkey,
               metadata: snapshot.data,
@@ -84,7 +84,7 @@ class _IndexDrawerContnetComponnent
 
     list.add(GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onHorizontalDragUpdate: (detail) {
+      onHorizontalDragUpdate: (final detail) {
         userStatisticscontroller
             .jumpTo(userStatisticscontroller.offset - detail.delta.dx);
       },
@@ -190,8 +190,8 @@ class _IndexDrawerContnetComponnent
     ));
 
     if (!PlatformUtil.isPC()) {
-      centerList.add(
-          Selector<WebViewProvider, String?>(builder: (context, url, child) {
+      centerList.add(Selector<WebViewProvider, String?>(
+          builder: (final context, final url, final child) {
         if (StringUtil.isBlank(url)) {
           return IndexDrawerItem(
             iconData: Icons.view_list,
@@ -209,7 +209,7 @@ class _IndexDrawerContnetComponnent
             webViewProvider.show();
           },
         );
-      }, selector: (context, provider) {
+      }, selector: (final context, final provider) {
         return provider.url;
       }));
     }
@@ -272,11 +272,11 @@ class _IndexDrawerContnetComponnent
     RouterUtil.router(context, RouterPath.PROFILE_EDITOR);
   }
 
-  void _showBasicModalBottomSheet(context) async {
+  void _showBasicModalBottomSheet(final context) async {
     showModalBottomSheet(
       isScrollControlled: false, // true 为 全屏
       context: context,
-      builder: (BuildContext context) {
+      builder: (final BuildContext context) {
         return const AccountManagerComponent();
       },
     );
@@ -284,28 +284,27 @@ class _IndexDrawerContnetComponnent
 }
 
 class IndexDrawerItem extends StatelessWidget {
-  final IconData iconData;
-  final String name;
-  final Function onTap;
-  final Function? onDoubleTap;
-  final Color? color;
-
   // bool borderTop;
   // bool borderBottom;
 
   const IndexDrawerItem({
-    super.key,
     required this.iconData,
     required this.name,
     required this.onTap,
+    super.key,
     this.color,
     this.onDoubleTap,
     // this.borderTop = true,
     // this.borderBottom = false,
   });
+  final IconData iconData;
+  final String name;
+  final Function() onTap;
+  final Function? onDoubleTap;
+  final Color? color;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     List<Widget> list = [];
 
     list.add(Container(
@@ -322,9 +321,7 @@ class IndexDrawerItem extends StatelessWidget {
     list.add(Text(name, style: TextStyle(color: color)));
 
     return GestureDetector(
-      onTap: () {
-        onTap();
-      },
+      onTap: onTap,
       onDoubleTap: () {
         if (onDoubleTap != null) {
           onDoubleTap!();

@@ -1,15 +1,14 @@
+import "package:markdown/markdown.dart" as md;
 
-import 'package:markdown/markdown.dart' as md;
-
-import 'package:loure/component/content/markdown/markdown_nrelay_element_builder.dart';
+import "package:loure/component/content/markdown/markdown_nrelay_element_builder.dart";
 
 class MarkdownNrelayInlineSyntax extends md.InlineSyntax {
-  MarkdownNrelayInlineSyntax() : super('nostr:nrelay[a-zA-Z0-9]+');
+  MarkdownNrelayInlineSyntax() : super("nostr:nrelay[a-zA-Z0-9]+");
 
   @override
-  bool onMatch(md.InlineParser parser, Match match) {
+  bool onMatch(final md.InlineParser parser, final Match match) {
     // var text = match.input.substring(match.start, match.end);
-    var text = match[0]!;
+    final text = match[0]!;
     final element = md.Element.text(MarkdownNrelayElementBuilder.TAG, text);
     parser.addNode(element);
 

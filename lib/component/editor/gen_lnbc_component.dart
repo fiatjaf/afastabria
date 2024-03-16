@@ -1,16 +1,16 @@
-import 'dart:developer';
+import "dart:developer";
 
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/material.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/material.dart";
 
-import 'package:loure/client/zap/zap_action.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/main.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/component/content/content_str_link_component.dart';
+import "package:loure/client/zap/zap_action.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/main.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/component/content/content_str_link_component.dart";
 
 class GenLnbcComponent extends StatefulWidget {
   const GenLnbcComponent({super.key});
@@ -33,17 +33,17 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return FutureBuilder(
       future: metadataLoader.load(nostr.publicKey),
       initialData: Metadata.blank(nostr.publicKey),
-      builder: (context, snapshot) {
+      builder: (final context, final snapshot) {
         final metadata = snapshot.data!;
 
-        var themeData = Theme.of(context);
-        Color cardColor = themeData.cardColor;
-        var mainColor = themeData.primaryColor;
-        var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+        final themeData = Theme.of(context);
+        final Color cardColor = themeData.cardColor;
+        final mainColor = themeData.primaryColor;
+        final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
         if (metadata.lud06 == "" && metadata.lud16 == "") {
           return Center(
             child: Column(
@@ -141,7 +141,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
           ),
         ));
 
-        var main = Container(
+        final main = Container(
           padding: const EdgeInsets.all(Base.BASE_PADDING),
           decoration: BoxDecoration(
             color: cardColor,
@@ -158,17 +158,17 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
     );
   }
 
-  Future<void> _onConfirm(String pubkey) async {
-    var text = controller.text;
-    var num = int.tryParse(text);
+  Future<void> _onConfirm(final String pubkey) async {
+    final text = controller.text;
+    final num = int.tryParse(text);
     if (num == null) {
       BotToast.showText(text: "Number parse error");
       return;
     }
 
-    var comment = commentController.text;
+    final comment = commentController.text;
     log("comment $comment");
-    var lnbcStr =
+    final lnbcStr =
         await ZapAction.genInvoiceCode(context, num, pubkey, comment: comment);
     if (StringUtil.isNotBlank(lnbcStr)) {
       RouterUtil.back(context, lnbcStr);

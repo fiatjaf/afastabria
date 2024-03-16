@@ -1,26 +1,26 @@
-import 'package:flutter/material.dart';
-import 'package:loure/client/cashu/cashu_tokens.dart';
-import 'package:loure/util/colors_util.dart';
+import "package:flutter/material.dart";
+import "package:loure/client/cashu/cashu_tokens.dart";
+import "package:loure/util/colors_util.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/cashu_util.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/util/cashu_util.dart";
 
 class ContentCashuComponent extends StatelessWidget {
+  ContentCashuComponent({
+    required this.tokens,
+    required this.cashuStr,
+    super.key,
+  });
   String cashuStr;
 
   Tokens tokens;
 
-  ContentCashuComponent({super.key, 
-    required this.tokens,
-    required this.cashuStr,
-  });
-
   @override
-  Widget build(BuildContext context) {
-        var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var cardColor = themeData.cardColor;
-    double largeFontSize = 20;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final cardColor = themeData.cardColor;
+    const double largeFontSize = 20;
 
     return Container(
       margin: const EdgeInsets.all(Base.BASE_PADDING),
@@ -59,17 +59,17 @@ class ContentCashuComponent extends StatelessWidget {
                       child: Row(
                         children: [
                           Container(
-                            margin:
-                                const EdgeInsets.only(right: Base.BASE_PADDING_HALF),
+                            margin: const EdgeInsets.only(
+                                right: Base.BASE_PADDING_HALF),
                             child: Text(
                               tokens.totalAmount().toString(),
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: largeFontSize,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
-                          Text(
+                          const Text(
                             "sats",
                             style: TextStyle(
                               fontSize: largeFontSize,

@@ -1,5 +1,38 @@
 /// filter is a JSON object that determines what events will be sent in that subscription
 class Filter {
+  /// Default constructor
+  Filter({
+    this.ids,
+    this.authors,
+    this.kinds,
+    this.e,
+    this.p,
+    this.a,
+    this.d,
+    this.t,
+    this.since,
+    this.until,
+    this.limit,
+    this.search,
+  });
+
+  /// Deserialize a filter from a JSON
+  Filter.fromJson(final Map<String, dynamic> json) {
+    this.ids = json["ids"] == null ? null : List<String>.from(json["ids"]);
+    this.authors =
+        json["authors"] == null ? null : List<String>.from(json["authors"]);
+    this.kinds = json["kinds"] == null ? null : List<int>.from(json["kinds"]);
+    this.e = json["#e"] == null ? null : List<String>.from(json["#e"]);
+    this.p = json["#p"] == null ? null : List<String>.from(json["#p"]);
+    this.a = json["#a"] == null ? null : List<String>.from(json["#a"]);
+    this.d = json["#d"] == null ? null : List<String>.from(json["#d"]);
+    this.t = json["#t"] == null ? null : List<String>.from(json["#t"]);
+    this.since = json["since"];
+    this.until = json["until"];
+    this.limit = json["limit"];
+    this.search = json["search"];
+  }
+
   /// a list of event ids or prefixes
   List<String>? ids;
 
@@ -36,77 +69,44 @@ class Filter {
   // NIP-50 optional fulltext search
   String? search;
 
-  /// Default constructor
-  Filter({
-    this.ids,
-    this.authors,
-    this.kinds,
-    this.e,
-    this.p,
-    this.a,
-    this.d,
-    this.t,
-    this.since,
-    this.until,
-    this.limit,
-    this.search,
-  });
-
-  /// Deserialize a filter from a JSON
-  Filter.fromJson(Map<String, dynamic> json) {
-    this.ids = json['ids'] == null ? null : List<String>.from(json['ids']);
-    this.authors =
-        json['authors'] == null ? null : List<String>.from(json['authors']);
-    this.kinds = json['kinds'] == null ? null : List<int>.from(json['kinds']);
-    this.e = json['#e'] == null ? null : List<String>.from(json['#e']);
-    this.p = json['#p'] == null ? null : List<String>.from(json['#p']);
-    this.a = json['#a'] == null ? null : List<String>.from(json['#a']);
-    this.d = json['#d'] == null ? null : List<String>.from(json['#d']);
-    this.t = json['#t'] == null ? null : List<String>.from(json['#t']);
-    this.since = json['since'];
-    this.until = json['until'];
-    this.limit = json['limit'];
-    this.search = json['search'];
-  }
-
   /// Serialize a filter in JSON
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     if (this.ids != null) {
-      data['ids'] = this.ids;
+      data["ids"] = this.ids;
     }
     if (this.authors != null) {
-      data['authors'] = this.authors;
+      data["authors"] = this.authors;
     }
     if (this.kinds != null) {
-      data['kinds'] = this.kinds;
+      data["kinds"] = this.kinds;
     }
     if (this.e != null) {
-      data['#e'] = this.e;
+      data["#e"] = this.e;
     }
     if (this.p != null) {
-      data['#p'] = this.p;
+      data["#p"] = this.p;
     }
     if (this.a != null) {
-      data['#a'] = this.a;
+      data["#a"] = this.a;
     }
     if (this.d != null) {
-      data['#d'] = this.d;
+      data["#d"] = this.d;
     }
     if (this.t != null) {
-      data['#t'] = this.t;
+      data["#t"] = this.t;
     }
     if (this.since != null) {
-      data['since'] = this.since;
+      data["since"] = this.since;
     }
     if (this.until != null) {
-      data['until'] = this.until;
+      data["until"] = this.until;
     }
     if (this.limit != null) {
-      data['limit'] = this.limit;
+      data["limit"] = this.limit;
     }
     if (this.search != null) {
-      data['search'] = this.search;
+      data["search"] = this.search;
     }
     return data;
   }

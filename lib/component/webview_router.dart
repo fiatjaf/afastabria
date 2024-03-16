@@ -1,36 +1,35 @@
-import 'dart:collection';
-import 'dart:convert';
+import "dart:collection";
+import "dart:convert";
 
-import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:loure/component/cust_state.dart';
-import 'package:loure/component/nip07_dialog.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/base_consts.dart';
-import 'package:loure/provider/setting_provider.dart';
-import 'package:loure/provider/webview_provider.dart';
-import 'package:loure/util/lightning_util.dart';
-import 'package:loure/util/platform_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+import "package:bot_toast/bot_toast.dart";
+import "package:flutter/foundation.dart";
+import "package:flutter/material.dart";
+import "package:flutter/services.dart";
+import "package:flutter_inappwebview/flutter_inappwebview.dart";
+import "package:loure/component/cust_state.dart";
+import "package:loure/component/nip07_dialog.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/provider/setting_provider.dart";
+import "package:loure/provider/webview_provider.dart";
+import "package:loure/util/lightning_util.dart";
+import "package:loure/util/platform_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:permission_handler/permission_handler.dart";
+import "package:provider/provider.dart";
+import "package:url_launcher/url_launcher.dart";
 
-import 'package:loure/client/event.dart';
-import 'package:loure/client/nip04/nip04.dart';
-import 'package:loure/client/nip07/nip07_methods.dart';
-import 'package:loure/main.dart';
+import "package:loure/client/event.dart";
+import "package:loure/client/nip04/nip04.dart";
+import "package:loure/client/nip07/nip07_methods.dart";
+import "package:loure/main.dart";
 
 // ignore: must_be_immutable
 class WebViewRouter extends StatefulWidget {
+  WebViewRouter({required this.url, super.key});
   String url;
 
-  WebViewRouter({super.key, required this.url});
-
-  static void open(BuildContext context, String link) {
+  static void open(final BuildContext context, final String link) {
     if (PlatformUtil.isTableMode()) {
       launchUrl(Uri.parse(link));
       return;
@@ -65,8 +64,8 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
 
   double progress = 0;
 
-  Future<void> nip07Reject(String resultId, String content) async {
-    var script = "window.nostr.reject(\"$resultId\", \"$content\");";
+  Future<void> nip07Reject(final String resultId, final String content) async {
+    final script = "window.nostr.reject(\"$resultId\", \"$content\");";
     await webViewController!.evaluateJavascript(source: script);
     // _controller.runJavaScript(script);
   }
@@ -87,7 +86,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
               })
         ],
         settings: ContextMenuSettings(hideDefaultSystemContextMenuItems: false),
-        onCreateContextMenu: (hitTestResult) async {
+        onCreateContextMenu: (final hitTestResult) async {
           print("onCreateContextMenu");
           print(hitTestResult.extra);
           print(await webViewController?.getSelectedText());
@@ -95,8 +94,8 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
         onHideContextMenu: () {
           print("onHideContextMenu");
         },
-        onContextMenuActionItemClicked: (contextMenuItemClicked) async {
-          var id = contextMenuItemClicked.id;
+        onContextMenuActionItemClicked: (final contextMenuItemClicked) async {
+          final id = contextMenuItemClicked.id;
           print(
               "onContextMenuActionItemClicked: $id ${contextMenuItemClicked.title}");
         });
@@ -123,17 +122,17 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
   }
 
   @override
-  Widget doBuild(BuildContext context) {
-    var themeData = Theme.of(context);
-    var paddingTop = mediaDataCache.padding.top;
-    var mainColor = themeData.primaryColor;
-    var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
-    var settingProvider = Provider.of<SettingProvider>(context);
-    var webViewProvider = Provider.of<WebViewProvider>(context);
+  Widget doBuild(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final paddingTop = mediaDataCache.padding.top;
+    final mainColor = themeData.primaryColor;
+    final scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
+    final settingProvider = Provider.of<SettingProvider>(context);
+    final webViewProvider = Provider.of<WebViewProvider>(context);
 
-    var btnTopPosition = Base.BASE_PADDING + Base.BASE_PADDING_HALF;
+    const btnTopPosition = Base.BASE_PADDING + Base.BASE_PADDING_HALF;
 
-    var main = Stack(
+    final main = Stack(
       children: [
         InAppWebView(
           key: webViewKey,
@@ -145,20 +144,21 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
           initialSettings: settings,
           contextMenu: contextMenu,
           pullToRefreshController: pullToRefreshController,
-          onWebViewCreated: (controller) async {
+          onWebViewCreated: (final controller) async {
             webViewController = controller;
             initJSHandle(controller);
           },
-          onLoadStart: (controller, url) async {},
-          onPermissionRequest: (controller, request) async {
+          onLoadStart: (final controller, final url) async {},
+          onPermissionRequest: (final controller, final request) async {
             return PermissionResponse(
                 resources: request.resources,
                 action: PermissionResponseAction.GRANT);
           },
-          shouldOverrideUrlLoading: (controller, navigationAction) async {
-            var uri = navigationAction.request.url!;
+          shouldOverrideUrlLoading:
+              (final controller, final navigationAction) async {
+            final uri = navigationAction.request.url!;
             if (uri.scheme == "lightning" && StringUtil.isNotBlank(uri.path)) {
-              var result =
+              final result =
                   await NIP07Dialog.show(context, NIP07Methods.lightning);
               if (result == true) {
                 await LightningUtil.goToPay(context, uri.path);
@@ -187,14 +187,14 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
 
             return NavigationActionPolicy.ALLOW;
           },
-          onLoadStop: (controller, url) async {
+          onLoadStop: (final controller, final url) async {
             pullToRefreshController?.endRefreshing();
             addInitScript(controller);
           },
-          onReceivedError: (controller, request, error) {
+          onReceivedError: (final controller, final request, final error) {
             pullToRefreshController?.endRefreshing();
           },
-          onProgressChanged: (controller, progress) {
+          onProgressChanged: (final controller, final progress) {
             if (progress == 100) {
               pullToRefreshController?.endRefreshing();
             }
@@ -202,8 +202,9 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
               this.progress = progress / 100;
             });
           },
-          onUpdateVisitedHistory: (controller, url, isReload) {},
-          onConsoleMessage: (controller, consoleMessage) {
+          onUpdateVisitedHistory:
+              (final controller, final url, final isReload) {},
+          onConsoleMessage: (final controller, final consoleMessage) {
             print(consoleMessage);
           },
         ),
@@ -232,7 +233,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
         ],
       );
     } else {
-      var lefeBtn = GestureDetector(
+      final lefeBtn = GestureDetector(
         onTap: handleBack,
         child: Container(
           height: btnWidth,
@@ -291,12 +292,12 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
     );
   }
 
-  Widget getMoreWidget(Widget icon) {
+  Widget getMoreWidget(final Widget icon) {
     // var themeData = Theme.of(context);
     // var scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
 
     return PopupMenuButton<String>(
-      itemBuilder: (context) {
+      itemBuilder: (final context) {
         return [
           const PopupMenuItem(
             value: "copyCurrentUrl",
@@ -330,18 +331,18 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {}
+  Future<void> onReady(final BuildContext context) async {}
 
-  Future<void> onPopupSelected(String value) async {
+  Future<void> onPopupSelected(final String value) async {
     if (value == "copyCurrentUrl") {
-      var url = await webViewController!.getUrl();
+      final url = await webViewController!.getUrl();
       if (StringUtil.isNotBlank(url.toString())) {
         _doCopy(url.toString());
       }
     } else if (value == "copyInitUrl") {
       _doCopy(widget.url);
     } else if (value == "openInBrowser") {
-      var url0 = Uri.parse(widget.url);
+      final url0 = Uri.parse(widget.url);
       launchUrl(url0);
     } else if (value == "hideBrowser") {
       webViewProvider.hide();
@@ -353,14 +354,14 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
     }
   }
 
-  void _doCopy(String text) {
-    Clipboard.setData(ClipboardData(text: text)).then((_) {
+  void _doCopy(final String text) {
+    Clipboard.setData(ClipboardData(text: text)).then((final _) {
       BotToast.showText(text: "Copy_success");
     });
   }
 
   Future<void> handleBack() async {
-    var canGoBack = await webViewController!.canGoBack();
+    final canGoBack = await webViewController!.canGoBack();
     if (canGoBack) {
       webViewController!.goBack();
     } else {
@@ -378,20 +379,20 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
     // log("dispose!!!!");
   }
 
-  void initJSHandle(InAppWebViewController controller) {
+  void initJSHandle(final InAppWebViewController controller) {
     controller.addJavaScriptHandler(
       handlerName: "Loure_JS_getPublicKey",
-      callback: (jsMsgs) async {
-        var jsMsg = jsMsgs[0];
+      callback: (final jsMsgs) async {
+        final jsMsg = jsMsgs[0];
         // print("Loure_JS_getPublicKey $jsMsg");
-        var jsonObj = jsonDecode(jsMsg);
-        var resultId = jsonObj["resultId"];
+        final jsonObj = jsonDecode(jsMsg);
+        final resultId = jsonObj["resultId"];
 
-        var confirmResult =
+        final confirmResult =
             await NIP07Dialog.show(context, NIP07Methods.getPublicKey);
         if (confirmResult == true) {
-          var pubkey = nostr.publicKey;
-          var script = "window.nostr.callback(\"$resultId\", \"$pubkey\");";
+          final pubkey = nostr.publicKey;
+          final script = "window.nostr.callback(\"$resultId\", \"$pubkey\");";
           controller.evaluateJavascript(source: script);
         } else {
           nip07Reject(resultId, "Forbid");
@@ -400,28 +401,28 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
     );
     controller.addJavaScriptHandler(
       handlerName: "Loure_JS_signEvent",
-      callback: (jsMsgs) async {
-        var jsMsg = jsMsgs[0];
+      callback: (final jsMsgs) async {
+        final jsMsg = jsMsgs[0];
         // print("Loure_JS_signEvent $jsMsg");
-        var jsonObj = jsonDecode(jsMsg);
-        var resultId = jsonObj["resultId"];
-        var content = jsonObj["msg"];
+        final jsonObj = jsonDecode(jsMsg);
+        final resultId = jsonObj["resultId"];
+        final content = jsonObj["msg"];
 
-        var confirmResult = await NIP07Dialog.show(
+        final confirmResult = await NIP07Dialog.show(
             context, NIP07Methods.signEvent,
             content: content);
 
         if (confirmResult == true) {
           try {
-            var eventObj = jsonDecode(content);
-            var tags = eventObj["tags"];
-            Event event = Event.finalize(nostr.privateKey, eventObj["kind"],
-                tags ?? [], eventObj["content"]);
+            final eventObj = jsonDecode(content);
+            final tags = eventObj["tags"];
+            final Event event = Event.finalize(nostr.privateKey,
+                eventObj["kind"], tags ?? [], eventObj["content"]);
 
             var eventResultStr = jsonEncode(event.toJson());
             // TODO this method to handle " may be error
             eventResultStr = eventResultStr.replaceAll("\"", "\\\"");
-            var script =
+            final script =
                 "window.nostr.callback(\"$resultId\", JSON.parse(\"$eventResultStr\"));";
             webViewController!.evaluateJavascript(source: script);
           } catch (e) {
@@ -434,32 +435,33 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
     );
     controller.addJavaScriptHandler(
       handlerName: "Loure_JS_getRelays",
-      callback: (jsMsgs) async {
-        var jsMsg = jsMsgs[0];
+      callback: (final jsMsgs) async {
+        final jsMsg = jsMsgs[0];
         // print("Loure_JS_getRelays $jsMsg");
-        var jsonObj = jsonDecode(jsMsg);
-        var resultId = jsonObj["resultId"];
+        final jsonObj = jsonDecode(jsMsg);
+        final resultId = jsonObj["resultId"];
 
-        var confirmResult =
+        final confirmResult =
             await NIP07Dialog.show(context, NIP07Methods.getRelays);
         if (confirmResult == true) {
           final relayMap = Map.fromEntries(
-            nostr.relayList.write.map((url) => MapEntry(url, {"write": true})),
+            nostr.relayList.write
+                .map((final url) => MapEntry(url, {"write": true})),
           );
-          relayMap.updateAll((url, rw) {
+          relayMap.updateAll((final url, final rw) {
             if (nostr.relayList.read.contains(url)) {
-              rw['read'] = true;
+              rw["read"] = true;
             }
             return rw;
           });
           relayMap.addEntries(
             nostr.relayList.read
-                .where((url) => relayMap[url] == null)
-                .map((url) => MapEntry(url, {"read": true})),
+                .where((final url) => relayMap[url] == null)
+                .map((final url) => MapEntry(url, {"read": true})),
           );
 
           final resultStr = jsonEncode(relayMap).replaceAll("\"", "\\\"");
-          var script =
+          final script =
               "window.nostr.callback(\"$resultId\", JSON.parse(\"$resultStr\"));";
 
           webViewController!.evaluateJavascript(source: script);
@@ -470,23 +472,23 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
     );
     controller.addJavaScriptHandler(
       handlerName: "Loure_JS_nip04_encrypt",
-      callback: (jsMsgs) async {
-        var jsMsg = jsMsgs[0];
+      callback: (final jsMsgs) async {
+        final jsMsg = jsMsgs[0];
         // print("Loure_JS_nip04_encrypt $jsMsg");
-        var jsonObj = jsonDecode(jsMsg);
-        var resultId = jsonObj["resultId"];
-        var msg = jsonObj["msg"];
+        final jsonObj = jsonDecode(jsMsg);
+        final resultId = jsonObj["resultId"];
+        final msg = jsonObj["msg"];
         if (msg != null && msg is Map) {
-          var pubkey = msg["pubkey"];
-          var plaintext = msg["plaintext"];
+          final pubkey = msg["pubkey"];
+          final plaintext = msg["plaintext"];
 
-          var confirmResult = await NIP07Dialog.show(
+          final confirmResult = await NIP07Dialog.show(
               context, NIP07Methods.nip04_encrypt,
               content: plaintext);
           if (confirmResult == true) {
-            var agreement = NIP04.getAgreement(nostr.privateKey);
-            var resultStr = NIP04.encrypt(plaintext, agreement, pubkey);
-            var script =
+            final agreement = NIP04.getAgreement(nostr.privateKey);
+            final resultStr = NIP04.encrypt(plaintext, agreement, pubkey);
+            final script =
                 "window.nostr.callback(\"$resultId\", \"$resultStr\");";
             webViewController!.evaluateJavascript(source: script);
           } else {
@@ -497,23 +499,23 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
     );
     controller.addJavaScriptHandler(
       handlerName: "Loure_JS_nip04_decrypt",
-      callback: (jsMsgs) async {
-        var jsMsg = jsMsgs[0];
+      callback: (final jsMsgs) async {
+        final jsMsg = jsMsgs[0];
         // print("Loure_JS_nip04_decrypt $jsMsg");
-        var jsonObj = jsonDecode(jsMsg.message);
-        var resultId = jsonObj["resultId"];
-        var msg = jsonObj["msg"];
+        final jsonObj = jsonDecode(jsMsg.message);
+        final resultId = jsonObj["resultId"];
+        final msg = jsonObj["msg"];
         if (msg != null && msg is Map) {
-          var pubkey = msg["pubkey"];
-          var ciphertext = msg["ciphertext"];
+          final pubkey = msg["pubkey"];
+          final ciphertext = msg["ciphertext"];
 
-          var confirmResult = await NIP07Dialog.show(
+          final confirmResult = await NIP07Dialog.show(
               context, NIP07Methods.nip04_decrypt,
               content: ciphertext);
           if (confirmResult == true) {
-            var agreement = NIP04.getAgreement(nostr.privateKey);
-            var resultStr = NIP04.decrypt(ciphertext, agreement, pubkey);
-            var script =
+            final agreement = NIP04.getAgreement(nostr.privateKey);
+            final resultStr = NIP04.decrypt(ciphertext, agreement, pubkey);
+            final script =
                 "window.nostr.callback(\"$resultId\", \"$resultStr\");";
             webViewController!.evaluateJavascript(source: script);
           } else {
@@ -524,7 +526,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
     );
   }
 
-  void addInitScript(InAppWebViewController controller) {
+  void addInitScript(final InAppWebViewController controller) {
     controller.evaluateJavascript(source: """
 window.nostr = {
 _call(channel, message) {

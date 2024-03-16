@@ -1,28 +1,27 @@
-import 'package:flutter/material.dart';
-import 'package:pointycastle/export.dart' as pointycastle;
-import 'package:get_time_ago/get_time_ago.dart';
+import "package:flutter/material.dart";
+import "package:pointycastle/export.dart" as pointycastle;
+import "package:get_time_ago/get_time_ago.dart";
 
-import 'package:loure/client/nip04/nip04.dart';
-import 'package:loure/component/name_component.dart';
-import 'package:loure/component/point_component.dart';
-import 'package:loure/component/user_pic_component.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/consts/router_path.dart';
-import 'package:loure/data/metadata.dart';
-import 'package:loure/main.dart';
-import 'package:loure/provider/dm_provider.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
+import "package:loure/client/nip04/nip04.dart";
+import "package:loure/component/name_component.dart";
+import "package:loure/component/point_component.dart";
+import "package:loure/component/user_pic_component.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/consts/router_path.dart";
+import "package:loure/data/metadata.dart";
+import "package:loure/main.dart";
+import "package:loure/provider/dm_provider.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
 
 class DMSessionListItemComponent extends StatefulWidget {
-  final DMSessionDetail detail;
-  final pointycastle.ECDHBasicAgreement agreement;
-
   const DMSessionListItemComponent({
-    super.key,
     required this.detail,
     required this.agreement,
+    super.key,
   });
+  final DMSessionDetail detail;
+  final pointycastle.ECDHBasicAgreement agreement;
 
   @override
   State<StatefulWidget> createState() {
@@ -44,7 +43,7 @@ class DMSessionListItemComponentState
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return GestureDetector(
       onTap: () {
         RouterUtil.router(context, RouterPath.DM_DETAIL, widget.detail);
@@ -52,7 +51,7 @@ class DMSessionListItemComponentState
       child: FutureBuilder(
         future: this.metadataFuture,
         initialData: Metadata.blank(widget.detail.dmSession.pubkey),
-        builder: (context, snapshot) {
+        builder: (final context, final snapshot) {
           final metadata = snapshot.data;
 
           final themeData = Theme.of(context);
@@ -67,7 +66,7 @@ class DMSessionListItemComponentState
           content = content.replaceAll("\r", " ");
           content = content.replaceAll("\n", " ");
 
-          var leftWidget = Container(
+          final leftWidget = Container(
             margin: const EdgeInsets.only(top: 4),
             child: UserPicComponent(
               pubkey: dmSession.pubkey,
@@ -75,9 +74,9 @@ class DMSessionListItemComponentState
             ),
           );
 
-          var lastEvent = dmSession.newestEvent!;
+          final lastEvent = dmSession.newestEvent!;
 
-          bool hasNewMessage = widget.detail.hasNewMessage();
+          final bool hasNewMessage = widget.detail.hasNewMessage();
 
           List<Widget> contentList = [
             Expanded(

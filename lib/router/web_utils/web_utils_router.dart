@@ -1,13 +1,13 @@
-import 'dart:convert';
+import "dart:convert";
 
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:loure/component/cust_state.dart';
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/dio_util.dart';
-import 'package:loure/util/router_util.dart';
-import 'package:loure/util/string_util.dart';
-import 'package:loure/router/web_utils/web_util_item_component.dart';
+import "package:loure/component/cust_state.dart";
+import "package:loure/consts/base.dart";
+import "package:loure/util/dio_util.dart";
+import "package:loure/util/router_util.dart";
+import "package:loure/util/string_util.dart";
+import "package:loure/router/web_utils/web_util_item_component.dart";
 
 class WebUtilsRouter extends StatefulWidget {
   const WebUtilsRouter({super.key});
@@ -20,9 +20,9 @@ class WebUtilsRouter extends StatefulWidget {
 
 class _WebUtilsRouter extends CustState<WebUtilsRouter> {
   @override
-  Widget doBuild(BuildContext context) {
-    var themeData = Theme.of(context);
-        var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
+  Widget doBuild(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
     List<Widget> list = [
       // WebUtilItemComponent(
@@ -72,7 +72,7 @@ class _WebUtilsRouter extends CustState<WebUtilsRouter> {
       // ),
     ];
 
-    for (var item in webUtils) {
+    for (final item in webUtils) {
       list.add(WebUtilItemComponent(link: item.link, des: item.des));
     }
 
@@ -105,18 +105,18 @@ class _WebUtilsRouter extends CustState<WebUtilsRouter> {
   }
 
   @override
-  Future<void> onReady(BuildContext context) async {
+  Future<void> onReady(final BuildContext context) async {
     load();
   }
 
   List<WebUtilItem> webUtils = [];
 
   Future<void> load() async {
-    var str = await DioUtil.getStr(Base.WEB_TOOLS);
+    final str = await DioUtil.getStr(Base.WEB_TOOLS);
     if (StringUtil.isNotBlank(str)) {
-      var itfs = jsonDecode(str!);
+      final itfs = jsonDecode(str!);
       webUtils = [];
-      for (var itf in itfs) {
+      for (final itf in itfs) {
         if (itf is Map) {
           webUtils.add(WebUtilItem(itf["link"], itf["des"]));
         }
@@ -127,8 +127,7 @@ class _WebUtilsRouter extends CustState<WebUtilsRouter> {
 }
 
 class WebUtilItem {
+  WebUtilItem(this.link, this.des);
   String link;
   String des;
-
-  WebUtilItem(this.link, this.des);
 }

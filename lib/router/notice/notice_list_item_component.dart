@@ -1,20 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:get_time_ago/get_time_ago.dart';
-import 'package:loure/provider/notice_provider.dart';
+import "package:flutter/material.dart";
+import "package:get_time_ago/get_time_ago.dart";
+import "package:loure/provider/notice_provider.dart";
 
-import 'package:loure/consts/base.dart';
-import 'package:loure/util/string_util.dart';
+import "package:loure/consts/base.dart";
+import "package:loure/util/string_util.dart";
 
 class NoticeListItemComponent extends StatelessWidget {
+  NoticeListItemComponent({required this.notice, super.key});
   NoticeData notice;
 
-  NoticeListItemComponent({super.key, required this.notice});
-
   @override
-  Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var hintColor = themeData.hintColor;
-    var smallTextSize = themeData.textTheme.bodySmall!.fontSize;
+  Widget build(final BuildContext context) {
+    final themeData = Theme.of(context);
+    final hintColor = themeData.hintColor;
+    final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
 
     return Container(
       padding: const EdgeInsets.all(Base.BASE_PADDING),

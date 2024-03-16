@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:loure/router/follow/mention_me_router.dart';
+import "package:flutter/material.dart";
+import "package:loure/router/follow/mention_me_router.dart";
 
-import 'package:loure/router/follow/follow_posts_router.dart';
-import 'package:loure/router/follow/follow_router.dart';
+import "package:loure/router/follow/follow_posts_router.dart";
+import "package:loure/router/follow/follow_router.dart";
 
 class FollowIndexRouter extends StatefulWidget {
+  FollowIndexRouter({required this.tabController, super.key});
   TabController tabController;
-
-  FollowIndexRouter({super.key, required this.tabController});
 
   @override
   State<StatefulWidget> createState() {
@@ -17,7 +16,7 @@ class FollowIndexRouter extends StatefulWidget {
 
 class _FollowIndexRouter extends State<FollowIndexRouter> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: TabBarView(

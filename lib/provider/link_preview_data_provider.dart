@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart';
-import 'package:loure/util/string_util.dart';
+import "package:flutter/material.dart";
+import "package:flutter_chat_types/flutter_chat_types.dart";
+import "package:loure/util/string_util.dart";
 
 class LinkPreviewDataProvider extends ChangeNotifier {
   static const CACHE_LENGTH = 100;
@@ -11,10 +11,10 @@ class LinkPreviewDataProvider extends ChangeNotifier {
 
   final List<String?> _cacheKey = List.filled(CACHE_LENGTH, null);
 
-  void set(String link, PreviewData? data) {
+  void set(final String link, final PreviewData? data) {
     if (data != null) {
       // remove cache
-      var cachedLink = _cacheKey[_index];
+      final cachedLink = _cacheKey[_index];
       if (StringUtil.isNotBlank(cachedLink)) {
         _data.remove(cachedLink);
       }
@@ -31,7 +31,7 @@ class LinkPreviewDataProvider extends ChangeNotifier {
     }
   }
 
-  PreviewData? getPreviewData(String link) {
+  PreviewData? getPreviewData(final String link) {
     return _data[link];
   }
 

@@ -1,5 +1,5 @@
 class NumberFormatUtil {
-  static String format(int num) {
+  static String format(final int num) {
     String numStr = num.toString();
     if (num > 1000000) {
       numStr = "${(num / 1000000).toStringAsFixed(1)}m";
