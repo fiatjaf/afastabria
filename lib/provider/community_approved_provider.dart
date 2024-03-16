@@ -34,7 +34,7 @@ class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
     if (eids.isNotEmpty) {
       final filter = Filter(kinds: [EventKind.COMMUNITY_APPROVED], e: eids);
       eids.clear();
-      nostr.pool.subscribeManyEose(["wss://relay.nostr.band"], [filter],
+      pool.subscribeManyEose(["wss://relay.nostr.band"], [filter],
           onEvent: onEvent);
     }
 

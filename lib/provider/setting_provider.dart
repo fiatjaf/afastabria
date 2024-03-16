@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:loure/main.dart';
 import 'package:loure/util/encrypt_util.dart';
 import 'package:loure/util/platform_util.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:loure/consts/base.dart';
 import 'package:loure/consts/base_consts.dart';
@@ -14,22 +14,11 @@ import 'package:loure/provider/data_util.dart';
 
 class SettingProvider extends ChangeNotifier {
   static SettingProvider? _settingProvider;
-  SharedPreferences? _sharedPreferences;
   SettingData? _settingData;
   final Map<String, String> _privateKeyMap = {};
 
-  static Future<SettingProvider> getInstance() async {
-    if (_settingProvider == null) {
-      _settingProvider = SettingProvider();
-      _settingProvider!._sharedPreferences = await DataUtil.getInstance();
-      await _settingProvider!._init();
-      _settingProvider!._reloadTranslateSourceArgs();
-    }
-    return _settingProvider!;
-  }
-
-  Future<void> _init() async {
-    String? settingStr = _sharedPreferences!.getString(DataKey.SETTING);
+  Future<void> init() async {
+    String? settingStr = sharedPreferences.getString(DataKey.SETTING);
     if (StringUtil.isNotBlank(settingStr)) {
       var jsonMap = json.decode(settingStr!);
       if (jsonMap != null) {
@@ -76,7 +65,7 @@ class SettingProvider extends ChangeNotifier {
   }
 
   Future<void> reload() async {
-    await _init();
+    await init();
     _settingProvider!._reloadTranslateSourceArgs();
     notifyListeners();
   }
@@ -171,17 +160,9 @@ class SettingProvider extends ChangeNotifier {
       : OpenStatus.CLOSE;
 
   String? get network => _settingData!.network;
-
   String? get imageService => _settingData!.imageService;
-
   int? get videoPreview => _settingData!.videoPreview;
-
   int? get imagePreview => _settingData!.imagePreview;
-
-  /// i18n
-  String? get i18n => _settingData!.i18n;
-
-  String? get i18nCC => _settingData!.i18nCC;
 
   /// image compress
   int get imgCompress => _settingData!.imgCompress;
@@ -310,18 +291,6 @@ class SettingProvider extends ChangeNotifier {
     saveAndNotifyListeners();
   }
 
-  /// i18n
-  set i18n(String? o) {
-    _settingData!.i18n = o;
-    saveAndNotifyListeners();
-  }
-
-  void setI18n(String? i18n, String? i18nCC) {
-    _settingData!.i18n = i18n;
-    _settingData!.i18nCC = i18nCC;
-    saveAndNotifyListeners();
-  }
-
   /// image compress
   set imgCompress(int o) {
     _settingData!.imgCompress = o;
@@ -406,7 +375,7 @@ class SettingProvider extends ChangeNotifier {
     var m = _settingData!.toJson();
     var jsonStr = json.encode(m);
     // print(jsonStr);
-    await _sharedPreferences!.setString(DataKey.SETTING, jsonStr);
+    await sharedPreferences.setString(DataKey.SETTING, jsonStr);
     _settingProvider!._reloadTranslateSourceArgs();
 
     if (updateUI) {
@@ -417,34 +386,22 @@ class SettingProvider extends ChangeNotifier {
 
 class SettingData {
   int? privateKeyIndex;
-
   String? privateKeyMap;
-
   String? encryptPrivateKeyMap;
 
   /// open lock
   late int lockOpen;
 
   int? defaultIndex;
-
   int? defaultTab;
-
   int? linkPreview;
-
   int? videoPreviewInList;
 
   String? network;
-
   String? imageService;
 
   int? videoPreview;
-
   int? imagePreview;
-
-  /// i18n
-  String? i18n;
-
-  String? i18nCC;
 
   /// image compress
   late int imgCompress;
@@ -459,25 +416,17 @@ class SettingData {
   String? fontFamily;
 
   int? openTranslate;
-
   String? translateTarget;
-
   String? translateSourceArgs;
-
   int? broadcaseWhenBoost;
-
   double? fontSize;
 
   late int webviewAppbarOpen;
 
   int? tableMode;
-
   int? autoOpenSensitive;
-
   int? relayMode;
-
   int? eventSignCheck;
-
   int? limitNoteHeight;
 
   /// updated time
@@ -495,8 +444,6 @@ class SettingData {
     this.imageService,
     this.videoPreview,
     this.imagePreview,
-    this.i18n,
-    this.i18nCC,
     this.imgCompress = 50,
     this.themeStyle = ThemeStyle.AUTO,
     this.themeColor,
@@ -532,8 +479,6 @@ class SettingData {
     imageService = json['imageService'];
     videoPreview = json['videoPreview'];
     imagePreview = json['imagePreview'];
-    i18n = json['i18n'];
-    i18nCC = json['i18nCC'];
     if (json['imgCompress'] != null) {
       imgCompress = json['imgCompress'];
     } else {
@@ -577,8 +522,6 @@ class SettingData {
     data['imageService'] = imageService;
     data['videoPreview'] = videoPreview;
     data['imagePreview'] = imagePreview;
-    data['i18n'] = i18n;
-    data['i18nCC'] = i18nCC;
     data['imgCompress'] = imgCompress;
     data['themeStyle'] = themeStyle;
     data['themeColor'] = themeColor;

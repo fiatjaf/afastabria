@@ -97,7 +97,7 @@ class _UserBadgesComponent extends CustState<UserBadgesComponent>
 
   @override
   Future<void> onReady(BuildContext context) async {
-    nostr.pool.querySingle(
+    pool.querySingle(
         ["wss://relay.nostr.band"],
         Filter(
             authors: [widget.pubkey],

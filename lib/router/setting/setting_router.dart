@@ -680,7 +680,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
           kind.EventKind.GENERIC_REPOST,
         ]);
 
-        nostr.pool.subscribeManyEose(["wss://relay.nostr.band"], [filter],
+        pool.subscribeManyEose(["wss://relay.nostr.band"], [filter],
             onEvent: onDeletedEventReceive);
       } catch (e) {
         log("delete account error ${e.toString()}");

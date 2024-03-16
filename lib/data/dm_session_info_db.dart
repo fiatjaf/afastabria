@@ -1,4 +1,3 @@
-
 import 'package:loure/data/dm_session_info.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -7,7 +6,7 @@ import 'package:loure/data/db.dart';
 class DMSessionInfoDB {
   static Future<List<DMSessionInfo>> all(int keyIndex,
       {DatabaseExecutor? db}) async {
-    db = await DB.getDB(db);
+    db = DB.getDB(db);
     List<DMSessionInfo> l = [];
     List<dynamic> args = [keyIndex];
 
@@ -21,24 +20,21 @@ class DMSessionInfoDB {
   }
 
   static Future<int> insert(DMSessionInfo o, {DatabaseExecutor? db}) async {
-    db = await DB.getDB(db);
-    var jsonObj = o.toJson();
-    return await db.insert("dm_session_info", jsonObj);
+    return await DB.getDB(db).insert("dm_session_info", o.toJson());
   }
 
   static Future<int> update(DMSessionInfo o, {DatabaseExecutor? db}) async {
-    db = await DB.getDB(db);
-    var jsonObj = o.toJson();
-    return await db.update(
+    return await DB.getDB(db).update(
       "dm_session_info",
-      jsonObj,
+      o.toJson(),
       where: "key_index = ? and pubkey = ?",
       whereArgs: [o.keyIndex, o.pubkey],
     );
   }
 
   static Future<void> deleteAll(int keyIndex, {DatabaseExecutor? db}) async {
-    db = await DB.getDB(db);
-    db.execute("delete from dm_session_info where key_index = ?", [keyIndex]);
+    DB
+        .getDB(db)
+        .execute("delete from dm_session_info where key_index = ?", [keyIndex]);
   }
 }

@@ -225,7 +225,7 @@ class _SearchRouter extends CustState<SearchRouter>
       };
     }
 
-    nostr.pool.querySync(relays, this.filter!, filterModifier: filterModifier);
+    pool.querySync(relays, this.filter!, filterModifier: filterModifier);
   }
 
   void onQueryEvent(Event event) {

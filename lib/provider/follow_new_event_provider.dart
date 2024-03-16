@@ -37,7 +37,7 @@ class FollowNewEventProvider extends ChangeNotifier
 
     // TODO: outbox model
     filter.authors = pubkeys.toList();
-    this.subHandle = nostr.pool.subscribeMany(
+    this.subHandle = pool.subscribeMany(
         ["wss://relay.nostr.band"], [filter], onEvent: (Event event) {
       later(event, handleEvents, null);
     });

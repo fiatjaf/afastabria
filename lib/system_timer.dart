@@ -20,7 +20,7 @@ class SystemTimer {
   }
 
   static void runTask() {
-    print("SystemTimer runTask");
+    // print("SystemTimer runTask");
   }
 
   static void stopTask() {

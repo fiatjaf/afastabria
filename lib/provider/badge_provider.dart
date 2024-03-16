@@ -38,7 +38,7 @@ class BadgeProvider extends ChangeNotifier {
     var filter =
         Filter(authors: [nostr.publicKey], kinds: [EventKind.BADGE_ACCEPT]);
 
-    nostr.pool.subscribeMany(nostr.relayList.write, [filter], onEvent: onEvent);
+    pool.subscribeMany(nostr.relayList.write, [filter], onEvent: onEvent);
   }
 
   void onEvent(Event event) {

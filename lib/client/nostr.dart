@@ -9,62 +9,36 @@ import 'package:loure/main.dart';
 
 import 'package:loure/client/client_utils/keys.dart';
 import 'package:loure/client/event.dart';
-import 'package:loure/client/relay/relay_pool.dart';
 import 'package:loure/client/nip02/cust_contact_list.dart';
 import 'package:loure/client/nip65/relay_list.dart';
 
 class Nostr {
-  late String privateKey;
-  late String publicKey;
-  late RelayPool pool;
+  final String privateKey;
+  final String publicKey;
 
-  late RelayList relayList;
+  RelayList relayList = RelayList([
+    "wss://nostr.wine",
+    "wss://nostr21.com",
+    "wss://nostr.mom",
+    "wss://relay.snort.social",
+  ], [
+    "wss://nos.lol",
+    "wss://offchain.pub",
+    "wss://relay.damus.io",
+    "wss://relay.primal.net",
+  ]);
 
   final idIndex = <String, Event>{};
   final addressIndex = <String, Event>{};
 
-  Nostr(String privateKey) {
-    if (keyIsValid(privateKey)) {
-      privateKey = privateKey;
-      publicKey = getPublicKey(privateKey);
-    } else {
-      throw const FormatException("invalid key");
-    }
-    this.pool = RelayPool();
-  }
+  Nostr(this.privateKey) : this.publicKey = getPublicKey(privateKey);
 
   void init(String secretKey) {
-    contactListProvider.reload();
-    contactListProvider.query();
-    followEventProvider.doQuery();
-    mentionMeProvider.doQuery();
-    dmProvider.initDMSessions().then((_) {
-      dmProvider.query();
-    });
-
-    bookmarkProvider.init();
-    badgeProvider.reload();
-    followNewEventProvider.start();
-
-    this
-        .pool
+    pool
         .querySync(RELAYLIST_RELAYS,
             Filter(kinds: [10002], authors: [nostr.publicKey]))
         .then((Iterable<Event> evts) {
-      if (evts.length == 0) {
-        return RelayList([
-          "wss://nostr.wine",
-          "wss://nostr21.com",
-          "wss://nostr.mom",
-          "wss://pyramid.fiatjaf.com",
-          "wss://relay.snort.social",
-        ], [
-          "wss://nos.lol",
-          "wss://offchain.pub",
-          "wss://relay.damus.io",
-          "wss://relay.primal.net",
-        ]);
-      }
+      if (evts.length == 0) return;
 
       Event latest = evts.reduce((Event a, Event b) {
         if (a.createdAt > b.createdAt) {
@@ -119,7 +93,7 @@ class Nostr {
     if (evt != null) {
       return evt;
     } else {
-      return await nostr.pool.querySingle(nostr.ID_RELAYS, Filter(ids: [id]));
+      return await pool.querySingle(nostr.ID_RELAYS, Filter(ids: [id]));
     }
   }
 
@@ -129,7 +103,7 @@ class Nostr {
     if (evt != null) {
       return evt;
     } else {
-      return nostr.pool.querySingle(
+      return pool.querySingle(
           relays == null
               ? nostr.RANDOM_RELAYS
               : [...relays, ...nostr.RANDOM_RELAYS],
@@ -173,7 +147,7 @@ class Nostr {
         ],
         "+");
 
-    this.pool.publish(target.sources, event);
+    pool.publish(target.sources, event);
     return event;
   }
 
@@ -191,7 +165,7 @@ class Nostr {
           ["e", id]
         ],
         "");
-    this.pool.publish(relays, event);
+    pool.publish(relays, event);
   }
 
   void deleteEvents(List<String> ids) {
@@ -209,7 +183,7 @@ class Nostr {
 
     Event event = Event.finalize(
         this.privateKey, EventKind.EVENT_DELETION, tags, "delete");
-    this.pool.publish(relays, event);
+    pool.publish(relays, event);
   }
 
   Event? sendRepost(String id) {
@@ -226,10 +200,10 @@ class Nostr {
         ],
         jsonEncode(target.toJson()));
 
-    this.pool.publish(this.relayList.write, event);
+    pool.publish(this.relayList.write, event);
 
     if (settingProvider.broadcaseWhenBoost == OpenStatus.OPEN) {
-      nostr.pool.publish(nostr.relayList.write, target);
+      pool.publish(nostr.relayList.write, target);
     }
 
     return event;
@@ -238,14 +212,14 @@ class Nostr {
   Event sendTextNote(String text, [List<List<String>> tags = const []]) {
     Event event =
         Event.finalize(this.privateKey, EventKind.TEXT_NOTE, tags, text);
-    this.pool.publish(this.relayList.write, event);
+    pool.publish(this.relayList.write, event);
     return event;
   }
 
   Event sendMetadata(Metadata metadata) {
     final event = Event.finalize(
         this.privateKey, EventKind.METADATA, [], jsonEncode(metadata));
-    this.pool.publish([...this.relayList.write, ...METADATA_RELAYS], event);
+    pool.publish([...this.relayList.write, ...METADATA_RELAYS], event);
     return event;
   }
 
@@ -253,19 +227,19 @@ class Nostr {
     final tags = contacts.toTags();
     final event =
         Event.finalize(this.privateKey, EventKind.CONTACT_LIST, tags, content);
-    this.pool.publish([...this.relayList.write, ...CONTACT_RELAYS], event);
+    pool.publish([...this.relayList.write, ...CONTACT_RELAYS], event);
     return event;
   }
 
   Event sendRelayList(String content) {
     var event = this.relayList.toEvent(nostr.privateKey);
-    this.pool.publish([...this.relayList.write, ...RELAYLIST_RELAYS], event);
+    pool.publish([...this.relayList.write, ...RELAYLIST_RELAYS], event);
     return event;
   }
 
   Event sendList(int kind, List<List<String>> tags, String content) {
     final event = Event.finalize(this.privateKey, kind, tags, content);
-    this.pool.publish(this.relayList.write, event);
+    pool.publish(this.relayList.write, event);
     return event;
   }
 }

@@ -1,14 +1,3 @@
-import 'package:shared_preferences/shared_preferences.dart';
-
-class DataUtil {
-  static SharedPreferences? _prefs;
-
-  static Future<SharedPreferences> getInstance() async {
-    _prefs ??= await SharedPreferences.getInstance();
-    return _prefs!;
-  }
-}
-
 class DataKey {
   static const String SETTING = "setting";
   static const String CONTACT_LISTS = "contactLists";

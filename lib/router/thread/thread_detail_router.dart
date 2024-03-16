@@ -348,7 +348,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
             kinds: replyKinds,
           );
 
-    this.repliesSubHandle = nostr.pool
+    this.repliesSubHandle = pool
         .subscribeMany(nostr.relayList.read, [filter], onEvent: onEvent);
   }
 

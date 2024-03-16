@@ -178,7 +178,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
 
   void onLongPressStart(LongPressStartDetails d) {
     localContactBox = EventMemBox(sortAfterAdd: false);
-    nostr.pool
+    pool
         .querySingle(
             nostr.CONTACT_RELAYS,
             Filter(
@@ -304,7 +304,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
       // pull zap event
       var filter =
           Filter(kinds: [kind.EventKind.ZAP], p: [widget.pubkey], limit: 1);
-      nostr.pool
+      pool
           .querySingle(["wss://relay.nostr.band"], filter).then((Event? event) {
         if (event == null) return;
         if (event.kind == kind.EventKind.ZAP && zapEventBox!.add(event)) {

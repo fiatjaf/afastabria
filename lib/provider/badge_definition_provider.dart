@@ -44,7 +44,7 @@ class BadgeDefinitionProvider extends ChangeNotifier with LaterFunction {
   void _laterSearch() {
     final filter = Filter(
         kinds: [EventKind.BADGE_DEFINITION], authors: _needUpdatePubKeys);
-    nostr.pool.subscribeManyEose(["wss://relay.nostr.band"], [filter],
+    pool.subscribeManyEose(["wss://relay.nostr.band"], [filter],
         onEvent: _onEvent);
 
     for (var pubkey in _needUpdatePubKeys) {

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_socks_proxy/socks_proxy.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loure/client/metadata_loader.dart';
 import 'package:loure/client/nostr.dart';
@@ -34,7 +33,6 @@ import 'package:loure/home_component.dart';
 import 'package:loure/provider/badge_provider.dart';
 import 'package:loure/provider/community_approved_provider.dart';
 import 'package:loure/provider/contact_list_provider.dart';
-import 'package:loure/provider/data_util.dart';
 import 'package:loure/provider/dm_provider.dart';
 import 'package:loure/provider/event_reactions_provider.dart';
 import 'package:loure/provider/filter_provider.dart';
@@ -68,39 +66,38 @@ import 'package:loure/router/user/user_relays_router.dart';
 import 'package:loure/router/user/user_router.dart';
 import 'package:loure/system_timer.dart';
 import 'package:loure/util/colors_util.dart';
-import 'package:loure/util/image/cache_manager_builder.dart';
 import 'package:loure/util/media_data_cache.dart';
-import 'package:loure/util/string_util.dart';
 
-late MetadataLoader metadataLoader;
+final Map<String, WidgetBuilder> routes = {};
+
+final RelayPool pool = RelayPool();
+final metadataLoader = MetadataLoader();
+
+Nostr nostr =
+    Nostr("0000000000000000000000000000000000000000000000000000000000000001");
 late SharedPreferences sharedPreferences;
 
-late SettingProvider settingProvider;
-late ContactListProvider contactListProvider;
-late FollowEventProvider followEventProvider;
-late FollowNewEventProvider followNewEventProvider;
-late MentionMeProvider mentionMeProvider;
-late MentionMeNewProvider mentionMeNewProvider;
-late DMProvider dmProvider;
-late IndexProvider indexProvider;
-late EventReactionsProvider eventReactionsProvider;
-late NoticeProvider noticeProvider;
-late FilterProvider filterProvider;
-late LinkPreviewDataProvider linkPreviewDataProvider;
-late BadgeDefinitionProvider badgeDefinitionProvider;
-late MediaDataCache mediaDataCache;
-late CacheManager localCacheManager;
-late PcRouterFakeProvider pcRouterFakeProvider;
-late Map<String, WidgetBuilder> routes;
-late WebViewProvider webViewProvider;
-// late CustomEmojiProvider customEmojiProvider;
-late CommunityApprovedProvider communityApprovedProvider;
-late CommunityInfoProvider communityInfoProvider;
-late BookmarkProvider bookmarkProvider;
-late EmojiProvider emojiProvider;
-late BadgeProvider badgeProvider;
-
-late Nostr nostr;
+final settingProvider = SettingProvider();
+final contactListProvider = ContactListProvider();
+final followEventProvider = FollowEventProvider();
+final mentionMeProvider = MentionMeProvider();
+final mentionMeNewProvider = MentionMeNewProvider();
+final dmProvider = DMProvider();
+final indexProvider = IndexProvider();
+final eventReactionsProvider = EventReactionsProvider();
+final noticeProvider = NoticeProvider();
+final filterProvider = FilterProvider();
+final linkPreviewDataProvider = LinkPreviewDataProvider();
+final badgeDefinitionProvider = BadgeDefinitionProvider();
+final mediaDataCache = MediaDataCache();
+final pcRouterFakeProvider = PcRouterFakeProvider();
+final webViewProvider = WebViewProvider();
+final communityApprovedProvider = CommunityApprovedProvider();
+final communityInfoProvider = CommunityInfoProvider();
+final bookmarkProvider = BookmarkProvider();
+final followNewEventProvider = FollowNewEventProvider();
+final emojiProvider = EmojiProvider();
+final badgeProvider = BadgeProvider();
 
 bool firstLogin = false;
 
@@ -140,39 +137,25 @@ Future<void> main() async {
     print(e);
   }
 
-  var dbInitTask = DB.getCurrentDatabase();
-  var dataUtilTask = DataUtil.getInstance();
-  var dataFutureResultList = await Future.wait([dbInitTask, dataUtilTask]);
+  DB.init();
 
-  sharedPreferences = dataFutureResultList[1] as SharedPreferences;
-  metadataLoader = MetadataLoader();
+  sharedPreferences = await SharedPreferences.getInstance();
 
-  settingProvider = await SettingProvider.getInstance();
-  contactListProvider = ContactListProvider.getInstance();
-  followEventProvider = FollowEventProvider();
-  followNewEventProvider = FollowNewEventProvider();
-  mentionMeProvider = MentionMeProvider();
-  mentionMeNewProvider = MentionMeNewProvider();
-  dmProvider = DMProvider();
-  indexProvider = IndexProvider(
-    indexTap: settingProvider.defaultIndex,
-  );
-  eventReactionsProvider = EventReactionsProvider();
-  noticeProvider = NoticeProvider();
-  filterProvider = FilterProvider.getInstance();
-  linkPreviewDataProvider = LinkPreviewDataProvider();
-  badgeDefinitionProvider = BadgeDefinitionProvider();
-  mediaDataCache = MediaDataCache();
-  localCacheManager = CacheManagerBuilder.build();
-  pcRouterFakeProvider = PcRouterFakeProvider();
-  webViewProvider = WebViewProvider();
-  // customEmojiProvider = CustomEmojiProvider.load();
-  communityApprovedProvider = CommunityApprovedProvider();
-  communityInfoProvider = CommunityInfoProvider();
-  bookmarkProvider = BookmarkProvider();
-  badgeProvider = BadgeProvider();
+  settingProvider.init();
 
-  if (StringUtil.isNotBlank(settingProvider.network)) {
+  contactListProvider.reload();
+  contactListProvider.query();
+  followEventProvider.doQuery();
+  mentionMeProvider.doQuery();
+  dmProvider.initDMSessions().then((_) {
+    dmProvider.query();
+  });
+  bookmarkProvider.init();
+  badgeProvider.reload();
+  emojiProvider.init();
+  followNewEventProvider.start();
+
+  if (settingProvider.network != null && settingProvider.network != "") {
     var network = settingProvider.network;
     network = network!.trim();
     SocksProxy.initProxy(proxy: network);
@@ -216,7 +199,7 @@ class _MyApp extends State<MyApp> {
       defaultDarkTheme = darkTheme;
     }
 
-    routes = {
+    routes.addAll({
       RouterPath.INDEX: (context) => IndexRouter(reload: reload),
       RouterPath.DONATE: (context) => const DonateRouter(),
       RouterPath.USER: (context) => const UserRouter(),
@@ -245,7 +228,7 @@ class _MyApp extends State<MyApp> {
           const FollowedCommunitiesRouter(),
       RouterPath.FOLLOWED: (context) => const FollowedRouter(),
       RouterPath.BOOKMARK: (context) => const BookmarkRouter(),
-    };
+    });
 
     return MultiProvider(
       providers: [
@@ -253,7 +236,7 @@ class _MyApp extends State<MyApp> {
           value: settingProvider,
         ),
         ListenableProvider<RelayPool>.value(
-          value: nostr.pool,
+          value: pool,
         ),
         ListenableProvider<IndexProvider>.value(
           value: indexProvider,
@@ -297,9 +280,6 @@ class _MyApp extends State<MyApp> {
         ListenableProvider<WebViewProvider>.value(
           value: webViewProvider,
         ),
-        // ListenableProvider<CustomEmojiProvider>.value(
-        //   value: customEmojiProvider,
-        // ),
         ListenableProvider<CommunityApprovedProvider>.value(
           value: communityApprovedProvider,
         ),
@@ -320,9 +300,11 @@ class _MyApp extends State<MyApp> {
         theme: defaultTheme,
         child: MaterialApp(
           builder: BotToastInit(),
-          navigatorObservers: [BotToastNavigatorObserver()],
+          navigatorObservers: [
+            BotToastNavigatorObserver(),
+          ],
           // showPerformanceOverlay: true,
-          debugShowCheckedModeBanner: false,
+          // debugShowCheckedModeBanner: true,
           title: Base.APP_NAME,
           theme: defaultTheme,
           darkTheme: defaultDarkTheme,

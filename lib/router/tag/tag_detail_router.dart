@@ -173,7 +173,7 @@ class _TagDetailRouter extends CustState<TagDetailRouter>
       }
       filter.t = list;
     }
-    nostr.pool.subscribeManyEose(["wss://relay.nostr.band"], [filter],
+    pool.subscribeManyEose(["wss://relay.nostr.band"], [filter],
         onEvent: onEvent);
   }
 

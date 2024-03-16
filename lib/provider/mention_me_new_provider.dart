@@ -35,7 +35,7 @@ class MentionMeNewProvider extends ChangeNotifier
       p: [nostr.publicKey],
     );
 
-    this.subHandle = nostr.pool
+    this.subHandle = pool
         .subscribeMany(["wss://relay.nostr.band"], [filter], onEvent: (event) {
       later(event, handleEvents, null);
     });

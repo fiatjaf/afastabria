@@ -103,7 +103,7 @@ class FollowEventProvider extends ChangeNotifier
       };
     }
 
-    this.subHandle = nostr.pool.subscribeMany(
+    this.subHandle = pool.subscribeMany(
         relays,
         [
           Filter(kinds: [EventKind.TEXT_NOTE])

@@ -52,7 +52,7 @@ class CommunityInfoProvider extends ChangeNotifier with LaterFunction {
       filters.add(aId.toFilter());
     }
 
-    nostr.pool.subscribeManyEose(["wss://relay.nostr.band"], filters,
+    pool.subscribeManyEose(["wss://relay.nostr.band"], filters,
         onEvent: _onEvent);
 
     for (var pubkey in _needPullIds) {

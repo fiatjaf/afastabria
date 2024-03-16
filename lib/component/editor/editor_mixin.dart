@@ -607,7 +607,7 @@ mixin EditorMixin {
     if (publishAt != null) {
       await SendBox.submit(event, nostr.relayList.write);
     } else {
-      nostr.pool.publish(nostr.relayList.write, event);
+      pool.publish(nostr.relayList.write, event);
       log(jsonEncode(event.toJson()));
     }
 

@@ -22,7 +22,7 @@ abstract class ListProvider extends ChangeNotifier {
   Event? latest;
 
   void init() {
-    nostr.pool.subscribeMany(nostr.relayList.write, [
+    pool.subscribeMany(nostr.relayList.write, [
       Filter(
         kinds: [this.kind],
         authors: [nostr.publicKey],

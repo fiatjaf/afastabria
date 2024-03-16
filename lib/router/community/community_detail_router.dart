@@ -182,7 +182,7 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
 
   void queryEvents() {
     if (this.aId == null) return;
-    this.subHandle = nostr.pool.subscribeManyEose(
+    this.subHandle = pool.subscribeManyEose(
         ["wss://relay.nostr.band"], [this.aId!.toFilter()],
         onEvent: onEvent);
   }

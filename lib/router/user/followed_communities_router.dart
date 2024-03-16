@@ -34,7 +34,7 @@ class _FollowedCommunitiesRouter extends State<FollowedCommunitiesRouter> {
       return Container();
     }
 
-        var themeData = Theme.of(context);
+    var themeData = Theme.of(context);
     var titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
     var hintColor = themeData.hintColor;
 

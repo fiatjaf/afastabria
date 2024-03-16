@@ -260,7 +260,7 @@ class UserRouterState extends CustState<UserRouter>
       };
     }
 
-    nostr.pool.querySync(relays, filter, filterModifier: filterModifier);
+    pool.querySync(relays, filter, filterModifier: filterModifier);
   }
 
   @override

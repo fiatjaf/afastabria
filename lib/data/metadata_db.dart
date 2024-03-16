@@ -9,10 +9,9 @@ import 'package:loure/data/db.dart';
 class MetadataDB {
   static Future<List<Metadata>> all({DatabaseExecutor? db}) async {
     List<Metadata> objs = [];
-    Database db = await DB.getCurrentDatabase();
 
     List<Map<String, dynamic>> list =
-        await db.rawQuery("select * from metadata");
+        await DB.getDB(null).rawQuery("select * from metadata");
     for (var i = 0; i < list.length; i++) {
       var json = list[i];
       objs.add(Metadata.fromEvent(
@@ -22,10 +21,9 @@ class MetadataDB {
   }
 
   static Future<Metadata?> get(String pubKey, {DatabaseExecutor? db}) async {
-    db = await DB.getDB(db);
-
-    var list =
-        await db.query("metadata", where: "pubkey = ?", whereArgs: [pubKey]);
+    var list = await DB
+        .getDB(db)
+        .query("metadata", where: "pubkey = ?", whereArgs: [pubKey]);
 
     if (list.length > 0) {
       return Metadata.fromEvent(
@@ -36,9 +34,7 @@ class MetadataDB {
 
   static Future<Iterable<Metadata>> search(String term,
       {DatabaseExecutor? db}) async {
-    db = await DB.getDB(db);
-
-    var list = await db.query("metadata",
+    var list = await DB.getDB(db).query("metadata",
         where: "event like '%' || ? || '%' LIMIT 7", whereArgs: [term]);
 
     return list.map((row) => Metadata.fromEvent(
@@ -46,24 +42,21 @@ class MetadataDB {
   }
 
   static Future<int> insert(Metadata o, {DatabaseExecutor? db}) async {
-    db = await DB.getDB(db);
-    return await db.insert("metadata",
+    return await DB.getDB(db).insert("metadata",
         {"pubkey": o.pubkey, "event": jsonEncode(o.event!.toJson())});
   }
 
   static Future update(Metadata o, {DatabaseExecutor? db}) async {
-    db = await DB.getDB(db);
-    await db.update("metadata", {'event': jsonEncode(o.event!.toJson())},
+    await DB.getDB(db).update(
+        "metadata", {'event': jsonEncode(o.event!.toJson())},
         where: "pubkey = ?", whereArgs: [o.pubkey]);
   }
 
   static Future<void> delete(String pubkey, {DatabaseExecutor? db}) async {
-    db = await DB.getDB(db);
-    db.execute("delete from metadata where pubkey = ?", [pubkey]);
+    DB.getDB(db).execute("delete from metadata where pubkey = ?", [pubkey]);
   }
 
   static Future<void> deleteAll({DatabaseExecutor? db}) async {
-    db = await DB.getDB(db);
-    db.execute("delete from metadata");
+    DB.getDB(db).execute("delete from metadata");
   }
 }

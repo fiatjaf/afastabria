@@ -68,7 +68,7 @@ class MentionMeProvider extends ChangeNotifier with PendingEventsLaterFunction {
       };
     }
 
-    nostr.pool.querySync(relays, filter, filterModifier: filterModifier);
+    pool.querySync(relays, filter, filterModifier: filterModifier);
   }
 
   void onEvent(Event event) {

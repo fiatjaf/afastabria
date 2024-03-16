@@ -181,7 +181,7 @@ class DMProvider extends ChangeNotifier with PendingEventsLaterFunction {
       since: _initSince + 1,
     );
 
-    nostr.pool.subscribeMany(nostr.relayList.read, [filter0, filter1],
+    pool.subscribeMany(nostr.relayList.read, [filter0, filter1],
         onEvent: (Event event) {
       later(event, eventLaterHandle, null);
     });

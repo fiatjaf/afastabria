@@ -36,18 +36,11 @@ class DB {
     });
   }
 
-  static Future<Database> getCurrentDatabase() async {
-    if (_database == null) {
-      await init();
-    }
-    return _database!;
-  }
-
-  static Future<DatabaseExecutor> getDB(DatabaseExecutor? db) async {
+  static DatabaseExecutor getDB(DatabaseExecutor? db) {
     if (db != null) {
       return db;
     }
-    return getCurrentDatabase();
+    return _database!;
   }
 
   static void close() {

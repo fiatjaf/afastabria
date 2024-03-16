@@ -109,7 +109,7 @@ class EventReactionsProvider extends ChangeNotifier
     }
 
     _pendingIds.clear();
-    nostr.pool
+    pool
         .querySync(nostr.relayList.read, Filter(e: _pendingIds.keys.toList()))
         .then((evts) => onEvents(evts.toList()));
   }

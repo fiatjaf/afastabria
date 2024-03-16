@@ -13,15 +13,9 @@ import 'package:loure/util/string_util.dart';
 import 'package:loure/provider/data_util.dart';
 
 class ContactListProvider extends ChangeNotifier {
-  static ContactListProvider? _contactListProvider;
   Event? _event;
   String content = "";
   CustContactList? _contactList;
-
-  static ContactListProvider getInstance() {
-    _contactListProvider ??= ContactListProvider();
-    return _contactListProvider!;
-  }
 
   void reload() {
     String? pubkey;
@@ -29,8 +23,8 @@ class ContactListProvider extends ChangeNotifier {
 
     var str = sharedPreferences.getString(DataKey.CONTACT_LISTS);
     print("str $str");
-    if (str != "") {
-      var jsonMap = jsonDecode(str!);
+    if (str != null && str != "") {
+      var jsonMap = jsonDecode(str);
 
       if (jsonMap is Map<String, dynamic>) {
         String? eventStr;
@@ -42,17 +36,16 @@ class ContactListProvider extends ChangeNotifier {
 
         if (eventStr != null) {
           var eventMap = jsonDecode(eventStr);
-          _contactListProvider!._event = Event.fromJson(eventMap);
-          _contactListProvider!._contactList =
-              CustContactList.fromJson(_contactListProvider!._event!.tags);
-          _contactListProvider!.content = _contactListProvider!._event!.content;
+          this._event = Event.fromJson(eventMap);
+          this._contactList = CustContactList.fromJson(this._event!.tags);
+          this.content = this._event!.content;
 
           return;
         }
       }
     }
 
-    _contactListProvider!._contactList = CustContactList();
+    this._contactList = CustContactList();
   }
 
   void clearCurrentContactList() {
@@ -73,8 +66,7 @@ class ContactListProvider extends ChangeNotifier {
     var filter = Filter(
         kinds: [EventKind.CONTACT_LIST], limit: 1, authors: [nostr.publicKey]);
 
-    nostr.pool
-        .subscribeManyEose(nostr.CONTACT_RELAYS, [filter], onEvent: _onEvent);
+    pool.subscribeManyEose(nostr.CONTACT_RELAYS, [filter], onEvent: _onEvent);
   }
 
   void _onEvent(Event e) {

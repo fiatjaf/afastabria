@@ -9,7 +9,7 @@ import 'package:loure/data/db.dart';
 class EventDB {
   static Future<List<Event>> list(int keyIndex, int kind, int skip, limit,
       {DatabaseExecutor? db, String? pubkey}) async {
-    db = await DB.getDB(db);
+    db = DB.getDB(db);
     List<Event> l = [];
     List<dynamic> args = [];
 
@@ -33,7 +33,7 @@ class EventDB {
 
   static Future<int> insert(int keyIndex, Event o,
       {DatabaseExecutor? db}) async {
-    db = await DB.getDB(db);
+    db = DB.getDB(db);
     var jsonObj = o.toJson();
     var tags = jsonEncode(o.tags);
     jsonObj["tags"] = tags;
@@ -44,7 +44,7 @@ class EventDB {
 
   static Future<Event?> get(int keyIndex, String id,
       {DatabaseExecutor? db}) async {
-    db = await DB.getDB(db);
+    db = DB.getDB(db);
     var list = await db.query("event",
         where: "key_index = ? and id = ?", whereArgs: [keyIndex, id]);
     if (list.isNotEmpty) {
@@ -54,7 +54,7 @@ class EventDB {
   }
 
   static Future<void> deleteAll(int keyIndex, {DatabaseExecutor? db}) async {
-    db = await DB.getDB(db);
+    db = DB.getDB(db);
     db.execute("delete from event where key_index = ?", [keyIndex]);
   }
 

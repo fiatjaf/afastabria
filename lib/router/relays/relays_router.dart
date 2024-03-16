@@ -56,7 +56,7 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
             child: ListView.builder(
               itemBuilder: (context, index) {
                 var addr = nostr.relayList.all[index];
-                var relayStatus = nostr.pool.getRelayStatus(addr);
+                var relayStatus = pool.getRelayStatus(addr);
                 relayStatus ??= RelayStatus(addr);
                 return RelaysItemComponent(
                   addr: addr,

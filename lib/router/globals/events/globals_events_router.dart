@@ -76,7 +76,7 @@ class _GlobalsEventsRouter extends KeepAliveCustState<GlobalsEventsRouter>
   }
 
   Future<void> refresh() async {
-    this.subHandle = nostr.pool.subscribeMany(nostr.relayList.read, [
+    this.subHandle = pool.subscribeMany(nostr.relayList.read, [
       Filter(kinds: [EventKind.TEXT_NOTE])
     ], onEvent: (event) {
       if (eventBox.isEmpty()) {

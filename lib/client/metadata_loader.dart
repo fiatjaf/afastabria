@@ -18,7 +18,7 @@ class MetadataLoader {
             .millisecondsSinceEpoch /
         1000;
 
-    final events = await nostr.pool.querySync(
+    final events = await pool.querySync(
         nostr.METADATA_RELAYS, Filter(kinds: [0], authors: keys.toList()));
 
     return await Future.wait(
