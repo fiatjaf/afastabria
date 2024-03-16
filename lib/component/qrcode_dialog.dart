@@ -88,7 +88,7 @@ class _QrcodeDialog extends State<QrcodeDialog> {
           child: imageWidget,
         );
 
-        Widget userNameWidget = NameComponnet(
+        Widget userNameWidget = NameComponent(
           pubkey: widget.pubkey,
           metadata: metadata,
         );

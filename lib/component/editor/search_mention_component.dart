@@ -6,11 +6,11 @@ import 'package:loure/util/when_stop_function.dart';
 typedef ResultBuildFunc = Widget Function();
 typedef HandleSearchFunc = void Function(String);
 
-class SaerchMentionComponent extends StatefulWidget {
+class SearchMentionComponent extends StatefulWidget {
   final ResultBuildFunc resultBuildFunc;
   final HandleSearchFunc handleSearchFunc;
 
-  const SaerchMentionComponent({
+  const SearchMentionComponent({
     super.key,
     required this.resultBuildFunc,
     required this.handleSearchFunc,
@@ -18,11 +18,11 @@ class SaerchMentionComponent extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return SaerchMentionComponentState();
+    return SearchMentionComponentState();
   }
 }
 
-class SaerchMentionComponentState extends State<SaerchMentionComponent>
+class SearchMentionComponentState extends State<SearchMentionComponent>
     with WhenStopFunction {
   TextEditingController controller = TextEditingController();
 

@@ -6,7 +6,7 @@ import 'package:loure/client/nip19/nip19.dart';
 import 'package:loure/util/string_util.dart';
 
 // ignore: must_be_immutable
-class NameComponnet extends StatefulWidget {
+class NameComponent extends StatefulWidget {
   String pubkey;
   Metadata? metadata;
   bool showNip05;
@@ -15,7 +15,7 @@ class NameComponnet extends StatefulWidget {
   TextOverflow? textOverflow;
   int? maxLines;
 
-  NameComponnet({
+  NameComponent({
     super.key,
     required this.pubkey,
     this.metadata,
@@ -28,11 +28,11 @@ class NameComponnet extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _NameComponnet();
+    return _NameComponent();
   }
 }
 
-class _NameComponnet extends State<NameComponnet> {
+class _NameComponent extends State<NameComponent> {
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);

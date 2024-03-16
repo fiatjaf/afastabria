@@ -36,14 +36,14 @@ class ThreadDetailRouter extends StatefulWidget {
     var bodyLargeFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
     List<Widget> appBarTitleList = [];
-    var nameComponnet = SimpleNameComponent(
+    var nameComponent = SimpleNameComponent(
       pubkey: event.pubKey,
       textStyle: TextStyle(
         fontSize: bodyLargeFontSize,
         color: themeData.appBarTheme.titleTextStyle!.color,
       ),
     );
-    appBarTitleList.add(nameComponnet);
+    appBarTitleList.add(nameComponent);
     appBarTitleList.add(const Text(" : "));
     appBarTitleList.add(Expanded(
         child: Text(

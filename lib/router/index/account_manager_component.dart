@@ -317,7 +317,7 @@ class AccountManagerItemComponentState
 
           list.add(Container(
             margin: const EdgeInsets.only(left: 5, right: 5),
-            child: NameComponnet(
+            child: NameComponent(
               pubkey: metadata.pubkey,
               metadata: metadata,
             ),

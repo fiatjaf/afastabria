@@ -61,11 +61,11 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
     }
     detail = arg as DMSessionDetail;
 
-    var nameComponnet = FutureBuilder(
+    var nameComponent = FutureBuilder(
       future: this.metadataFuture,
       initialData: Metadata.blank(detail!.dmSession.pubkey),
       builder: (context, snapshot) {
-        return NameComponnet(
+        return NameComponent(
           pubkey: detail!.dmSession.pubkey,
           metadata: snapshot.data,
         );
@@ -233,7 +233,7 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
             color: themeData.appBarTheme.titleTextStyle!.color,
           ),
         ),
-        title: nameComponnet,
+        title: nameComponent,
       ),
       body: main,
     );

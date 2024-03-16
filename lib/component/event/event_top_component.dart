@@ -118,7 +118,7 @@ class EventTopComponentState extends State<EventTopComponent> {
                       Container(
                         // margin: const EdgeInsets.only(bottom: 2),
                         child: jumpWrap(
-                          NameComponnet(
+                          NameComponent(
                             pubkey: widget.event.pubKey,
                             metadata: metadata,
                             maxLines: 1,

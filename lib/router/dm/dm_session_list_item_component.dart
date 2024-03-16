@@ -123,7 +123,7 @@ class DMSessionListItemComponentState
                         Row(
                           children: [
                             Expanded(
-                              child: NameComponnet(
+                              child: NameComponent(
                                 pubkey: dmSession.pubkey,
                                 metadata: metadata,
                                 maxLines: 1,

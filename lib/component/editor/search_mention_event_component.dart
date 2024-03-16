@@ -22,7 +22,7 @@ class _SearchMentionEventComponent extends State<SearchMentionEventComponent>
     with WhenStopFunction {
   @override
   Widget build(BuildContext context) {
-    return SaerchMentionComponent(
+    return SearchMentionComponent(
       resultBuildFunc: resultBuild,
       handleSearchFunc: handleSearch,
     );

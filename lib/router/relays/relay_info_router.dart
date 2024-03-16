@@ -125,7 +125,7 @@ class RelayInfoRouterState extends State<RelayInfoRouter> {
 
               list.add(Container(
                 margin: const EdgeInsets.only(left: Base.BASE_PADDING),
-                child: NameComponnet(
+                child: NameComponent(
                   pubkey: this.info!.pubKey,
                   metadata: metadata,
                 ),
