@@ -68,7 +68,7 @@ class RelayIsolateWorker {
 
     final wsUrl = Uri.parse(url);
     try {
-      print("Begin to connect ${config.url}");
+      print("[$url] connecting");
       wsChannel = WebSocketChannel.connect(wsUrl);
       wsChannel!.stream.listen(subToMainSendPort.send,
           onError: (final error) async {
@@ -76,13 +76,13 @@ class RelayIsolateWorker {
         wsChannel = null;
         subToMainSendPort.send(RelayIsolateMsgs.DIS_CONNECTED);
       }, onDone: () {
-        print("Websocket stream closed by remote:  $url");
+        print("[$url]: websocket closed by remote");
         _closeWS(wsChannel);
         subToMainSendPort.send(RelayIsolateMsgs.DIS_CONNECTED);
       });
       await wsChannel!.ready;
-      print("Connect complete! ${config.url}");
       subToMainSendPort.send(RelayIsolateMsgs.CONNECTED);
+      print("[$url] connected");
 
       return wsChannel;
     } catch (e) {
@@ -100,8 +100,8 @@ class RelayIsolateWorker {
 
     try {
       wsChannel.sink.close();
-    } catch (e) {
-      print("ws close error ${e.toString()}");
+    } catch (err) {
+      print("[${config.url}]: ws close error $err");
     }
 
     wsChannel = null;

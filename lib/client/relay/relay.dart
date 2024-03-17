@@ -1,5 +1,4 @@
 import "dart:convert";
-import "dart:developer";
 import "dart:async";
 
 import "package:loure/main.dart";
@@ -25,19 +24,11 @@ abstract class Relay {
   int serial = 0;
   String? challenge;
 
-  Future<bool> connect() async {
-    try {
-      return await doConnect();
-    } catch (e) {
-      print("connect fail");
-      disconnect();
-      return false;
-    }
-  }
+  Future<bool> connect();
 
   Subscription subscribe(
     final List<Filter> filters, {
-    final Function(Event)? onEvent,
+    required final Function(Event) onEvent,
     final Function()? onEose,
     final Function(String)? onClose,
     String? id,
@@ -53,20 +44,24 @@ abstract class Relay {
       this,
       id,
       filters,
-      onEvent ?? (final Event evt) => log("$evt from $url::$id"),
-      onEose ?? () => log("eose from $url::$id"),
-      onClose ?? (final String msg) => log("closed $url::$id with $msg"),
+      onEvent,
+      onEose ?? () => print("eose from $url::$id"),
+      onClose ?? (final String msg) => print("closed $url::$id with $msg"),
       intercept,
     );
+
     _subscriptions[sub.id] = sub;
+
     sub.fire();
     return sub;
   }
 
-  Subscription subscribeEose(final List<Filter> filters,
-      {final Function(Event)? onEvent,
-      final Function(String)? onClose,
-      final String? id}) {
+  Subscription subscribeEose(
+    final List<Filter> filters, {
+    required Function(Event) onEvent,
+    final Function(String)? onClose,
+    final String? id,
+  }) {
     Subscription? internalSub;
     final sub = this.subscribe(filters,
         id: id,
@@ -92,11 +87,6 @@ abstract class Relay {
       switch (message[0]) {
         case "OK":
           final id = message[1] as String;
-
-          nostr.idIndex.update(id, (final Event evt) {
-            evt.sources.add(this.url);
-            return evt;
-          });
 
           final completer = this._published[id];
           if (completer != null) {
@@ -174,11 +164,9 @@ abstract class Relay {
           break;
       }
     } catch (err) {
-      log("error receiving message '$rawMessage' from $url: $err");
+      print("[$url]: error receiving message '$rawMessage': $err");
     }
   }
-
-  Future<bool> doConnect();
 
   Future<OK> publish(final Event event) async {
     final completer = Completer<OK>();
@@ -199,12 +187,9 @@ abstract class Relay {
   bool _waitingReconnect = false;
 
   void onError(final String errMsg, {final bool reconnect = false}) {
-    print("relay error $errMsg");
+    print("[$url]: relay error: $errMsg");
     relayStatus.error++;
     relayStatus.connected = ConnState.UN_CONNECT;
-    if (relayStatusCallback != null) {
-      relayStatusCallback!();
-    }
     disconnect();
 
     if (reconnect && !_waitingReconnect) {
@@ -234,8 +219,6 @@ abstract class Relay {
     return _subscriptions[id] != null;
   }
 
-  Function? relayStatusCallback;
-
   void dispose() {}
 }
 
@@ -255,7 +238,7 @@ class Subscription {
 
   void fire() {
     List<dynamic> json = ["REQ", this.id];
-    for (final Filter filter in this.filters) {
+    for (final filter in this.filters) {
       json.add(filter.toJson());
     }
     this._relay.send(json);

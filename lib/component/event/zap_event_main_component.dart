@@ -1,5 +1,4 @@
 import "dart:convert";
-import "dart:developer";
 
 import "package:flutter/material.dart";
 
@@ -50,7 +49,7 @@ class _ZapEventMainComponent extends State<ZapEventMainComponent> {
         final zapRequestEvent = Event.fromJson(eventJson);
         senderPubkey = zapRequestEvent.pubKey;
       } catch (e) {
-        log("jsonDecode zapRequest error ${e.toString()}");
+        print("jsonDecode zapRequest error ${e.toString()}");
         senderPubkey =
             SpiderUtil.subUntil(zapRequestEventStr!, "pubkey\":\"", "\"");
       }

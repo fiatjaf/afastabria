@@ -34,14 +34,6 @@ class DMSessionListItemComponentState
   static const double IMAGE_WIDTH = 34;
   static const double HALF_IMAGE_WIDTH = 17;
 
-  Future<Metadata>? metadataFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    this.metadataFuture = metadataLoader.load(widget.detail.dmSession.pubkey);
-  }
-
   @override
   Widget build(final BuildContext context) {
     return GestureDetector(
@@ -49,7 +41,7 @@ class DMSessionListItemComponentState
         RouterUtil.router(context, RouterPath.DM_DETAIL, widget.detail);
       },
       child: FutureBuilder(
-        future: this.metadataFuture,
+        future: metadataLoader.load(widget.detail.dmSession.pubkey),
         initialData: Metadata.blank(widget.detail.dmSession.pubkey),
         builder: (final context, final snapshot) {
           final metadata = snapshot.data;

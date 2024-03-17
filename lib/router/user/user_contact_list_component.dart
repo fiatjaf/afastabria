@@ -1,12 +1,12 @@
 import "package:flutter/material.dart";
 
-import "package:loure/main.dart";
 import "package:loure/client/nip02/contact.dart";
 import "package:loure/client/nip02/cust_contact_list.dart";
 import "package:loure/component/user/metadata_component.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/consts/router_path.dart";
 import "package:loure/data/metadata.dart";
+import "package:loure/main.dart";
 import "package:loure/util/platform_util.dart";
 import "package:loure/util/router_util.dart";
 
@@ -24,20 +24,16 @@ class _UserContactListComponent extends State<UserContactListComponent> {
   final ScrollController _controller = ScrollController();
 
   List<Contact>? list;
-  List<Future<Metadata>>? metadataFutures;
 
   @override
   void initState() {
     super.initState();
     this.list = widget.contactList.list().toList();
-    this.metadataFutures = list!
-        .map((final contact) => metadataLoader.load(contact.publicKey))
-        .toList();
   }
 
   @override
   Widget build(final BuildContext context) {
-    if (this.metadataFutures == null) return Container();
+    if (this.list == null) return Container();
 
     Widget main = ListView.builder(
       controller: _controller,
@@ -51,7 +47,7 @@ class _UserContactListComponent extends State<UserContactListComponent> {
             },
             behavior: HitTestBehavior.translucent,
             child: FutureBuilder(
-              future: this.metadataFutures![index],
+              future: metadataLoader.load(contact.publicKey),
               initialData: Metadata.blank(contact.publicKey),
               builder: (final context, final snapshot) {
                 return MetadataComponent(

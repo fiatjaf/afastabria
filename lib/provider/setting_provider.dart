@@ -1,5 +1,4 @@
 import "dart:convert";
-import "dart:developer";
 
 import "package:flutter/material.dart";
 import "package:loure/main.dart";
@@ -13,7 +12,6 @@ import "package:loure/util/string_util.dart";
 import "package:loure/provider/data_util.dart";
 
 class SettingProvider extends ChangeNotifier {
-  static SettingProvider? _settingProvider;
   SettingData? _settingData;
   final Map<String, String> _privateKeyMap = {};
 
@@ -40,8 +38,7 @@ class SettingProvider extends ChangeNotifier {
             _settingData!.privateKeyMap = null;
           }
         } catch (e) {
-          log("settingProvider handle privateKey error");
-          log(e.toString());
+          print("settingProvider handle privateKey error $e");
         }
 
         if (StringUtil.isNotBlank(privateKeyMapText)) {
@@ -54,8 +51,7 @@ class SettingProvider extends ChangeNotifier {
               }
             }
           } catch (e) {
-            log("_settingData!.privateKeyMap! jsonDecode error");
-            log(e.toString());
+            print("_settingData!.privateKeyMap! jsonDecode error $e");
           }
         }
         return;
@@ -67,7 +63,7 @@ class SettingProvider extends ChangeNotifier {
 
   Future<void> reload() async {
     await init();
-    _settingProvider!._reloadTranslateSourceArgs();
+    this._reloadTranslateSourceArgs();
     notifyListeners();
   }
 
@@ -82,11 +78,11 @@ class SettingProvider extends ChangeNotifier {
     return null;
   }
 
-  int addAndChangePrivateKey(final String pk, {final bool updateUI = false}) {
+  int addAndChangePrivateKey(final String sk, {final bool updateUI = false}) {
     int? findIndex;
     final entries = _privateKeyMap.entries;
     for (final entry in entries) {
-      if (entry.value == pk) {
+      if (entry.value == sk) {
         findIndex = int.tryParse(entry.key);
         break;
       }
@@ -100,7 +96,7 @@ class SettingProvider extends ChangeNotifier {
       final index = i.toString();
       final pk0 = _privateKeyMap[index];
       if (pk0 == null) {
-        _privateKeyMap[index] = pk;
+        _privateKeyMap[index] = sk;
 
         _settingData!.privateKeyIndex = i;
 
@@ -149,7 +145,6 @@ class SettingProvider extends ChangeNotifier {
   int get lockOpen => _settingData!.lockOpen;
 
   int? get defaultIndex => _settingData!.defaultIndex;
-
   int? get defaultTab => _settingData!.defaultTab;
 
   int get linkPreview => _settingData!.linkPreview != null
@@ -377,7 +372,7 @@ class SettingProvider extends ChangeNotifier {
     final jsonStr = json.encode(m);
     // print(jsonStr);
     await sharedPreferences.setString(DataKey.SETTING, jsonStr);
-    _settingProvider!._reloadTranslateSourceArgs();
+    this._reloadTranslateSourceArgs();
 
     if (updateUI) {
       notifyListeners();

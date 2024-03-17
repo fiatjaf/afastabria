@@ -1,5 +1,4 @@
 import "dart:convert";
-import "dart:developer";
 
 import "package:pointycastle/ecc/api.dart";
 import "package:auto_size_text_field/auto_size_text_field.dart";
@@ -608,7 +607,7 @@ mixin EditorMixin {
       await SendBox.submit(event, nostr.relayList.write);
     } else {
       pool.publish(nostr.relayList.write, event);
-      log(jsonEncode(event.toJson()));
+      print(jsonEncode(event.toJson()));
     }
 
     return event;

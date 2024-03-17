@@ -1,5 +1,4 @@
 import "dart:convert";
-import "dart:developer";
 
 import "package:bech32/bech32.dart";
 
@@ -105,12 +104,12 @@ class Zap {
     }
     final event = Event.finalize(
         targetNostr.privateKey, kind.EventKind.ZAP_REQUEST, tags, eventContent);
-    log(jsonEncode(event));
+    print(jsonEncode(event));
     final eventStr = Uri.encodeQueryComponent(jsonEncode(event));
     callback += "&nostr=$eventStr";
     callback += "&lnurl=$lnurl";
 
-    log("getInvoice callback $callback");
+    print("getInvoice callback $callback");
 
     final responseMap = await DioUtil.get(callback);
     if (responseMap != null && StringUtil.isNotBlank(responseMap["pr"])) {

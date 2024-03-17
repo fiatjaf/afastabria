@@ -16,7 +16,7 @@ class RelayBase extends Relay {
   WebSocketChannel? _wsChannel;
 
   @override
-  Future<bool> doConnect() async {
+  Future<bool> connect() async {
     if (_wsChannel != null && _wsChannel!.closeCode == null) {
       print("connect break: $url");
       return true;
@@ -38,9 +38,6 @@ class RelayBase extends Relay {
         onError("Websocket stream closed by remote: $url", reconnect: true);
       });
       relayStatus.connected = ConnState.CONNECTED;
-      if (relayStatusCallback != null) {
-        relayStatusCallback!();
-      }
       return true;
     } catch (e) {
       onError(e.toString(), reconnect: true);
@@ -57,6 +54,8 @@ class RelayBase extends Relay {
       } catch (e) {
         onError(e.toString(), reconnect: true);
       }
+    } else {
+      print("[$url]: can't send '$message' not connected");
     }
   }
 

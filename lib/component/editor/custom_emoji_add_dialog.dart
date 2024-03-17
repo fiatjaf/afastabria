@@ -1,5 +1,3 @@
-import "dart:developer";
-
 import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
 import "package:loure/data/custom_emoji.dart";
@@ -179,7 +177,7 @@ class _CustomEmojiAddDialog extends State<CustomEmojiAddDialog> {
         filepath!,
         imageService: settingProvider.imageService,
       );
-      log("$text $imagePath");
+      print("$text $imagePath");
 
       if (StringUtil.isBlank(imagePath)) {
         BotToast.showText(text: "Upload fail.");

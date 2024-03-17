@@ -47,16 +47,22 @@ class _EventDetailRouter extends State<EventDetailRouter> {
         });
       }
     });
+  }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     final arg = RouterUtil.routerArgs(context);
     if (arg != null) {
-      if (arg is Event) {
-        this.eventFuture = Future.value(arg);
-        eventId = arg.id;
-      } else if (arg is String) {
-        eventId = arg;
-        this.eventFuture = nostr.getByID(arg);
-      }
+      this.setState(() {
+        if (arg is Event) {
+          this.eventFuture = Future.value(arg);
+          this.eventId = arg.id;
+        } else if (arg is String) {
+          this.eventId = arg;
+          this.eventFuture = nostr.getByID(arg);
+        }
+      });
     }
 
     RouterUtil.back(context);

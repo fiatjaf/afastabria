@@ -15,13 +15,10 @@ class RelayUtil {
   }
 
   static String? getSubscriptionId(final String json) {
-    final int idx = json.substring(0, 22).indexOf('"EVENT"');
-    if (idx == -1) return null;
+    final match = json.startsWith('["EVENT","');
+    if (!match) return null;
 
-    final int pstart = json.indexOf('"', idx + 7 + 1);
-    if (pstart == -1) return null;
-    final int start = pstart;
-
+    const start = 9;
     final int pend = json.substring(start + 1, start + 80).indexOf('"');
     if (pend == -1) return null;
     final int end = start + 1 + pend;

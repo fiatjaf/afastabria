@@ -1,5 +1,3 @@
-import "dart:developer";
-
 import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
 
@@ -167,7 +165,7 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
     }
 
     final comment = commentController.text;
-    log("comment $comment");
+    print("comment $comment");
     final lnbcStr =
         await ZapAction.genInvoiceCode(context, num, pubkey, comment: comment);
     if (StringUtil.isNotBlank(lnbcStr)) {

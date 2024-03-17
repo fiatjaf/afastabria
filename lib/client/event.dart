@@ -121,4 +121,9 @@ class Event {
     }
     return zeros;
   }
+
+  @override
+  String toString() {
+    return jsonEncode(this.toJson());
+  }
 }

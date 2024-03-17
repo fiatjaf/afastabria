@@ -7,45 +7,23 @@ import "package:loure/consts/router_path.dart";
 import "package:loure/data/metadata.dart";
 import "package:loure/util/platform_util.dart";
 import "package:loure/util/router_util.dart";
-import "package:loure/util/string_util.dart";
 
 class FollowedRouter extends StatefulWidget {
   const FollowedRouter({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _FollowedRouter();
+    return FollowedRouterState();
   }
 }
 
-class _FollowedRouter extends State<FollowedRouter> {
+class FollowedRouterState extends State<FollowedRouter> {
   ScrollController scrollController = ScrollController();
-
-  List<String>? pubkeys;
-  List<Future<Metadata>>? metadataFutures;
-
-  @override
-  void initState() {
-    super.initState();
-
-    final arg = RouterUtil.routerArgs(context);
-    if (arg != null) {
-      this.pubkeys = arg as List<String>;
-    }
-
-    if (this.pubkeys == null) {
-      RouterUtil.back(context);
-      return;
-    }
-
-    this.metadataFutures = this.pubkeys!.map(metadataLoader.load).toList();
-  }
 
   @override
   Widget build(final BuildContext context) {
-    if (this.metadataFutures == null) {
-      return Container();
-    }
+    final arg = RouterUtil.routerArgs(context);
+    final pubkeys = (arg ?? []) as List<String>;
 
     final themeData = Theme.of(context);
     final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
@@ -53,15 +31,12 @@ class _FollowedRouter extends State<FollowedRouter> {
     final listView = ListView.builder(
       controller: scrollController,
       itemBuilder: (final context, final index) {
-        final pubkey = pubkeys![index];
-        if (StringUtil.isBlank(pubkey)) {
-          return Container();
-        }
+        final pubkey = pubkeys[index];
 
         return Container(
           margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
           child: FutureBuilder(
-            future: this.metadataFutures![index],
+            future: metadataLoader.load(pubkey),
             initialData: Metadata.blank(pubkey),
             builder: (final context, final snapshot) {
               return GestureDetector(
@@ -79,7 +54,7 @@ class _FollowedRouter extends State<FollowedRouter> {
           ),
         );
       },
-      itemCount: pubkeys!.length,
+      itemCount: pubkeys.length,
     );
 
     final main = Scaffold(

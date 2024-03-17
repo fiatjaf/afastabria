@@ -33,7 +33,6 @@ class EventTopComponentState extends State<EventTopComponent> {
   static const double IMAGE_WIDTH = 34;
   static const double HALF_IMAGE_WIDTH = 17;
 
-  Future<Metadata>? metadataFuture;
   String? pubkey;
 
   @override
@@ -55,8 +54,6 @@ class EventTopComponentState extends State<EventTopComponent> {
         }
       }
     }
-
-    this.metadataFuture = metadataLoader.load(this.pubkey!);
   }
 
   @override
@@ -67,7 +64,7 @@ class EventTopComponentState extends State<EventTopComponent> {
     final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
 
     return FutureBuilder(
-      future: this.metadataFuture,
+      future: metadataLoader.load(this.pubkey!),
       initialData: Metadata.blank(this.pubkey!),
       builder: (final context, final snapshot) {
         final metadata = snapshot.data;

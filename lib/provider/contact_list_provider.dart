@@ -22,7 +22,6 @@ class ContactListProvider extends ChangeNotifier {
     pubkey = nostr.publicKey;
 
     final str = sharedPreferences.getString(DataKey.CONTACT_LISTS);
-    print("str $str");
     if (str != null && str != "") {
       final jsonMap = jsonDecode(str);
 
@@ -87,13 +86,10 @@ class ContactListProvider extends ChangeNotifier {
     final eventJsonStr = jsonEncode(eventJsonMap);
 
     final pubkey = nostr.publicKey;
-    Map<String, dynamic>? allJsonMap;
 
     final str = sharedPreferences.getString(DataKey.CONTACT_LISTS);
-    if (str != "") {
-      allJsonMap = jsonDecode(str!);
-    }
-    allJsonMap ??= {};
+    Map<String, dynamic> allJsonMap =
+        jsonDecode(str == "" ? "{}" : str ?? "{}");
 
     allJsonMap[pubkey] = eventJsonStr;
     final jsonStr = jsonEncode(allJsonMap);

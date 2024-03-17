@@ -26,7 +26,7 @@ class RelayPool extends RelayProvider {
   RelayPool();
   final Map<String, Relay> _relays = {};
 
-  Relay ensureRelay(String url) {
+  Future<Relay> ensureRelay(String url) async {
     url = RelayUtil.normalizeURL(url);
     var relay = this._relays[url];
     if (relay != null) {
@@ -62,6 +62,8 @@ class RelayPool extends RelayProvider {
       }
     }
 
+    await relay.connect();
+
     this._relays[url] = relay;
     return relay;
   }
@@ -69,23 +71,19 @@ class RelayPool extends RelayProvider {
   ManySubscriptionHandle subscribeMany(
     Iterable<String> relays,
     final List<Filter> filters, {
-    Function(Event)? onEvent,
+    required Function(Event) onEvent,
     final Function()? onEose,
     final Function()? onClose,
     final String? id,
     final List<Filter> Function(String, List<Filter>)? filterModifier,
   }) {
-    onEvent ??= (final Event evt) {
-      print("received unhandled event $evt");
-    };
-
     relays = relays.map(RelayUtil.normalizeURL).toList();
     final eosesMissing = relays.toSet();
     final closesMissing = relays.toSet();
     final idsReceived = <String>{};
 
-    return ManySubscriptionHandle(relays.map((final String url) {
-      final relay = this.ensureRelay(url);
+    final subscriptionFutures = relays.map((final String url) async {
+      final relay = await this.ensureRelay(url);
 
       if (filterModifier != null) {
         filterModifier(url, filters);
@@ -95,7 +93,7 @@ class RelayPool extends RelayProvider {
         filters,
         onEvent: (final Event evt) {
           idsReceived.add(evt.id);
-          onEvent!(evt);
+          onEvent(evt);
         },
         onEose: () {
           if (onEose != null) {
@@ -116,24 +114,28 @@ class RelayPool extends RelayProvider {
         id: id,
         intercept: (final String? eventId) {
           if (eventId != null) {
-            nostr.idIndex.update(eventId, (final Event evt) {
-              evt.sources.add(url);
-              return evt;
-            });
-            if (idsReceived.contains(eventId)) {
-              return true;
-            }
+            try {
+              nostr.idIndex.update(eventId, (final Event evt) {
+                evt.sources.add(url);
+                return evt;
+              });
+              if (idsReceived.contains(eventId)) {
+                return true;
+              }
+            } catch (err) {/***/}
           }
           return false;
         },
       );
-    }));
+    }).toList();
+
+    return ManySubscriptionHandle(subscriptionFutures);
   }
 
   ManySubscriptionHandle subscribeManyEose(
     final Iterable<String> relays,
     final List<Filter> filters, {
-    final Function(Event)? onEvent,
+    required final Function(Event) onEvent,
     final Function()? onClose,
     final String? id,
     final List<Filter> Function(String, List<Filter>)? filterModifier,
@@ -183,7 +185,7 @@ class RelayPool extends RelayProvider {
   Future<ManyPublishResult> publish(
       final Iterable<String> relays, final Event event) async {
     final oks = await Future.wait(relays.map((final String url) async {
-      final relay = this.ensureRelay(url);
+      final relay = await this.ensureRelay(url);
       try {
         final ok = await relay.publish(event);
         return ok;
@@ -196,12 +198,14 @@ class RelayPool extends RelayProvider {
 }
 
 class ManySubscriptionHandle {
-  ManySubscriptionHandle(this._subscriptions);
-  final Iterable<Subscription> _subscriptions;
+  ManySubscriptionHandle(this._subfutures);
+  final Iterable<Future<Subscription>> _subfutures;
 
   void close() {
-    for (final sub in this._subscriptions) {
-      sub.close("close initiated by client");
+    for (final subf in this._subfutures) {
+      subf.then((sub) {
+        sub.close("close initiated by client");
+      });
     }
   }
 }

@@ -22,14 +22,6 @@ class EditorNotifyItemComponent extends StatefulWidget {
 }
 
 class EditorNotifyItemComponentState extends State<EditorNotifyItemComponent> {
-  Future<Metadata>? metadataFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    this.metadataFuture = metadataLoader.load(widget.item.pubkey);
-  }
-
   @override
   Widget build(final BuildContext context) {
     final themeData = Theme.of(context);
@@ -39,7 +31,7 @@ class EditorNotifyItemComponentState extends State<EditorNotifyItemComponent> {
     List<Widget> list = [];
     list.add(
       FutureBuilder(
-        future: this.metadataFuture,
+        future: metadataLoader.load(widget.item.pubkey),
         initialData: Metadata.blank(widget.item.pubkey),
         builder: (final context, final snapshot) {
           final String name = SimpleNameComponent.getSimpleName(

@@ -77,28 +77,6 @@ class _IndexRouter extends CustState<IndexRouter>
   }
 
   @override
-  void didChangeAppLifecycleState(final AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    switch (state) {
-      case AppLifecycleState.resumed:
-        print("AppLifecycleState.resumed");
-        break;
-      case AppLifecycleState.inactive:
-        print("AppLifecycleState.inactive");
-        break;
-      case AppLifecycleState.detached:
-        print("AppLifecycleState.detached");
-        break;
-      case AppLifecycleState.paused:
-        print("AppLifecycleState.paused");
-        break;
-      case AppLifecycleState.hidden:
-        print("AppLifecycleState.hidden");
-        break;
-    }
-  }
-
-  @override
   Future<void> onReady(final BuildContext context) async {
     if (settingProvider.lockOpen == OpenStatus.OPEN && !unlock) {
       doAuth();

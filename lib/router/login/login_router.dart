@@ -182,7 +182,9 @@ class LoginRouterState extends State<LoginRouter>
 
   void doLogin() {
     if (checkTerms != true) {
-      tipAcceptTerm();
+      BotToast.showText(text: "Please accept the terms");
+      animationController.reset();
+      animationController.forward();
       return;
     }
 
@@ -202,11 +204,5 @@ class LoginRouterState extends State<LoginRouter>
 
     // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
     settingProvider.notifyListeners();
-  }
-
-  void tipAcceptTerm() {
-    BotToast.showText(text: "Please accept the terms");
-    animationController.reset();
-    animationController.forward();
   }
 }

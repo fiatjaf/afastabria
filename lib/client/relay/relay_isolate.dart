@@ -24,13 +24,13 @@ class RelayIsolate extends Relay {
   Completer<bool>? relayConnectResultComplete;
 
   @override
-  Future<bool> doConnect() async {
+  Future<bool> connect() async {
     if (subToMainReceivePort == null) {
       relayStatus.connected = ConnState.CONNECTING;
 
       // never run isolate, begin to run
       subToMainReceivePort = ReceivePort("relay_stm_$url");
-      subToMainListener(subToMainReceivePort!);
+      subToMainListener();
 
       relayConnectResultComplete = Completer();
       isolate = await Isolate.spawn(
@@ -44,7 +44,7 @@ class RelayIsolate extends Relay {
       // isolate has run and return a completer.future, wait for subToMain msg to complete this completer.
       return relayConnectResultComplete!.future;
     } else {
-      // the isolate had bean run
+      // the isolate had been run
       if (relayStatus.connected == ConnState.CONNECTED) {
         // relay has bean connected, return true, but also send a connect message.
         mainToSubSendPort!.send(RelayIsolateMsgs.CONNECT);
@@ -85,27 +85,24 @@ class RelayIsolate extends Relay {
     if (mainToSubSendPort != null &&
         relayStatus.connected == ConnState.CONNECTED) {
       final encoded = jsonEncode(message);
-      // print(encoded);
       mainToSubSendPort!.send(encoded);
+    } else {
+      print("[$url]: can't send '$message' not connected");
     }
   }
 
-  void subToMainListener(final ReceivePort receivePort) {
-    receivePort.listen((final message) {
+  void subToMainListener() {
+    subToMainReceivePort!.listen((final message) {
       if (message is int) {
-        // this is const msg.
-        // print("msg is $message $url");
         if (message == RelayIsolateMsgs.CONNECTED) {
-          // print("$url receive connected status!");
           relayStatus.connected = ConnState.CONNECTED;
-          relayStatusCallback!();
           _relayConnectComplete(true);
         } else if (message == RelayIsolateMsgs.DIS_CONNECTED) {
           onError("Websocket error $url", reconnect: true);
           _relayConnectComplete(false);
         }
       } else if (message is String) {
-        onMessage(jsonDecode(message));
+        onMessage(message);
       } else if (message is SendPort) {
         mainToSubSendPort = message;
       }

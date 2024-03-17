@@ -44,17 +44,18 @@ class _NameComponent extends State<NameComponent> {
     final String nip19Name = Nip19.encodeSimplePubKey(widget.pubkey);
     String displayName = "";
     String name = "";
+
     if (widget.fontColor != null) {
       hintColor = widget.fontColor!;
     }
 
     if (metadata != null) {
-      if (metadata.displayName != "") {
+      if (metadata.displayName != null && metadata.displayName != "") {
         displayName = metadata.displayName!;
-        if (metadata.name != "") {
+        if (metadata.name != null && metadata.name != "") {
           name = metadata.name!;
         }
-      } else if (metadata.name != "") {
+      } else if (metadata.name != null && metadata.name != "") {
         displayName = metadata.name!;
       }
     }

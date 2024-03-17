@@ -6,7 +6,6 @@ import "package:loure/client/aid.dart";
 import "package:loure/client/event.dart";
 import "package:loure/client/event_relation.dart";
 import "package:loure/client/filter.dart";
-import "package:loure/component/cust_state.dart";
 import "package:loure/component/event/event_list_component.dart";
 import "package:loure/component/event/event_load_list_component.dart";
 import "package:loure/component/event_reply_callback.dart";
@@ -29,7 +28,7 @@ class ThreadDetailRouter extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _ThreadDetailRouter();
+    return ThreadDetailRouterState();
   }
 
   static Widget detailAppBarTitle(
@@ -61,7 +60,7 @@ class ThreadDetailRouter extends StatefulWidget {
   }
 }
 
-class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
+class ThreadDetailRouterState extends State<ThreadDetailRouter>
     with PendingEventsLaterFunction, WhenStopFunction {
   EventMemBox box = EventMemBox();
   Event? sourceEvent;
@@ -73,6 +72,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
   String? rootId;
   List<ThreadDetailEvent>? rootSubList = [];
   ManySubscriptionHandle? repliesSubHandle;
+  GlobalKey sourceEventKey = GlobalKey();
 
   @override
   void initState() {
@@ -91,6 +91,11 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
         });
       }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
     if (this.sourceEvent == null) {
       final obj = RouterUtil.routerArgs(context);
@@ -114,13 +119,12 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
           this.rootSubList = [];
 
           this.initFromArgs();
-          this.subscribeReplies();
         }
       }
     }
-  }
 
-  GlobalKey sourceEventKey = GlobalKey();
+    this.subscribeReplies();
+  }
 
   void initFromArgs() {
     final eventRelation = EventRelation.fromEvent(sourceEvent!);
@@ -132,12 +136,13 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
     }
 
     // TODO: if we have a rootId and also an aId and we can't find the rootEvent with the id, try with the aId
-    if (this.rootId == null) {
+    if (this.rootId != null) {
       this.rootEventFuture = nostr.getByID(this.rootId!);
     } else {
       if (this.aId == null) {
         if (eventRelation.replyId != null) {
           this.rootId = eventRelation.replyId;
+          this.rootEventFuture = nostr.getByID(this.rootId!);
         } else {
           // source event is root event
           // TODO: check if source is a replaceable event and check tags here instead of just id
@@ -200,7 +205,7 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
   }
 
   @override
-  Widget doBuild(final BuildContext context) {
+  Widget build(final BuildContext context) {
     final themeData = Theme.of(context);
     // var bodyLargeFontSize = themeData.textTheme.bodyLarge!.fontSize;
     // var titleTextColor = themeData.appBarTheme.titleTextStyle!.color;
@@ -324,11 +329,6 @@ class _ThreadDetailRouter extends CustState<ThreadDetailRouter>
         child: main,
       ),
     );
-  }
-
-  @override
-  Future<void> onReady(final BuildContext context) async {
-    this.subscribeReplies();
   }
 
   void subscribeReplies() {

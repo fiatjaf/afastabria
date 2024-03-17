@@ -54,6 +54,12 @@ class MetadataDB {
         where: "pubkey = ?", whereArgs: [o.pubkey]);
   }
 
+  static Future upsert(final Metadata o, {final DatabaseExecutor? db}) async {
+    return await DB.getDB(db).execute(
+        "insert into metadata (pubkey, event) values (?, ?) on conflict (pubkey) do update set event = excluded.event",
+        [o.pubkey, jsonEncode(o.event!.toJson())]);
+  }
+
   static Future<void> delete(final String pubkey,
       {final DatabaseExecutor? db}) async {
     DB.getDB(db).execute("delete from metadata where pubkey = ?", [pubkey]);

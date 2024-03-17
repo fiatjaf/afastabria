@@ -28,13 +28,6 @@ class GlobalsUsersRouterState extends KeepAliveCustState<GlobalsUsersRouter> {
   ScrollController scrollController = ScrollController();
 
   List<String> pubkeys = [];
-  List<Future<Metadata>>? metadataFutures;
-
-  @override
-  void initState() {
-    super.initState();
-    this.metadataFutures = this.pubkeys.map(metadataLoader.load).toList();
-  }
 
   @override
   Widget doBuild(final BuildContext context) {
@@ -62,7 +55,7 @@ class GlobalsUsersRouterState extends KeepAliveCustState<GlobalsUsersRouter> {
             },
             behavior: HitTestBehavior.translucent,
             child: FutureBuilder(
-              future: this.metadataFutures![index],
+              future: metadataLoader.load(pubkey),
               initialData: Metadata.blank(pubkey),
               builder: (final context, final snapshot) {
                 return MetadataComponent(

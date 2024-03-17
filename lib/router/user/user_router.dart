@@ -42,8 +42,6 @@ class UserRouterState extends CustState<UserRouter>
   /// the offset to appbar background color, showTitleHeight + 100;
   double showAppbarBGHeight = 50 + 100;
 
-  Future<Metadata>? metadataFuture;
-
   @override
   void initState() {
     super.initState();
@@ -69,41 +67,42 @@ class UserRouterState extends CustState<UserRouter>
         });
       }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final newPubkey = RouterUtil.routerArgs(context) as String?;
+    if (newPubkey == null || !keyIsValid(newPubkey)) {
+      RouterUtil.back(context);
+      return;
+    }
 
     if (this.pubkey == null || !keyIsValid(this.pubkey!)) {
-      pubkey = RouterUtil.routerArgs(context) as String?;
-      if (pubkey == null || !keyIsValid(pubkey!)) {
-        RouterUtil.back(context);
-        return;
-      }
-
+      this.setState(() {
+        this.pubkey = newPubkey;
+      });
       final events = followEventProvider.eventsByPubkey(pubkey!);
       if (events.isNotEmpty) {
         box.addList(events);
       }
     } else {
-      final arg = RouterUtil.routerArgs(context);
-      if (arg != null && arg is String) {
-        if (arg != pubkey) {
-          // arg change! reset.
-          box.clear();
-          until = null;
-          pubkey = arg;
-          doQuery();
-        }
+      if (newPubkey != pubkey) {
+        // arg change! reset.
+        box.clear();
+        until = null;
+        this.setState(() {
+          this.pubkey = newPubkey;
+        });
+        doQuery();
       }
     }
     preBuild();
-
-    this.metadataFuture = metadataLoader.load(pubkey!);
   }
 
   @override
   Widget doBuild(final BuildContext context) {
-    if (this.metadataFuture == null) {
-      return Container();
-    }
-
     final paddingTop = mediaDataCache.padding.top;
     final maxWidth = mediaDataCache.size.width;
 
@@ -113,8 +112,10 @@ class UserRouterState extends CustState<UserRouter>
     final themeData = Theme.of(context);
     // var cardColor = themeData.cardColor;
 
+    if (this.pubkey == null) return Container();
+
     return FutureBuilder(
-      future: this.metadataFuture,
+      future: metadataLoader.load(this.pubkey!),
       initialData: Metadata.blank(this.pubkey!),
       builder: (final context, final snapshot) {
         final metadata = snapshot.data;
@@ -245,9 +246,9 @@ class UserRouterState extends CustState<UserRouter>
     // load event from relay
     final filter = Filter(
       kinds: EventKind.SUPPORTED_EVENTS,
-      until: until,
-      authors: [pubkey!],
-      limit: queryLimit,
+      until: this.until,
+      authors: [this.pubkey!],
+      limit: this.queryLimit,
     );
 
     final relays = ["wss://relay.nostr.band"];

@@ -29,7 +29,7 @@ class UserPicComponentState extends State<UserPicComponent> {
         final metadata = snapshot.data!;
 
         Widget? imageWidget;
-        if (metadata.picture != "") {
+        if (metadata.picture != null && metadata.picture != "") {
           imageWidget = ImageComponent(
             imageUrl: metadata.picture!,
             width: widget.width,

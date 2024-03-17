@@ -37,13 +37,11 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
   DMSessionDetail? detail;
 
   ECDHBasicAgreement? agreement;
-  Future<Metadata>? metadataFuture;
 
   @override
   void initState() {
     super.initState();
     handleFocusInit();
-    this.metadataFuture = metadataLoader.load(detail!.dmSession.pubkey);
   }
 
   @override
@@ -62,7 +60,7 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
     detail = arg as DMSessionDetail;
 
     final nameComponent = FutureBuilder(
-      future: this.metadataFuture,
+      future: metadataLoader.load(detail!.dmSession.pubkey),
       initialData: Metadata.blank(detail!.dmSession.pubkey),
       builder: (final context, final snapshot) {
         return NameComponent(

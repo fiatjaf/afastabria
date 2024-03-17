@@ -1,5 +1,3 @@
-import "dart:developer";
-
 import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
@@ -66,7 +64,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
     privateKeyMap.forEach((final key, final value) {
       final index = int.tryParse(key);
       if (index == null) {
-        log("parse index key error");
+        print("parse index key error $index");
         return;
       }
       list.add(AccountManagerItemComponent(
@@ -250,14 +248,6 @@ class AccountManagerItemComponentState
   static const double IMAGE_WIDTH = 26;
   static const double LINE_HEIGHT = 44;
 
-  Future<Metadata>? metadataFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    this.metadataFuture = metadataLoader.load(widget.publicKey);
-  }
-
   @override
   Widget build(final BuildContext context) {
     final themeData = Theme.of(context);
@@ -268,7 +258,7 @@ class AccountManagerItemComponentState
     }
 
     return FutureBuilder(
-        future: this.metadataFuture,
+        future: metadataLoader.load(widget.publicKey),
         initialData: Metadata.blank(widget.publicKey),
         builder: (final context, final snapshot) {
           final metadata = snapshot.data!;
@@ -279,7 +269,7 @@ class AccountManagerItemComponentState
           final nip19PubKey = Nip19.encodePubKey(metadata.pubkey);
 
           Widget? imageWidget;
-          if (metadata.picture != "") {
+          if (metadata.picture != null && metadata.picture != "") {
             imageWidget = ImageComponent(
               imageUrl: metadata.picture!,
               width: IMAGE_WIDTH,

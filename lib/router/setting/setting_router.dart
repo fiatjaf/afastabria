@@ -1,5 +1,3 @@
-import "dart:developer";
-
 import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
 import "package:flutter_font_picker/flutter_font_picker.dart";
@@ -682,7 +680,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
         pool.subscribeManyEose(["wss://relay.nostr.band"], [filter],
             onEvent: onDeletedEventReceive);
       } catch (e) {
-        log("delete account error ${e.toString()}");
+        print("delete account error $e");
       }
     }
   }

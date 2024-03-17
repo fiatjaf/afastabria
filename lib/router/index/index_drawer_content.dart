@@ -29,14 +29,6 @@ class _IndexDrawerContnetComponnent
   ScrollController userStatisticscontroller = ScrollController();
   double profileEditBtnWidth = 40;
 
-  Future<Metadata>? metadataFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    metadataFuture = metadataLoader.load(nostr.publicKey);
-  }
-
   @override
   Widget build(final BuildContext context) {
     final indexProvider = Provider.of<IndexProvider>(context);
@@ -52,7 +44,7 @@ class _IndexDrawerContnetComponnent
     list.add(
       Stack(children: [
         FutureBuilder(
-          future: this.metadataFuture,
+          future: metadataLoader.load(pubkey),
           initialData: Metadata.blank(pubkey),
           builder: (final context, final snapshot) {
             return MetadataTopComponent(

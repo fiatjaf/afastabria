@@ -1,3 +1,5 @@
+import "dart:convert";
+
 /// filter is a JSON object that determines what events will be sent in that subscription
 class Filter {
   /// Default constructor
@@ -126,5 +128,10 @@ class Filter {
       limit: this.limit,
       search: this.search,
     );
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(this.toJson());
   }
 }

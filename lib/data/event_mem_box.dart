@@ -74,6 +74,7 @@ class EventMemBox implements FindEventInterface {
     for (final value in it) {
       counter += value;
     }
+    print("infinity or nan? $counter ~/ $relayNum");
     result.avCreatedAt = counter ~/ relayNum;
 
     return result;

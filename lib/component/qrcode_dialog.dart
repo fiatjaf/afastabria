@@ -43,13 +43,6 @@ class _QrcodeDialog extends State<QrcodeDialog> {
   static const double QR_WIDTH = 200;
 
   ScreenshotController screenshotController = ScreenshotController();
-  Future<Metadata>? metadataFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    this.metadataFuture = metadataLoader.load(widget.pubkey);
-  }
 
   @override
   Widget build(final BuildContext context) {
@@ -60,7 +53,7 @@ class _QrcodeDialog extends State<QrcodeDialog> {
     List<Widget> list = [];
     final nip19Pubkey = Nip19.encodePubKey(widget.pubkey);
     final Widget topWidget = FutureBuilder(
-      future: this.metadataFuture,
+      future: metadataLoader.load(widget.pubkey),
       initialData: Metadata.blank(widget.pubkey),
       builder: (final context, final snapshot) {
         final metadata = snapshot.data;

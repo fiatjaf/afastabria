@@ -12,31 +12,21 @@ class MetadataLoader {
 
   final Map<String, Future<Metadata>> _promises = {};
 
-  static Future<List<Metadata>> batchLoad(final Iterable<String> keys) async {
-    final threshold = DateTime.now()
-            .subtract(const Duration(days: 3))
-            .millisecondsSinceEpoch /
-        1000;
+  final threshold =
+      DateTime.now().subtract(const Duration(days: 3)).millisecondsSinceEpoch /
+          1000;
 
+  static Future<List<Metadata>> batchLoad(final Iterable<String> keys) async {
     final events = await pool.querySync(
         nostr.METADATA_RELAYS, Filter(kinds: [0], authors: keys.toList()));
 
     return await Future.wait(
       keys.map((final String key) async {
-        final fromDB = await MetadataDB.get(key);
-        if (fromDB != null && fromDB.event!.createdAt > threshold) {
-          return fromDB;
-        }
-
         try {
           final md = Metadata.fromEvent(
               events.firstWhere((final Event event) => event.pubKey == key));
 
-          if (fromDB == null) {
-            MetadataDB.insert(md);
-          } else if (md.event!.createdAt > fromDB.event!.createdAt) {
-            MetadataDB.update(md);
-          }
+          MetadataDB.upsert(md);
           return md;
         } catch (err) {
           return Metadata.blank(key);
@@ -46,7 +36,14 @@ class MetadataLoader {
   }
 
   Future<Metadata> load(final String pubkey) {
-    return this._promises.putIfAbsent(pubkey, () => this._loader.load(pubkey));
+    return this._promises.putIfAbsent(pubkey, () {
+      return MetadataDB.get(pubkey).then((Metadata? md) {
+        if (md != null && md.event!.createdAt > threshold) {
+          return md;
+        }
+        return this._loader.load(pubkey);
+      });
+    });
   }
 
   void invalidate(final String pubkey) {

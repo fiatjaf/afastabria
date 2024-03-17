@@ -14,9 +14,11 @@ const _defaultCloseButtonColor = Colors.white;
 const _defaultCloseButtonTooltip = "Close";
 
 class ImagePreviewDialog extends StatefulWidget {
-
   const ImagePreviewDialog(this.imageProvider,
-      {required this.closeButtonColor, required this.backgroundColor, required this.closeButtonTooltip, final Key? key,
+      {required this.closeButtonColor,
+      required this.backgroundColor,
+      required this.closeButtonTooltip,
+      final Key? key,
       this.immersive = true,
       this.onPageChanged,
       this.onViewerDismissed,

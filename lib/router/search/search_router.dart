@@ -1,5 +1,3 @@
-import "dart:developer";
-
 import "package:flutter/material.dart";
 import "package:loure/component/user/metadata_top_component.dart";
 import "package:loure/data/event_find_util.dart";
@@ -253,7 +251,7 @@ class _SearchRouter extends CustState<SearchRouter>
         final result = Nip19.decode(value);
         authors = [result];
       } catch (e) {
-        log(e.toString());
+        print(e);
         return;
       }
     } else {
