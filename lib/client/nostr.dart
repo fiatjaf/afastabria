@@ -27,7 +27,7 @@ class Nostr {
     return this.privateKey == ONE;
   }
 
-  RelayList relayList = RelayList([
+  RelayList relayList = RelayList("", [
     "wss://nostr.wine",
     "wss://nostr21.com",
     "wss://nostr.mom",
@@ -244,7 +244,7 @@ class Nostr {
   }
 
   Event sendRelayList(final String content) {
-    final event = this.relayList.toEvent(nostr.privateKey);
+    final event = this.relayList.toEvent(Event.getSigner(nostr.privateKey));
     pool.publish([...this.relayList.write, ...RELAYLIST_RELAYS], event);
     return event;
   }

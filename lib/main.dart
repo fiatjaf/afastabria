@@ -7,6 +7,7 @@ import "package:google_fonts/google_fonts.dart";
 import "package:loure/client/metadata_loader.dart";
 import "package:loure/client/nostr.dart";
 import "package:loure/client/relay/relay_pool.dart";
+import "package:loure/client/relaylist_loader.dart";
 import "package:loure/provider/badge_definition_provider.dart";
 import "package:loure/provider/community_info_provider.dart";
 import "package:loure/provider/follow_new_event_provider.dart";
@@ -72,6 +73,7 @@ final Map<String, WidgetBuilder> routes = {};
 
 final RelayPool pool = RelayPool();
 final metadataLoader = MetadataLoader();
+final relaylistLoader = RelayListLoader();
 
 Nostr nostr = Nostr.empty();
 late SharedPreferences sharedPreferences;

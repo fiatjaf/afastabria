@@ -22,6 +22,8 @@ class DB {
       db.execute(
           "create table metadata(pubkey TEXT not null primary key, event text not null);");
       db.execute(
+          "create table relaylist(pubkey TEXT not null primary key, event text not null);");
+      db.execute(
           "create table event(key_index INTEGER, id text, pubkey text, created_at integer, kind integer, tags text, content text);");
       db.execute(
           "create unique index event_key_index_id_uindex on event (key_index, id);");

@@ -11,7 +11,8 @@ class Event {
   Event(this.id, this.pubKey, this.createdAt, this.kind, this.tags,
       this.content, this.sig);
 
-  Event.finalize(final String privateKey, this.kind, this.tags, this.content,
+  Event.finalizeWithSigner(
+      final Function(Event) sign, this.kind, this.tags, this.content,
       {final DateTime? publishAt, final int proofOfWorkDifficulty = 0}) {
     if (publishAt != null) {
       createdAt = publishAt.millisecondsSinceEpoch ~/ 1000;
@@ -29,8 +30,13 @@ class Event {
         this.id = this.getId();
       } while (_countLeadingZeroBytes(this.id) < difficultyInBytes);
     }
+  }
 
-    this.sign(privateKey);
+  Event.finalize(final String privateKey, this.kind, this.tags, this.content,
+      {final DateTime? publishAt, final int proofOfWorkDifficulty = 0}) {
+    Event.finalizeWithSigner(
+        Event.getSigner(privateKey), this.kind, this.tags, this.content,
+        publishAt: publishAt, proofOfWorkDifficulty: proofOfWorkDifficulty);
   }
 
   factory Event.fromJson(final Map<String, dynamic> data) {
@@ -48,13 +54,14 @@ class Event {
 
     return Event(id, pubKey, createdAt, kind, tags, content, sig);
   }
-  late String id;
-  late String pubKey;
-  late String sig;
 
-  late int createdAt;
+  late final String id;
+  late final String pubKey;
+  late final String sig;
+
+  late final int createdAt;
+
   final int kind;
-
   final List<List<String>> tags;
   final String content;
 
@@ -70,13 +77,6 @@ class Event {
       "content": content,
       "sig": sig
     };
-  }
-
-  void sign(final String privateKey) {
-    this.pubKey = getPublicKey(privateKey);
-    this.id = this.getId();
-    final aux = getRandomHexString();
-    this.sig = schnorr.sign(privateKey, this.id, aux);
   }
 
   bool get isValid {
@@ -125,5 +125,18 @@ class Event {
   @override
   String toString() {
     return jsonEncode(this.toJson());
+  }
+
+  static void sign(Event evt, final String privateKey) {
+    evt.pubKey = getPublicKey(privateKey);
+    evt.id = evt.getId();
+    final aux = getRandomHexString();
+    evt.sig = schnorr.sign(privateKey, evt.id, aux);
+  }
+
+  static Function(Event) getSigner(String privateKey) {
+    return (Event evt) {
+      Event.sign(evt, privateKey);
+    };
   }
 }

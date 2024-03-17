@@ -2,7 +2,7 @@ import "package:loure/client/event.dart";
 import "package:loure/client/relay/util.dart";
 
 class RelayList {
-  RelayList(this.read, this.write);
+  RelayList(this.pubkey, this.read, this.write, {this.event});
 
   factory RelayList.fromEvent(final Event event) {
     List<String> read = [];
@@ -32,12 +32,15 @@ class RelayList {
         write.add(url);
       }
     }
-    return RelayList(read, write);
+    return RelayList(event.pubKey, read, write, event: event);
   }
+
   final List<String> read;
   final List<String> write;
+  final String pubkey;
+  final Event? event;
 
-  Event toEvent(final String privateKey) {
+  Event toEvent(final Function(Event) signer) {
     List<List<String>> tags = [];
     for (final relay in this.write) {
       List<String> tag = ["r", relay, "write"];
@@ -52,7 +55,7 @@ class RelayList {
       tags.add(["r", relay, "read"]);
     }
 
-    return Event.finalize(privateKey, 10002, tags, "");
+    return Event.finalizeWithSigner(signer, 10002, tags, "");
   }
 
   List<String> get all {
