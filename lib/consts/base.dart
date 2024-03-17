@@ -1,5 +1,3 @@
-import "package:loure/util/hash_util.dart";
-
 class Base {
   static const APP_NAME = "loure";
   static String VERSION_NAME = "1.0.0";
@@ -17,8 +15,6 @@ class Base {
     return "$APP_NAME $VERSION_NAME";
   }
 
-  static String KEY_EKEY = HashUtil.md5("Jo49KwLvyhrsar");
-  static String KEY_IV = "1681713832000000";
   static double BASE_FONT_SIZE = 14;
   static double BASE_FONT_SIZE_PC = 14;
   static double TABBAR_HEIGHT = 46;

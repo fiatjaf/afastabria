@@ -3,19 +3,13 @@ import "package:flutter/material.dart";
 import "package:flutter_font_picker/flutter_font_picker.dart";
 import "package:google_mlkit_translation/google_mlkit_translation.dart";
 import "package:local_auth/local_auth.dart";
-import "package:loure/client/nip02/cust_contact_list.dart";
-import "package:loure/client/filter.dart";
 import "package:loure/data/event_mem_box.dart";
-import "package:loure/router/index/account_manager_component.dart";
 import "package:loure/util/platform_util.dart";
 import "package:loure/util/router_util.dart";
 import "package:loure/util/when_stop_function.dart";
 import "package:provider/provider.dart";
 
-import "package:loure/client/event.dart";
-import "package:loure/client/event_kind.dart" as kind;
 import "package:loure/component/colors_selector_component.dart";
-import "package:loure/component/confirm_dialog.dart";
 import "package:loure/component/editor/text_input_dialog.dart";
 import "package:loure/component/enum_multi_selector_component.dart";
 import "package:loure/component/enum_selector_component.dart";
@@ -25,7 +19,6 @@ import "package:loure/consts/base_consts.dart";
 import "package:loure/consts/image_services.dart";
 import "package:loure/consts/relay_mode.dart";
 import "package:loure/consts/theme_style.dart";
-import "package:loure/data/metadata.dart";
 import "package:loure/main.dart";
 import "package:loure/provider/setting_provider.dart";
 import "package:loure/util/auth_util.dart";
@@ -241,11 +234,6 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     }
 
     list.add(SettingGroupTitleComponent(iconData: Icons.source, title: "Data"));
-    list.add(SettingGroupItemComponent(
-      name: "Delete Account",
-      nameColor: Colors.red,
-      onTap: askToDeleteAccount,
-    ));
 
     list.add(SliverToBoxAdapter(
       child: Container(
@@ -653,72 +641,6 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
   EventMemBox waitingDeleteEventBox = EventMemBox(sortAfterAdd: false);
 
   CancelFunc? deleteAccountLoadingCancel;
-
-  askToDeleteAccount() async {
-    final result = await ConfirmDialog.show(context, "Delete_Account_Tips");
-    if (result == true) {
-      deleteAccountLoadingCancel = BotToast.showLoading();
-      try {
-        whenStopMS = 2000;
-        waitingDeleteEventBox.clear();
-
-        // use a blank metadata to update it
-        nostr.sendMetadata(Metadata.blank(""));
-
-        // use a blank contact list to update it
-        final blankContactList = CustContactList();
-        nostr.sendContactList(blankContactList, "");
-
-        final filter = Filter(authors: [
-          nostr.publicKey
-        ], kinds: [
-          kind.EventKind.TEXT_NOTE,
-          kind.EventKind.REPOST,
-          kind.EventKind.GENERIC_REPOST,
-        ]);
-
-        pool.subscribeManyEose(["wss://relay.nostr.band"], [filter],
-            onEvent: onDeletedEventReceive);
-      } catch (e) {
-        print("delete account error $e");
-      }
-    }
-  }
-
-  onDeletedEventReceive(final Event event) {
-    print(event.toJson());
-    waitingDeleteEventBox.add(event);
-    whenStop(handleDeleteEvent);
-  }
-
-  void handleDeleteEvent() {
-    try {
-      List<Event> all = waitingDeleteEventBox.all();
-      List<String> ids = [];
-      for (final event in all) {
-        ids.add(event.id);
-
-        if (ids.length > 20) {
-          nostr.deleteEvents(ids);
-          ids.clear();
-        }
-      }
-
-      if (ids.isNotEmpty) {
-        nostr.deleteEvents(ids);
-      }
-    } finally {
-      final index = settingProvider.privateKeyIndex;
-      if (index != null) {
-        AccountManagerComponentState.onLogoutTap(index,
-            routerBack: true, context: context);
-        metadataLoader.clear();
-      }
-      if (deleteAccountLoadingCancel != null) {
-        deleteAccountLoadingCancel!.call();
-      }
-    }
-  }
 
   List<EnumObj>? translateLanguages;
 

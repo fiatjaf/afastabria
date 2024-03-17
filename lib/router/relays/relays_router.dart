@@ -40,7 +40,7 @@ class _RelaysRouter extends CustState<RelaysRouter> with WhenStopFunction {
           ),
         ),
         title: Text(
-          "[relays]",
+          "Your relays",
           style: TextStyle(
             fontSize: titleFontSize,
             fontWeight: FontWeight.bold,

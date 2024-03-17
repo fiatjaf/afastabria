@@ -42,7 +42,7 @@ class Nostr {
   final idIndex = <String, Event>{};
   final addressIndex = <String, Event>{};
 
-  void init(final String secretKey) {
+  void init() {
     pool
         .querySync(RELAYLIST_RELAYS,
             Filter(kinds: [10002], authors: [nostr.publicKey]))

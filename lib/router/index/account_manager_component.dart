@@ -31,10 +31,23 @@ class AccountManagerComponent extends StatefulWidget {
 }
 
 class AccountManagerComponentState extends State<AccountManagerComponent> {
+  List<String> publicKeyList = [];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final settingProvider = Provider.of<SettingProvider>(context);
+    settingProvider.publicKeyList().then((final list) {
+      this.setState(() {
+        this.publicKeyList = list;
+      });
+    });
+  }
+
   @override
   Widget build(final BuildContext context) {
     final settingProvider = Provider.of<SettingProvider>(context);
-    final privateKeyMap = settingProvider.privateKeyMap;
 
     final themeData = Theme.of(context);
     final hintColor = themeData.hintColor;
@@ -61,22 +74,20 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
       ),
     ));
 
-    privateKeyMap.forEach((final key, final value) {
-      final index = int.tryParse(key);
-      if (index == null) {
-        print("parse index key error $index");
-        return;
-      }
+    for (var idx = 0; idx < publicKeyList.length; idx++) {
+      final key = publicKeyList[idx];
       list.add(AccountManagerItemComponent(
-        index: index,
-        privateKey: value,
-        isCurrent: settingProvider.privateKeyIndex == index,
-        onLoginTap: onLoginTap,
-        onLogoutTap: (final index) {
-          onLogoutTap(index, context: context);
+        publicKey: key,
+        isCurrent: settingProvider.privateKeyIndex == idx,
+        onLogin: () {
+          this.onLoginTap(idx);
+        },
+        onLogout: () {
+          this.onLogoutTap(idx, idx == publicKeyList.length - 1,
+              context: context);
         },
       ));
-    });
+    }
 
     list.add(Container(
       margin: const EdgeInsets.only(
@@ -111,21 +122,21 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
   }
 
   Future<void> addAccount() async {
-    var privateKey = await TextInputDialog.show(
-        context, "Input_account_private_key",
+    var privateKey = await TextInputDialog.show(context, "Input secret key",
         valueCheck: addAccountCheck);
     if (StringUtil.isNotBlank(privateKey)) {
-      final result = await ConfirmDialog.show(context, "Add_account_and_login");
+      final result = await ConfirmDialog.show(context, "Add account and login");
       if (result == true) {
         if (Nip19.isPrivateKey(privateKey!)) {
           privateKey = Nip19.decode(privateKey);
         }
         // logout current and login new
         final oldIndex = settingProvider.privateKeyIndex;
-        final newIndex = settingProvider.addAndChangePrivateKey(privateKey);
+        final newIndex =
+            await settingProvider.addAndChangePrivateKey(privateKey);
         if (oldIndex != newIndex) {
           clearCurrentMemInfo();
-          doLogin();
+          this.doLogin();
           // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
           settingProvider.notifyListeners();
           RouterUtil.back(context);
@@ -144,7 +155,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
       try {
         getPublicKey(privateKey);
       } catch (e) {
-        BotToast.showText(text: "Wrong_Private_Key_format");
+        BotToast.showText(text: "Wrong Private key format");
         return false;
       }
     }
@@ -152,45 +163,31 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
     return true;
   }
 
-  void doLogin() {
-    nostr = Nostr(settingProvider.privateKey!);
+  void doLogin() async {
+    nostr = Nostr((await settingProvider.privateKey())!);
+    nostr.init();
   }
 
-  void onLoginTap(final int index) {
+  void onLoginTap(final int index) async {
     if (settingProvider.privateKeyIndex != index) {
       clearCurrentMemInfo();
-
       settingProvider.privateKeyIndex = index;
-
-      // signOut complete
-      if (settingProvider.privateKey != null) {
-        // use next privateKey to login
-        doLogin();
-
-        // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-        settingProvider.notifyListeners();
-        RouterUtil.back(context);
-      }
+      this.doLogin();
+      settingProvider.saveAndNotifyListeners();
+      RouterUtil.back(context);
     }
   }
 
-  static void onLogoutTap(final int index,
+  void onLogoutTap(final int index, final bool isLast,
       {final bool routerBack = true, final BuildContext? context}) {
-    final oldIndex = settingProvider.privateKeyIndex;
-    clearLocalData(index);
-
-    if (oldIndex == index) {
+    if (index == settingProvider.privateKeyIndex) {
+      clearLocalData(index);
       clearCurrentMemInfo();
-
-      // signOut complete
-      if (settingProvider.privateKey != null) {
-        // use next privateKey to login
-        nostr = Nostr(settingProvider.privateKey!);
-      }
+      settingProvider.privateKeyIndex = isLast ? index - 1 : index;
+      this.doLogin();
+      settingProvider.saveAndNotifyListeners();
     }
 
-    // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-    settingProvider.notifyListeners();
     if (routerBack && context != null) {
       RouterUtil.back(context);
     }
@@ -208,6 +205,7 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
     eventReactionsProvider.clear();
     linkPreviewDataProvider.clear();
     bookmarkProvider.clear();
+    emojiProvider.clear();
   }
 
   static void clearLocalData(final int index) {
@@ -221,30 +219,20 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
 }
 
 // ignore: must_be_immutable
-class AccountManagerItemComponent extends StatefulWidget {
-  AccountManagerItemComponent({
+class AccountManagerItemComponent extends StatelessWidget {
+  const AccountManagerItemComponent({
     required this.isCurrent,
-    required this.index,
-    required this.privateKey,
+    required this.publicKey,
+    required this.onLogin,
+    required this.onLogout,
     super.key,
-    this.onLoginTap,
-    this.onLogoutTap,
-  }) : this.publicKey = getPublicKey(privateKey);
-  bool isCurrent;
-  int index;
-  String privateKey;
-  String publicKey;
-  Function(int)? onLoginTap;
-  Function(int)? onLogoutTap;
+  });
 
-  @override
-  State<StatefulWidget> createState() {
-    return AccountManagerItemComponentState();
-  }
-}
+  final bool isCurrent;
+  final String publicKey;
+  final Function() onLogin;
+  final Function() onLogout;
 
-class AccountManagerItemComponentState
-    extends State<AccountManagerItemComponent> {
   static const double IMAGE_WIDTH = 26;
   static const double LINE_HEIGHT = 44;
 
@@ -258,8 +246,8 @@ class AccountManagerItemComponentState
     }
 
     return FutureBuilder(
-        future: metadataLoader.load(widget.publicKey),
-        initialData: Metadata.blank(widget.publicKey),
+        future: metadataLoader.load(this.publicKey),
+        initialData: Metadata.blank(this.publicKey),
         builder: (final context, final snapshot) {
           final metadata = snapshot.data!;
 
@@ -285,7 +273,7 @@ class AccountManagerItemComponentState
             alignment: Alignment.centerLeft,
             child: SizedBox(
               width: 15,
-              child: widget.isCurrent
+              child: this.isCurrent
                   ? PointComponent(
                       width: 15,
                       color: currentColor,
@@ -341,7 +329,7 @@ class AccountManagerItemComponentState
           ));
 
           return GestureDetector(
-            onTap: onTap,
+            onTap: onLogin,
             behavior: HitTestBehavior.translucent,
             child: Container(
               height: LINE_HEIGHT,
@@ -357,17 +345,5 @@ class AccountManagerItemComponentState
             ),
           );
         });
-  }
-
-  void onLogout() {
-    if (widget.onLogoutTap != null) {
-      widget.onLogoutTap!(widget.index);
-    }
-  }
-
-  void onTap() {
-    if (widget.onLoginTap != null) {
-      widget.onLoginTap!(widget.index);
-    }
   }
 }
