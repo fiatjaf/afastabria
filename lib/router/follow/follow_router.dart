@@ -19,12 +19,10 @@ class FollowRouter extends StatefulWidget {
   const FollowRouter({super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    return _FollowRouter();
-  }
+  State<StatefulWidget> createState() => FollowRouterState();
 }
 
-class _FollowRouter extends KeepAliveCustState<FollowRouter>
+class FollowRouterState extends KeepAliveCustState<FollowRouter>
     with LoadMoreEvent {
   final ScrollController _controller = ScrollController();
 

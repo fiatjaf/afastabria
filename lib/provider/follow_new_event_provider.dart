@@ -8,11 +8,9 @@ import "package:loure/client/relay/relay_pool.dart";
 import "package:loure/data/event_mem_box.dart";
 import "package:loure/main.dart";
 import "package:loure/util/pendingevents_later_function.dart";
-import "package:loure/provider/follow_event_provider.dart";
 
 class FollowNewEventProvider extends ChangeNotifier
     with PendingEventsLaterFunction {
-  EventMemBox eventPostMemBox = EventMemBox(sortAfterAdd: false);
   EventMemBox eventMemBox = EventMemBox();
 
   int? _localSince;
@@ -44,7 +42,6 @@ class FollowNewEventProvider extends ChangeNotifier
   }
 
   void clear() {
-    eventPostMemBox.clear();
     eventMemBox.clear();
     if (this.subHandle != null) this.subHandle!.close();
     notifyListeners();
@@ -53,13 +50,6 @@ class FollowNewEventProvider extends ChangeNotifier
   handleEvents(final List<Event> events) {
     eventMemBox.addList(events);
     _localSince = eventMemBox.newestEvent!.createdAt;
-
-    for (final event in events) {
-      final bool isPosts = FollowEventProvider.eventIsPost(event);
-      if (isPosts) {
-        eventPostMemBox.add(event);
-      }
-    }
 
     notifyListeners();
   }

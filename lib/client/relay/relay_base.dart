@@ -33,14 +33,14 @@ class RelayBase extends Relay {
         onMessage(jsonDecode(message));
       }, onError: (final error) async {
         print(error);
-        onError("Websocket error $url", reconnect: true);
+        this.handleError("websocket error: $error");
       }, onDone: () {
-        onError("Websocket stream closed by remote: $url", reconnect: true);
+        this.handleError("websocket stream closed by remote");
       });
       relayStatus.connected = ConnState.CONNECTED;
       return true;
-    } catch (e) {
-      onError(e.toString(), reconnect: true);
+    } catch (err) {
+      this.handleError("connection attempt threw exception: $err");
     }
     return false;
   }
@@ -51,8 +51,8 @@ class RelayBase extends Relay {
       try {
         final encoded = jsonEncode(message);
         _wsChannel!.sink.add(encoded);
-      } catch (e) {
-        onError(e.toString(), reconnect: true);
+      } catch (err) {
+        this.handleError("send threw exception: $err");
       }
     } else {
       print("[$url]: can't send '$message' not connected");
@@ -62,7 +62,7 @@ class RelayBase extends Relay {
   @override
   Future<void> disconnect() async {
     try {
-      relayStatus.connected = ConnState.UN_CONNECT;
+      relayStatus.connected = ConnState.DISCONNECTED;
       if (_wsChannel != null) {
         await _wsChannel!.sink.close();
       }

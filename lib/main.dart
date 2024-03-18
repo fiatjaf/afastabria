@@ -49,7 +49,6 @@ import "package:loure/provider/webview_provider.dart";
 import "package:loure/router/bookmark/bookmark_router.dart";
 import "package:loure/router/community/community_detail_router.dart";
 import "package:loure/router/dm/dm_detail_router.dart";
-import "package:loure/router/donate/donate_router.dart";
 import "package:loure/router/event_detail/event_detail_router.dart";
 import "package:loure/router/filter/filter_router.dart";
 import "package:loure/router/profile_editor/profile_editor_router.dart";
@@ -202,7 +201,6 @@ class _MyApp extends State<MyApp> {
 
     routes.addAll({
       RouterPath.INDEX: (final context) => IndexRouter(reload: reload),
-      RouterPath.DONATE: (final context) => const DonateRouter(),
       RouterPath.USER: (final context) => const UserRouter(),
       RouterPath.USER_CONTACT_LIST: (final context) =>
           const UserContactListRouter(),

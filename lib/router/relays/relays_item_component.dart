@@ -21,7 +21,7 @@ class RelaysItemComponent extends StatelessWidget {
     final themeData = Theme.of(context);
     final cardColor = themeData.cardColor;
     Color borderLeftColor = Colors.green;
-    if (relayStatus.connected == ConnState.UN_CONNECT) {
+    if (relayStatus.connected == ConnState.DISCONNECTED) {
       borderLeftColor = Colors.red;
     } else if (relayStatus.connected == ConnState.CONNECTING) {
       borderLeftColor = Colors.yellow;

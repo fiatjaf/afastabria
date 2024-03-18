@@ -90,21 +90,17 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
           child: Row(
             children: [
               Expanded(
+                child: Tooltip(
+                  message: "Reply",
                   child: EventReactionNumComponent(
-                num: replyNum,
-                iconData: Icons.comment,
-                onTap: onCommmentTap,
-                color: hintColor,
-                fontSize: fontSize,
-              )),
-              // Expanded(
-              //     child: EventReactionNumComponent(
-              //   num: repostNum,
-              //   iconData: Icons.repeat,
-              //   onTap: onRepostTap,
-              //   color: hintColor,
-              //   fontSize: fontSize,
-              // )),
+                    num: replyNum,
+                    iconData: Icons.comment,
+                    onTap: onCommmentTap,
+                    color: hintColor,
+                    fontSize: fontSize,
+                  ),
+                ),
+              ),
               Expanded(
                 child: PopupMenuButton<String>(
                   tooltip: "Boost",
@@ -130,13 +126,17 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                 ),
               ),
               Expanded(
+                child: Tooltip(
+                  message: "Like",
                   child: EventReactionNumComponent(
-                num: likeNum,
-                iconData: Icons.favorite,
-                onTap: onLikeTap,
-                color: likeColor,
-                fontSize: fontSize,
-              )),
+                    num: likeNum,
+                    iconData: Icons.favorite,
+                    onTap: onLikeTap,
+                    color: likeColor,
+                    fontSize: fontSize,
+                  ),
+                ),
+              ),
               Expanded(
                 child: PopupMenuButton<int>(
                   tooltip: "Zap",
@@ -486,17 +486,17 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
   }
 
   void onShareTap() {
-    widget.screenshotController
-        .capture()
-        .then((final Uint8List? imageData) async {
-      if (imageData != null) {
-        final tempFile = await StoreUtil.saveBS2TempFile(
-          "png",
-          imageData,
-        );
-        Share.shareXFiles([XFile(tempFile)]);
-      }
-    }).catchError(print);
+    widget.screenshotController.capture().then(
+      (final Uint8List? imageData) async {
+        if (imageData != null) {
+          final tempFile = await StoreUtil.saveBS2TempFile(
+            "png",
+            imageData,
+          );
+          Share.shareXFiles([XFile(tempFile)]);
+        }
+      },
+    ).catchError(print);
   }
 
   void genZap() {

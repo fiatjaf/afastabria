@@ -409,8 +409,7 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
     if (defaultTabListTimeline == null) {
       defaultTabListTimeline = [];
       defaultTabListTimeline!.add(EnumObj(0, "Posts"));
-      defaultTabListTimeline!.add(EnumObj(1, "Posts & Replies"));
-      defaultTabListTimeline!.add(EnumObj(2, "Mentions"));
+      defaultTabListTimeline!.add(EnumObj(1, "Inbox"));
     }
   }
 
@@ -421,7 +420,6 @@ class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
       defaultTabListGlobal = [];
       defaultTabListGlobal!.add(EnumObj(0, "Notes"));
       defaultTabListGlobal!.add(EnumObj(1, "Users"));
-      defaultTabListGlobal!.add(EnumObj(2, "Topics"));
     }
   }
 

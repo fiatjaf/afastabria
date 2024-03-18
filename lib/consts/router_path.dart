@@ -1,7 +1,6 @@
 class RouterPath {
   static const String INDEX = "/";
   static const String EDITOR = "/editor";
-  static const String DONATE = "/donate";
   static const String NOTICES = "/notices";
   static const String KEY_BACKUP = "/keyBackup";
   static const String RELAYS = "/relays";

@@ -23,6 +23,9 @@ abstract class Relay {
 
   int serial = 0;
   String? challenge;
+  bool hasAuthed = false;
+
+  Function()? onError;
 
   Future<bool> connect();
 
@@ -139,7 +142,7 @@ abstract class Relay {
             if (reason.startsWith("auth-required: ") &&
                 this.challenge != null &&
                 this.makeAuthEvent != null &&
-                sub.hasAuthed == false) {
+                this.hasAuthed == false) {
               // relay is requesting auth for this subscription, so perform auth and try again
               this.send([
                 "AUTH",
@@ -150,8 +153,10 @@ abstract class Relay {
                     ])
                     .toJson()
               ]);
-              sub.hasAuthed =
-                  true; // mark this so we don't auth infinite times in case the relay is buggy
+
+              // mark this so we don't auth infinite times in case the relay is buggy
+              this.hasAuthed = true;
+
               sub.fire(); // try again
             } else {
               // nothing to do, so call close()
@@ -184,42 +189,18 @@ abstract class Relay {
 
   Future<void> disconnect();
 
-  bool _waitingReconnect = false;
-
-  void onError(final String errMsg, {final bool reconnect = false}) {
+  void handleError(final String errMsg) {
     print("[$url]: relay error: $errMsg");
     relayStatus.error++;
-    relayStatus.connected = ConnState.UN_CONNECT;
+    relayStatus.connected = ConnState.DISCONNECTED;
     disconnect();
 
-    if (reconnect && !_waitingReconnect) {
-      _waitingReconnect = true;
-      Future.delayed(const Duration(seconds: 30), () {
-        _waitingReconnect = false;
-        connect();
-      });
-    }
+    if (this.onError != null) this.onError!();
   }
 
-  void saveQuery(final Subscription subscription) {
-    _subscriptions[subscription.id] = subscription;
+  void dispose() {
+    this.disconnect();
   }
-
-  bool checkAndCompleteQuery(final String id) {
-    // all subscription should be close
-    final sub = _subscriptions.remove(id);
-    if (sub != null) {
-      send(["CLOSE", id]);
-      return true;
-    }
-    return false;
-  }
-
-  bool checkQuery(final String id) {
-    return _subscriptions[id] != null;
-  }
-
-  void dispose() {}
 }
 
 class Subscription {
@@ -234,7 +215,6 @@ class Subscription {
   final bool Function(String?)? intercept;
 
   bool hasEosed = false;
-  bool hasAuthed = false;
 
   void fire() {
     List<dynamic> json = ["REQ", this.id];
@@ -261,7 +241,7 @@ class Subscription {
 class RelayStatus {
   RelayStatus(this.addr);
   String addr;
-  int connected = ConnState.UN_CONNECT;
+  ConnState connected = ConnState.DISCONNECTED;
 
   // bool noteAble = true;
   // bool dmAble = true;
@@ -278,8 +258,8 @@ class OK {
   final String message;
 }
 
-class ConnState {
-  static int UN_CONNECT = -1;
-  static int CONNECTING = 1;
-  static int CONNECTED = 2;
+enum ConnState {
+  DISCONNECTED,
+  CONNECTING,
+  CONNECTED,
 }

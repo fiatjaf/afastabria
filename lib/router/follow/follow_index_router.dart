@@ -1,28 +1,20 @@
 import "package:flutter/material.dart";
-import "package:loure/router/follow/mention_me_router.dart";
 
-import "package:loure/router/follow/follow_posts_router.dart";
+import "package:loure/router/follow/mention_me_router.dart";
 import "package:loure/router/follow/follow_router.dart";
 
-class FollowIndexRouter extends StatefulWidget {
-  FollowIndexRouter({required this.tabController, super.key});
-  TabController tabController;
+class FollowIndexRouter extends StatelessWidget {
+  const FollowIndexRouter({required this.tabController, super.key});
 
-  @override
-  State<StatefulWidget> createState() {
-    return _FollowIndexRouter();
-  }
-}
+  final TabController tabController;
 
-class _FollowIndexRouter extends State<FollowIndexRouter> {
   @override
   Widget build(final BuildContext context) {
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: TabBarView(
-        controller: widget.tabController,
+        controller: this.tabController,
         children: const [
-          FollowPostsRouter(),
           FollowRouter(),
           MentionMeRouter(),
         ],

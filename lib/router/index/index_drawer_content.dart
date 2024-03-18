@@ -137,45 +137,25 @@ class _IndexDrawerContnetComponnent
       },
     ));
 
-    if (!PlatformUtil.isTableMode()) {
-      centerList.add(IndexDrawerItem(
-        iconData: Icons.cloud,
-        name: "Relays",
-        onTap: () {
-          RouterUtil.router(context, RouterPath.RELAYS);
-        },
-      ));
-    }
-
     centerList.add(IndexDrawerItem(
-      iconData: Icons.key,
-      name: "Key Backup",
+      iconData: Icons.cloud,
+      name: "Relays",
       onTap: () {
-        RouterUtil.router(context, RouterPath.KEY_BACKUP);
+        RouterUtil.router(context, RouterPath.RELAYS);
       },
     ));
 
     centerList.add(IndexDrawerItem(
       iconData: Icons.bookmarks,
-      name: "Bookmark",
+      name: "Bookmarks",
       onTap: () {
         RouterUtil.router(context, RouterPath.BOOKMARK);
       },
     ));
 
-    if (!PlatformUtil.isPC() && !PlatformUtil.isWeb()) {
-      centerList.add(IndexDrawerItem(
-        iconData: Icons.coffee_outlined,
-        name: "Donate",
-        onTap: () {
-          RouterUtil.router(context, RouterPath.DONATE);
-        },
-      ));
-    }
-
     centerList.add(IndexDrawerItem(
       iconData: Icons.settings,
-      name: "Setting",
+      name: "Settings",
       onTap: () {
         RouterUtil.router(context, RouterPath.SETTING);
       },
@@ -205,6 +185,14 @@ class _IndexDrawerContnetComponnent
         return provider.url;
       }));
     }
+
+    centerList.add(IndexDrawerItem(
+      iconData: Icons.key,
+      name: "Key Backup",
+      onTap: () {
+        RouterUtil.router(context, RouterPath.KEY_BACKUP);
+      },
+    ));
 
     list.add(Expanded(
       child: SingleChildScrollView(

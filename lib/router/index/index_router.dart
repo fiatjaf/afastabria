@@ -62,9 +62,9 @@ class _IndexRouter extends CustState<IndexRouter>
     }
 
     followTabController =
-        TabController(initialIndex: followInitTab, length: 3, vsync: this);
+        TabController(initialIndex: followInitTab, length: 2, vsync: this);
     globalsTabController =
-        TabController(initialIndex: globalsInitTab, length: 3, vsync: this);
+        TabController(initialIndex: globalsInitTab, length: 2, vsync: this);
     dmTabController = TabController(length: 2, vsync: this);
 
     if (!PlatformUtil.isPC() && !PlatformUtil.isWeb()) {
@@ -140,16 +140,7 @@ class _IndexRouter extends CustState<IndexRouter>
             height: IndexAppBar.height,
             alignment: Alignment.center,
             child: Text(
-              "Posts & Replies",
-              textAlign: TextAlign.center,
-              style: titleTextStyle,
-            ),
-          ),
-          Container(
-            height: IndexAppBar.height,
-            alignment: Alignment.center,
-            child: Text(
-              "Mentions",
+              "Inbox",
               style: titleTextStyle,
             ),
           ),
@@ -176,14 +167,6 @@ class _IndexRouter extends CustState<IndexRouter>
             alignment: Alignment.center,
             child: Text(
               "Users",
-              style: titleTextStyle,
-            ),
-          ),
-          Container(
-            height: IndexAppBar.height,
-            alignment: Alignment.center,
-            child: Text(
-              "Topics",
               style: titleTextStyle,
             ),
           ),

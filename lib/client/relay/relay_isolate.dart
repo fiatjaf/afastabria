@@ -72,8 +72,8 @@ class RelayIsolate extends Relay {
 
   @override
   Future<void> disconnect() async {
-    if (relayStatus.connected != ConnState.UN_CONNECT) {
-      relayStatus.connected = ConnState.UN_CONNECT;
+    if (relayStatus.connected != ConnState.DISCONNECTED) {
+      relayStatus.connected = ConnState.DISCONNECTED;
       if (mainToSubSendPort != null) {
         mainToSubSendPort!.send(RelayIsolateMsgs.DIS_CONNECT);
       }
@@ -98,7 +98,7 @@ class RelayIsolate extends Relay {
           relayStatus.connected = ConnState.CONNECTED;
           _relayConnectComplete(true);
         } else if (message == RelayIsolateMsgs.DIS_CONNECTED) {
-          onError("Websocket error $url", reconnect: true);
+          this.handleError("websocket disconnected");
           _relayConnectComplete(false);
         }
       } else if (message is String) {

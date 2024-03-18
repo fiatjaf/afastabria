@@ -24,48 +24,55 @@ class RelayProvider extends ChangeNotifier {
 
 class RelayPool extends RelayProvider {
   RelayPool();
-  final Map<String, Relay> _relays = {};
+
+  final Map<String, Future<Relay>> _relays = {};
+  final Set<String> _penaltyBox = {};
 
   Future<Relay> ensureRelay(String url) async {
     url = RelayUtil.normalizeURL(url);
-    var relay = this._relays[url];
-    if (relay != null) {
-      if (relay.relayStatus.connected == ConnState.UN_CONNECT) {
-        this._relays.remove(url);
-      } else {
-        return relay;
+    if (this._penaltyBox.contains(url)) {
+      throw FormatException("$url in penalty box");
+    }
+    return this._relays.putIfAbsent(url, () async {
+      late Relay relay;
+
+      Event mae(final List<List<String>> tags) {
+        return Event.finalize(
+            nostr.privateKey, EventKind.AUTHENTICATION, tags, "");
       }
-    }
 
-    Event mae(final List<List<String>> tags) {
-      return Event.finalize(
-          nostr.privateKey, EventKind.AUTHENTICATION, tags, "");
-    }
+      var relayStatus = this.relayStatusMap[url];
+      if (relayStatus == null) {
+        relayStatus = RelayStatus(url);
+        relayStatusMap[url] = relayStatus;
+      }
 
-    var relayStatus = this.relayStatusMap[url];
-    if (relayStatus == null) {
-      relayStatus = RelayStatus(url);
-      relayStatusMap[url] = relayStatus;
-    }
-
-    if (PlatformUtil.isWeb()) {
-      // dart:isolate is not supported on dart4web
-      relay =
-          RelayBase(url, relayStatus, assumeValid: true, makeAuthEvent: mae);
-    } else {
-      if (settingProvider.relayMode == RelayMode.BASE_MODE) {
+      if (PlatformUtil.isWeb()) {
+        // dart:isolate is not supported on dart4web
         relay =
             RelayBase(url, relayStatus, assumeValid: true, makeAuthEvent: mae);
       } else {
-        relay = RelayIsolate(url, relayStatus,
-            assumeValid: true, makeAuthEvent: mae);
+        if (settingProvider.relayMode == RelayMode.BASE_MODE) {
+          relay = RelayBase(url, relayStatus,
+              assumeValid: true, makeAuthEvent: mae);
+        } else {
+          relay = RelayIsolate(url, relayStatus,
+              assumeValid: true, makeAuthEvent: mae);
+        }
       }
-    }
 
-    await relay.connect();
+      relay.onError = () {
+        print("$url errored, goes to penalty box for 30 seconds");
+        this._penaltyBox.add(url);
+        this._relays.remove(url);
+        Future.delayed(const Duration(seconds: 30), () {
+          this._penaltyBox.remove(url);
+        });
+      };
 
-    this._relays[url] = relay;
-    return relay;
+      await relay.connect();
+      return relay;
+    });
   }
 
   ManySubscriptionHandle subscribeMany(

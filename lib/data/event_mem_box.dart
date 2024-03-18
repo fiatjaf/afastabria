@@ -12,7 +12,7 @@ class EventMemBox implements FindEventInterface {
   @override
   List<Event> findEvent(final String str, {final int? limit = 5}) {
     List<Event> list = [];
-    for (final event in _eventList) {
+    for (final event in this._eventList) {
       if (event.content.contains(str)) {
         list.add(event);
 
@@ -25,17 +25,17 @@ class EventMemBox implements FindEventInterface {
   }
 
   Event? get newestEvent {
-    if (_eventList.isEmpty) {
+    if (this._eventList.isEmpty) {
       return null;
     }
-    return _eventList.first;
+    return this._eventList.first;
   }
 
   Event? get oldestEvent {
-    if (_eventList.isEmpty) {
+    if (this._eventList.isEmpty) {
       return null;
     }
-    return _eventList.last;
+    return this._eventList.last;
   }
 
   // find event oldest createdAt by relay
@@ -87,12 +87,12 @@ class EventMemBox implements FindEventInterface {
   }
 
   bool delete(final String id) {
-    if (_idMap[id] == null) {
+    if (this._idMap[id] == null) {
       return false;
     }
 
-    _idMap.remove(id);
-    _eventList.removeWhere((final element) => element.id == id);
+    this._idMap.remove(id);
+    this._eventList.removeWhere((final element) => element.id == id);
 
     return true;
   }

@@ -2,41 +2,43 @@ import "dart:convert";
 import "package:crypto/crypto.dart";
 import "package:clock/clock.dart";
 import "package:bip340/bip340.dart" as schnorr;
-import "package:hex/hex.dart";
 
 import "package:loure/client/client_utils/keys.dart";
+
+class Finalized {
+  Finalized(this.id, this.pubkey, this.sig);
+  String id;
+  String pubkey;
+  String sig;
+}
+
+typedef SignerFunction = Finalized Function(
+    int, int, List<List<String>>, String);
+typedef Tag = List<String>;
+typedef Tags = List<Tag>;
 
 /// A Nostr event
 class Event {
   Event(this.id, this.pubKey, this.createdAt, this.kind, this.tags,
       this.content, this.sig);
 
-  Event.finalizeWithSigner(
-      final Function(Event) sign, this.kind, this.tags, this.content,
-      {final DateTime? publishAt, final int proofOfWorkDifficulty = 0}) {
-    if (publishAt != null) {
-      createdAt = publishAt.millisecondsSinceEpoch ~/ 1000;
-    } else {
-      createdAt = _secondsSinceEpoch();
-    }
-
-    if (proofOfWorkDifficulty > 0) {
-      final difficultyInBytes = (proofOfWorkDifficulty / 8).ceil();
-      this.tags.add(["nonce", "0", proofOfWorkDifficulty.toString()]);
-      int nonce = 0;
-      do {
-        const int nonceIndex = 1;
-        this.tags.last[nonceIndex] = (++nonce).toString();
-        this.id = this.getId();
-      } while (_countLeadingZeroBytes(this.id) < difficultyInBytes);
-    }
+  factory Event.finalize(final String privateKey, int kind,
+      List<List<String>> tags, String content,
+      {final DateTime? publishAt}) {
+    return Event.finalizeWithSigner(
+        Event.getSigner(privateKey), kind, tags, content,
+        publishAt: publishAt);
   }
 
-  Event.finalize(final String privateKey, this.kind, this.tags, this.content,
-      {final DateTime? publishAt, final int proofOfWorkDifficulty = 0}) {
-    Event.finalizeWithSigner(
-        Event.getSigner(privateKey), this.kind, this.tags, this.content,
-        publishAt: publishAt, proofOfWorkDifficulty: proofOfWorkDifficulty);
+  factory Event.finalizeWithSigner(final SignerFunction sign, int kind,
+      List<List<String>> tags, String content,
+      {final DateTime? publishAt}) {
+    final createdAt = publishAt != null
+        ? publishAt.millisecondsSinceEpoch ~/ 1000
+        : clock.now().millisecondsSinceEpoch ~/ 1000;
+
+    final fin = sign(createdAt, kind, tags, content);
+    return Event(fin.id, fin.pubkey, createdAt, kind, tags, content, fin.sig);
   }
 
   factory Event.fromJson(final Map<String, dynamic> data) {
@@ -62,7 +64,7 @@ class Event {
   late final int createdAt;
 
   final int kind;
-  final List<List<String>> tags;
+  final Tags tags;
   final String content;
 
   Set<String> sources = {};
@@ -80,7 +82,9 @@ class Event {
   }
 
   bool get isValid {
-    if (this.id != getId()) {
+    if (this.id !=
+        getId(
+            this.pubKey, this.createdAt, this.kind, this.tags, this.content)) {
       return false;
     }
     if (!schnorr.verify(this.pubKey, this.id, this.sig)) {
@@ -89,54 +93,38 @@ class Event {
     return true;
   }
 
-  String getId() {
-    final jsonData = json.encode(
-        [0, this.pubKey, this.createdAt, this.kind, this.tags, this.content]);
-    final bytes = utf8.encode(jsonData);
-    final digest = sha256.convert(bytes);
-    return digest.toString();
-  }
-
   // Individual events with the same "id" are equivalent
   @override
   bool operator ==(final other) => other is Event && id == other.id;
   @override
   int get hashCode => id.hashCode;
 
-  static int _secondsSinceEpoch() {
-    final now = clock.now();
-    final secondsSinceEpoch = now.millisecondsSinceEpoch ~/ 1000;
-    return secondsSinceEpoch;
-  }
-
-  int _countLeadingZeroBytes(final String eventId) {
-    List<int> bytes = HEX.decode(eventId);
-    int zeros = 0;
-    for (int i = 0; i < bytes.length; i++) {
-      if (bytes[i] == 0) {
-        zeros = i + 1;
-      } else {
-        break;
-      }
-    }
-    return zeros;
-  }
-
   @override
   String toString() {
     return jsonEncode(this.toJson());
   }
 
-  static void sign(Event evt, final String privateKey) {
-    evt.pubKey = getPublicKey(privateKey);
-    evt.id = evt.getId();
-    final aux = getRandomHexString();
-    evt.sig = schnorr.sign(privateKey, evt.id, aux);
+  static String getId(
+      String pubkey, int createdAt, int kind, Tags tags, String content) {
+    final jsonData =
+        '[0,"$pubkey","$createdAt","$kind","${json.encode(tags)}","${json.encode(content)}"]';
+    final bytes = utf8.encode(jsonData);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 
-  static Function(Event) getSigner(String privateKey) {
-    return (Event evt) {
-      Event.sign(evt, privateKey);
+  static Finalized sign(
+      String privateKey, int createdAt, int kind, Tags tags, String content) {
+    final pubkey = getPublicKey(privateKey);
+    final id = getId(pubkey, createdAt, kind, tags, content);
+    final aux = getRandomHexString();
+    final sig = schnorr.sign(privateKey, id, aux);
+    return Finalized(id, pubkey, sig);
+  }
+
+  static SignerFunction getSigner(String privateKey) {
+    return (int createdAt, int kind, Tags tags, String content) {
+      return Event.sign(privateKey, createdAt, kind, tags, content);
     };
   }
 }

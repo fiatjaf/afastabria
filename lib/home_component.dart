@@ -5,26 +5,22 @@ import "package:loure/provider/webview_provider.dart";
 import "package:loure/util/platform_util.dart";
 import "package:provider/provider.dart";
 
-// ignore: must_be_immutable
 class HomeComponent extends StatefulWidget {
-  HomeComponent({
+  const HomeComponent({
     required this.child,
     super.key,
     this.theme,
   });
-  Widget child;
-
-  Locale? locale;
-
-  ThemeData? theme;
+  final Widget child;
+  final ThemeData? theme;
 
   @override
   State<StatefulWidget> createState() {
-    return _HomeComponent();
+    return HomeComponentState();
   }
 }
 
-class _HomeComponent extends State<HomeComponent> {
+class HomeComponentState extends State<HomeComponent> {
   @override
   Widget build(final BuildContext context) {
     PlatformUtil.init(context);

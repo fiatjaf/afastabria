@@ -45,7 +45,6 @@ class RelayIsolateWorker {
           } else {
             // print("${config.url} worker send ping");
             // wsChannel!.sink.add("ping");
-            // TODO the websocket is connected, try to check or reconnect.
           }
         } else if (message == RelayIsolateMsgs.DIS_CONNECT) {
           _closeWS(wsChannel);

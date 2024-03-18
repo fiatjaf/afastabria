@@ -17,12 +17,9 @@ class FollowEventProvider extends ChangeNotifier
   FollowEventProvider() {
     _initTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     eventBox = EventMemBox(sortAfterAdd: false); // sortAfterAdd by call
-    postsBox = EventMemBox(sortAfterAdd: false);
   }
   late int _initTime;
-
   late EventMemBox eventBox;
-  late EventMemBox postsBox;
 
   ManySubscriptionHandle? subHandle;
 
@@ -38,7 +35,6 @@ class FollowEventProvider extends ChangeNotifier
   void refresh() {
     _initTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     eventBox.clear();
-    postsBox.clear();
     doQuery();
 
     followNewEventProvider.clear();
@@ -49,7 +45,6 @@ class FollowEventProvider extends ChangeNotifier
   }
 
   void deleteEvent(final String id) {
-    postsBox.delete(id);
     final result = eventBox.delete(id);
     if (result) {
       notifyListeners();
@@ -116,35 +111,12 @@ class FollowEventProvider extends ChangeNotifier
     if (this.subHandle != null) this.subHandle!.close();
   }
 
-  // check if is posts (no tag e and not Mentions, TODO handle NIP27)
-  static bool eventIsPost(final Event event) {
-    bool isPosts = true;
-    final tagLength = event.tags.length;
-    for (var i = 0; i < tagLength; i++) {
-      final tag = event.tags[i];
-      if (tag.length > 0 && tag[0] == "e") {
-        if (event.content.contains("[$i]")) {
-          continue;
-        }
-
-        isPosts = false;
-        break;
-      }
-    }
-
-    return isPosts;
-  }
-
   void mergeNewEvent() {
     final allEvents = followNewEventProvider.eventMemBox.all();
-    final postEvnets = followNewEventProvider.eventPostMemBox.all();
 
     eventBox.addList(allEvents);
-    postsBox.addList(postEvnets);
 
-    // sort
     eventBox.sort();
-    postsBox.sort();
 
     followNewEventProvider.clear();
 
@@ -165,21 +137,11 @@ class FollowEventProvider extends ChangeNotifier
         if (result) {
           // add success
           added = true;
-
-          // check if is posts (no tag e)
-          final bool isPosts = eventIsPost(e);
-          if (isPosts) {
-            postsBox.add(e);
-          }
         }
       }
 
       if (added) {
-        // sort
         eventBox.sort();
-        postsBox.sort();
-
-        // update ui
         notifyListeners();
       }
     }, null);
@@ -187,7 +149,6 @@ class FollowEventProvider extends ChangeNotifier
 
   void clear() {
     this.eventBox.clear();
-    this.postsBox.clear();
     this.unsubscribe();
     this.notifyListeners();
   }

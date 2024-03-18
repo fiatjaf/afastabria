@@ -40,7 +40,7 @@ class RelayList {
   final String pubkey;
   final Event? event;
 
-  Event toEvent(final Function(Event) signer) {
+  Event toEvent(final SignerFunction signer) {
     List<List<String>> tags = [];
     for (final relay in this.write) {
       List<String> tag = ["r", relay, "write"];

@@ -3,30 +3,21 @@ import "package:loure/util/platform_util.dart";
 
 import "package:loure/component/user_pic_component.dart";
 import "package:loure/consts/base.dart";
-import "package:loure/consts/router_path.dart";
 import "package:loure/main.dart";
-import "package:loure/util/router_util.dart";
 
-class IndexAppBar extends StatefulWidget {
-  IndexAppBar({super.key, this.center});
+class IndexAppBar extends StatelessWidget {
+  const IndexAppBar({super.key, this.center});
+
   static const double height = 56;
+  static const double picHeight = 30;
 
-  Widget? center;
-
-  @override
-  State<StatefulWidget> createState() {
-    return _IndexAppBar();
-  }
-}
-
-class _IndexAppBar extends State<IndexAppBar> {
-  double picHeight = 30;
+  final Widget? center;
 
   @override
   Widget build(final BuildContext context) {
     final themeData = Theme.of(context);
     final paddingTop = mediaDataCache.padding.top;
-    final textColor = themeData.appBarTheme.titleTextStyle!.color;
+    // final textColor = themeData.appBarTheme.titleTextStyle!.color;
     final appBarBackgroundColor = themeData.appBarTheme.backgroundColor;
 
     Widget? userPicWidget;
@@ -46,9 +37,6 @@ class _IndexAppBar extends State<IndexAppBar> {
       );
     }
 
-    var center = widget.center;
-    center ??= Container();
-
     return Container(
       padding: EdgeInsets.only(
         top: paddingTop,
@@ -67,14 +55,8 @@ class _IndexAppBar extends State<IndexAppBar> {
               left: Base.BASE_PADDING,
               right: Base.BASE_PADDING,
             ),
-            child: center,
+            child: this.center,
           ),
-        ),
-        GestureDetector(
-          onTap: () {
-            RouterUtil.router(context, RouterPath.RELAYS);
-          },
-          child: Text("relays", style: TextStyle(color: textColor)),
         ),
       ]),
     );
