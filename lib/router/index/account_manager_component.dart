@@ -196,8 +196,6 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
   static void clearCurrentMemInfo() {
     mentionMeProvider.clear();
     mentionMeNewProvider.clear();
-    followEventProvider.clear();
-    followNewEventProvider.clear();
     dmProvider.clear();
     noticeProvider.clear();
     contactListProvider.clear();

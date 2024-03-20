@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 
-import "package:loure/client/nip02/contact.dart";
-import "package:loure/client/nip02/cust_contact_list.dart";
+import "package:loure/client/nip02/contact_list.dart";
 import "package:loure/component/user/metadata_component.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/consts/router_path.dart";
@@ -12,7 +11,7 @@ import "package:loure/util/router_util.dart";
 
 class UserContactListComponent extends StatefulWidget {
   const UserContactListComponent({required this.contactList, super.key});
-  final CustContactList contactList;
+  final ContactList contactList;
 
   @override
   State<StatefulWidget> createState() {
@@ -28,7 +27,7 @@ class _UserContactListComponent extends State<UserContactListComponent> {
   @override
   void initState() {
     super.initState();
-    this.list = widget.contactList.list().toList();
+    this.list = widget.contactList.contacts;
   }
 
   @override
@@ -43,15 +42,15 @@ class _UserContactListComponent extends State<UserContactListComponent> {
           margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
           child: GestureDetector(
             onTap: () {
-              RouterUtil.router(context, RouterPath.USER, contact.publicKey);
+              RouterUtil.router(context, RouterPath.USER, contact.pubkey);
             },
             behavior: HitTestBehavior.translucent,
             child: FutureBuilder(
-              future: metadataLoader.load(contact.publicKey),
-              initialData: Metadata.blank(contact.publicKey),
+              future: metadataLoader.load(contact.pubkey),
+              initialData: Metadata.blank(contact.pubkey),
               builder: (final context, final snapshot) {
                 return MetadataComponent(
-                  pubKey: contact.publicKey,
+                  pubKey: contact.pubkey,
                   metadata: snapshot.data,
                   jumpable: true,
                 );

@@ -83,9 +83,9 @@ class UserRouterState extends CustState<UserRouter>
       this.setState(() {
         this.pubkey = newPubkey;
       });
-      final events = followEventProvider.eventsByPubkey(pubkey!);
+      final events = followingManager.eventsByPubkey(pubkey!);
       if (events.isNotEmpty) {
-        box.addList(events);
+        box.addList(events.toList());
       }
     } else {
       if (newPubkey != pubkey) {

@@ -12,7 +12,7 @@ class Finalized {
   String sig;
 }
 
-typedef SignerFunction = Finalized Function(
+typedef SignerFunction = Future<Finalized> Function(
     int, int, List<List<String>>, String);
 typedef Tag = List<String>;
 typedef Tags = List<Tag>;
@@ -25,19 +25,11 @@ class Event {
   factory Event.finalize(final String privateKey, int kind,
       List<List<String>> tags, String content,
       {final DateTime? publishAt}) {
-    return Event.finalizeWithSigner(
-        Event.getSigner(privateKey), kind, tags, content,
-        publishAt: publishAt);
-  }
-
-  factory Event.finalizeWithSigner(final SignerFunction sign, int kind,
-      List<List<String>> tags, String content,
-      {final DateTime? publishAt}) {
     final createdAt = publishAt != null
         ? publishAt.millisecondsSinceEpoch ~/ 1000
         : clock.now().millisecondsSinceEpoch ~/ 1000;
 
-    final fin = sign(createdAt, kind, tags, content);
+    final fin = Event.sign(privateKey, createdAt, kind, tags, content);
     return Event(fin.id, fin.pubkey, createdAt, kind, tags, content, fin.sig);
   }
 
@@ -68,6 +60,17 @@ class Event {
   final String content;
 
   Set<String> sources = {};
+
+  static Future<Event> finalizeWithSigner(final SignerFunction sign, int kind,
+      List<List<String>> tags, String content,
+      {final DateTime? publishAt}) async {
+    final createdAt = publishAt != null
+        ? publishAt.millisecondsSinceEpoch ~/ 1000
+        : clock.now().millisecondsSinceEpoch ~/ 1000;
+
+    final fin = await sign(createdAt, kind, tags, content);
+    return Event(fin.id, fin.pubkey, createdAt, kind, tags, content, fin.sig);
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -123,7 +126,7 @@ class Event {
   }
 
   static SignerFunction getSigner(String privateKey) {
-    return (int createdAt, int kind, Tags tags, String content) {
+    return (int createdAt, int kind, Tags tags, String content) async {
       return Event.sign(privateKey, createdAt, kind, tags, content);
     };
   }

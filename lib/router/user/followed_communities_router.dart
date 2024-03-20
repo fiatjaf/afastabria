@@ -4,7 +4,7 @@ import "package:loure/consts/router_path.dart";
 import "package:loure/provider/contact_list_provider.dart";
 import "package:provider/provider.dart";
 
-import "package:loure/client/nip02/cust_contact_list.dart";
+import "package:loure/client/nip02/contact_list.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/main.dart";
 import "package:loure/util/router_util.dart";
@@ -19,14 +19,14 @@ class FollowedCommunitiesRouter extends StatefulWidget {
 }
 
 class _FollowedCommunitiesRouter extends State<FollowedCommunitiesRouter> {
-  CustContactList? contactList;
+  ContactList? contactList;
 
   @override
   Widget build(final BuildContext context) {
     if (contactList == null) {
       final arg = RouterUtil.routerArgs(context);
       if (arg != null) {
-        contactList = arg as CustContactList;
+        contactList = arg as ContactList;
       }
     }
     if (contactList == null) {
@@ -38,7 +38,7 @@ class _FollowedCommunitiesRouter extends State<FollowedCommunitiesRouter> {
     final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
     final hintColor = themeData.hintColor;
 
-    final communitiesList = contactList!.followedCommunitiesList().toList();
+    final communitiesList = [];
 
     final main = ListView.builder(
       itemBuilder: (final context, final index) {

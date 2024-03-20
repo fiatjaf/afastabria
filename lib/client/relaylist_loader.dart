@@ -61,9 +61,4 @@ class RelayListLoader {
     RelayListDB.delete(pubkey);
     this._promises.remove(pubkey);
   }
-
-  void clear() {
-    this._loader.close();
-    RelayListDB.deleteAll();
-  }
 }

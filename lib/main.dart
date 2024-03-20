@@ -4,46 +4,39 @@ import "package:flutter/services.dart";
 import "package:flutter_native_splash/flutter_native_splash.dart";
 import "package:flutter_socks_proxy/socks_proxy.dart";
 import "package:google_fonts/google_fonts.dart";
-import "package:loure/client/metadata_loader.dart";
-import "package:loure/client/nostr.dart";
-import "package:loure/client/relay/relay_pool.dart";
-import "package:loure/client/relaylist_loader.dart";
-import "package:loure/provider/badge_definition_provider.dart";
-import "package:loure/provider/community_info_provider.dart";
-import "package:loure/provider/follow_new_event_provider.dart";
-import "package:loure/provider/mention_me_new_provider.dart";
-import "package:loure/router/relays/relay_info_router.dart";
-import "package:loure/router/user/followed_router.dart";
-import "package:loure/router/user/followed_tags_list_router.dart";
-import "package:loure/router/user/user_history_contact_list_router.dart";
-import "package:loure/router/user/user_zap_list_router.dart";
-import "package:loure/router/web_utils/web_utils_router.dart";
-import "package:loure/util/platform_util.dart";
 import "package:provider/provider.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:sqflite_common_ffi/sqflite_ffi.dart";
 import "package:sqflite_common_ffi_web/sqflite_ffi_web.dart";
 import "package:window_manager/window_manager.dart";
 
+import "package:loure/client/metadata_loader.dart";
+import "package:loure/client/contactlist_loader.dart";
+import "package:loure/client/following.dart";
+import "package:loure/client/nostr.dart";
+import "package:loure/client/relay/relay_pool.dart";
+import "package:loure/client/relaylist_loader.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/consts/colors.dart";
 import "package:loure/consts/router_path.dart";
 import "package:loure/consts/theme_style.dart";
 import "package:loure/data/db.dart";
 import "package:loure/home_component.dart";
+import "package:loure/provider/badge_definition_provider.dart";
 import "package:loure/provider/badge_provider.dart";
 import "package:loure/provider/community_approved_provider.dart";
+import "package:loure/provider/community_info_provider.dart";
 import "package:loure/provider/contact_list_provider.dart";
 import "package:loure/provider/dm_provider.dart";
 import "package:loure/provider/event_reactions_provider.dart";
 import "package:loure/provider/filter_provider.dart";
-import "package:loure/provider/follow_event_provider.dart";
 import "package:loure/provider/index_provider.dart";
 import "package:loure/provider/link_preview_data_provider.dart";
 import "package:loure/provider/list_provider.dart";
+import "package:loure/provider/mention_me_new_provider.dart";
 import "package:loure/provider/mention_me_provider.dart";
-import "package:loure/provider/pc_router_fake_provider.dart";
 import "package:loure/provider/notice_provider.dart";
+import "package:loure/provider/pc_router_fake_provider.dart";
 import "package:loure/provider/setting_provider.dart";
 import "package:loure/provider/webview_provider.dart";
 import "package:loure/router/bookmark/bookmark_router.dart";
@@ -51,35 +44,44 @@ import "package:loure/router/community/community_detail_router.dart";
 import "package:loure/router/dm/dm_detail_router.dart";
 import "package:loure/router/event_detail/event_detail_router.dart";
 import "package:loure/router/filter/filter_router.dart";
-import "package:loure/router/profile_editor/profile_editor_router.dart";
 import "package:loure/router/index/index_router.dart";
 import "package:loure/router/keybackup/key_backup_router.dart";
 import "package:loure/router/notice/notice_router.dart";
+import "package:loure/router/profile_editor/profile_editor_router.dart";
 import "package:loure/router/qrscanner/qrscanner_router.dart";
+import "package:loure/router/relays/relay_info_router.dart";
 import "package:loure/router/relays/relays_router.dart";
 import "package:loure/router/setting/setting_router.dart";
 import "package:loure/router/tag/tag_detail_router.dart";
 import "package:loure/router/thread/thread_detail_router.dart";
 import "package:loure/router/user/followed_communities_router.dart";
+import "package:loure/router/user/followed_router.dart";
+import "package:loure/router/user/followed_tags_list_router.dart";
 import "package:loure/router/user/user_contact_list_router.dart";
+import "package:loure/router/user/user_history_contact_list_router.dart";
 import "package:loure/router/user/user_relays_router.dart";
 import "package:loure/router/user/user_router.dart";
+import "package:loure/router/user/user_zap_list_router.dart";
+import "package:loure/router/web_utils/web_utils_router.dart";
 import "package:loure/system_timer.dart";
 import "package:loure/util/colors_util.dart";
 import "package:loure/util/media_data_cache.dart";
+import "package:loure/util/platform_util.dart";
 
 final Map<String, WidgetBuilder> routes = {};
 
 final RelayPool pool = RelayPool();
 final metadataLoader = MetadataLoader();
 final relaylistLoader = RelayListLoader();
+final contactListLoader = ContactListLoader();
 
 Nostr nostr = Nostr.empty();
 late SharedPreferences sharedPreferences;
 
+final followingManager = FollowingManager();
+
 final settingProvider = SettingProvider();
 final contactListProvider = ContactListProvider();
-final followEventProvider = FollowEventProvider();
 final mentionMeProvider = MentionMeProvider();
 final mentionMeNewProvider = MentionMeNewProvider();
 final dmProvider = DMProvider();
@@ -95,7 +97,6 @@ final webViewProvider = WebViewProvider();
 final communityApprovedProvider = CommunityApprovedProvider();
 final communityInfoProvider = CommunityInfoProvider();
 final bookmarkProvider = BookmarkProvider();
-final followNewEventProvider = FollowNewEventProvider();
 final emojiProvider = EmojiProvider();
 final badgeProvider = BadgeProvider();
 
@@ -143,9 +144,9 @@ Future<void> main() async {
 
   settingProvider.init();
 
-  contactListProvider.reload();
-  contactListProvider.query();
-  followEventProvider.doQuery();
+  followingManager.init();
+
+  contactListProvider.init();
   mentionMeProvider.doQuery();
   dmProvider.initDMSessions().then((final _) {
     dmProvider.query();
@@ -153,7 +154,6 @@ Future<void> main() async {
   bookmarkProvider.init();
   badgeProvider.reload();
   emojiProvider.init();
-  followNewEventProvider.start();
 
   if (settingProvider.network != null && settingProvider.network != "") {
     var network = settingProvider.network;
@@ -244,12 +244,6 @@ class _MyApp extends State<MyApp> {
         ),
         ListenableProvider<ContactListProvider>.value(
           value: contactListProvider,
-        ),
-        ListenableProvider<FollowEventProvider>.value(
-          value: followEventProvider,
-        ),
-        ListenableProvider<FollowNewEventProvider>.value(
-          value: followNewEventProvider,
         ),
         ListenableProvider<MentionMeProvider>.value(
           value: mentionMeProvider,

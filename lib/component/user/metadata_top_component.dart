@@ -3,6 +3,9 @@ import "package:cached_network_image/cached_network_image.dart";
 import "package:easy_image_viewer/easy_image_viewer.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:provider/provider.dart";
+
+import "package:loure/client/nip02/contact_list.dart";
 import "package:loure/client/nip19/nip19_tlv.dart";
 import "package:loure/component/nip05_valid_component.dart";
 import "package:loure/component/qrcode_dialog.dart";
@@ -13,9 +16,6 @@ import "package:loure/main.dart";
 import "package:loure/provider/contact_list_provider.dart";
 import "package:loure/util/platform_util.dart";
 import "package:loure/util/router_util.dart";
-import "package:provider/provider.dart";
-
-import "package:loure/client/nip02/contact.dart";
 import "package:loure/client/nip19/nip19.dart";
 import "package:loure/client/zap/zap_action.dart";
 import "package:loure/consts/base.dart";
@@ -45,29 +45,23 @@ class MetadataTopComponent extends StatefulWidget {
   }
 
   String pubkey;
-
   Metadata? metadata;
 
   // is local user
   bool isLocal;
-
   bool jumpable;
-
   bool userPicturePreview;
 
   @override
   State<StatefulWidget> createState() {
-    return _MetadataTopComponent();
+    return MetadataTopComponentState();
   }
 }
 
-class _MetadataTopComponent extends State<MetadataTopComponent> {
+class MetadataTopComponentState extends State<MetadataTopComponent> {
   static const double IMAGE_BORDER = 4;
-
   static const double IMAGE_WIDTH = 80;
-
   static const double HALF_IMAGE_WIDTH = 40;
-
   late String nip19PubKey;
 
   @override
@@ -240,8 +234,7 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
               text: "Follow",
               borderColor: mainColor,
               onTap: () {
-                contactListProvider
-                    .addContact(Contact(publicKey: widget.pubkey));
+                contactListProvider.addContact(Contact(pubkey: widget.pubkey));
               },
             ));
           } else {
@@ -482,15 +475,13 @@ class _MetadataTopComponent extends State<MetadataTopComponent> {
   }
 }
 
-// ignore: must_be_immutable
 class MetadataIconBtn extends StatelessWidget {
-  MetadataIconBtn(
+  const MetadataIconBtn(
       {required this.iconData, super.key, this.onTap, this.onLongPress});
-  void Function()? onTap;
 
-  void Function()? onLongPress;
-
-  IconData iconData;
+  final void Function()? onTap;
+  final void Function()? onLongPress;
+  final IconData iconData;
 
   @override
   Widget build(final BuildContext context) {
@@ -535,17 +526,16 @@ class MetadataIconBtn extends StatelessWidget {
 }
 
 class MetadataTextBtn extends StatelessWidget {
-  MetadataTextBtn({
+  const MetadataTextBtn({
     required this.text,
     required this.onTap,
     super.key,
     this.borderColor,
   });
-  void Function() onTap;
 
-  String text;
-
-  Color? borderColor;
+  final void Function() onTap;
+  final String text;
+  final Color? borderColor;
 
   @override
   Widget build(final BuildContext context) {
@@ -576,7 +566,7 @@ class MetadataTextBtn extends StatelessWidget {
 }
 
 class MetadataIconDataComp extends StatelessWidget {
-  MetadataIconDataComp({
+  const MetadataIconDataComp({
     required this.text,
     super.key,
     this.iconData,
@@ -585,17 +575,13 @@ class MetadataIconDataComp extends StatelessWidget {
     this.textBG = false,
     this.onTap,
   });
-  String text;
 
-  IconData? iconData;
-
-  Color? iconColor;
-
-  bool textBG;
-
-  Function? onTap;
-
-  Widget? leftWidget;
+  final String text;
+  final IconData? iconData;
+  final Color? iconColor;
+  final bool textBG;
+  final Function? onTap;
+  final Widget? leftWidget;
 
   @override
   Widget build(final BuildContext context) {
@@ -605,7 +591,7 @@ class MetadataIconDataComp extends StatelessWidget {
       cardColor = Colors.grey[300];
     }
 
-    iconData ??= Icons.circle;
+    final iconData = this.iconData ?? Icons.circle;
 
     return Container(
       padding: const EdgeInsets.only(

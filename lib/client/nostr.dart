@@ -3,13 +3,17 @@ import "dart:convert";
 import "package:loure/client/aid.dart";
 import "package:loure/client/event_kind.dart";
 import "package:loure/client/filter.dart";
+import "package:loure/client/relaylist_loader.dart";
 import "package:loure/consts/base_consts.dart";
+import "package:loure/data/contactlist_db.dart";
 import "package:loure/data/metadata.dart";
+import "package:loure/data/metadata_db.dart";
+import "package:loure/data/relaylist_db.dart";
 import "package:loure/main.dart";
 
 import "package:loure/client/client_utils/keys.dart";
 import "package:loure/client/event.dart";
-import "package:loure/client/nip02/cust_contact_list.dart";
+import "package:loure/client/nip02/contact_list.dart";
 import "package:loure/client/nip65/relay_list.dart";
 
 const ONE = "0000000000000000000000000000000000000000000000000000000000000001";
@@ -192,8 +196,8 @@ class Nostr {
       tags.add(["e", id]);
     }
 
-    final Event event = Event.finalize(
-        this.privateKey, EventKind.EVENT_DELETION, tags, "delete");
+    final Event event =
+        Event.finalize(this.privateKey, EventKind.EVENT_DELETION, tags, "");
     pool.publish(relays, event);
   }
 
@@ -228,24 +232,28 @@ class Nostr {
     return event;
   }
 
-  Event sendMetadata(final Metadata metadata) {
-    final event = Event.finalize(
-        this.privateKey, EventKind.METADATA, [], jsonEncode(metadata));
+  sendMetadata(final Metadata metadata) async {
+    final event = await metadata.toEvent(Event.getSigner(nostr.privateKey));
     pool.publish([...this.relayList.write, ...METADATA_RELAYS], event);
+    MetadataDB.upsert(metadata);
+    metadataLoader.invalidate(metadata.pubkey);
     return event;
   }
 
-  Event sendContactList(final CustContactList contacts, final String content) {
-    final tags = contacts.toTags();
-    final event =
-        Event.finalize(this.privateKey, EventKind.CONTACT_LIST, tags, content);
+  sendContactList(final ContactList cl) async {
+    final event = await cl.toEvent(Event.getSigner(nostr.privateKey));
     pool.publish([...this.relayList.write, ...CONTACT_RELAYS], event);
+    ContactListDB.upsert(cl);
+    contactListLoader.invalidate(cl.pubkey);
     return event;
   }
 
-  Event sendRelayList(final String content) {
-    final event = this.relayList.toEvent(Event.getSigner(nostr.privateKey));
+  sendRelayList() async {
+    final event =
+        await this.relayList.toEvent(Event.getSigner(nostr.privateKey));
     pool.publish([...this.relayList.write, ...RELAYLIST_RELAYS], event);
+    RelayListDB.upsert(this.relayList);
+    relaylistLoader.invalidate(this.relayList.pubkey);
     return event;
   }
 

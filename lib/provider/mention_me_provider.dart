@@ -24,13 +24,6 @@ class MentionMeProvider extends ChangeNotifier with PendingEventsLaterFunction {
     mentionMeNewProvider.clear();
   }
 
-  void deleteEvent(final String id) {
-    final result = eventBox.delete(id);
-    if (result) {
-      notifyListeners();
-    }
-  }
-
   int lastTime() {
     return _initTime;
   }

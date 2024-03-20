@@ -300,20 +300,6 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                       child: Text("Block", style: popFontStyle),
                     ));
 
-                    if (widget.event.pubKey == nostr.publicKey) {
-                      list.add(const PopupMenuDivider());
-                      list.add(PopupMenuItem(
-                        value: "delete",
-                        child: Text(
-                          "Delete",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: mediumFontSize,
-                          ),
-                        ),
-                      ));
-                    }
-
                     return list;
                   },
                   onSelected: onPopupSelected,
@@ -383,15 +369,6 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
       EnumSelectorComponent.show(context, list);
     } else if (value == "block") {
       filterProvider.addBlock(widget.event.pubKey);
-    } else if (value == "delete") {
-      nostr.deleteEvent(widget.event.id);
-      followEventProvider.deleteEvent(widget.event.id);
-      mentionMeProvider.deleteEvent(widget.event.id);
-      final deleteCallback = EventDeleteCallback.of(context);
-      if (deleteCallback != null) {
-        deleteCallback.onDelete(widget.event);
-      }
-      // BotToast.showText(text: "Delete success!");
     }
   }
 

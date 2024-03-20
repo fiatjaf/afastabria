@@ -6,7 +6,7 @@ import "package:loure/data/event_mem_box.dart";
 
 class EventFindUtil {
   static List<Event> findEvent(final String str, {final int? limit = 5}) {
-    List<FindEventInterface> finders = [followEventProvider];
+    List<FindEventInterface> finders = [/*followEventProvider*/];
     finders.addAll(eventReactionsProvider.allReactions());
 
     final eventBox = EventMemBox(sortAfterAdd: false);

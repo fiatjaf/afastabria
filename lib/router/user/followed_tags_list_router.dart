@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:loure/component/tag_info_component.dart";
 import "package:loure/consts/base.dart";
 
-import "package:loure/client/nip02/cust_contact_list.dart";
+import "package:loure/client/nip02/contact_list.dart";
 import "package:loure/util/router_util.dart";
 
 class FollowedTagsListRouter extends StatefulWidget {
@@ -15,14 +15,14 @@ class FollowedTagsListRouter extends StatefulWidget {
 }
 
 class _FollowedTagsListRouter extends State<FollowedTagsListRouter> {
-  CustContactList? contactList;
+  ContactList? contactList;
 
   @override
   Widget build(final BuildContext context) {
     if (contactList == null) {
       final arg = RouterUtil.routerArgs(context);
       if (arg != null) {
-        contactList = arg as CustContactList;
+        contactList = arg as ContactList;
       }
     }
     if (contactList == null) {
@@ -33,7 +33,7 @@ class _FollowedTagsListRouter extends State<FollowedTagsListRouter> {
     final themeData = Theme.of(context);
     final titleFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
-    final tagList = contactList!.tagList().toList();
+    final tagList = [];
 
     return Scaffold(
       appBar: AppBar(

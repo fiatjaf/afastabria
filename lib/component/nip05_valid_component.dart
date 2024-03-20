@@ -19,7 +19,7 @@ class Nip05ValidComponentState extends State<Nip05ValidComponent> {
   @override
   void initState() {
     super.initState();
-    this.nip05ValidFuture = widget.metadata.valid();
+    this.nip05ValidFuture = widget.metadata.validateNIP05();
   }
 
   @override

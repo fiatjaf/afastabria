@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
-import "package:loure/main.dart";
 
-import "package:loure/client/nip02/cust_contact_list.dart";
+import "package:loure/main.dart";
+import "package:loure/client/nip02/contact_list.dart";
 import "package:loure/util/router_util.dart";
 import "package:loure/router/user/user_contact_list_component.dart";
 
@@ -16,14 +16,14 @@ class UserHistoryContactListRouter extends StatefulWidget {
 
 class _UserHistoryContactListRouter
     extends State<UserHistoryContactListRouter> {
-  CustContactList? contactList;
+  ContactList? contactList;
 
   @override
   Widget build(final BuildContext context) {
     if (contactList == null) {
       final arg = RouterUtil.routerArgs(context);
       if (arg != null) {
-        contactList = arg as CustContactList;
+        contactList = arg as ContactList;
       }
     }
     if (contactList == null) {
@@ -53,16 +53,14 @@ class _UserHistoryContactListRouter
           ),
         ),
         actions: [
-          Container(
-            child: TextButton(
-              onPressed: doRecovery,
-              style: const ButtonStyle(),
-              child: Text(
-                "Recovery",
-                style: TextStyle(
-                  color: titleTextColor,
-                  fontSize: 16,
-                ),
+          TextButton(
+            onPressed: doRecovery,
+            style: const ButtonStyle(),
+            child: Text(
+              "Recovery",
+              style: TextStyle(
+                color: titleTextColor,
+                fontSize: 16,
               ),
             ),
           ),

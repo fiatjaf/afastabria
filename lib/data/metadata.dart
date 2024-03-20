@@ -47,7 +47,7 @@ class Metadata {
       /***/
     }
   }
-  late Event? event;
+  Event? event;
   late String pubkey;
 
   String? name;
@@ -61,12 +61,11 @@ class Metadata {
   String? lud06;
 
   bool? nip05valid;
-
   bool isBlank() {
     return this.event == null;
   }
 
-  Map<String, dynamic> toJson() {
+  Future<Event> toEvent(final SignerFunction signer) async {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["name"] = name;
     data["display_name"] = displayName;
@@ -77,10 +76,13 @@ class Metadata {
     data["nip05"] = nip05;
     data["lud16"] = lud16;
     data["lud06"] = lud06;
-    return data;
+    final event =
+        await Event.finalizeWithSigner(signer, 0, [], jsonEncode(data));
+    this.event = event;
+    return event;
   }
 
-  Future<bool> valid() async {
+  Future<bool> validateNIP05() async {
     if (this.nip05valid != null) return this.nip05valid!;
     if (this.nip05 == null) return false;
 

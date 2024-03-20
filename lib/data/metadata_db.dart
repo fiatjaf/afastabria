@@ -11,7 +11,7 @@ class MetadataDB {
     List<Metadata> objs = [];
 
     List<Map<String, dynamic>> list =
-        await DB.getDB(null).rawQuery("select * from metadata");
+        await DB.getDB(null).rawQuery("select event from metadata");
     for (var i = 0; i < list.length; i++) {
       final json = list[i];
       objs.add(Metadata.fromEvent(
@@ -22,9 +22,10 @@ class MetadataDB {
 
   static Future<Metadata?> get(final String pubKey,
       {final DatabaseExecutor? db}) async {
-    final list = await DB
-        .getDB(db)
-        .query("metadata", where: "pubkey = ?", whereArgs: [pubKey]);
+    final list = await DB.getDB(db).query("metadata",
+        columns: ["event"],
+        where: "pubkey = ?",
+        whereArgs: [pubKey.substring(0, 16)]);
 
     if (list.length > 0) {
       return Metadata.fromEvent(
@@ -44,25 +45,28 @@ class MetadataDB {
 
   static Future<int> insert(final Metadata o,
       {final DatabaseExecutor? db}) async {
-    return await DB.getDB(db).insert("metadata",
-        {"pubkey": o.pubkey, "event": jsonEncode(o.event!.toJson())});
+    return await DB.getDB(db).insert("metadata", {
+      "pubkey": o.pubkey.substring(0, 16),
+      "event": jsonEncode(o.event!.toJson()),
+    });
   }
 
   static Future update(final Metadata o, {final DatabaseExecutor? db}) async {
     await DB.getDB(db).update(
         "metadata", {"event": jsonEncode(o.event!.toJson())},
-        where: "pubkey = ?", whereArgs: [o.pubkey]);
+        where: "pubkey = ?", whereArgs: [o.pubkey.substring(0, 16)]);
   }
 
   static Future upsert(final Metadata o, {final DatabaseExecutor? db}) async {
     return await DB.getDB(db).execute(
         "insert into metadata (pubkey, event) values (?, ?) on conflict (pubkey) do update set event = excluded.event",
-        [o.pubkey, jsonEncode(o.event!.toJson())]);
+        [o.pubkey.substring(0, 16), jsonEncode(o.event!.toJson())]);
   }
 
   static Future<void> delete(final String pubkey,
       {final DatabaseExecutor? db}) async {
-    DB.getDB(db).execute("delete from metadata where pubkey = ?", [pubkey]);
+    DB.getDB(db).execute(
+        "delete from metadata where pubkey = ?", [pubkey.substring(0, 16)]);
   }
 
   static Future<void> deleteAll({final DatabaseExecutor? db}) async {

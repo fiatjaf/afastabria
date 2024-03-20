@@ -89,6 +89,8 @@ class RelayPool extends RelayProvider {
     final closesMissing = relays.toSet();
     final idsReceived = <String>{};
 
+    // print("subscribing to $relays with $filters");
+
     final subscriptionFutures = relays.map((final String url) async {
       final relay = await this.ensureRelay(url);
 

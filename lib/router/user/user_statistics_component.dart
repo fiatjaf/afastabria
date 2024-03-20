@@ -6,7 +6,7 @@ import "package:provider/provider.dart";
 
 import "package:loure/client/event.dart";
 import "package:loure/client/event_kind.dart" as kind;
-import "package:loure/client/nip02/cust_contact_list.dart";
+import "package:loure/client/nip02/contact_list.dart";
 import "package:loure/client/filter.dart";
 import "package:loure/client/zap/zap_num_util.dart";
 import "package:loure/component/cust_state.dart";
@@ -30,7 +30,7 @@ class UserStatisticsComponent extends StatefulWidget {
 
 class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
   Event? contactListEvent;
-  CustContactList? contactList;
+  ContactList? contactList;
   Event? relaysEvent;
   List<dynamic>? relaysTags;
   EventMemBox? zapEventBox;
@@ -80,11 +80,11 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
           onLongPressStart: onLongPressStart,
         );
       }, selector: (final context, final provider) {
-        return provider.total();
+        return provider.contactList!.contacts.length;
       }));
     } else {
       if (contactList != null) {
-        length = contactList!.list().length;
+        length = contactList!.contacts.length;
       }
       list.add(UserStatisticsItemComponent(
           num: length, name: "Following", onTap: onFollowingTap));
@@ -119,49 +119,6 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
       onTap: onZapTap,
       formatNum: true,
     ));
-
-    if (isLocal) {
-      list.add(Selector<ContactListProvider, int>(
-          builder: (final context, final num_, final child) {
-        return UserStatisticsItemComponent(
-          num: num_,
-          name: "Followed Tags",
-          onTap: onFollowedTagsTap,
-        );
-      }, selector: (final context, final provider) {
-        return provider.totalFollowedTags();
-      }));
-    } else {
-      if (contactList != null) {
-        followedTagsLength = contactList!.tagList().length;
-      }
-      list.add(UserStatisticsItemComponent(
-          num: followedTagsLength,
-          name: "Followed Tags",
-          onTap: onFollowedTagsTap));
-    }
-
-    if (isLocal) {
-      list.add(Selector<ContactListProvider, int>(
-          builder: (final context, final num_, final child) {
-        return UserStatisticsItemComponent(
-          num: num_,
-          name: "Followed Communities",
-          onTap: onFollowedCommunitiesTap,
-        );
-      }, selector: (final context, final provider) {
-        return provider.totalfollowedCommunities();
-      }));
-    } else {
-      if (contactList != null) {
-        followedCommunitiesLength =
-            contactList!.followedCommunitiesList().length;
-      }
-      list.add(UserStatisticsItemComponent(
-          num: followedCommunitiesLength,
-          name: "Followed Communities",
-          onTap: onFollowedCommunitiesTap));
-    }
 
     return Container(
       // color: Colors.red,
@@ -212,7 +169,7 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     //         !_disposed) {
     //       setState(() {
     //         contactListEvent = event;
-    //         contactList = CustContactList.fromJson(event.tags);
+    //         contactList = ContactList.fromJson(event.tags);
     //       });
     //     }
     //   }, id: queryId);

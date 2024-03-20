@@ -14,6 +14,10 @@ class NewNotesUpdatedComponent extends StatelessWidget {
     final mainColor = themeData.primaryColor;
     Color? textColor = Colors.white;
 
+    if (num == 0) {
+      return Container();
+    }
+
     return GestureDetector(
       onTap: () {
         if (onTap != null) {

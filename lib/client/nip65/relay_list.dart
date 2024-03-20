@@ -38,9 +38,9 @@ class RelayList {
   final List<String> read;
   final List<String> write;
   final String pubkey;
-  final Event? event;
+  Event? event;
 
-  Event toEvent(final SignerFunction signer) {
+  Future<Event> toEvent(final SignerFunction signer) async {
     List<List<String>> tags = [];
     for (final relay in this.write) {
       List<String> tag = ["r", relay, "write"];
@@ -55,7 +55,9 @@ class RelayList {
       tags.add(["r", relay, "read"]);
     }
 
-    return Event.finalizeWithSigner(signer, 10002, tags, "");
+    final event = await Event.finalizeWithSigner(signer, 10002, tags, "");
+    this.event = event;
+    return event;
   }
 
   List<String> get all {
