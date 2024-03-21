@@ -13,6 +13,8 @@ import "package:loure/client/relay/util.dart";
 import "package:loure/client/relay/relay_base.dart";
 import "package:loure/client/relay/relay_isolate.dart";
 
+const penaltyBoxTime = Duration(seconds: 30);
+
 class RelayProvider extends ChangeNotifier {
   final Map<String, RelayStatus> relayStatusMap = {};
 
@@ -21,6 +23,8 @@ class RelayProvider extends ChangeNotifier {
     return this.relayStatusMap[url];
   }
 }
+
+class PenaltyBoxException extends FormatException {}
 
 class RelayPool extends RelayProvider {
   RelayPool();
@@ -31,7 +35,7 @@ class RelayPool extends RelayProvider {
   Future<Relay> ensureRelay(String url) async {
     url = RelayUtil.normalizeURL(url);
     if (this._penaltyBox.contains(url)) {
-      throw FormatException("$url in penalty box");
+      throw PenaltyBoxException();
     }
     return this._relays.putIfAbsent(url, () async {
       late Relay relay;
@@ -62,10 +66,11 @@ class RelayPool extends RelayProvider {
       }
 
       relay.onError = () {
-        print("$url errored, goes to penalty box for 30 seconds");
+        print(
+            "$url errored, goes to penalty box for ${penaltyBoxTime.toString()}");
         this._penaltyBox.add(url);
         this._relays.remove(url);
-        Future.delayed(const Duration(seconds: 30), () {
+        Future.delayed(penaltyBoxTime, () {
           this._penaltyBox.remove(url);
         });
       };
@@ -92,7 +97,13 @@ class RelayPool extends RelayProvider {
     // print("subscribing to $relays with $filters");
 
     final subscriptionFutures = relays.map((final String url) async {
-      final relay = await this.ensureRelay(url);
+      late final Relay relay;
+      try {
+        relay = await this.ensureRelay(url);
+      } on PenaltyBoxException {
+        await Future.delayed(penaltyBoxTime);
+        relay = await this.ensureRelay(url);
+      }
 
       if (filterModifier != null) {
         filterModifier(url, filters);
