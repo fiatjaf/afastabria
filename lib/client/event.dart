@@ -110,7 +110,7 @@ class Event {
   static String getId(
       String pubkey, int createdAt, int kind, Tags tags, String content) {
     final jsonData =
-        '[0,"$pubkey","$createdAt","$kind","${json.encode(tags)}","${json.encode(content)}"]';
+        '[0,"$pubkey",$createdAt,$kind,${json.encode(tags)},${json.encode(content)}]';
     final bytes = utf8.encode(jsonData);
     final digest = sha256.convert(bytes);
     return digest.toString();
