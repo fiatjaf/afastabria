@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:loure/client/event.dart";
 
 class ContactList {
@@ -53,7 +54,7 @@ class ContactList {
   }
 
   Contact? get(final String pubkey) {
-    return this.contacts.firstWhere((c) => c.pubkey == pubkey);
+    return this.contacts.firstWhereOrNull((c) => c.pubkey == pubkey);
   }
 
   void remove(final String pubkey) {

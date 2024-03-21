@@ -4,6 +4,10 @@ import "package:loure/client/relay/util.dart";
 class RelayList {
   RelayList(this.pubkey, this.read, this.write, {this.event});
 
+  RelayList.blank(this.pubkey)
+      : this.read = [],
+        this.write = [];
+
   factory RelayList.fromEvent(final Event event) {
     List<String> read = [];
     List<String> write = [];

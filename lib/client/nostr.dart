@@ -3,14 +3,12 @@ import "dart:convert";
 import "package:loure/client/aid.dart";
 import "package:loure/client/event_kind.dart";
 import "package:loure/client/filter.dart";
-import "package:loure/client/relaylist_loader.dart";
 import "package:loure/consts/base_consts.dart";
 import "package:loure/data/contactlist_db.dart";
 import "package:loure/data/metadata.dart";
 import "package:loure/data/metadata_db.dart";
 import "package:loure/data/relaylist_db.dart";
 import "package:loure/main.dart";
-
 import "package:loure/client/client_utils/keys.dart";
 import "package:loure/client/event.dart";
 import "package:loure/client/nip02/contact_list.dart";
@@ -138,11 +136,9 @@ class Nostr {
       final aid = AId(
         kind: event.kind,
         pubkey: event.pubKey,
-        identifier: event.tags
-                .firstWhere((final tag) => tag.firstOrNull == "d",
-                    orElse: () => [])
-                .firstOrNull ??
-            "",
+        identifier: event.tags.firstWhere(
+            (final tag) => tag.firstOrNull == "d" && tag.length >= 2,
+            orElse: () => ["", ""])[1],
       );
       this.addressIndex[aid.toTag()] = event;
     }

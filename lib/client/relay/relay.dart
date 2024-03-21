@@ -20,6 +20,7 @@ abstract class Relay {
 
   final Map<String, Subscription> _subscriptions = {};
   final Map<String, Completer<OK>> _published = {};
+  final Map<String, Timer> _timers = {};
 
   int serial = 0;
   String? challenge;
@@ -90,6 +91,9 @@ abstract class Relay {
       switch (message[0]) {
         case "OK":
           final id = message[1] as String;
+
+          final timer = this._timers.remove(id);
+          if (timer != null) timer.cancel();
 
           final completer = this._published[id];
           if (completer != null) {
@@ -177,10 +181,13 @@ abstract class Relay {
     final completer = Completer<OK>();
     this._published[event.id] = completer;
     this.send(["EVENT", event.toJson()]);
-    Future.delayed(const Duration(seconds: 45), () {
-      this._published.remove(event.id);
-      completer.completeError(FormatException(
-          "$url took too long to reply with OK for ${event.id}"));
+    this._timers[event.id] = Timer(const Duration(seconds: 45), () {
+      this._timers.remove(event.id);
+      final completer = this._published.remove(event.id);
+      if (completer != null) {
+        completer.completeError(FormatException(
+            "$url took too long to reply with OK for ${event.id}"));
+      }
     });
     return completer.future;
   }

@@ -179,7 +179,7 @@ class RelayPool extends RelayProvider {
     final String? id,
     final List<Filter> Function(String, List<Filter>)? filterModifier,
   }) async {
-    final completer = Completer<Event>();
+    final completer = Completer<Event?>();
     Event? result;
     this.subscribeManyEose(relays, [filter], onEvent: (final Event evt) {
       if (result == null || evt.createdAt > result!.createdAt) {
