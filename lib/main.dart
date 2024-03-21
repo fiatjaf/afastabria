@@ -142,7 +142,12 @@ Future<void> main() async {
 
   sharedPreferences = await SharedPreferences.getInstance();
 
-  settingProvider.init();
+  await settingProvider.init();
+
+  final sk = await settingProvider.privateKey();
+  if (sk != null) {
+    nostr = Nostr(sk);
+  }
 
   followingManager.init();
 
