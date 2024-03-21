@@ -1,15 +1,12 @@
 import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
-import "package:loure/client/relay/relay_pool.dart";
-import "package:loure/provider/contact_list_provider.dart";
-import "package:provider/provider.dart";
+import "package:loure/client/nip65/relay_list.dart";
 
 import "package:loure/client/event.dart";
 import "package:loure/client/event_kind.dart" as kind;
 import "package:loure/client/nip02/contact_list.dart";
 import "package:loure/client/filter.dart";
 import "package:loure/client/zap/zap_num_util.dart";
-import "package:loure/component/cust_state.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/consts/router_path.dart";
 import "package:loure/data/event_mem_box.dart";
@@ -17,108 +14,58 @@ import "package:loure/main.dart";
 import "package:loure/util/number_format_util.dart";
 import "package:loure/util/router_util.dart";
 
-// ignore: must_be_immutable
 class UserStatisticsComponent extends StatefulWidget {
-  UserStatisticsComponent({required this.pubkey, super.key});
-  String pubkey;
+  const UserStatisticsComponent({required this.pubkey, super.key});
+  final String pubkey;
 
   @override
   State<StatefulWidget> createState() {
-    return _UserStatisticsComponent();
+    return UserStatisticsComponentState();
   }
 }
 
-class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
+class UserStatisticsComponentState extends State<UserStatisticsComponent> {
   Event? contactListEvent;
-  ContactList? contactList;
   Event? relaysEvent;
-  List<dynamic>? relaysTags;
   EventMemBox? zapEventBox;
   Map<String, Event>? followedMap;
 
   int length = 0;
   int relaysNum = 0;
-  int followedTagsLength = 0;
-  int followedCommunitiesLength = 0;
   int? zapNum;
   int? followedNum;
 
-  bool isLocal = false;
   String? pubkey;
 
   @override
-  Widget doBuild(final BuildContext context) {
-    if (pubkey != null && pubkey != widget.pubkey) {
-      // arg changed! reset
-      this.contactListEvent = null;
-      this.contactList = null;
-      this.relaysEvent = null;
-      this.relaysTags = null;
-      this.zapEventBox = null;
-      this.followedMap = null;
+  void initState() {
+    super.initState();
+    this.pubkey = widget.pubkey;
+  }
 
-      this.length = 0;
-      this.relaysNum = 0;
-      this.followedTagsLength = 0;
-      this.followedCommunitiesLength = 0;
-      this.zapNum = null;
-      this.followedNum = null;
-      doQuery();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (this.pubkey != null && this.pubkey != widget.pubkey) {
+      setState(() {
+        // arg changed! reset
+        this.contactListEvent = null;
+        this.relaysEvent = null;
+        this.zapEventBox = null;
+        this.followedMap = null;
+
+        this.length = 0;
+        this.relaysNum = 0;
+        this.zapNum = null;
+        this.followedNum = null;
+      });
     }
+  }
+
+  @override
+  Widget build(final BuildContext context) {
     pubkey = widget.pubkey;
-    isLocal = widget.pubkey == nostr.publicKey;
-
-    List<Widget> list = [];
-
-    if (isLocal) {
-      list.add(Selector<ContactListProvider, int>(
-          builder: (final context, final num_, final child) {
-        return UserStatisticsItemComponent(
-          num: num_,
-          name: "Following",
-          onTap: onFollowingTap,
-          onLongPressStart: onLongPressStart,
-        );
-      }, selector: (final context, final provider) {
-        return provider.contactList!.contacts.length;
-      }));
-    } else {
-      if (contactList != null) {
-        length = contactList!.contacts.length;
-      }
-      list.add(UserStatisticsItemComponent(
-          num: length, name: "Following", onTap: onFollowingTap));
-    }
-
-    if (isLocal) {
-      list.add(Selector<RelayPool, int>(
-          builder: (final context, final num_, final child) {
-        return UserStatisticsItemComponent(
-            num: num_, name: "Relays", onTap: onRelaysTap);
-      }, selector: (final context, final provider) {
-        return provider.relayStatusMap.length;
-      }));
-    } else {
-      if (relaysTags != null) {
-        relaysNum = relaysTags!.length;
-      }
-      list.add(UserStatisticsItemComponent(
-          num: relaysNum, name: "Relays", onTap: onRelaysTap));
-    }
-
-    list.add(UserStatisticsItemComponent(
-      num: followedNum,
-      name: "Followed",
-      onTap: onFollowedTap,
-      formatNum: true,
-    ));
-
-    list.add(UserStatisticsItemComponent(
-      num: zapNum,
-      name: "Zap",
-      onTap: onZapTap,
-      formatNum: true,
-    ));
 
     return Container(
       // color: Colors.red,
@@ -126,7 +73,47 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
       margin: const EdgeInsets.only(bottom: Base.BASE_PADDING),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: list,
+        children: [
+          FutureBuilder(
+            future: contactListLoader.load(this.pubkey!),
+            initialData: ContactList.blank(this.pubkey!),
+            builder: (final context, final snapshot) {
+              return UserStatisticsItemComponent(
+                num: snapshot.data!.contacts.length,
+                name: "Following",
+                onTap: () {
+                  onFollowingTap(snapshot.data!);
+                },
+                onLongPressStart: onLongPressStart,
+              );
+            },
+          ),
+          FutureBuilder(
+            future: relaylistLoader.load(this.pubkey!),
+            initialData: RelayList.blank(this.pubkey!),
+            builder: (final context, final snapshot) {
+              return UserStatisticsItemComponent(
+                num: snapshot.data!.all.length,
+                name: "Relays",
+                onTap: () {
+                  onRelaysTap(snapshot.data!);
+                },
+              );
+            },
+          ),
+          UserStatisticsItemComponent(
+            num: followedNum,
+            name: "Followed",
+            onTap: onFollowedTap,
+            formatNum: true,
+          ),
+          UserStatisticsItemComponent(
+            num: zapNum,
+            name: "Zap",
+            onTap: onZapTap,
+            formatNum: true,
+          ),
+        ],
       ),
     );
   }
@@ -148,73 +135,8 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     BotToast.showText(text: "Begin to load contact history");
   }
 
-  @override
-  Future<void> onReady(final BuildContext context) async {
-    if (!isLocal) {
-      doQuery();
-    }
-  }
-
-  void doQuery() {
-    // {
-    //   queryId = StringUtil.rndNameStr(16);
-    //   var filter = Filter(
-    //       authors: [widget.pubkey],
-    //       limit: 1,
-    //       kinds: [kind.EventKind.CONTACT_LIST]);
-    //   nostr.query([filter.toJson()], (event) {
-    //     if (((contactListEvent != null &&
-    //                 event.createdAt > contactListEvent!.createdAt) ||
-    //             contactListEvent == null) &&
-    //         !_disposed) {
-    //       setState(() {
-    //         contactListEvent = event;
-    //         contactList = ContactList.fromJson(event.tags);
-    //       });
-    //     }
-    //   }, id: queryId);
-    // }
-
-    // {
-    //   queryId2 = StringUtil.rndNameStr(16);
-    //   var filter = Filter(
-    //       authors: [widget.pubkey],
-    //       limit: 1,
-    //       kinds: [kind.EventKind.RELAY_LIST_METADATA]);
-    //   nostr.query(filter, (event) {
-    //     if (((relaysEvent != null &&
-    //                 event.createdAt > relaysEvent!.createdAt) ||
-    //             relaysEvent == null) &&
-    //         !_disposed) {
-    //       setState(() {
-    //         relaysEvent = event;
-    //         relaysTags = event.tags;
-    //       });
-    //     }
-    //   }, id: queryId2);
-    // }
-  }
-
-  onFollowingTap() {
-    if (contactList != null) {
-      RouterUtil.router(context, RouterPath.USER_CONTACT_LIST, contactList);
-    } else if (isLocal) {
-      final cl = contactListProvider.contactList;
-      if (cl != null) {
-        RouterUtil.router(context, RouterPath.USER_CONTACT_LIST, cl);
-      }
-    }
-  }
-
-  onFollowedTagsTap() {
-    if (contactList != null) {
-      RouterUtil.router(context, RouterPath.FOLLOWED_TAGS_LIST, contactList);
-    } else if (isLocal) {
-      final cl = contactListProvider.contactList;
-      if (cl != null) {
-        RouterUtil.router(context, RouterPath.FOLLOWED_TAGS_LIST, cl);
-      }
-    }
+  onFollowingTap(ContactList cl) {
+    RouterUtil.router(context, RouterPath.USER_CONTACT_LIST, cl);
   }
 
   String followedSubscribeId = "";
@@ -247,12 +169,8 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
     // }
   }
 
-  onRelaysTap() {
-    if (relaysTags != null && relaysTags!.isNotEmpty) {
-      RouterUtil.router(context, RouterPath.USER_RELAYS, relaysTags);
-    } else if (isLocal) {
-      RouterUtil.router(context, RouterPath.RELAYS);
-    }
+  onRelaysTap(RelayList rl) {
+    RouterUtil.router(context, RouterPath.USER_RELAYS, rl);
   }
 
   onZapTap() {
@@ -283,34 +201,11 @@ class _UserStatisticsComponent extends CustState<UserStatisticsComponent> {
   @override
   void dispose() {
     super.dispose();
-
-    // checkAndUnsubscribe(queryId);
-    // checkAndUnsubscribe(queryId2);
-  }
-
-  // void checkAndUnsubscribe(String queryId) {
-  //   if (StringUtil.isNotBlank(queryId)) {
-  //     try {
-  //       nostr.unsubscribe(queryId);
-  //     } catch (e) {}
-  //   }
-  // }
-
-  onFollowedCommunitiesTap() {
-    if (contactList != null) {
-      RouterUtil.router(context, RouterPath.FOLLOWED_COMMUNITIES, contactList);
-    } else if (isLocal) {
-      final cl = contactListProvider.contactList;
-      if (cl != null) {
-        RouterUtil.router(context, RouterPath.FOLLOWED_COMMUNITIES, cl);
-      }
-    }
   }
 }
 
-// ignore: must_be_immutable
 class UserStatisticsItemComponent extends StatelessWidget {
-  UserStatisticsItemComponent({
+  const UserStatisticsItemComponent({
     required this.num,
     required this.name,
     required this.onTap,
@@ -318,11 +213,11 @@ class UserStatisticsItemComponent extends StatelessWidget {
     this.formatNum = false,
     this.onLongPressStart,
   });
-  int? num;
-  String name;
-  Function onTap;
-  bool formatNum;
-  Function(LongPressStartDetails)? onLongPressStart;
+  final int? num;
+  final String name;
+  final Function() onTap;
+  final bool formatNum;
+  final Function(LongPressStartDetails)? onLongPressStart;
 
   @override
   Widget build(final BuildContext context) {
@@ -362,9 +257,7 @@ class UserStatisticsItemComponent extends StatelessWidget {
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () {
-        onTap();
-      },
+      onTap: onTap,
       onLongPressStart: onLongPressStart,
       child: Container(
         margin: const EdgeInsets.only(left: Base.BASE_PADDING),
