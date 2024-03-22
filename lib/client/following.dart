@@ -26,6 +26,8 @@ class FollowingManager {
   int newEventsCountCurrent = 0;
 
   void init() async {
+    print("init");
+
     final cl = await contactListLoader.load(nostr.publicKey);
     this.contacts = cl.contacts; // add some randomness
     this.relaysFor = List.filled(contacts.length, [], growable: false);
@@ -74,6 +76,7 @@ class FollowingManager {
 
     // start an ongoing subscription
     final mostRecent = this.events.length == 0 ? 0 : this.events[0].createdAt;
+    print("subscribing $mostRecent $chosen");
     this.subHandle = pool.subscribeMany(
       chosen.keys,
       [Filter(kinds: EventKind.SUPPORTED_EVENTS, since: mostRecent)],
