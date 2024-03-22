@@ -1,6 +1,6 @@
 import "dart:convert";
 
-import "package:flutter/material.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter_secure_storage/flutter_secure_storage.dart";
 import "package:loure/client/client_utils/keys.dart";
 
@@ -14,11 +14,7 @@ import "package:loure/provider/data_util.dart";
 
 class SettingProvider extends ChangeNotifier {
   late final SettingData _settingData;
-  late final FlutterSecureStorage _secureStorage;
-
-  AndroidOptions _getAndroidOptions() => const AndroidOptions(
-        encryptedSharedPreferences: true,
-      );
+  late final CustomSecureStorage _secureStorage;
 
   Future<void> init() async {
     try {
@@ -28,7 +24,7 @@ class SettingProvider extends ChangeNotifier {
       _settingData = SettingData();
     }
 
-    _secureStorage = FlutterSecureStorage(aOptions: _getAndroidOptions());
+    _secureStorage = CustomSecureStorage();
   }
 
   Future<void> reload() async {
@@ -44,7 +40,13 @@ class SettingProvider extends ChangeNotifier {
 
   Future<String?> privateKey() async {
     final keylist = await _loadKeyList();
-    return keylist[_settingData.privateKeyIndex];
+
+    if (keylist.length == 0) return null;
+    if (this._settingData.privateKeyIndex >= keylist.length) {
+      this.privateKeyIndex = keylist.length - 1;
+    }
+
+    return keylist[this._settingData.privateKeyIndex];
   }
 
   Future<int> addAndChangePrivateKey(final String sk,
@@ -55,10 +57,10 @@ class SettingProvider extends ChangeNotifier {
     if (idx == -1) {
       idx = keylist.length;
       keylist.add(sk);
-      _secureStorage.write(key: "secretkeys", value: json.encode(keylist));
+      this._secureStorage.write("secretkeys", json.encode(keylist));
     }
 
-    _settingData.privateKeyIndex = idx;
+    this._settingData.privateKeyIndex = idx;
     saveAndNotifyListeners(updateUI: updateUI);
     return idx;
   }
@@ -67,16 +69,16 @@ class SettingProvider extends ChangeNotifier {
     final keylist = await _loadKeyList();
     if (keylist.length > idx) {
       keylist.removeAt(idx);
-      _secureStorage.write(key: "secretkeys", value: json.encode(keylist));
-      if (_settingData.privateKeyIndex > keylist.length) {
-        _settingData.privateKeyIndex--;
+      _secureStorage.write("secretkeys", json.encode(keylist));
+      if (this._settingData.privateKeyIndex > keylist.length) {
+        this._settingData.privateKeyIndex--;
       }
-      saveAndNotifyListeners();
+      this.saveAndNotifyListeners();
     }
   }
 
   Future<List<String>> _loadKeyList() async {
-    final data = (await _secureStorage.read(key: "secretkeys")) ?? "[]";
+    final data = (await _secureStorage.read("secretkeys")) ?? "[]";
     final keylist = jsonDecode(data) as List<dynamic>;
     return keylist.cast();
   }
@@ -171,155 +173,149 @@ class SettingProvider extends ChangeNotifier {
   int? get limitNoteHeight => _settingData.limitNoteHeight;
 
   set settingData(final SettingData o) {
-    _settingData = o;
-    saveAndNotifyListeners();
+    this._settingData = o;
+    this.saveAndNotifyListeners();
   }
 
   set privateKeyIndex(final int o) {
-    _settingData.privateKeyIndex = o;
-    saveAndNotifyListeners();
+    this._settingData.privateKeyIndex = o;
+    this.saveAndNotifyListeners();
   }
-
-  // set privateKeyMap(String? o) {
-  //   _settingData.privateKeyMap = o;
-  //   saveAndNotifyListeners();
-  // }
 
   /// open lock
   set lockOpen(final int o) {
-    _settingData.lockOpen = o;
-    saveAndNotifyListeners();
+    this._settingData.lockOpen = o;
+    this.saveAndNotifyListeners();
   }
 
   set defaultIndex(final int? o) {
-    _settingData.defaultIndex = o;
-    saveAndNotifyListeners();
+    this._settingData.defaultIndex = o;
+    this.saveAndNotifyListeners();
   }
 
   set defaultTab(final int? o) {
-    _settingData.defaultTab = o;
-    saveAndNotifyListeners();
+    this._settingData.defaultTab = o;
+    this.saveAndNotifyListeners();
   }
 
   set linkPreview(final int o) {
-    _settingData.linkPreview = o;
-    saveAndNotifyListeners();
+    this._settingData.linkPreview = o;
+    this.saveAndNotifyListeners();
   }
 
   set videoPreviewInList(final int o) {
-    _settingData.videoPreviewInList = o;
-    saveAndNotifyListeners();
+    this._settingData.videoPreviewInList = o;
+    this.saveAndNotifyListeners();
   }
 
   set network(final String? o) {
-    _settingData.network = o;
-    saveAndNotifyListeners();
+    this._settingData.network = o;
+    this.saveAndNotifyListeners();
   }
 
   set imageService(final String? o) {
-    _settingData.imageService = o;
-    saveAndNotifyListeners();
+    this._settingData.imageService = o;
+    this.saveAndNotifyListeners();
   }
 
   set videoPreview(final int? o) {
-    _settingData.videoPreview = o;
-    saveAndNotifyListeners();
+    this._settingData.videoPreview = o;
+    this.saveAndNotifyListeners();
   }
 
   set imagePreview(final int? o) {
-    _settingData.imagePreview = o;
-    saveAndNotifyListeners();
+    this._settingData.imagePreview = o;
+    this.saveAndNotifyListeners();
   }
 
   /// image compress
   set imgCompress(final int o) {
-    _settingData.imgCompress = o;
-    saveAndNotifyListeners();
+    this._settingData.imgCompress = o;
+    this.saveAndNotifyListeners();
   }
 
   /// theme style
   set themeStyle(final int o) {
-    _settingData.themeStyle = o;
-    saveAndNotifyListeners();
+    this._settingData.themeStyle = o;
+    this.saveAndNotifyListeners();
   }
 
   /// theme color
   set themeColor(final int? o) {
-    _settingData.themeColor = o;
-    saveAndNotifyListeners();
+    this._settingData.themeColor = o;
+    this.saveAndNotifyListeners();
   }
 
   /// fontFamily
   set fontFamily(final String? fontFamily) {
-    _settingData.fontFamily = fontFamily;
-    saveAndNotifyListeners();
+    this._settingData.fontFamily = fontFamily;
+    this.saveAndNotifyListeners();
   }
 
   set openTranslate(final int? o) {
-    _settingData.openTranslate = o;
-    saveAndNotifyListeners();
+    this._settingData.openTranslate = o;
+    this.saveAndNotifyListeners();
   }
 
   set translateSourceArgs(final String? o) {
-    _settingData.translateSourceArgs = o;
-    saveAndNotifyListeners();
+    this._settingData.translateSourceArgs = o;
+    this.saveAndNotifyListeners();
   }
 
   set translateTarget(final String? o) {
-    _settingData.translateTarget = o;
-    saveAndNotifyListeners();
+    this._settingData.translateTarget = o;
+    this.saveAndNotifyListeners();
   }
 
   set broadcaseWhenBoost(final int? o) {
-    _settingData.broadcaseWhenBoost = o;
-    saveAndNotifyListeners();
+    this._settingData.broadcaseWhenBoost = o;
+    this.saveAndNotifyListeners();
   }
 
   set fontSize(final double o) {
-    _settingData.fontSize = o;
-    saveAndNotifyListeners();
+    this._settingData.fontSize = o;
+    this.saveAndNotifyListeners();
   }
 
   set webviewAppbarOpen(final int o) {
-    _settingData.webviewAppbarOpen = o;
-    saveAndNotifyListeners();
+    this._settingData.webviewAppbarOpen = o;
+    this.saveAndNotifyListeners();
   }
 
   set tableMode(final int? o) {
-    _settingData.tableMode = o;
-    saveAndNotifyListeners();
+    this._settingData.tableMode = o;
+    this.saveAndNotifyListeners();
   }
 
   set autoOpenSensitive(final int? o) {
-    _settingData.autoOpenSensitive = o;
-    saveAndNotifyListeners();
+    this._settingData.autoOpenSensitive = o;
+    this.saveAndNotifyListeners();
   }
 
   set relayMode(final int? o) {
-    _settingData.relayMode = o;
-    saveAndNotifyListeners();
+    this._settingData.relayMode = o;
+    this.saveAndNotifyListeners();
   }
 
   set eventSignCheck(final int? o) {
-    _settingData.eventSignCheck = o;
-    saveAndNotifyListeners();
+    this._settingData.eventSignCheck = o;
+    this.saveAndNotifyListeners();
   }
 
   set limitNoteHeight(final int? o) {
-    _settingData.limitNoteHeight = o;
-    saveAndNotifyListeners();
+    this._settingData.limitNoteHeight = o;
+    this.saveAndNotifyListeners();
   }
 
   Future<void> saveAndNotifyListeners({final bool updateUI = true}) async {
-    _settingData.updatedTime = DateTime.now().millisecondsSinceEpoch;
+    this._settingData.updatedTime = DateTime.now().millisecondsSinceEpoch;
     final m = _settingData.toJson();
     final jsonStr = json.encode(m);
-    // print(jsonStr);
     await sharedPreferences.setString(DataKey.SETTING, jsonStr);
     this._reloadTranslateSourceArgs();
 
     if (updateUI) {
-      notifyListeners();
+      this.notifyListeners();
     }
   }
 }
@@ -355,48 +351,53 @@ class SettingData {
   });
 
   SettingData.fromJson(final Map<String, dynamic> json) {
-    privateKeyIndex = json["privateKeyIndex"];
-    privateKeyMap = json["privateKeyMap"];
+    this.privateKeyIndex = json["privateKeyIndex"];
+    this.privateKeyMap = json["privateKeyMap"];
     if (json["lockOpen"] != null) {
-      lockOpen = json["lockOpen"];
+      this.lockOpen = json["lockOpen"];
     } else {
-      lockOpen = OpenStatus.CLOSE;
+      this.lockOpen = OpenStatus.CLOSE;
     }
-    defaultIndex = json["defaultIndex"];
-    defaultTab = json["defaultTab"];
-    linkPreview = json["linkPreview"];
-    videoPreviewInList = json["videoPreviewInList"];
-    network = json["network"];
-    imageService = json["imageService"];
-    videoPreview = json["videoPreview"];
-    imagePreview = json["imagePreview"];
+    this.defaultIndex = json["defaultIndex"];
+    this.defaultTab = json["defaultTab"];
+    this.linkPreview = json["linkPreview"];
+    this.videoPreviewInList = json["videoPreviewInList"];
+    this.network = json["network"];
+    this.imageService = json["imageService"];
+    this.videoPreview = json["videoPreview"];
+    this.imagePreview = json["imagePreview"];
     if (json["imgCompress"] != null) {
-      imgCompress = json["imgCompress"];
+      this.imgCompress = json["imgCompress"];
     } else {
-      imgCompress = 50;
+      this.imgCompress = 50;
     }
     if (json["themeStyle"] != null) {
-      themeStyle = json["themeStyle"];
+      this.themeStyle = json["themeStyle"];
     } else {
-      themeStyle = ThemeStyle.AUTO;
+      this.themeStyle = ThemeStyle.AUTO;
     }
-    themeColor = json["themeColor"];
-    openTranslate = json["openTranslate"];
-    translateTarget = json["translateTarget"];
-    translateSourceArgs = json["translateSourceArgs"];
-    broadcaseWhenBoost = json["broadcaseWhenBoost"];
-    fontSize = json["fontSize"];
-    webviewAppbarOpen = json["webviewAppbarOpen"] ?? OpenStatus.OPEN;
-    tableMode = json["tableMode"];
-    autoOpenSensitive = json["autoOpenSensitive"];
-    relayMode = json["relayMode"];
-    eventSignCheck = json["eventSignCheck"];
-    limitNoteHeight = json["limitNoteHeight"];
+    this.themeColor = json["themeColor"];
+    this.openTranslate = json["openTranslate"];
+    this.translateTarget = json["translateTarget"];
+    this.translateSourceArgs = json["translateSourceArgs"];
+    this.broadcaseWhenBoost = json["broadcaseWhenBoost"];
+    this.fontSize = json["fontSize"];
+    this.webviewAppbarOpen = json["webviewAppbarOpen"] ?? OpenStatus.OPEN;
+    this.tableMode = json["tableMode"];
+    this.autoOpenSensitive = json["autoOpenSensitive"];
+    this.relayMode = json["relayMode"];
+    this.eventSignCheck = json["eventSignCheck"];
+    this.limitNoteHeight = json["limitNoteHeight"];
     if (json["updatedTime"] != null) {
-      updatedTime = json["updatedTime"];
+      this.updatedTime = json["updatedTime"];
     } else {
-      updatedTime = 0;
+      this.updatedTime = 0;
     }
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(this.toJson());
   }
 
   int privateKeyIndex = 0;
@@ -449,33 +450,64 @@ class SettingData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data["privateKeyIndex"] = privateKeyIndex;
-    data["privateKeyMap"] = privateKeyMap;
-    data["lockOpen"] = lockOpen;
-    data["defaultIndex"] = defaultIndex;
-    data["defaultTab"] = defaultTab;
-    data["linkPreview"] = linkPreview;
-    data["videoPreviewInList"] = videoPreviewInList;
-    data["network"] = network;
-    data["imageService"] = imageService;
-    data["videoPreview"] = videoPreview;
-    data["imagePreview"] = imagePreview;
-    data["imgCompress"] = imgCompress;
-    data["themeStyle"] = themeStyle;
-    data["themeColor"] = themeColor;
-    data["fontFamily"] = fontFamily;
-    data["openTranslate"] = openTranslate;
-    data["translateTarget"] = translateTarget;
-    data["translateSourceArgs"] = translateSourceArgs;
-    data["broadcaseWhenBoost"] = broadcaseWhenBoost;
-    data["fontSize"] = fontSize;
-    data["webviewAppbarOpen"] = webviewAppbarOpen;
-    data["tableMode"] = tableMode;
-    data["autoOpenSensitive"] = autoOpenSensitive;
-    data["relayMode"] = relayMode;
-    data["eventSignCheck"] = eventSignCheck;
-    data["limitNoteHeight"] = limitNoteHeight;
-    data["updatedTime"] = updatedTime;
+    data["privateKeyIndex"] = this.privateKeyIndex;
+    data["privateKeyMap"] = this.privateKeyMap;
+    data["lockOpen"] = this.lockOpen;
+    data["defaultIndex"] = this.defaultIndex;
+    data["defaultTab"] = this.defaultTab;
+    data["linkPreview"] = this.linkPreview;
+    data["videoPreviewInList"] = this.videoPreviewInList;
+    data["network"] = this.network;
+    data["imageService"] = this.imageService;
+    data["videoPreview"] = this.videoPreview;
+    data["imagePreview"] = this.imagePreview;
+    data["imgCompress"] = this.imgCompress;
+    data["themeStyle"] = this.themeStyle;
+    data["themeColor"] = this.themeColor;
+    data["fontFamily"] = this.fontFamily;
+    data["openTranslate"] = this.openTranslate;
+    data["translateTarget"] = this.translateTarget;
+    data["translateSourceArgs"] = this.translateSourceArgs;
+    data["broadcaseWhenBoost"] = this.broadcaseWhenBoost;
+    data["fontSize"] = this.fontSize;
+    data["webviewAppbarOpen"] = this.webviewAppbarOpen;
+    data["tableMode"] = this.tableMode;
+    data["autoOpenSensitive"] = this.autoOpenSensitive;
+    data["relayMode"] = this.relayMode;
+    data["eventSignCheck"] = this.eventSignCheck;
+    data["limitNoteHeight"] = this.limitNoteHeight;
+    data["updatedTime"] = this.updatedTime;
     return data;
+  }
+}
+
+class CustomSecureStorage {
+  CustomSecureStorage()
+      : this.fss = FlutterSecureStorage(aOptions: _getAndroidOptions());
+
+  final FlutterSecureStorage fss;
+
+  static AndroidOptions _getAndroidOptions() {
+    return const AndroidOptions(
+      encryptedSharedPreferences: true,
+    );
+  }
+
+  Future<String?> read(String key) async {
+    try {
+      return await this.fss.read(key: key);
+    } catch (err) {
+      final value = sharedPreferences.get("secret:$key");
+      return value == null ? null : value as String;
+    }
+  }
+
+  Future<void> write(String key, String value) async {
+    try {
+      await this.fss.write(key: key, value: value);
+    } catch (err) {
+      sharedPreferences.setString("secret:$key", value);
+      return;
+    }
   }
 }
