@@ -66,7 +66,7 @@ class _UserBadgesComponent extends CustState<UserBadgesComponent>
                 ),
               );
             }, selector: (final context, final provider) {
-              return provider.get(badgeId, event.pubKey);
+              return provider.get(badgeId, event.pubkey);
             });
 
             list.add(itemWidget);

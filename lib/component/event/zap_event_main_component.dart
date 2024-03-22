@@ -47,7 +47,7 @@ class _ZapEventMainComponent extends State<ZapEventMainComponent> {
       try {
         final eventJson = jsonDecode(zapRequestEventStr!);
         final zapRequestEvent = Event.fromJson(eventJson);
-        senderPubkey = zapRequestEvent.pubKey;
+        senderPubkey = zapRequestEvent.pubkey;
       } catch (e) {
         print("jsonDecode zapRequest error ${e.toString()}");
         senderPubkey =

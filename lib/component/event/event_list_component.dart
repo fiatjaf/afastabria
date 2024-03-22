@@ -98,7 +98,7 @@ class _EventListComponent extends State<EventListComponent> {
 
       return Container();
     }, selector: (final context, final provider) {
-      return provider.check(widget.event.pubKey, widget.event.id,
+      return provider.check(widget.event.pubkey, widget.event.id,
           aId: eventRelation.aId);
     });
 

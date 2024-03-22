@@ -20,12 +20,12 @@ class MetadataDB {
     return objs;
   }
 
-  static Future<Metadata?> get(final String pubKey,
+  static Future<Metadata?> get(final String pubkey,
       {final DatabaseExecutor? db}) async {
     final list = await DB.getDB(db).query("metadata",
         columns: ["event"],
         where: "pubkey = ?",
-        whereArgs: [pubKey.substring(0, 16)]);
+        whereArgs: [pubkey.substring(0, 16)]);
 
     if (list.length > 0) {
       return Metadata.fromEvent(

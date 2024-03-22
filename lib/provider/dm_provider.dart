@@ -158,8 +158,8 @@ class DMProvider extends ChangeNotifier with PendingEventsLaterFunction {
   }
 
   String? _getPubkey(final String localPubkey, final Event event) {
-    if (event.pubKey != localPubkey) {
-      return event.pubKey;
+    if (event.pubkey != localPubkey) {
+      return event.pubkey;
     }
 
     for (final tag in event.tags) {

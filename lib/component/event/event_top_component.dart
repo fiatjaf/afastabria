@@ -39,7 +39,7 @@ class EventTopComponentState extends State<EventTopComponent> {
   void initState() {
     super.initState();
 
-    this.pubkey = widget.event.pubKey;
+    this.pubkey = widget.event.pubkey;
 
     // if this is the zap event, change the pubkey from the zap tag info
     if (widget.event.kind == EventKind.ZAP) {
@@ -48,8 +48,8 @@ class EventTopComponentState extends State<EventTopComponent> {
           final description = tag[1];
           final jsonMap = jsonDecode(description);
           final sourceEvent = Event.fromJson(jsonMap);
-          if (StringUtil.isNotBlank(sourceEvent.pubKey)) {
-            this.pubkey = sourceEvent.pubKey;
+          if (StringUtil.isNotBlank(sourceEvent.pubkey)) {
+            this.pubkey = sourceEvent.pubkey;
           }
         }
       }
@@ -116,7 +116,7 @@ class EventTopComponentState extends State<EventTopComponent> {
                         // margin: const EdgeInsets.only(bottom: 2),
                         child: jumpWrap(
                           NameComponent(
-                            pubkey: widget.event.pubKey,
+                            pubkey: widget.event.pubkey,
                             metadata: metadata,
                             maxLines: 1,
                             textOverflow: TextOverflow.ellipsis,
@@ -146,11 +146,11 @@ class EventTopComponentState extends State<EventTopComponent> {
     return GestureDetector(
       onTap: () {
         // disable jump when in same user page.
-        if (widget.pagePubkey == widget.event.pubKey) {
+        if (widget.pagePubkey == widget.event.pubkey) {
           return;
         }
 
-        RouterUtil.router(context, RouterPath.USER, widget.event.pubKey);
+        RouterUtil.router(context, RouterPath.USER, widget.event.pubkey);
       },
       child: c,
     );

@@ -136,7 +136,7 @@ class FollowingManager {
   }
 
   Iterable<Event> eventsByPubkey(String pubkey) {
-    return this.events.where((final evt) => evt.pubKey == pubkey);
+    return this.events.where((final evt) => evt.pubkey == pubkey);
   }
 
   dispose() {

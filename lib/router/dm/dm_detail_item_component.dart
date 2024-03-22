@@ -48,7 +48,7 @@ class _DMDetailItemComponent extends State<DMDetailItemComponent> {
     Widget userHeadWidget = Container(
       margin: const EdgeInsets.only(top: 2),
       child: UserPicComponent(
-        pubkey: widget.event.pubKey,
+        pubkey: widget.event.pubkey,
         width: IMAGE_WIDTH,
       ),
     );
@@ -125,7 +125,7 @@ class _DMDetailItemComponent extends State<DMDetailItemComponent> {
     // if (!widget.isLocal) {
     userHeadWidget = GestureDetector(
       onTap: () {
-        RouterUtil.router(context, RouterPath.USER, widget.event.pubKey);
+        RouterUtil.router(context, RouterPath.USER, widget.event.pubkey);
       },
       child: userHeadWidget,
     );

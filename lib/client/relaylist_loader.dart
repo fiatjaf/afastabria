@@ -24,7 +24,7 @@ class RelayListLoader {
       keys.map((final String key) async {
         try {
           final md = RelayList.fromEvent(
-              events.firstWhere((final Event event) => event.pubKey == key));
+              events.firstWhere((final Event event) => event.pubkey == key));
 
           RelayListDB.upsert(md);
           return md;

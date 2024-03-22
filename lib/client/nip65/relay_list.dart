@@ -36,7 +36,7 @@ class RelayList {
         write.add(url);
       }
     }
-    return RelayList(event.pubKey, read, write, event: event);
+    return RelayList(event.pubkey, read, write, event: event);
   }
 
   final List<String> read;

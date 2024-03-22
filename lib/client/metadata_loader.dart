@@ -24,7 +24,7 @@ class MetadataLoader {
       keys.map((final String key) async {
         try {
           final md = Metadata.fromEvent(
-              events.firstWhere((final Event event) => event.pubKey == key));
+              events.firstWhere((final Event event) => event.pubkey == key));
 
           MetadataDB.upsert(md);
           return md;

@@ -20,8 +20,8 @@ class NIP04 {
 
   static String encrypt(final String message,
       final ECDHBasicAgreement agreement, final String pk) {
-    final pubKey = getPubKey(pk);
-    final agreementD0 = agreement.calculateAgreement(pubKey);
+    final pubkey = getPubKey(pk);
+    final agreementD0 = agreement.calculateAgreement(pubkey);
     final enctyptKey = agreementD0.toRadixString(16).padLeft(64, "0");
 
     final random = Random.secure();
@@ -55,8 +55,8 @@ class NIP04 {
     final iv = strs[1];
     final ivData = base64.decode(iv);
 
-    final pubKey = getPubKey(pk);
-    final agreementD0 = agreement.calculateAgreement(pubKey);
+    final pubkey = getPubKey(pk);
+    final agreementD0 = agreement.calculateAgreement(pubkey);
     final encryptKey = agreementD0.toRadixString(16).padLeft(64, "0");
 
     // var encrypter = Encrypter(AES(
@@ -85,7 +85,7 @@ class NIP04 {
     try {
       y = liftX(x);
     } on Error {
-      print("error in handle pubKey");
+      print("error in handle pubkey");
     }
     final ECPoint endPoint = secp256k1.curve.createPoint(x, y!);
     return ECPublicKey(endPoint, secp256k1);

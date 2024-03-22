@@ -45,7 +45,7 @@ class CommunityInfo {
       if (StringUtil.isNotBlank(title)) {
         final id = AId(
             kind: kind.EventKind.COMMUNITY_DEFINITION,
-            pubkey: event.pubKey,
+            pubkey: event.pubkey,
             identifier: title);
         return CommunityInfo(
           createdAt: event.createdAt,

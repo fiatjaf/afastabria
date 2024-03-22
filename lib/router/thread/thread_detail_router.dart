@@ -37,7 +37,7 @@ class ThreadDetailRouter extends StatefulWidget {
 
     List<Widget> appBarTitleList = [];
     final nameComponent = SimpleNameComponent(
-      pubkey: event.pubKey,
+      pubkey: event.pubkey,
       textStyle: TextStyle(
         fontSize: bodyLargeFontSize,
         color: themeData.appBarTheme.titleTextStyle!.color,
@@ -159,7 +159,7 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
       // if (rootEvent != null && StringUtil.isNotBlank(eventRelation.dTag)) {
       //   aId = AId(
       //       kind: rootEvent!.kind,
-      //       pubkey: rootEvent!.pubKey,
+      //       pubkey: rootEvent!.pubkey,
       //       identifier: eventRelation.dTag!);
       // }
 

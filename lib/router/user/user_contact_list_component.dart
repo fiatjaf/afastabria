@@ -50,7 +50,7 @@ class _UserContactListComponent extends State<UserContactListComponent> {
               initialData: Metadata.blank(contact.pubkey),
               builder: (final context, final snapshot) {
                 return MetadataComponent(
-                  pubKey: contact.pubkey,
+                  pubkey: contact.pubkey,
                   metadata: snapshot.data,
                   jumpable: true,
                 );

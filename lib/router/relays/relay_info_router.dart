@@ -47,8 +47,8 @@ class RelayInfoRouterState extends State<RelayInfoRouter> {
       });
     });
 
-    this.ownerFuture = this.info != null && keyIsValid(this.info!.pubKey)
-        ? metadataLoader.load(this.info!.pubKey)
+    this.ownerFuture = this.info != null && keyIsValid(this.info!.pubkey)
+        ? metadataLoader.load(this.info!.pubkey)
         : null;
   }
 
@@ -94,7 +94,7 @@ class RelayInfoRouterState extends State<RelayInfoRouter> {
           title: "Owner",
           child: FutureBuilder(
             future: ownerFuture,
-            initialData: Metadata.blank(this.info!.pubKey),
+            initialData: Metadata.blank(this.info!.pubkey),
             builder: (final context, final snapshot) {
               final metadata = snapshot.data;
 
@@ -126,7 +126,7 @@ class RelayInfoRouterState extends State<RelayInfoRouter> {
               list.add(Container(
                 margin: const EdgeInsets.only(left: Base.BASE_PADDING),
                 child: NameComponent(
-                  pubkey: this.info!.pubKey,
+                  pubkey: this.info!.pubkey,
                   metadata: metadata,
                 ),
               ));
@@ -134,7 +134,7 @@ class RelayInfoRouterState extends State<RelayInfoRouter> {
               return GestureDetector(
                 onTap: () {
                   RouterUtil.router(
-                      context, RouterPath.USER, this.info!.pubKey);
+                      context, RouterPath.USER, this.info!.pubkey);
                 },
                 child: Row(
                   children: list,

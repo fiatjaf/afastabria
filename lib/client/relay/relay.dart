@@ -115,7 +115,7 @@ abstract class Relay {
             this.relayStatus.noteReceived++;
 
             // check block pubkey
-            if (filterProvider.checkBlock(event.pubKey)) {
+            if (filterProvider.checkBlock(event.pubkey)) {
               return;
             }
             // check dirtyword

@@ -135,7 +135,7 @@ class Nostr {
     if (event.kind >= 30000 && event.kind < 40000) {
       final aid = AId(
         kind: event.kind,
-        pubkey: event.pubKey,
+        pubkey: event.pubkey,
         identifier: event.tags.firstWhere(
             (final tag) => tag.firstOrNull == "d" && tag.length >= 2,
             orElse: () => ["", ""])[1],

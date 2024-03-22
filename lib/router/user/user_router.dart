@@ -155,7 +155,7 @@ class UserRouterState extends CustState<UserRouter>
             return <Widget>[
               SliverToBoxAdapter(
                 child: MetadataComponent(
-                  pubKey: pubkey!,
+                  pubkey: pubkey!,
                   metadata: metadata,
                   showBadges: true,
                   userPicturePreview: true,

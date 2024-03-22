@@ -20,7 +20,7 @@ class BadgeDefinition {
   final int updatedAt;
 
   static BadgeDefinition? loadFromEvent(final Event event) {
-    final String pubkey = event.pubKey;
+    final String pubkey = event.pubkey;
     String? d;
     String? name;
     String? description;

@@ -535,7 +535,7 @@ mixin EditorMixin {
             final nevent = Nevent(id: value);
             final mentionEvent = nostr.idIndex[value];
             if (mentionEvent != null) {
-              nevent.author = mentionEvent.pubKey;
+              nevent.author = mentionEvent.pubkey;
               nevent.relays = mentionEvent.sources.take(3);
             }
             result += "${NIP19Tlv.encodeNevent(nevent)} ";

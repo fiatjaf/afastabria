@@ -20,12 +20,12 @@ class ContactListDB {
     return objs;
   }
 
-  static Future<ContactList?> get(final String pubKey,
+  static Future<ContactList?> get(final String pubkey,
       {final DatabaseExecutor? db}) async {
     final list = await DB.getDB(db).query("contactlist",
         columns: ["event"],
         where: "pubkey = ?",
-        whereArgs: [pubKey.substring(0, 16)]);
+        whereArgs: [pubkey.substring(0, 16)]);
 
     if (list.length > 0) {
       return ContactList.fromEvent(

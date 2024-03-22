@@ -9,14 +9,14 @@ import "package:loure/component/user/user_badges_component.dart";
 
 class MetadataComponent extends StatefulWidget {
   MetadataComponent({
-    required this.pubKey,
+    required this.pubkey,
     super.key,
     this.metadata,
     this.jumpable = false,
     this.showBadges = false,
     this.userPicturePreview = false,
   });
-  String pubKey;
+  String pubkey;
 
   Metadata? metadata;
 
@@ -38,7 +38,7 @@ class _MetadataComponent extends State<MetadataComponent> {
     List<Widget> mainList = [];
 
     mainList.add(MetadataTopComponent(
-      pubkey: widget.pubKey,
+      pubkey: widget.pubkey,
       metadata: widget.metadata,
       jumpable: widget.jumpable,
       userPicturePreview: widget.userPicturePreview,
@@ -46,8 +46,8 @@ class _MetadataComponent extends State<MetadataComponent> {
 
     if (widget.showBadges) {
       mainList.add(UserBadgesComponent(
-        key: Key("ubc_${widget.pubKey}"),
-        pubkey: widget.pubKey,
+        key: Key("ubc_${widget.pubkey}"),
+        pubkey: widget.pubkey,
       ));
     }
 

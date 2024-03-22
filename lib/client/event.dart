@@ -19,7 +19,7 @@ typedef Tags = List<Tag>;
 
 /// A Nostr event
 class Event {
-  Event(this.id, this.pubKey, this.createdAt, this.kind, this.tags,
+  Event(this.id, this.pubkey, this.createdAt, this.kind, this.tags,
       this.content, this.sig);
 
   factory Event.finalize(final String privateKey, int kind,
@@ -35,7 +35,7 @@ class Event {
 
   factory Event.fromJson(final Map<String, dynamic> data) {
     final id = data["id"] as String;
-    final pubKey = data["pubkey"] as String;
+    final pubkey = data["pubkey"] as String;
     final createdAt = data["created_at"] as int;
     final kind = data["kind"] as int;
     final content = data["content"] as String;
@@ -46,11 +46,11 @@ class Event {
         .toList();
     final sig = data["sig"] as String;
 
-    return Event(id, pubKey, createdAt, kind, tags, content, sig);
+    return Event(id, pubkey, createdAt, kind, tags, content, sig);
   }
 
   late final String id;
-  late final String pubKey;
+  late final String pubkey;
   late final String sig;
 
   late final int createdAt;
@@ -75,7 +75,7 @@ class Event {
   Map<String, dynamic> toJson() {
     return {
       "id": id,
-      "pubkey": pubKey,
+      "pubkey": pubkey,
       "created_at": createdAt,
       "kind": kind,
       "tags": tags,
@@ -87,10 +87,10 @@ class Event {
   bool get isValid {
     if (this.id !=
         getId(
-            this.pubKey, this.createdAt, this.kind, this.tags, this.content)) {
+            this.pubkey, this.createdAt, this.kind, this.tags, this.content)) {
       return false;
     }
-    if (!schnorr.verify(this.pubKey, this.id, this.sig)) {
+    if (!schnorr.verify(this.pubkey, this.id, this.sig)) {
       return false;
     }
     return true;

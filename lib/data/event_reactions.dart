@@ -89,7 +89,7 @@ class EventReactions implements FindEventInterface {
         } else {
           likeNum++;
           likes.add(event);
-          if (event.pubKey == nostr.publicKey) {
+          if (event.pubkey == nostr.publicKey) {
             myLikeEvents ??= [];
             myLikeEvents!.add(event);
           }

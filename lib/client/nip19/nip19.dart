@@ -12,8 +12,8 @@ class Hrps {
 }
 
 class Nip19 {
-  // static String encodePubKey(String pubKey) {
-  //   var data = hex.decode(pubKey);
+  // static String encodePubKey(String pubkey) {
+  //   var data = hex.decode(pubkey);
   //   data = Bech32.convertBits(data, 8, 5, true);
   //   return Bech32.encode(Hrps.PUBLIC_KEY, data);
   // }
@@ -31,7 +31,7 @@ class Nip19 {
   }
 
   static String encodePubKey(final String pubkey) {
-    // var data = HEX.decode(pubKey);
+    // var data = HEX.decode(pubkey);
     // data = _convertBits(data, 8, 5, true);
 
     // var encoder = Bech32Encoder();
@@ -40,8 +40,8 @@ class Nip19 {
     return _encodeKey(Hrps.PUBLIC_KEY, pubkey);
   }
 
-  static String encodeSimplePubKey(final String pubKey) {
-    final code = encodePubKey(pubKey);
+  static String encodeSimplePubKey(final String pubkey) {
+    final code = encodePubKey(pubkey);
     final length = code.length;
     return "${code.substring(0, 6)}:${code.substring(length - 6)}";
   }

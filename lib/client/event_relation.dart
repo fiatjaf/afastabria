@@ -8,7 +8,7 @@ import "package:loure/client/event.dart";
 class EventRelation {
   EventRelation.fromEvent(final Event event) {
     id = event.id;
-    pubkey = event.pubKey;
+    pubkey = event.pubkey;
 
     Map<String, int> pMap = {};
     final length = event.tags.length;
@@ -93,7 +93,7 @@ class EventRelation {
       rootRelayAddr = replyRelayAddr;
     }
 
-    pMap.remove(event.pubKey);
+    pMap.remove(event.pubkey);
     tagPList.addAll(pMap.keys);
   }
   late String id;

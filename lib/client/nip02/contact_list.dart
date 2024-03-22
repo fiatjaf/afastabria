@@ -27,7 +27,7 @@ class ContactList {
         contacts.add(Contact(pubkey: tag[1], relay: url, petname: petname));
       }
     }
-    return ContactList(event.pubKey, contacts, event: event);
+    return ContactList(event.pubkey, contacts, event: event);
   }
 
   final String pubkey;

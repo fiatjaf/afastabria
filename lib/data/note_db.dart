@@ -13,7 +13,7 @@ class NoteDB {
     return await db.insert("note", {
       "id": event.id.substring(0, 16),
       "created_at": event.createdAt,
-      "pubkey": event.pubKey.substring(0, 16),
+      "pubkey": event.pubkey.substring(0, 16),
       "follow": isFollow,
       "event": jsonEncode(event.toJson())
     });

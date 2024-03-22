@@ -25,7 +25,7 @@ class ContactListLoader {
       keys.map((final String key) async {
         try {
           final md = ContactList.fromEvent(
-              events.firstWhere((final Event event) => event.pubKey == key));
+              events.firstWhere((final Event event) => event.pubkey == key));
 
           ContactListDB.upsert(md);
           return md;

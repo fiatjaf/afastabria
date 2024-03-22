@@ -19,7 +19,7 @@ class Metadata {
     this.lud06,
   }) {
     if (this.event != null) {
-      this.pubkey = this.event!.pubKey;
+      this.pubkey = this.event!.pubkey;
     } else {
       this.pubkey = pubkey!;
     }
@@ -30,7 +30,7 @@ class Metadata {
   Metadata.fromEvent(final Event event) {
     // ignore: prefer_initializing_formals
     this.event = event;
-    this.pubkey = event.pubKey;
+    this.pubkey = event.pubkey;
 
     try {
       final json = jsonDecode(event.content);
