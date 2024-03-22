@@ -29,9 +29,9 @@ class DB {
       db.execute(
           "create table note(id TEXT not null primary key, pubkey not null, created_at integer not null, follow bool not null, event text not null);");
       db.execute(
-          "create index note_follow_created_at on event (follow, created_at);");
+          "create index note_follow_created_at on note (follow, created_at);");
       db.execute(
-          "create index note_pubkey_created_at on event (pubkey, created_at);");
+          "create index note_pubkey_created_at on note (pubkey, created_at);");
       //
 
       db.execute(
