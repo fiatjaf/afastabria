@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 import "package:loure/client/nip02/contact_list.dart";
 import "package:loure/component/user/metadata_component.dart";
 import "package:loure/consts/base.dart";
-import "package:loure/consts/router_path.dart";
+import "package:loure/router/routes.dart";
 import "package:loure/data/metadata.dart";
 import "package:loure/main.dart";
 import "package:loure/util/platform_util.dart";

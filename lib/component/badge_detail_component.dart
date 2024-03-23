@@ -3,26 +3,26 @@ import "package:loure/component/image_component.dart";
 import "package:loure/component/simple_name_component.dart";
 import "package:loure/component/user_pic_component.dart";
 import "package:loure/consts/base.dart";
-import "package:loure/consts/router_path.dart";
+import "package:loure/router/routes.dart";
 import "package:loure/util/router_util.dart";
 import "package:loure/util/string_util.dart";
 
 import "package:loure/client/nip58/badge_definition.dart";
 
 class BadgeDetailComponent extends StatefulWidget {
-  BadgeDetailComponent({
+  const BadgeDetailComponent({
     required this.badgeDefinition,
     super.key,
   });
-  BadgeDefinition badgeDefinition;
+  final BadgeDefinition badgeDefinition;
 
   @override
   State<StatefulWidget> createState() {
-    return _BadgeDetailComponent();
+    return BadgeDetailComponentState();
   }
 }
 
-class _BadgeDetailComponent extends State<BadgeDetailComponent> {
+class BadgeDetailComponentState extends State<BadgeDetailComponent> {
   @override
   Widget build(final BuildContext context) {
     final themeData = Theme.of(context);

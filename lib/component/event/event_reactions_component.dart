@@ -16,7 +16,7 @@ import "package:loure/client/event_relation.dart";
 import "package:loure/client/nip19/nip19.dart";
 import "package:loure/client/zap/zap_action.dart";
 import "package:loure/consts/base_consts.dart";
-import "package:loure/consts/router_path.dart";
+import "package:loure/router/routes.dart";
 import "package:loure/data/event_reactions.dart";
 import "package:loure/main.dart";
 import "package:loure/provider/event_reactions_provider.dart";

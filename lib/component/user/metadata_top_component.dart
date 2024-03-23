@@ -11,7 +11,7 @@ import "package:loure/component/nip05_valid_component.dart";
 import "package:loure/component/qrcode_dialog.dart";
 import "package:loure/component/webview_router.dart";
 import "package:loure/component/zap_gen_dialog.dart";
-import "package:loure/consts/router_path.dart";
+import "package:loure/router/routes.dart";
 import "package:loure/main.dart";
 import "package:loure/provider/contact_list_provider.dart";
 import "package:loure/util/platform_util.dart";

@@ -8,8 +8,8 @@ import "package:loure/component/cust_state.dart";
 import "package:loure/component/pc_router_fake.dart";
 import "package:loure/consts/base_consts.dart";
 import "package:loure/provider/pc_router_fake_provider.dart";
+import "package:loure/router/routes.dart";
 import "package:loure/util/platform_util.dart";
-import "package:loure/util/string_util.dart";
 import "package:provider/provider.dart";
 
 import "package:loure/main.dart";
@@ -25,18 +25,16 @@ import "package:loure/router/index/index_app_bar.dart";
 import "package:loure/router/index/index_bottom_bar.dart";
 import "package:loure/router/index/index_drawer_content.dart";
 
-// ignore: must_be_immutable
 class IndexRouter extends StatefulWidget {
-  IndexRouter({required this.reload, super.key});
-  Function reload;
+  const IndexRouter({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _IndexRouter();
+    return IndexRouterState();
   }
 }
 
-class _IndexRouter extends CustState<IndexRouter>
+class IndexRouterState extends CustState<IndexRouter>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   static double PC_MAX_COLUMN_0 = 200;
   static double PC_MAX_COLUMN_1 = 550;
@@ -289,15 +287,13 @@ class _IndexRouter extends CustState<IndexRouter>
 
                 final List<Widget> pages = [];
                 for (final info in infos) {
-                  if (StringUtil.isNotBlank(info.routerPath) &&
-                      routes[info.routerPath] != null) {
-                    final builder = routes[info.routerPath];
-                    if (builder != null) {
-                      pages.add(PcRouterFake(
-                        info: info,
-                        child: builder(context),
-                      ));
-                    }
+                  if (info.routerPath != null && info.routerPath != "") {
+                    final widget = renderWidget(RouteSettings(
+                        name: info.routerPath, arguments: info.arguments));
+                    pages.add(PcRouterFake(
+                      info: info,
+                      child: widget,
+                    ));
                   } else if (info.buildContent != null) {
                     pages.add(PcRouterFake(
                       info: info,

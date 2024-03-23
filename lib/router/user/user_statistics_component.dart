@@ -8,7 +8,7 @@ import "package:loure/client/nip02/contact_list.dart";
 import "package:loure/client/filter.dart";
 import "package:loure/client/zap/zap_num_util.dart";
 import "package:loure/consts/base.dart";
-import "package:loure/consts/router_path.dart";
+import "package:loure/router/routes.dart";
 import "package:loure/data/event_mem_box.dart";
 import "package:loure/main.dart";
 import "package:loure/util/number_format_util.dart";

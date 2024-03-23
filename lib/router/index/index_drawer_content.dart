@@ -3,7 +3,7 @@ import "package:provider/provider.dart";
 import "package:flutter/material.dart";
 import "package:loure/component/user/metadata_top_component.dart";
 import "package:loure/consts/base.dart";
-import "package:loure/consts/router_path.dart";
+import "package:loure/router/routes.dart";
 import "package:loure/provider/index_provider.dart";
 import "package:loure/provider/webview_provider.dart";
 import "package:loure/router/user/user_statistics_component.dart";

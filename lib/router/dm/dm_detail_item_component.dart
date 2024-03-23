@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:get_time_ago/get_time_ago.dart";
 import "package:loure/client/nip04/nip04.dart";
 import "package:loure/component/content/content_component.dart";
-import "package:loure/consts/router_path.dart";
+import "package:loure/router/routes.dart";
 import "package:loure/util/router_util.dart";
 import "package:pointycastle/export.dart" as pointycastle;
 import "package:provider/provider.dart";

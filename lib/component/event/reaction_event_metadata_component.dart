@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:loure/consts/router_path.dart";
+import "package:loure/router/routes.dart";
 import "package:loure/main.dart";
 import "package:loure/util/router_util.dart";
 

@@ -8,7 +8,7 @@ import "package:loure/component/keep_alive_cust_state.dart";
 import "package:loure/component/placeholder/metadata_list_placeholder.dart";
 import "package:loure/component/user/metadata_component.dart";
 import "package:loure/consts/base.dart";
-import "package:loure/consts/router_path.dart";
+import "package:loure/router/routes.dart";
 import "package:loure/data/metadata.dart";
 import "package:loure/main.dart";
 import "package:loure/util/dio_util.dart";

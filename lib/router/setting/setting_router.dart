@@ -26,23 +26,18 @@ import "package:loure/util/string_util.dart";
 import "package:loure/router/setting/setting_group_item_component.dart";
 import "package:loure/router/setting/setting_group_title_component.dart";
 
-// ignore: must_be_immutable
 class SettingRouter extends StatefulWidget {
-  SettingRouter({
-    required this.indexReload,
-    super.key,
-  });
-  Function indexReload;
+  const SettingRouter({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _SettingRouter();
+    return SettingRouterState();
   }
 }
 
-class _SettingRouter extends State<SettingRouter> with WhenStopFunction {
+class SettingRouterState extends State<SettingRouter> with WhenStopFunction {
   void resetTheme() {
-    widget.indexReload();
+    // widget.indexReload();
   }
 
   @override

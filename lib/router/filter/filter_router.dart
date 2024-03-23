@@ -11,11 +11,11 @@ class FilterRouter extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _FilterRouter();
+    return FilterRouterState();
   }
 }
 
-class _FilterRouter extends State<FilterRouter>
+class FilterRouterState extends State<FilterRouter>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
 

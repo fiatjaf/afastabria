@@ -4,7 +4,7 @@ import "package:flutter/services.dart";
 
 import "package:loure/client/relay/relay.dart";
 import "package:loure/client/nip19/nip19_tlv.dart";
-import "package:loure/consts/router_path.dart";
+import "package:loure/router/routes.dart";
 import "package:loure/main.dart";
 import "package:loure/util/router_util.dart";
 import "package:loure/consts/base.dart";

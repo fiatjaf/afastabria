@@ -11,14 +11,13 @@ import "package:loure/client/event_kind.dart";
 import "package:loure/client/event.dart";
 import "package:loure/client/event_relation.dart";
 import "package:loure/consts/base.dart";
-import "package:loure/consts/router_path.dart";
+import "package:loure/router/routes.dart";
 import "package:loure/util/router_util.dart";
 import "package:loure/component/event/event_bitcion_icon_component.dart";
 import "package:loure/component/event/event_main_component.dart";
 
-// ignore: must_be_immutable
 class EventListComponent extends StatefulWidget {
-  EventListComponent({
+  const EventListComponent({
     required this.event,
     super.key,
     this.pagePubkey,
@@ -29,23 +28,23 @@ class EventListComponent extends StatefulWidget {
     this.showLongContent = false,
     this.showCommunity = true,
   });
-  Event event;
-  String? pagePubkey;
-  bool jumpable;
-  bool showVideo;
-  bool imageListMode;
-  bool showDetailBtn;
-  bool showLongContent;
-  bool showCommunity;
+  final Event event;
+  final String? pagePubkey;
+  final bool jumpable;
+  final bool showVideo;
+  final bool imageListMode;
+  final bool showDetailBtn;
+  final bool showLongContent;
+  final bool showCommunity;
 
   @override
   State<StatefulWidget> createState() {
-    return _EventListComponent();
+    return EventListComponentState();
   }
 }
 
-class _EventListComponent extends State<EventListComponent> {
-  ScreenshotController screenshotController = ScreenshotController();
+class EventListComponentState extends State<EventListComponent> {
+  final ScreenshotController screenshotController = ScreenshotController();
 
   @override
   Widget build(final BuildContext context) {

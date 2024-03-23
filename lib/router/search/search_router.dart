@@ -15,7 +15,7 @@ import "package:loure/client/filter.dart";
 import "package:loure/component/event/event_list_component.dart";
 import "package:loure/component/event_delete_callback.dart";
 import "package:loure/consts/base_consts.dart";
-import "package:loure/consts/router_path.dart";
+import "package:loure/router/routes.dart";
 import "package:loure/data/event_mem_box.dart";
 import "package:loure/main.dart";
 import "package:loure/provider/setting_provider.dart";

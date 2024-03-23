@@ -7,7 +7,7 @@ import "package:loure/component/name_component.dart";
 import "package:loure/component/point_component.dart";
 import "package:loure/component/user_pic_component.dart";
 import "package:loure/consts/base.dart";
-import "package:loure/consts/router_path.dart";
+import "package:loure/router/routes.dart";
 import "package:loure/data/metadata.dart";
 import "package:loure/main.dart";
 import "package:loure/provider/dm_provider.dart";
