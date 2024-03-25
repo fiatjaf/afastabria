@@ -24,7 +24,14 @@ class RelayProvider extends ChangeNotifier {
   }
 }
 
-class PenaltyBoxException extends FormatException {}
+class PenaltyBoxException implements Exception {
+  const PenaltyBoxException(this.url);
+
+  final String url;
+
+  @override
+  String toString() => "${this.url} is in PenaltyBox!";
+}
 
 class RelayPool extends RelayProvider {
   RelayPool();
@@ -32,10 +39,11 @@ class RelayPool extends RelayProvider {
   final Map<String, Future<Relay>> _relays = {};
   final Set<String> _penaltyBox = {};
 
-  Future<Relay> ensureRelay(String url) async {
+  Future<Relay> ensureRelay(String url,
+      {Duration penaltyBoxStartTime = Duration.zero}) async {
     url = RelayUtil.normalizeURL(url);
     if (this._penaltyBox.contains(url)) {
-      throw PenaltyBoxException();
+      throw PenaltyBoxException(url);
     }
     return this._relays.putIfAbsent(url, () async {
       late Relay relay;
@@ -70,7 +78,7 @@ class RelayPool extends RelayProvider {
             "$url errored, goes to penalty box for ${penaltyBoxTime.toString()}");
         this._penaltyBox.add(url);
         this._relays.remove(url);
-        Future.delayed(penaltyBoxTime, () {
+        Future.delayed(penaltyBoxStartTime + penaltyBoxTime, () {
           this._penaltyBox.remove(url);
         });
       };
@@ -98,11 +106,16 @@ class RelayPool extends RelayProvider {
 
     final subscriptionFutures = relays.map((final String url) async {
       late final Relay relay;
-      try {
-        relay = await this.ensureRelay(url);
-      } on PenaltyBoxException {
-        await Future.delayed(penaltyBoxTime);
-        relay = await this.ensureRelay(url);
+      while (true) {
+        var penaltyBoxStartTime = Duration.zero;
+        try {
+          relay = await this
+              .ensureRelay(url, penaltyBoxStartTime: penaltyBoxStartTime);
+          break;
+        } on PenaltyBoxException {
+          await Future.delayed(penaltyBoxTime + penaltyBoxStartTime);
+          penaltyBoxStartTime += penaltyBoxTime + penaltyBoxStartTime;
+        }
       }
 
       if (filterModifier != null) {
