@@ -23,14 +23,12 @@ class _NoticeRouter extends State<NoticeRouter> {
 
     Widget? main;
     if (length == 0) {
-      main = Container(
-        child: Center(
-          child: GestureDetector(
-            onTap: () {
-              EditorRouter.open(context);
-            },
-            child: const Text("Notices"),
-          ),
+      main = Center(
+        child: GestureDetector(
+          onTap: () {
+            EditorRouter.open(context);
+          },
+          child: const Text("Notices"),
         ),
       );
     } else {

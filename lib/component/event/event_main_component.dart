@@ -48,7 +48,6 @@ class EventMainComponent extends StatefulWidget {
     required this.screenshotController,
     required this.event,
     super.key,
-    this.pagePubkey,
     this.showReplying = true,
     this.textOnTap,
     this.showVideo = false,
@@ -62,7 +61,6 @@ class EventMainComponent extends StatefulWidget {
   });
   final ScreenshotController screenshotController;
   final Event event;
-  final String? pagePubkey;
   final bool showReplying;
   final Function? textOnTap;
   final bool showVideo;
@@ -447,7 +445,6 @@ class EventMainComponentState extends State<EventMainComponent> {
 
     eventAllList.add(EventTopComponent(
       event: widget.event,
-      pagePubkey: widget.pagePubkey,
     ));
 
     eventAllList.add(Container(

@@ -1,79 +1,55 @@
-import "dart:async";
-
 import "package:flutter/material.dart";
-import "package:loure/component/pc_router_fake.dart";
 import "package:loure/main.dart";
+import "package:loure/router/routes.dart";
 import "package:loure/util/platform_util.dart";
 
-import "package:loure/provider/pc_router_fake_provider.dart";
+// TODO: must set "clear" to true when this request is from home, globals, search or dms, just to clean stack and push
+// TODO: make router() just render the widget and call push() -- then after that we can begin switching out of named routes
 
 class RouterUtil {
-  static Future<T?> router<T>(final BuildContext context, final String pageName,
-      [final Object? arguments]) async {
+  static Future<dynamic> router<T>(
+      final BuildContext context, final String pageName,
+      [final dynamic argument, final bool clear = false]) async {
     if (!PlatformUtil.isTableMode()) {
-      return Navigator.of(context).pushNamed<T>(pageName, arguments: arguments);
+      return Navigator.of(context).pushNamed<T>(pageName, arguments: argument);
     } else {
-      bool clear = false;
-      final parentRouterFake = PcRouterFake.of(context);
-      if (parentRouterFake == null) {
-        // means this request is from home, globals, search or dms, just to clean stack and push
-        clear = true;
-      }
-      final routerFakeInfo =
-          RouterFakeInfo<T>(routerPath: pageName, arguments: arguments);
-      pcRouterFakeProvider.router<T>(routerFakeInfo, clear: clear);
-
-      return routerFakeInfo.completer.future;
+      final widget =
+          renderWidget(RouteSettings(name: pageName, arguments: argument));
+      return internalRouter.push(widget, arg: argument, clear: clear);
     }
   }
 
-  static Future<T?> push<T extends Object?>(
-      final BuildContext context, final MaterialPageRoute<T> route) {
+  static void push(final BuildContext context, final Widget widget,
+      {bool clear = false}) {
     if (!PlatformUtil.isTableMode()) {
-      return Navigator.of(context).push(route);
+      Navigator.of(context).push(MaterialPageRoute(builder: (final context) {
+        return widget;
+      }));
     } else {
-      bool clear = false;
-      final parentRouterFake = PcRouterFake.of(context);
-      if (parentRouterFake == null) {
-        // means this request is from home, globals, search or dms, just to clean stack and push
-        clear = true;
-      }
-      final routerFakeInfo =
-          RouterFakeInfo<T>(buildContent: route.buildContent);
-      pcRouterFakeProvider.router<T>(routerFakeInfo, clear: clear);
-
-      return routerFakeInfo.completer.future;
+      internalRouter.push(widget, clear: clear);
     }
   }
 
-  static Object? routerArgs(final BuildContext context) {
+  static dynamic routerArgs(final BuildContext context) {
     RouteSettings? setting = ModalRoute.of(context)?.settings;
     if (setting != null) {
       if (!PlatformUtil.isTableMode()) {
         return setting.arguments;
       } else {
-        final fake = PcRouterFake.of(context);
-        if (fake != null) {
-          return fake.info.arguments;
-        }
+        return internalRouter.lastArgument();
       }
     }
     return null;
   }
 
-  static void back(final BuildContext context, [final Object? returnObj]) {
-    final NavigatorState ns = Navigator.of(context);
-
-    final parentRouterFake = PcRouterFake.of(context);
-    if (parentRouterFake == null) {
+  static void back(final BuildContext context, [final dynamic returnObj]) {
+    if (!PlatformUtil.isTableMode()) {
+      final NavigatorState ns = Navigator.of(context);
       if (ns.canPop()) {
         ns.pop(returnObj);
       }
     } else {
-      // handle pop result
-      final info = parentRouterFake.info;
-      pcRouterFakeProvider.remove(info);
-      info.completer.complete(returnObj);
+      internalRouter.pop(returnObj);
     }
   }
 }

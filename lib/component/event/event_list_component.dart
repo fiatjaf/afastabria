@@ -20,7 +20,6 @@ class EventListComponent extends StatefulWidget {
   const EventListComponent({
     required this.event,
     super.key,
-    this.pagePubkey,
     this.jumpable = true,
     this.showVideo = false,
     this.imageListMode = true,
@@ -29,7 +28,6 @@ class EventListComponent extends StatefulWidget {
     this.showCommunity = true,
   });
   final Event event;
-  final String? pagePubkey;
   final bool jumpable;
   final bool showVideo;
   final bool imageListMode;
@@ -64,7 +62,6 @@ class EventListComponentState extends State<EventListComponent> {
         child: EventMainComponent(
           screenshotController: screenshotController,
           event: widget.event,
-          pagePubkey: widget.pagePubkey,
           textOnTap: widget.jumpable ? jumpToThread : null,
           showVideo: widget.showVideo,
           imageListMode: widget.imageListMode,

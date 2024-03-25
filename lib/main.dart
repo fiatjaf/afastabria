@@ -36,7 +36,6 @@ import "package:loure/provider/list_provider.dart";
 import "package:loure/provider/mention_me_new_provider.dart";
 import "package:loure/provider/mention_me_provider.dart";
 import "package:loure/provider/notice_provider.dart";
-import "package:loure/provider/pc_router_fake_provider.dart";
 import "package:loure/provider/setting_provider.dart";
 import "package:loure/provider/webview_provider.dart";
 import "package:loure/system_timer.dart";
@@ -53,6 +52,7 @@ Nostr nostr = Nostr.empty();
 late SharedPreferences sharedPreferences;
 
 final followingManager = FollowingManager();
+final internalRouter = InternalRouter();
 
 final settingProvider = SettingProvider();
 final contactListProvider = ContactListProvider();
@@ -66,7 +66,6 @@ final filterProvider = FilterProvider();
 final linkPreviewDataProvider = LinkPreviewDataProvider();
 final badgeDefinitionProvider = BadgeDefinitionProvider();
 final mediaDataCache = MediaDataCache();
-final pcRouterFakeProvider = PcRouterFakeProvider();
 final webViewProvider = WebViewProvider();
 final communityApprovedProvider = CommunityApprovedProvider();
 final communityInfoProvider = CommunityInfoProvider();
@@ -216,9 +215,6 @@ class _MyApp extends State<MyApp> {
         ListenableProvider<BadgeDefinitionProvider>.value(
           value: badgeDefinitionProvider,
         ),
-        ListenableProvider<PcRouterFakeProvider>.value(
-          value: pcRouterFakeProvider,
-        ),
         ListenableProvider<WebViewProvider>.value(
           value: webViewProvider,
         ),
@@ -252,11 +248,9 @@ class _MyApp extends State<MyApp> {
           darkTheme: defaultDarkTheme,
           initialRoute: RouterPath.INDEX,
           onGenerateRoute: (RouteSettings rs) {
-            final widget = renderWidget(rs);
-
             return MaterialPageRoute(
               settings: rs,
-              builder: (_) => widget,
+              builder: (_) => renderWidget(rs),
             );
           },
         ),

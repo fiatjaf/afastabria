@@ -7,24 +7,20 @@ import "package:screenshot/screenshot.dart";
 import "package:loure/consts/base.dart";
 
 class ThreadDetailItemMainComponent extends StatefulWidget {
-  ThreadDetailItemMainComponent({
+  const ThreadDetailItemMainComponent({
     required this.item,
     required this.totalMaxWidth,
     required this.sourceEventId,
     required this.sourceEventKey,
     super.key,
   });
-  static double BORDER_LEFT_WIDTH = 2;
 
-  static double EVENT_MAIN_MIN_WIDTH = 200;
-
-  ThreadDetailEvent item;
-
-  double totalMaxWidth;
-
-  String sourceEventId;
-
-  GlobalKey sourceEventKey;
+  static const double BORDER_LEFT_WIDTH = 2;
+  static const double EVENT_MAIN_MIN_WIDTH = 200;
+  final ThreadDetailEvent item;
+  final double totalMaxWidth;
+  final String sourceEventId;
+  final GlobalKey sourceEventKey;
 
   @override
   State<StatefulWidget> createState() {
@@ -70,13 +66,11 @@ class _ThreadDetailItemMainComponent
       List<Widget> subWidgets = [];
       for (final subItem in widget.item.subItems) {
         subWidgets.add(
-          Container(
-            child: ThreadDetailItemMainComponent(
-              item: subItem,
-              totalMaxWidth: widget.totalMaxWidth,
-              sourceEventId: widget.sourceEventId,
-              sourceEventKey: widget.sourceEventKey,
-            ),
+          ThreadDetailItemMainComponent(
+            item: subItem,
+            totalMaxWidth: widget.totalMaxWidth,
+            sourceEventId: widget.sourceEventId,
+            sourceEventKey: widget.sourceEventKey,
           ),
         );
       }

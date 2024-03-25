@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:flutter/material.dart";
 
 import "package:loure/router/bookmark/bookmark_router.dart";
@@ -24,6 +26,59 @@ import "package:loure/router/user/user_relays_router.dart";
 import "package:loure/router/user/user_router.dart";
 import "package:loure/router/user/user_zap_list_router.dart";
 import "package:loure/router/web_utils/web_utils_router.dart";
+
+class InternalRouter {
+  final StreamController<Widget> _streamController = StreamController<Widget>();
+
+  List<Widget> _stack = [];
+  List<dynamic> _arguments = [];
+  List<Completer> _completers = [];
+
+  Stream<Widget> get stream => _streamController.stream;
+
+  static const Widget base =
+      Center(child: Text("There should be a universe here."));
+
+  Future<dynamic> push(Widget widget, {bool clear = false, dynamic arg}) {
+    if (clear) {
+      for (final c in this._completers) {
+        c.complete(null);
+      }
+      this._stack = [];
+      this._arguments = [];
+      this._completers = [];
+    }
+
+    final completer = Completer();
+
+    this._stack.add(widget);
+    this._arguments.add(arg);
+    this._completers.add(completer);
+
+    this._streamController.add(widget);
+
+    return completer.future;
+  }
+
+  void pop([dynamic withValue]) {
+    if (this._completers.length == 0) return;
+
+    this._completers[this._completers.length].complete(withValue);
+
+    this._stack.removeLast();
+    this._completers.removeLast();
+
+    Widget next = InternalRouter.base;
+    if (this._stack.length > 0) {
+      next = this._stack[this._stack.length];
+    }
+    this._streamController.add(next);
+  }
+
+  dynamic lastArgument() {
+    return this._arguments[this._arguments.length - 1];
+  }
+}
 
 class RouterPath {
   static const String INDEX = "/";
@@ -58,7 +113,7 @@ Widget renderWidget(RouteSettings rs) {
     case RouterPath.INDEX:
       return const IndexRouter();
     case RouterPath.USER:
-      return const UserRouter();
+      return UserRouter(rs.arguments as String);
     case RouterPath.USER_CONTACT_LIST:
       return const UserContactListRouter();
     case RouterPath.USER_HISTORY_CONTACT_LIST:
@@ -70,7 +125,7 @@ Widget renderWidget(RouteSettings rs) {
     case RouterPath.DM_DETAIL:
       return const DMDetailRouter();
     case RouterPath.THREAD_DETAIL:
-      return const ThreadDetailRouter();
+      return ThreadDetailRouter(rs.arguments);
     case RouterPath.EVENT_DETAIL:
       return const EventDetailRouter();
     case RouterPath.TAG_DETAIL:

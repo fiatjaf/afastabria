@@ -5,9 +5,8 @@ import "package:loure/data/metadata.dart";
 import "package:loure/client/nip19/nip19.dart";
 import "package:loure/util/string_util.dart";
 
-// ignore: must_be_immutable
-class NameComponent extends StatefulWidget {
-  NameComponent({
+class NameComponent extends StatelessWidget {
+  const NameComponent({
     required this.pubkey,
     super.key,
     this.metadata,
@@ -17,21 +16,14 @@ class NameComponent extends StatefulWidget {
     this.textOverflow,
     this.maxLines = 3,
   });
-  String pubkey;
-  Metadata? metadata;
-  bool showNip05;
-  double? fontSize;
-  Color? fontColor;
-  TextOverflow? textOverflow;
-  int? maxLines;
+  final String pubkey;
+  final Metadata? metadata;
+  final bool showNip05;
+  final double? fontSize;
+  final Color? fontColor;
+  final TextOverflow? textOverflow;
+  final int? maxLines;
 
-  @override
-  State<StatefulWidget> createState() {
-    return _NameComponent();
-  }
-}
-
-class _NameComponent extends State<NameComponent> {
   @override
   Widget build(final BuildContext context) {
     final themeData = Theme.of(context);
@@ -40,13 +32,13 @@ class _NameComponent extends State<NameComponent> {
     final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
     Color hintColor = themeData.hintColor;
 
-    final metadata = widget.metadata;
-    final String nip19Name = Nip19.encodeSimplePubKey(widget.pubkey);
+    final metadata = this.metadata;
+    final String nip19Name = Nip19.encodeSimplePubKey(this.pubkey);
     String displayName = "";
     String name = "";
 
-    if (widget.fontColor != null) {
-      hintColor = widget.fontColor!;
+    if (this.fontColor != null) {
+      hintColor = this.fontColor!;
     }
 
     if (metadata != null) {
@@ -70,8 +62,8 @@ class _NameComponent extends State<NameComponent> {
       text: StringUtil.breakWord(displayName),
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        fontSize: widget.fontSize ?? textSize,
-        color: widget.fontColor,
+        fontSize: this.fontSize ?? textSize,
+        color: this.fontColor,
       ),
     ));
 
@@ -103,8 +95,8 @@ class _NameComponent extends State<NameComponent> {
 
     return Text.rich(
       TextSpan(children: nameList),
-      maxLines: widget.maxLines,
-      overflow: widget.textOverflow,
+      maxLines: this.maxLines,
+      overflow: this.textOverflow,
     );
   }
 }

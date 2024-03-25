@@ -412,15 +412,15 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
       tags.add(["e", er.rootId ?? "", relayAddr, "root"]);
     }
 
-    final event = await EditorRouter.open(context,
+    /*final event = await*/ EditorRouter.open(context,
         tags: tags, tagsAddedWhenSend: tagsAddedWhenSend, tagPs: tagPs);
-    if (event != null) {
+    /*if (event != null) {
       eventReactionsProvider.addEventAndHandle(event);
       final callback = EventReplyCallback.of(context);
       if (callback != null) {
         callback.onReply(event);
       }
-    }
+    }*/
   }
 
   Future<void> onRepostTap(final String value) async {
@@ -428,10 +428,10 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
       nostr.sendRepost(widget.event.id);
       eventReactionsProvider.addRepost(widget.event.id);
     } else if (value == "quote") {
-      final event = await EditorRouter.open(context, initEmbeds: [
+      /* final event = await */ EditorRouter.open(context, initEmbeds: [
         quill.CustomBlockEmbed(CustEmbedTypes.mention_event, widget.event.id)
       ]);
-      print(event);
+      // print(event);
     }
   }
 

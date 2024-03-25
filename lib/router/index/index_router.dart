@@ -1,17 +1,15 @@
 import "dart:async";
 import "dart:io";
 
+import "package:loure/router/routes.dart";
+import "package:provider/provider.dart";
 import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
 import "package:flutter_inapp_purchase/flutter_inapp_purchase.dart";
-import "package:loure/component/cust_state.dart";
-import "package:loure/component/pc_router_fake.dart";
-import "package:loure/consts/base_consts.dart";
-import "package:loure/provider/pc_router_fake_provider.dart";
-import "package:loure/router/routes.dart";
-import "package:loure/util/platform_util.dart";
-import "package:provider/provider.dart";
 
+import "package:loure/component/cust_state.dart";
+import "package:loure/consts/base_consts.dart";
+import "package:loure/util/platform_util.dart";
 import "package:loure/main.dart";
 import "package:loure/provider/index_provider.dart";
 import "package:loure/util/auth_util.dart";
@@ -277,47 +275,14 @@ class IndexRouterState extends CustState<IndexRouter>
             child: mainIndex,
           ),
           Expanded(
-            child: Selector<PcRouterFakeProvider, List<RouterFakeInfo>>(
-              builder: (final context, final infos, final child) {
-                if (infos.isEmpty) {
-                  return const Center(
-                    child: Text("There should be a universe here."),
-                  );
-                }
-
-                final List<Widget> pages = [];
-                for (final info in infos) {
-                  if (info.routerPath != null && info.routerPath != "") {
-                    final widget = renderWidget(RouteSettings(
-                        name: info.routerPath, arguments: info.arguments));
-                    pages.add(PcRouterFake(
-                      info: info,
-                      child: widget,
-                    ));
-                  } else if (info.buildContent != null) {
-                    pages.add(PcRouterFake(
-                      info: info,
-                      child: info.buildContent!(context),
-                    ));
-                  }
-                }
-
-                return IndexedStack(
-                  index: pages.length - 1,
-                  children: pages,
-                );
-              },
-              selector: (final context, final provider) {
-                return provider.routerFakeInfos;
-              },
-              shouldRebuild: (final previous, final next) {
-                if (previous != next) {
-                  return true;
-                }
-                return false;
+            child: StreamBuilder<Widget>(
+              stream: internalRouter.stream,
+              initialData: InternalRouter.base,
+              builder: (final context, final snapshot) {
+                return snapshot.data!;
               },
             ),
-          )
+          ),
         ]),
       );
     } else {
@@ -335,7 +300,7 @@ class IndexRouterState extends CustState<IndexRouter>
   }
 
   void doAuth() {
-    AuthUtil.authenticate(context, "Please_authenticate_to_use_app")
+    AuthUtil.authenticate(context, "Please authenticate to use app")
         .then((final didAuthenticate) {
       if (didAuthenticate) {
         setState(() {

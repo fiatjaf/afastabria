@@ -70,7 +70,6 @@ class _GlobalEventItemComponent extends State<GlobalEventItemComponent> {
               child: EventMainComponent(
                 screenshotController: screenshotController,
                 event: event,
-                pagePubkey: null,
                 textOnTap: () {
                   RouterUtil.router(context, RouterPath.THREAD_DETAIL, event);
                 },

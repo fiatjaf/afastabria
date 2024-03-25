@@ -19,7 +19,9 @@ import "package:loure/util/router_util.dart";
 import "package:loure/router/user/user_statistics_component.dart";
 
 class UserRouter extends StatefulWidget {
-  const UserRouter({super.key});
+  const UserRouter(this.pubkey, {super.key});
+
+  final String pubkey;
 
   @override
   State<StatefulWidget> createState() {
@@ -31,7 +33,7 @@ class UserRouterState extends CustState<UserRouter>
     with PendingEventsLaterFunction, LoadMoreEvent {
   final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
   final ScrollController _controller = ScrollController();
-  String? pubkey;
+
   bool showTitle = false;
   bool showAppbarBG = false;
   EventMemBox box = EventMemBox();
@@ -47,6 +49,7 @@ class UserRouterState extends CustState<UserRouter>
     super.initState();
 
     queryLimit = 200;
+    this.initFromArgs();
 
     this._controller.addListener(() {
       var showTitle = false;
@@ -70,34 +73,31 @@ class UserRouterState extends CustState<UserRouter>
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void didUpdateWidget(UserRouter oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
-    final newPubkey = RouterUtil.routerArgs(context) as String?;
-    if (newPubkey == null || !keyIsValid(newPubkey)) {
+    if (!keyIsValid(widget.pubkey)) {
       RouterUtil.back(context);
       return;
     }
 
-    if (this.pubkey == null || !keyIsValid(this.pubkey!)) {
-      this.setState(() {
-        this.pubkey = newPubkey;
-      });
-      final events = followingManager.eventsByPubkey(pubkey!);
-      if (events.isNotEmpty) {
-        box.addList(events.toList());
-      }
+    if (oldWidget.pubkey == widget.pubkey) {
+      // same stuff, do nothing
+      return;
     } else {
-      if (newPubkey != pubkey) {
-        // arg change! reset.
-        box.clear();
-        until = null;
-        this.setState(() {
-          this.pubkey = newPubkey;
-        });
-        doQuery();
-      }
+      // arg change! reset.
+      box.clear();
+      until = null;
+      this.initFromArgs();
     }
+  }
+
+  void initFromArgs() {
+    final events = followingManager.eventsByPubkey(widget.pubkey);
+    if (events.isNotEmpty) {
+      box.addList(events.toList());
+    }
+    doQuery();
     preBuild();
   }
 
@@ -112,11 +112,9 @@ class UserRouterState extends CustState<UserRouter>
     final themeData = Theme.of(context);
     // var cardColor = themeData.cardColor;
 
-    if (this.pubkey == null) return Container();
-
     return FutureBuilder(
-      future: metadataLoader.load(this.pubkey!),
-      initialData: Metadata.blank(this.pubkey!),
+      future: metadataLoader.load(widget.pubkey),
+      initialData: Metadata.blank(widget.pubkey),
       builder: (final context, final snapshot) {
         final metadata = snapshot.data;
 
@@ -127,7 +125,7 @@ class UserRouterState extends CustState<UserRouter>
         Widget? appbarTitle;
         if (showTitle) {
           final String displayName =
-              SimpleNameComponent.getSimpleName(pubkey!, metadata);
+              SimpleNameComponent.getSimpleName(widget.pubkey, metadata);
 
           appbarTitle = Container(
             alignment: Alignment.center,
@@ -155,7 +153,7 @@ class UserRouterState extends CustState<UserRouter>
             return <Widget>[
               SliverToBoxAdapter(
                 child: MetadataComponent(
-                  pubkey: pubkey!,
+                  pubkey: widget.pubkey,
                   metadata: metadata,
                   showBadges: true,
                   userPicturePreview: true,
@@ -165,7 +163,7 @@ class UserRouterState extends CustState<UserRouter>
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: UserStatisticsComponent(
-                    pubkey: pubkey!,
+                    pubkey: widget.pubkey,
                   ),
                 ),
               ),
@@ -247,7 +245,7 @@ class UserRouterState extends CustState<UserRouter>
     final filter = Filter(
       kinds: EventKind.SUPPORTED_EVENTS,
       until: this.until,
-      authors: [this.pubkey!],
+      authors: [widget.pubkey],
       limit: this.queryLimit,
     );
 

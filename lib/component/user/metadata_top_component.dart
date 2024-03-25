@@ -423,7 +423,8 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
   }
 
   Future<void> handleScanner() async {
-    final result = await RouterUtil.router(context, RouterPath.QRSCANNER);
+    final result =
+        (await RouterUtil.router(context, RouterPath.QRSCANNER)) as String;
     if (StringUtil.isNotBlank(result)) {
       if (Nip19.isPubkey(result)) {
         final pubkey = Nip19.decode(result);

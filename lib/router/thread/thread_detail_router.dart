@@ -16,7 +16,7 @@ import "package:loure/main.dart";
 import "package:loure/util/pendingevents_later_function.dart";
 import "package:loure/util/platform_util.dart";
 import "package:loure/util/router_util.dart";
-import "package:loure/client/event_kind.dart" as kind;
+import "package:loure/client/event_kind.dart";
 import "package:loure/util/string_util.dart";
 import "package:loure/util/when_stop_function.dart";
 import "package:loure/router/thread/thread_detail_event.dart";
@@ -24,7 +24,10 @@ import "package:loure/router/thread/thread_detail_event_main_component.dart";
 import "package:loure/router/thread/thread_detail_item_component.dart";
 
 class ThreadDetailRouter extends StatefulWidget {
-  const ThreadDetailRouter({super.key});
+  const ThreadDetailRouter(dynamic arg, {super.key})
+      : this.sourceEvent = arg != null && arg is Event ? arg : null;
+
+  final Event? sourceEvent;
 
   @override
   State<StatefulWidget> createState() {
@@ -62,8 +65,9 @@ class ThreadDetailRouter extends StatefulWidget {
 
 class ThreadDetailRouterState extends State<ThreadDetailRouter>
     with PendingEventsLaterFunction, WhenStopFunction {
+  ThreadDetailRouterState();
+
   EventMemBox box = EventMemBox();
-  Event? sourceEvent;
   bool showTitle = false;
   final ScrollController _controller = ScrollController();
   double rootEventHeight = 120;
@@ -91,47 +95,38 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
         });
       }
     });
-  }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (this.sourceEvent == null) {
-      final obj = RouterUtil.routerArgs(context);
-      if (obj != null && obj is Event) {
-        this.sourceEvent = obj;
-      }
-      if (this.sourceEvent == null) {
-        RouterUtil.back(context);
-        return;
-      }
-
-      this.initFromArgs();
-    } else {
-      final obj = RouterUtil.routerArgs(context);
-      if (obj != null && obj is Event) {
-        if (obj.id != sourceEvent!.id) {
-          // arg change! reset.
-          this.sourceEvent = obj;
-          this.rootId = null;
-          this.box = EventMemBox();
-          this.rootSubList = [];
-
-          this.initFromArgs();
-        }
-      }
-    }
-
+    this.initFromArgs();
     this.subscribeReplies();
   }
 
+  @override
+  void didUpdateWidget(ThreadDetailRouter oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.sourceEvent == null) {
+      RouterUtil.back(context);
+      return;
+    } else if (oldWidget.sourceEvent == widget.sourceEvent) {
+      // same stuff, do nothing
+      return;
+    } else {
+      // arg change! reset.
+      this.rootId = null;
+      this.box = EventMemBox();
+      this.rootSubList = [];
+
+      this.initFromArgs();
+      this.subscribeReplies();
+    }
+  }
+
   void initFromArgs() {
-    final eventRelation = EventRelation.fromEvent(sourceEvent!);
+    final eventRelation = EventRelation.fromEvent(widget.sourceEvent!);
     this.rootId = eventRelation.rootId;
 
     if (eventRelation.aId != null &&
-        eventRelation.aId!.kind == kind.EventKind.LONG_FORM) {
+        eventRelation.aId!.kind == EventKind.LONG_FORM) {
       this.aId = eventRelation.aId;
     }
 
@@ -146,8 +141,8 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
         } else {
           // source event is root event
           // TODO: check if source is a replaceable event and check tags here instead of just id
-          this.rootId = sourceEvent!.id;
-          this.rootEventFuture = Future.value(sourceEvent!);
+          this.rootId = widget.sourceEvent!.id;
+          this.rootEventFuture = Future.value(widget.sourceEvent!);
         }
       } else {
         // aid linked root event
@@ -166,12 +161,12 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
       // load replies from cache and avoid blank page
       {
         final eventReactions =
-            eventReactionsProvider.get(this.sourceEvent!.id, avoidPull: true);
+            eventReactionsProvider.get(widget.sourceEvent!.id, avoidPull: true);
         if (eventReactions != null && eventReactions.replies.isNotEmpty) {
           box.addList(eventReactions.replies);
         }
       }
-      if (this.rootId != null && this.rootId != this.sourceEvent!.id) {
+      if (this.rootId != null && this.rootId != widget.sourceEvent!.id) {
         final eventReactions =
             eventReactionsProvider.get(this.rootId!, avoidPull: true);
         if (eventReactions != null && eventReactions.replies.isNotEmpty) {
@@ -179,7 +174,7 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
         }
       }
       if (rootEvent == null) {
-        box.add(sourceEvent!);
+        box.add(widget.sourceEvent!);
       }
       listToTree(refresh: false);
 
@@ -275,7 +270,7 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
             child: ThreadDetailItemComponent(
               item: item,
               totalMaxWidth: needWidth,
-              sourceEventId: sourceEvent!.id,
+              sourceEventId: widget.sourceEvent!.id,
               sourceEventKey: sourceEventKey,
             ),
           ),
@@ -284,7 +279,7 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
         mainList.add(ThreadDetailItemComponent(
           item: item,
           totalMaxWidth: needWidth,
-          sourceEventId: sourceEvent!.id,
+          sourceEventId: widget.sourceEvent!.id,
           sourceEventKey: sourceEventKey,
         ));
       }
@@ -335,8 +330,8 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
     if (this.repliesSubHandle != null) this.repliesSubHandle!.close();
     if (this.rootId == null && this.aId == null) return;
 
-    List<int> replyKinds = [...kind.EventKind.SUPPORTED_EVENTS];
-    replyKinds.remove(kind.EventKind.REPOST);
+    List<int> replyKinds = [...EventKind.SUPPORTED_EVENTS];
+    replyKinds.remove(EventKind.REPOST);
 
     // query sub events
     final filter = this.aId == null
@@ -354,7 +349,7 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
   }
 
   void onEvent(final Event event) {
-    if (event.kind == kind.EventKind.ZAP && StringUtil.isBlank(event.content)) {
+    if (event.kind == EventKind.ZAP && StringUtil.isBlank(event.content)) {
       return;
     }
 

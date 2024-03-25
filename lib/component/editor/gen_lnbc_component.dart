@@ -57,9 +57,8 @@ class _GenLnbcComponent extends State<GenLnbcComponent> {
                   padding: const EdgeInsets.all(Base.BASE_PADDING),
                   child: ContentStrLinkComponent(
                     str: "Add now",
-                    onTap: () async {
-                      await RouterUtil.router(
-                          context, RouterPath.PROFILE_EDITOR);
+                    onTap: () {
+                      RouterUtil.router(context, RouterPath.PROFILE_EDITOR);
                       metadataLoader.invalidate(nostr.publicKey);
                     },
                   ),

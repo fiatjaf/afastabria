@@ -48,7 +48,7 @@ class EditorRouter extends StatefulWidget {
   List<List<String>> tagPs = [];
   List<quill.BlockEmbed>? initEmbeds;
 
-  static Future<Event?> open(
+  static void open(
     final BuildContext context, {
     List<List<String>>? tags,
     List<List<String>>? tagsAddedWhenSend,
@@ -70,12 +70,7 @@ class EditorRouter extends StatefulWidget {
       initEmbeds: initEmbeds,
     );
 
-    return RouterUtil.push(context, MaterialPageRoute(builder: (final context) {
-      return editor;
-    }));
-    // return Navigator.push(context, MaterialPageRoute(builder: (context) {
-    //   return editor;
-    // }));
+    RouterUtil.push(context, editor);
   }
 
   @override

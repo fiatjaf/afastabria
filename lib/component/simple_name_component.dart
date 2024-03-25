@@ -5,7 +5,7 @@ import "package:loure/client/nip19/nip19.dart";
 import "package:loure/data/metadata.dart";
 import "package:loure/util/string_util.dart";
 
-class SimpleNameComponent extends StatefulWidget {
+class SimpleNameComponent extends StatelessWidget {
   const SimpleNameComponent({
     required this.pubkey,
     super.key,
@@ -13,11 +13,6 @@ class SimpleNameComponent extends StatefulWidget {
   });
   final String pubkey;
   final TextStyle? textStyle;
-
-  @override
-  State<StatefulWidget> createState() {
-    return SimpleNameComponentState();
-  }
 
   static String getSimpleName(final String pubkey, final Metadata? metadata) {
     String? name;
@@ -34,20 +29,18 @@ class SimpleNameComponent extends StatefulWidget {
 
     return name!;
   }
-}
 
-class SimpleNameComponentState extends State<SimpleNameComponent> {
   @override
   Widget build(final BuildContext context) {
     return FutureBuilder(
-        future: metadataLoader.load(widget.pubkey),
-        initialData: Metadata.blank(widget.pubkey),
+        future: metadataLoader.load(this.pubkey),
+        initialData: Metadata.blank(this.pubkey),
         builder: (final context, final snapshot) {
           final name =
-              SimpleNameComponent.getSimpleName(widget.pubkey, snapshot.data);
+              SimpleNameComponent.getSimpleName(this.pubkey, snapshot.data);
           return Text(
             name,
-            style: widget.textStyle,
+            style: this.textStyle,
           );
         });
   }

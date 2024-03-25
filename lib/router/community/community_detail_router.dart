@@ -209,12 +209,12 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
 
   Future<void> addToCommunity() async {
     if (aId != null) {
-      final event = await EditorRouter.open(context, tags: [
+      /*final event = await*/ EditorRouter.open(context, tags: [
         ["a", aId!.toTag()]
       ]);
-      if (event != null) {
+      /*if (event != null) {
         queryEvents();
-      }
+      }*/
     }
   }
 }
