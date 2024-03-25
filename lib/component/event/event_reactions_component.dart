@@ -4,13 +4,16 @@ import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_quill/flutter_quill.dart" as quill;
-import "package:loure/client/nip51/bookmarks.dart";
-import "package:loure/component/enum_selector_component.dart";
-import "package:loure/component/zap_gen_dialog.dart";
 import "package:provider/provider.dart";
 import "package:screenshot/screenshot.dart";
 import "package:share_plus/share_plus.dart";
+import "package:url_launcher/url_launcher.dart";
 
+import "package:loure/client/nip19/nip19_tlv.dart";
+import "package:loure/client/nip51/bookmarks.dart";
+import "package:loure/component/enum_selector_component.dart";
+import "package:loure/component/zap_gen_dialog.dart";
+import "package:loure/util/platform_util.dart";
 import "package:loure/client/event.dart";
 import "package:loure/client/event_relation.dart";
 import "package:loure/client/nip19/nip19.dart";
@@ -26,25 +29,20 @@ import "package:loure/util/router_util.dart";
 import "package:loure/util/store_util.dart";
 import "package:loure/util/string_util.dart";
 import "package:loure/component/editor/cust_embed_types.dart";
-import "package:loure/component/event_delete_callback.dart";
-import "package:loure/component/event_reply_callback.dart";
 
-// ignore: must_be_immutable
 class EventReactionsComponent extends StatefulWidget {
-  EventReactionsComponent({
+  const EventReactionsComponent({
     required this.screenshotController,
     required this.event,
     required this.eventRelation,
     super.key,
     this.showDetailBtn = true,
   });
-  ScreenshotController screenshotController;
 
-  Event event;
-
-  EventRelation eventRelation;
-
-  bool showDetailBtn;
+  final ScreenshotController screenshotController;
+  final Event event;
+  final EventRelation eventRelation;
+  final bool showDetailBtn;
 
   @override
   State<StatefulWidget> createState() {
@@ -463,6 +461,14 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
   }
 
   void onShareTap() {
+    if (PlatformUtil.isPC()) {
+      final nevent = NIP19Tlv.encodeNevent(Nevent(
+        id: widget.event.id,
+        author: widget.event.pubkey,
+      ));
+      launchUrl(Uri.parse("https://njump.me/$nevent"));
+    }
+
     widget.screenshotController.capture().then(
       (final Uint8List? imageData) async {
         if (imageData != null) {
@@ -473,7 +479,9 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
           Share.shareXFiles([XFile(tempFile)]);
         }
       },
-    ).catchError(print);
+    ).catchError((final err) {
+      print("share error: $err");
+    });
   }
 
   void genZap() {
