@@ -1,6 +1,7 @@
 import "dart:async";
 
 import "package:collection/collection.dart";
+import "package:flutter/material.dart";
 
 import "package:loure/client/event.dart";
 import "package:loure/client/event_kind.dart";
@@ -10,24 +11,19 @@ import "package:loure/client/relay/relay_pool.dart";
 import "package:loure/data/note_db.dart";
 import "package:loure/main.dart";
 
-class FollowingManager {
+class FollowingManager extends ChangeNotifier {
   FollowingManager();
 
   List<Contact> contacts = [];
   List<List<String>> relaysFor = [];
 
-  List<Event> events = [];
   ManySubscriptionHandle? subHandle;
+  final List<Event> unmerged = [];
 
-  final StreamController<int> newEventsCountStreamController =
-      StreamController<int>();
-
-  Stream<int> get newEventsCountStream => newEventsCountStreamController.stream;
-  int newEventsCountCurrent = 0;
+  List<Event> events = [];
+  final ValueNotifier<int> newEvents = ValueNotifier(0);
 
   void init() async {
-    print("init");
-
     final cl = await contactListLoader.load(nostr.publicKey);
     this.contacts = cl.contacts; // add some randomness
     this.relaysFor = List.filled(contacts.length, [], growable: false);
@@ -81,25 +77,11 @@ class FollowingManager {
       chosen.keys,
       [Filter(kinds: EventKind.SUPPORTED_EVENTS, since: mostRecent)],
       onEvent: (final event) {
-        if (this.events.length == 0) {
-          this.events.add(event);
-        } else {
-          final idx = this.whereToInsert(event);
-          if (idx == -1) {
-            // event is already here
-            return;
-          }
-
-          this.events.insert(idx, event);
-
-          // if this event would be added to the top (in the range of all the other new events at the top
-          // that weren't seen yet) notify it as a new event
-          if (idx <= newEventsCountCurrent) {
-            newEventsCountCurrent++;
-            this.newEventsCountStreamController.add(newEventsCountCurrent);
-          }
-        }
+        this.unmerged.add(event);
+        this.newEvents.value++;
+        this.newEvents;
       },
+      id: "following-initial",
       filterModifier: (relay, filters) {
         filters[0].authors = chosen[relay];
         return filters;
@@ -107,15 +89,31 @@ class FollowingManager {
     );
   }
 
+  mergeNewNotes() {
+    for (final event in this.unmerged) {
+      final idx = whereToInsert(this.events, event);
+      if (idx == -1) {
+        // event is already here
+        continue;
+      }
+      this.events.insert(idx, event);
+    }
+    this.notifyListeners();
+
+    this.unmerged.clear();
+    this.newEvents.value = 0;
+  }
+
   // returns the index into which the event should be inserted, if it doesn't exist
   // if it exists already, returns -1 -- using a kind of binary search
-  int whereToInsert(Event needle) {
+  static int whereToInsert(List<Event> destination, Event needle) {
     var mostRecentIdx = 0;
-    var oldestIdx = this.events.length;
+    var oldestIdx = destination.length;
     var midIdx = mostRecentIdx + ((oldestIdx - mostRecentIdx) >> 1);
 
     while (mostRecentIdx < oldestIdx) {
-      var element = this.events[midIdx];
+      midIdx = mostRecentIdx + ((oldestIdx - mostRecentIdx) >> 1);
+      var element = destination[midIdx];
 
       if (needle.createdAt > element.createdAt) {
         oldestIdx = midIdx;
@@ -125,8 +123,10 @@ class FollowingManager {
         mostRecentIdx = midIdx + 1;
         continue;
       }
-      if (element.id == needle.id) return -1;
-      break;
+      if (element.id == needle.id) {
+        return -1; // we already have this element, so return -1
+      }
+      break; // we don't have it, but we found the best point possible
     }
 
     return midIdx;
@@ -142,8 +142,9 @@ class FollowingManager {
     return this.events.where((final evt) => evt.pubkey == pubkey);
   }
 
+  @override
   dispose() {
+    super.dispose();
     if (this.subHandle != null) this.subHandle!.close();
-    newEventsCountStreamController.close();
   }
 }

@@ -104,7 +104,11 @@ class Nostr {
     if (evt != null) {
       return evt;
     } else {
-      return await pool.querySingle(nostr.ID_RELAYS, Filter(ids: [id]));
+      return await pool.querySingle(
+        nostr.ID_RELAYS,
+        Filter(ids: [id]),
+        id: "specific-i",
+      );
     }
   }
 
@@ -116,10 +120,12 @@ class Nostr {
       return evt;
     } else {
       return pool.querySingle(
-          relays == null
-              ? nostr.RANDOM_RELAYS
-              : [...relays, ...nostr.RANDOM_RELAYS],
-          aid.toFilter());
+        relays == null
+            ? nostr.RANDOM_RELAYS
+            : [...relays, ...nostr.RANDOM_RELAYS],
+        aid.toFilter(),
+        id: "specific-a",
+      );
     }
   }
 

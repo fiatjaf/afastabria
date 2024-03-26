@@ -63,14 +63,14 @@ class InternalRouter {
   void pop([dynamic withValue]) {
     if (this._completers.length == 0) return;
 
-    this._completers[this._completers.length].complete(withValue);
+    this._completers[this._completers.length - 1].complete(withValue);
 
     this._stack.removeLast();
     this._completers.removeLast();
 
     Widget next = InternalRouter.base;
     if (this._stack.length > 0) {
-      next = this._stack[this._stack.length];
+      next = this._stack[this._stack.length - 1];
     }
     this._streamController.add(next);
   }

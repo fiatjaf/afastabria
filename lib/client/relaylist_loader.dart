@@ -18,7 +18,10 @@ class RelayListLoader {
 
   static Future<List<RelayList>> batchLoad(final Iterable<String> keys) async {
     final events = await pool.querySync(
-        nostr.RELAYLIST_RELAYS, Filter(kinds: [10002], authors: keys.toList()));
+      nostr.RELAYLIST_RELAYS,
+      Filter(kinds: [10002], authors: keys.toList()),
+      id: "load-relaylists",
+    );
 
     return await Future.wait(
       keys.map((final String key) async {

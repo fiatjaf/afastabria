@@ -19,7 +19,10 @@ class ContactListLoader {
   static Future<List<ContactList>> batchLoad(
       final Iterable<String> keys) async {
     final events = await pool.querySync(
-        nostr.METADATA_RELAYS, Filter(kinds: [3], authors: keys.toList()));
+      nostr.METADATA_RELAYS,
+      Filter(kinds: [3], authors: keys.toList()),
+      id: "load-contacts",
+    );
 
     return await Future.wait(
       keys.map((final String key) async {

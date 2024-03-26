@@ -1,10 +1,11 @@
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
+import "package:easy_debounce/easy_debounce.dart";
 
 import "package:loure/main.dart";
 import "package:loure/component/event/event_list_component.dart";
 import "package:loure/component/new_notes_updated_component.dart";
-// import "package:loure/component/placeholder/event_list_placeholder.dart";
+import "package:loure/component/placeholder/event_list_placeholder.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/consts/base_consts.dart";
 import "package:loure/provider/setting_provider.dart";
@@ -18,6 +19,8 @@ class FollowRouter extends StatefulWidget {
 
 class FollowRouterState extends State<FollowRouter>
     with AutomaticKeepAliveClientMixin<FollowRouter> {
+  static const debounceDuration = Duration(seconds: 3);
+
   final ScrollController scrollController = ScrollController();
 
   @override
@@ -28,6 +31,15 @@ class FollowRouterState extends State<FollowRouter>
     super.initState();
 
     scrollController.addListener(handleScroll);
+    followingManager.newEvents.addListener(newEventArrived);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    scrollController.removeListener(handleScroll);
+    followingManager.newEvents.removeListener(newEventArrived);
   }
 
   @override
@@ -38,40 +50,38 @@ class FollowRouterState extends State<FollowRouter>
         Provider.of<SettingProvider>(context).videoPreviewInList ==
             OpenStatus.OPEN;
 
-    // if (events.isEmpty) {
-    //   return EventListPlaceholder(
-    //     onRefresh: () {
-    //       followEventProvider.refresh();
-    //     },
-    //   );
-    // }
-
     indexProvider.setFollowScrollController(scrollController);
 
     return Stack(alignment: Alignment.center, children: [
-      ListView.builder(
-        controller: scrollController,
-        itemBuilder: (final BuildContext context, final int index) {
-          return EventListComponent(
-            event: followingManager.events[index],
-            showVideo: showVideo,
-          );
-        },
-        itemCount: followingManager.events.length,
+      ListenableBuilder(
+        listenable: followingManager,
+        builder: (final context, final child) => ListView.builder(
+          controller: scrollController,
+          itemBuilder: (final context, final int index) {
+            if (followingManager.events.isEmpty) {
+              return EventListPlaceholder();
+            }
+
+            return EventListComponent(
+              event: followingManager.events[index],
+              showVideo: showVideo,
+            );
+          },
+          itemCount: followingManager.events.length,
+        ),
       ),
       Positioned(
         top: Base.BASE_PADDING,
-        child: StreamBuilder<int>(
-          stream: followingManager.newEventsCountStream,
-          initialData: 0,
-          builder: (final context, final snapshot) {
-            return NewNotesUpdatedComponent(
-              num: snapshot.data!,
-              onTap: () {
-                scrollController.jumpTo(0);
-              },
-            );
-          },
+        child: ValueListenableBuilder<int>(
+          valueListenable: followingManager.newEvents,
+          builder: (final context, final num_, final child) =>
+              NewNotesUpdatedComponent(
+            num: num_,
+            onTap: () {
+              followingManager.mergeNewNotes();
+              scrollController.jumpTo(0);
+            },
+          ),
         ),
       ),
     ]);
@@ -79,5 +89,16 @@ class FollowRouterState extends State<FollowRouter>
 
   void handleScroll() {
     print("scrolled: ${scrollController.position.pixels}");
+  }
+
+  void newEventArrived() {
+    EasyDebounce.debounce(
+        "neweventarrived", debounceDuration, this.handleNewEvent);
+  }
+
+  void handleNewEvent() {
+    if (this.scrollController.position.pixels < 0.1) {
+      followingManager.mergeNewNotes();
+    }
   }
 }

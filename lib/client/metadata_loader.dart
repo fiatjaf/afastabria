@@ -18,7 +18,10 @@ class MetadataLoader {
 
   static Future<List<Metadata>> batchLoad(final Iterable<String> keys) async {
     final events = await pool.querySync(
-        nostr.METADATA_RELAYS, Filter(kinds: [0], authors: keys.toList()));
+      nostr.METADATA_RELAYS,
+      Filter(kinds: [0], authors: keys.toList()),
+      id: "load-metadata",
+    );
 
     return await Future.wait(
       keys.map((final String key) async {
