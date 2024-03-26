@@ -79,7 +79,7 @@ class SearchRouterState extends State<SearchRouter>
   void performSearch() async {
     final text = this.textEditingController.text;
     if (text.startsWith("npub1")) {
-      final pubkey = Nip19.decode(text);
+      final pubkey = NIP19.decode(text);
       final metadata = await metadataLoader.load(pubkey);
       setState(() {
         this.results = [
@@ -95,7 +95,7 @@ class SearchRouterState extends State<SearchRouter>
         ];
       });
     } else if (text.startsWith("nprofile1")) {
-      final nprofile = NIP19Tlv.decodeNprofile(text);
+      final nprofile = NIP19.decodeNprofile(text);
       if (nprofile == null) return;
       final pubkey = nprofile.pubkey;
       final metadata = await metadataLoader.load(pubkey);
@@ -113,7 +113,7 @@ class SearchRouterState extends State<SearchRouter>
         ];
       });
     } else if (text.startsWith("note1")) {
-      final id = Nip19.decode(text);
+      final id = NIP19.decode(text);
       final event = await nostr.getByID(id);
       if (event == null) return;
       setState(() {
@@ -125,9 +125,9 @@ class SearchRouterState extends State<SearchRouter>
         ];
       });
     } else if (text.startsWith("nevent1")) {
-      nevent = NIP19Tlv.decodeNevent(text);
+      nevent = NIP19.decodeNevent(text);
     } else if (text.startsWith("naddr1")) {
-      naddr = NIP19Tlv.decodeNaddr(text);
+      naddr = NIP19.decodeNaddr(text);
     } else if (text.startsWith("#") && !text.contains(" ")) {
       tag = text.substring(1);
     } else {
@@ -286,7 +286,7 @@ class SearchRouterState extends State<SearchRouter>
     List<String>? authors;
     if (StringUtil.isNotBlank(value) && value.indexOf("npub") == 0) {
       try {
-        final result = Nip19.decode(value);
+        final result = NIP19.decode(value);
         authors = [result];
       } catch (e) {
         print(e);
@@ -335,8 +335,8 @@ class SearchRouterState extends State<SearchRouter>
     final text = textEditingController.text;
     if (StringUtil.isNotBlank(text)) {
       String pubkey = text;
-      if (Nip19.isPubkey(text)) {
-        pubkey = Nip19.decode(text);
+      if (NIP19.isPubkey(text)) {
+        pubkey = NIP19.decode(text);
       }
 
       RouterUtil.router(context, RouterPath.USER, pubkey);
@@ -348,8 +348,8 @@ class SearchRouterState extends State<SearchRouter>
     final text = controller.text;
     if (StringUtil.isNotBlank(text)) {
       String noteId = text;
-      if (Nip19.isNoteId(text)) {
-        noteId = Nip19.decode(text);
+      if (NIP19.isNoteId(text)) {
+        noteId = NIP19.decode(text);
       }
 
       RouterUtil.router(context, RouterPath.EVENT_DETAIL, noteId);

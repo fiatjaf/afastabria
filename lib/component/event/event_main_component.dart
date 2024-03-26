@@ -15,7 +15,6 @@ import "package:loure/client/event_kind.dart";
 import "package:loure/client/event_relation.dart";
 import "package:loure/client/nip23/long_form_info.dart";
 import "package:loure/client/nip19/nip19.dart";
-import "package:loure/client/nip19/nip19_tlv.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/consts/base_consts.dart";
 import "package:loure/router/routes.dart";
@@ -35,8 +34,6 @@ import "package:loure/component/content/markdown/markdown_mention_user_element_b
 import "package:loure/component/content/markdown/markdown_mention_user_inline_syntax.dart";
 import "package:loure/component/content/markdown/markdown_nevent_inline_syntax.dart";
 import "package:loure/component/content/markdown/markdown_nprofile_inline_syntax.dart";
-import "package:loure/component/content/markdown/markdown_nrelay_element_builder.dart";
-import "package:loure/component/content/markdown/markdown_nrelay_inline_syntax%20copy.dart";
 import "package:loure/component/event/event_poll_component.dart";
 import "package:loure/component/webview_router.dart";
 import "package:loure/component/event/event_quote_component.dart";
@@ -513,9 +510,9 @@ class EventMainComponentState extends State<EventMainComponent> {
         final key = tag[0];
         final value = tag[1];
         if (key == "e") {
-          link = "nostr:${Nip19.encodeNoteId(value)}";
+          link = "nostr:${NIP19.encodeNoteId(value)}";
         } else if (key == "p") {
-          link = "nostr:${Nip19.encodePubKey(value)}";
+          link = "nostr:${NIP19.encodePubKey(value)}";
         }
       }
 
@@ -563,35 +560,35 @@ class EventMainComponentState extends State<EventMainComponent> {
             WebViewRouter.open(context, href);
           } else if (href.indexOf("nostr:") == 0) {
             final link = href.replaceFirst("nostr:", "");
-            if (Nip19.isPubkey(link)) {
+            if (NIP19.isPubkey(link)) {
               // jump user page
-              final pubkey = Nip19.decode(link);
+              final pubkey = NIP19.decode(link);
               if (StringUtil.isNotBlank(pubkey)) {
                 RouterUtil.router(context, RouterPath.USER, pubkey);
               }
-            } else if (NIP19Tlv.isNprofile(link)) {
-              final nprofile = NIP19Tlv.decodeNprofile(link);
+            } else if (NIP19.isNprofile(link)) {
+              final nprofile = NIP19.decodeNprofile(link);
               if (nprofile != null) {
                 RouterUtil.router(context, RouterPath.USER, nprofile.pubkey);
               }
-            } else if (Nip19.isNoteId(link)) {
-              final noteId = Nip19.decode(link);
+            } else if (NIP19.isNoteId(link)) {
+              final noteId = NIP19.decode(link);
               if (StringUtil.isNotBlank(noteId)) {
                 RouterUtil.router(context, RouterPath.EVENT_DETAIL, noteId);
               }
-            } else if (NIP19Tlv.isNevent(link)) {
-              final nevent = NIP19Tlv.decodeNevent(link);
+            } else if (NIP19.isNevent(link)) {
+              final nevent = NIP19.decodeNevent(link);
               if (nevent != null) {
                 RouterUtil.router(context, RouterPath.EVENT_DETAIL, nevent.id);
               }
-            } else if (NIP19Tlv.isNaddr(link)) {
-              final naddr = NIP19Tlv.decodeNaddr(link);
+            } else if (NIP19.isNaddr(link)) {
+              final naddr = NIP19.decodeNaddr(link);
               if (naddr != null) {
                 RouterUtil.router(
                     context, RouterPath.EVENT_DETAIL, naddr.identifier);
               }
-              // } else if (NIP19Tlv.isNrelay(link)) {
-              //   final nrelay = NIP19Tlv.decodeNrelay(link);
+              // } else if (NIP19.isNrelay(link)) {
+              //   final nrelay = NIP19.decodeNrelay(link);
               //   if (nrelay != null) {
               //     final result = await ConfirmDialog.show(
               //         context, "Add this relay to local");

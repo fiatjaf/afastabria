@@ -14,7 +14,7 @@ class Zap {
   static String decodeLud06Link(final String lud06) {
     final decoder = Bech32Decoder();
     final bech32Result = decoder.convert(lud06, 2000);
-    final data = Nip19.convertBits(bech32Result.data, 5, 8, false);
+    final data = NIP19.convertBits(bech32Result.data, 5, 8, false);
     return utf8.decode(data);
   }
 
@@ -33,7 +33,7 @@ class Zap {
   static String? getLnurlFromLud16(final String lud16) {
     final link = getLud16LinkFromLud16(lud16);
     List<int> data = utf8.encode(link!);
-    data = Nip19.convertBits(data, 8, 5, true);
+    data = NIP19.convertBits(data, 8, 5, true);
 
     final encoder = Bech32Encoder();
     final Bech32 input = Bech32("lnurl", data);

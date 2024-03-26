@@ -4,7 +4,6 @@ import "package:loure/component/content/content_event_tag_infos.dart";
 
 import "package:loure/client/event.dart";
 import "package:loure/client/nip19/nip19.dart";
-import "package:loure/client/nip19/nip19_tlv.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/consts/base64.dart";
 import "package:loure/util/platform_util.dart";
@@ -186,7 +185,7 @@ class ContentDecoder {
                     List<InlineSpan> spans = [];
                     if (lastListWidget is SelectableText) {
                       if (lastListWidget.data != null) {
-                        spans.add(TextSpan(text: lastListWidget.data!));
+                        spans.add(TextSpan(text: lastListWidget.data));
                       } else if (lastListWidget.textSpan != null) {
                         spans.addAll(lastListWidget.textSpan!.children!);
                       }
@@ -272,23 +271,23 @@ class ContentDecoder {
 
           String? otherStr;
 
-          if (Nip19.isPubkey(key)) {
+          if (NIP19.isPubkey(key)) {
             // inline
             // mention user
             if (key.length > NPUB_LENGTH) {
               otherStr = key.substring(NPUB_LENGTH);
               key = key.substring(0, NPUB_LENGTH);
             }
-            key = Nip19.decode(key);
+            key = NIP19.decode(key);
             handledStr = _closeHandledStr(handledStr, inlines);
             inlines.add(ContentMentionUserComponent(pubkey: key));
-          } else if (Nip19.isNoteId(key)) {
+          } else if (NIP19.isNoteId(key)) {
             // block
             if (key.length > NOTEID_LENGTH) {
               otherStr = key.substring(NOTEID_LENGTH);
               key = key.substring(0, NOTEID_LENGTH);
             }
-            key = Nip19.decode(key);
+            key = NIP19.decode(key);
             handledStr = _closeHandledStr(handledStr, inlines);
             _closeInlines(inlines, list, textOnTap: textOnTap);
             final widget = EventQuoteComponent(
@@ -296,8 +295,8 @@ class ContentDecoder {
               showVideo: showVideo,
             );
             list.add(widget);
-          } else if (NIP19Tlv.isNprofile(key)) {
-            final nprofile = NIP19Tlv.decodeNprofile(key);
+          } else if (NIP19.isNprofile(key)) {
+            final nprofile = NIP19.decodeNprofile(key);
             if (nprofile != null) {
               // inline
               // mention user
@@ -306,8 +305,8 @@ class ContentDecoder {
             } else {
               handledStr = _addToHandledStr(handledStr, subStr);
             }
-            // } else if (NIP19Tlv.isNrelay(key)) {
-            //   final nrelay = NIP19Tlv.decodeNrelay(key);
+            // } else if (NIP19.isNrelay(key)) {
+            //   final nrelay = NIP19.decodeNrelay(key);
             //   if (nrelay != null) {
             //     // inline
             //     handledStr = _closeHandledStr(handledStr, inlines);
@@ -315,8 +314,8 @@ class ContentDecoder {
             //   } else {
             //     handledStr = _addToHandledStr(handledStr, subStr);
             //   }
-          } else if (NIP19Tlv.isNevent(key)) {
-            final nevent = NIP19Tlv.decodeNevent(key);
+          } else if (NIP19.isNevent(key)) {
+            final nevent = NIP19.decodeNevent(key);
             if (nevent != null) {
               // block
               handledStr = _closeHandledStr(handledStr, inlines);
@@ -329,24 +328,24 @@ class ContentDecoder {
             } else {
               handledStr = _addToHandledStr(handledStr, subStr);
             }
-          } else if (NIP19Tlv.isNaddr(key)) {
-            final naddr = NIP19Tlv.decodeNaddr(key);
+          } else if (NIP19.isNaddr(key)) {
+            final naddr = NIP19.decodeNaddr(key);
             if (naddr != null) {
-              if (StringUtil.isNotBlank(naddr.id) &&
+              if (StringUtil.isNotBlank(naddr.identifier) &&
                   naddr.kind == EventKind.TEXT_NOTE) {
                 // block
                 handledStr = _closeHandledStr(handledStr, inlines);
                 _closeInlines(inlines, list, textOnTap: textOnTap);
                 final widget = EventQuoteComponent(
-                  id: naddr.id,
+                  id: naddr.identifier,
                   showVideo: showVideo,
                 );
                 list.add(widget);
-              } else if (StringUtil.isNotBlank(naddr.author) &&
+              } else if (StringUtil.isNotBlank(naddr.pubkey) &&
                   naddr.kind == EventKind.METADATA) {
                 // inline
                 handledStr = _closeHandledStr(handledStr, inlines);
-                inlines.add(ContentMentionUserComponent(pubkey: naddr.author));
+                inlines.add(ContentMentionUserComponent(pubkey: naddr.pubkey));
               } else {
                 handledStr = _addToHandledStr(handledStr, subStr);
               }
@@ -364,13 +363,13 @@ class ContentDecoder {
           var key = subStr.replaceFirst("@", "");
           // inline
           // mention user
-          key = Nip19.decode(key);
+          key = NIP19.decode(key);
           handledStr = _closeHandledStr(handledStr, inlines);
           inlines.add(ContentMentionUserComponent(pubkey: key));
         } else if (subStr.indexOf(MENTION_NOTE) == 0) {
           var key = subStr.replaceFirst("@", "");
           // block
-          key = Nip19.decode(key);
+          key = NIP19.decode(key);
           handledStr = _closeHandledStr(handledStr, inlines);
           _closeInlines(inlines, list, textOnTap: textOnTap);
           final widget = EventQuoteComponent(

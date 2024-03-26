@@ -34,7 +34,7 @@ class NIP19 {
       final data = convertBits(bech32Result.data, 5, 8, false);
       return HEX.encode(data);
     } catch (e) {
-      print("Nip19 decode error ${e.toString()}");
+      print("NIP19 decode error ${e.toString()}");
       return "";
     }
   }

@@ -1,5 +1,6 @@
 import "dart:convert";
 
+import "package:loure/client/input.dart";
 import "package:pointycastle/ecc/api.dart";
 import "package:auto_size_text_field/auto_size_text_field.dart";
 import "package:bot_toast/bot_toast.dart";
@@ -19,7 +20,6 @@ import "package:loure/client/event.dart";
 import "package:loure/client/event_kind.dart";
 import "package:loure/client/nip04/nip04.dart";
 import "package:loure/client/nip19/nip19.dart";
-import "package:loure/client/nip19/nip19_tlv.dart";
 import "package:loure/client/upload/uploader.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/data/custom_emoji.dart";
@@ -337,8 +337,8 @@ mixin EditorMixin {
     );
     if (StringUtil.isNotBlank(value)) {
       // check nip19 value
-      if (Nip19.isNoteId(value!)) {
-        value = Nip19.decode(value);
+      if (NIP19.isNoteId(value!)) {
+        value = NIP19.decode(value);
       }
       _submitMentionEvent(value);
     }
@@ -367,8 +367,8 @@ mixin EditorMixin {
     );
     if (StringUtil.isNotBlank(value)) {
       // check nip19 value
-      if (Nip19.isPubkey(value!)) {
-        value = Nip19.decode(value);
+      if (NIP19.isPubkey(value!)) {
+        value = NIP19.decode(value);
       }
       _submitMentionUser(value);
     }
@@ -522,7 +522,7 @@ mixin EditorMixin {
             //   var index = tags.length - 1;
             //   result += "#[$index] ";
             // } else {
-            result += "nostr:${Nip19.encodePubKey(value)} ";
+            result += "nostr:${NIP19.encodePubKey(value)} ";
             // }
             continue;
           }
@@ -532,13 +532,16 @@ mixin EditorMixin {
             if (!_lastIsLineEnd(result)) {
               result += " ";
             }
-            final nevent = Nevent(id: value);
+
+            String? author;
+            List<String> relays = [];
             final mentionEvent = nostr.idIndex[value];
             if (mentionEvent != null) {
-              nevent.author = mentionEvent.pubkey;
-              nevent.relays = mentionEvent.sources.take(3);
+              author = mentionEvent.pubkey;
+              relays = mentionEvent.sources.take(3).toList();
             }
-            result += "${NIP19Tlv.encodeNevent(nevent)} ";
+            result +=
+                "${NIP19.encodeNevent(EventPointer(value, relays, author, null))} ";
             continue;
           }
 

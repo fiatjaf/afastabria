@@ -45,7 +45,7 @@ class FilterBlockItemComponent extends StatelessWidget {
     final themeData = Theme.of(context);
     final cardColor = themeData.cardColor;
 
-    final nip19Pubkey = Nip19.encodePubKey(pubkey);
+    final nip19Pubkey = NIP19.encodePubKey(pubkey);
     return GestureDetector(
       onTap: () {
         Clipboard.setData(ClipboardData(text: nip19Pubkey)).then((final _) {

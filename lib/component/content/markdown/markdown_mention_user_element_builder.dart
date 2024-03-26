@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:markdown/markdown.dart" as md;
 import "package:flutter_markdown/flutter_markdown.dart";
 import "package:loure/client/nip19/nip19.dart";
-import "package:loure/client/nip19/nip19_tlv.dart";
 import "package:loure/component/content/content_mention_user_component.dart";
 
 class MarkdownMentionUserElementBuilder implements MarkdownElementBuilder {
@@ -15,10 +14,10 @@ class MarkdownMentionUserElementBuilder implements MarkdownElementBuilder {
     final nip19Text = pureText.replaceFirst("nostr:", "");
 
     String? key;
-    if (Nip19.isPubkey(nip19Text)) {
-      key = Nip19.decode(nip19Text);
-    } else if (NIP19Tlv.isNprofile(nip19Text)) {
-      final nprofile = NIP19Tlv.decodeNprofile(nip19Text);
+    if (NIP19.isPubkey(nip19Text)) {
+      key = NIP19.decode(nip19Text);
+    } else if (NIP19.isNprofile(nip19Text)) {
+      final nprofile = NIP19.decodeNprofile(nip19Text);
       if (nprofile != null) {
         key = nprofile.pubkey;
       }

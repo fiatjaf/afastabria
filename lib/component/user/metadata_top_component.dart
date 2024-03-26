@@ -6,7 +6,6 @@ import "package:flutter/services.dart";
 import "package:provider/provider.dart";
 
 import "package:loure/client/nip02/contact_list.dart";
-import "package:loure/client/nip19/nip19_tlv.dart";
 import "package:loure/component/nip05_valid_component.dart";
 import "package:loure/component/qrcode_dialog.dart";
 import "package:loure/component/webview_router.dart";
@@ -25,9 +24,8 @@ import "package:loure/util/string_util.dart";
 import "package:loure/component/image_component.dart";
 import "package:loure/component/image_preview_dialog.dart";
 
-// ignore: must_be_immutable
 class MetadataTopComponent extends StatefulWidget {
-  MetadataTopComponent({
+  const MetadataTopComponent({
     required this.pubkey,
     super.key,
     this.metadata,
@@ -35,6 +33,7 @@ class MetadataTopComponent extends StatefulWidget {
     this.jumpable = false,
     this.userPicturePreview = false,
   });
+
   static double getPcBannerHeight(final double maxHeight) {
     final height = maxHeight * 0.2;
     if (height > 200) {
@@ -44,13 +43,13 @@ class MetadataTopComponent extends StatefulWidget {
     return height;
   }
 
-  String pubkey;
-  Metadata? metadata;
+  final String pubkey;
+  final Metadata? metadata;
 
   // is local user
-  bool isLocal;
-  bool jumpable;
-  bool userPicturePreview;
+  final bool isLocal;
+  final bool jumpable;
+  final bool userPicturePreview;
 
   @override
   State<StatefulWidget> createState() {
@@ -68,7 +67,7 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
   void initState() {
     super.initState();
 
-    nip19PubKey = Nip19.encodePubKey(widget.pubkey);
+    nip19PubKey = NIP19.encodePubKey(widget.pubkey);
   }
 
   @override
@@ -86,7 +85,7 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
           MetadataTopComponent.getPcBannerHeight(mediaDataCache.size.height);
     }
 
-    final String nip19Name = Nip19.encodeSimplePubKey(widget.pubkey);
+    final String nip19Name = NIP19.encodeSimplePubKey(widget.pubkey);
     String displayName = "";
     String? name;
     if (widget.metadata != null) {
@@ -426,24 +425,24 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
     final result =
         (await RouterUtil.router(context, RouterPath.QRSCANNER)) as String;
     if (StringUtil.isNotBlank(result)) {
-      if (Nip19.isPubkey(result)) {
-        final pubkey = Nip19.decode(result);
+      if (NIP19.isPubkey(result)) {
+        final pubkey = NIP19.decode(result);
         RouterUtil.router(context, RouterPath.USER, pubkey);
-      } else if (NIP19Tlv.isNprofile(result)) {
-        final nprofile = NIP19Tlv.decodeNprofile(result);
+      } else if (NIP19.isNprofile(result)) {
+        final nprofile = NIP19.decodeNprofile(result);
         if (nprofile != null) {
           RouterUtil.router(context, RouterPath.USER, nprofile.pubkey);
         }
-      } else if (Nip19.isNoteId(result)) {
-        final noteId = Nip19.decode(result);
+      } else if (NIP19.isNoteId(result)) {
+        final noteId = NIP19.decode(result);
         RouterUtil.router(context, RouterPath.EVENT_DETAIL, noteId);
-      } else if (NIP19Tlv.isNevent(result)) {
-        final nevent = NIP19Tlv.decodeNevent(result);
+      } else if (NIP19.isNevent(result)) {
+        final nevent = NIP19.decodeNevent(result);
         if (nevent != null) {
           RouterUtil.router(context, RouterPath.EVENT_DETAIL, nevent.id);
         }
-        // } else if (NIP19Tlv.isNrelay(result)) {
-        //   final nrelay = NIP19Tlv.decodeNrelay(result);
+        // } else if (NIP19.isNrelay(result)) {
+        //   final nrelay = NIP19.decodeNrelay(result);
         //   if (nrelay != null) {
         //     final result =
         //         await ConfirmDialog.show(context, "Add this relay to local");

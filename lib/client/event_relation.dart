@@ -1,9 +1,10 @@
 import "package:loure/client/aid.dart";
+import "package:loure/client/input.dart";
 import "package:loure/client/nip19/nip19.dart";
-import "package:loure/client/nip19/nip19_tlv.dart";
 
 import "package:loure/client/event.dart";
 
+// TODO: rewrite this
 /// This class is designed for get the relation from event, but it seam to used for get tagInfo from event before event_main display.
 class EventRelation {
   EventRelation.fromEvent(final Event event) {
@@ -26,11 +27,11 @@ class EventRelation {
         final value = tag[1];
         if (tagKey == "p") {
           // check if is Text Note References
-          var nip19Str = "nostr:${Nip19.encodePubKey(value)}";
+          var nip19Str = "nostr:${NIP19.encodePubKey(value)}";
           if (event.content.contains(nip19Str)) {
             continue;
           }
-          nip19Str = NIP19Tlv.encodeNprofile(Nprofile(pubkey: value));
+          nip19Str = NIP19.encodeNprofile(ProfilePointer(value, []));
           if (event.content.contains(nip19Str)) {
             continue;
           }

@@ -105,7 +105,7 @@ class SearchMentionUserItemComponent extends StatelessWidget {
       );
     }
 
-    final String nip19Name = Nip19.encodeSimplePubKey(metadata.pubkey);
+    final String nip19Name = NIP19.encodeSimplePubKey(metadata.pubkey);
     String displayName = nip19Name;
     String name = "";
     if (StringUtil.isNotBlank(metadata.displayName)) {

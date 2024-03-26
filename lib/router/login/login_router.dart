@@ -189,8 +189,8 @@ class LoginRouterState extends State<LoginRouter>
     }
 
     var sk = controller.text;
-    if (Nip19.isPrivateKey(sk)) {
-      sk = Nip19.decode(sk);
+    if (NIP19.isPrivateKey(sk)) {
+      sk = NIP19.decode(sk);
     }
     if (!keyIsValid(sk)) {
       BotToast.showText(text: "Private key is not valid");

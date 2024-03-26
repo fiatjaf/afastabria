@@ -24,7 +24,7 @@ class SimpleNameComponent extends StatelessWidget {
       }
     }
     if (StringUtil.isBlank(name)) {
-      name = Nip19.encodeSimplePubKey(pubkey);
+      name = NIP19.encodeSimplePubKey(pubkey);
     }
 
     return name!;

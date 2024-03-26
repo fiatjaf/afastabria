@@ -51,7 +51,7 @@ class _QrcodeDialog extends State<QrcodeDialog> {
     final hintColor = themeData.hintColor;
 
     List<Widget> list = [];
-    final nip19Pubkey = Nip19.encodePubKey(widget.pubkey);
+    final nip19Pubkey = NIP19.encodePubKey(widget.pubkey);
     final Widget topWidget = FutureBuilder(
       future: metadataLoader.load(widget.pubkey),
       initialData: Metadata.blank(widget.pubkey),

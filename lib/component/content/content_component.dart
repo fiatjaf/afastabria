@@ -12,7 +12,6 @@ import "package:provider/provider.dart";
 import "package:loure/client/event.dart";
 import "package:loure/client/event_kind.dart";
 import "package:loure/client/nip19/nip19.dart";
-import "package:loure/client/nip19/nip19_tlv.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/main.dart";
 import "package:loure/util/platform_util.dart";
@@ -42,7 +41,7 @@ import "package:loure/component/content/content_video_component.dart";
 /// 10.Show more, hide extral when the content is too long.
 /// 11.Simple Markdown support. (LineStr with pre # - FontWeight blod and bigger fontSize, with pre ## - FontWeight blod and normal fontSize).
 class ContentComponent extends StatefulWidget {
-  ContentComponent({
+  const ContentComponent({
     super.key,
     this.content,
     this.event,
@@ -53,16 +52,16 @@ class ContentComponent extends StatefulWidget {
     this.imageListMode = false,
     this.smallest = false,
   });
-  String? content;
-  Event? event;
 
-  Function? textOnTap;
-  bool showImage = true;
-  bool showVideo = false;
-  bool showLinkPreview = true;
-  bool imageListMode = false;
+  final String? content;
+  final Event? event;
 
-  bool smallest;
+  final Function? textOnTap;
+  final bool showImage;
+  final bool showVideo;
+  final bool showLinkPreview;
+  final bool imageListMode;
+  final bool smallest;
 
   @override
   State<StatefulWidget> createState() {
@@ -117,10 +116,6 @@ class _ContentComponent extends State<ContentComponent> {
   static const PRE_CASHU_LINK = "cashu:";
 
   static const PRE_CASHU = "cashu";
-
-  static List<String> LNBC_LIST = [LNBC, LIGHTNING, OTHER_LIGHTNING];
-
-  static const LNBC_NUM_END = "1p";
 
   static const MAX_SHOW_LINE_NUM = 19;
 
@@ -504,26 +499,26 @@ class _ContentComponent extends State<ContentComponent> {
 
       String? otherStr;
 
-      if (Nip19.isPubkey(key)) {
+      if (NIP19.isPubkey(key)) {
         // inline
         // mention user
         if (key.length > NPUB_LENGTH) {
           otherStr = key.substring(NPUB_LENGTH);
           key = key.substring(0, NPUB_LENGTH);
         }
-        key = Nip19.decode(key);
+        key = NIP19.decode(key);
         bufferToList(buffer, allList);
         allList
             .add(WidgetSpan(child: ContentMentionUserComponent(pubkey: key)));
 
         return otherStr;
-      } else if (Nip19.isNoteId(key)) {
+      } else if (NIP19.isNoteId(key)) {
         // block
         if (key.length > NOTEID_LENGTH) {
           otherStr = key.substring(NOTEID_LENGTH);
           key = key.substring(0, NOTEID_LENGTH);
         }
-        key = Nip19.decode(key);
+        key = NIP19.decode(key);
         bufferToList(buffer, allList, removeLastSpan: true);
         final w = EventQuoteComponent(
           id: key,
@@ -533,8 +528,8 @@ class _ContentComponent extends State<ContentComponent> {
         counterAddLines(fake_event_counter);
 
         return otherStr;
-      } else if (NIP19Tlv.isNprofile(key)) {
-        final nprofile = NIP19Tlv.decodeNprofile(key);
+      } else if (NIP19.isNprofile(key)) {
+        final nprofile = NIP19.decodeNprofile(key);
         if (nprofile != null) {
           // inline
           // mention user
@@ -546,8 +541,8 @@ class _ContentComponent extends State<ContentComponent> {
         } else {
           return str;
         }
-        // } else if (NIP19Tlv.isNrelay(key)) {
-        //   final nrelay = NIP19Tlv.decodeNrelay(key);
+        // } else if (NIP19.isNrelay(key)) {
+        //   final nrelay = NIP19.decodeNrelay(key);
         //   if (nrelay != null) {
         //     // inline
         //     bufferToList(buffer, allList);
@@ -557,8 +552,8 @@ class _ContentComponent extends State<ContentComponent> {
         //   } else {
         //     return str;
         //   }
-      } else if (NIP19Tlv.isNevent(key)) {
-        final nevent = NIP19Tlv.decodeNevent(key);
+      } else if (NIP19.isNevent(key)) {
+        final nevent = NIP19.decodeNevent(key);
         if (nevent != null) {
           // block
           bufferToList(buffer, allList, removeLastSpan: true);
@@ -573,27 +568,27 @@ class _ContentComponent extends State<ContentComponent> {
         } else {
           return str;
         }
-      } else if (NIP19Tlv.isNaddr(key)) {
-        final naddr = NIP19Tlv.decodeNaddr(key);
+      } else if (NIP19.isNaddr(key)) {
+        final naddr = NIP19.decodeNaddr(key);
         if (naddr != null) {
-          if (StringUtil.isNotBlank(naddr.id) &&
+          if (StringUtil.isNotBlank(naddr.identifier) &&
               naddr.kind == EventKind.TEXT_NOTE) {
             // block
             bufferToList(buffer, allList, removeLastSpan: true);
             final w = EventQuoteComponent(
-              id: naddr.id,
+              id: naddr.identifier,
               showVideo: widget.showVideo,
             );
             allList.add(WidgetSpan(child: w));
             counterAddLines(fake_event_counter);
 
             return null;
-          } else if (StringUtil.isNotBlank(naddr.author) &&
+          } else if (StringUtil.isNotBlank(naddr.pubkey) &&
               naddr.kind == EventKind.METADATA) {
             // inline
             bufferToList(buffer, allList);
             allList.add(WidgetSpan(
-                child: ContentMentionUserComponent(pubkey: naddr.author)));
+                child: ContentMentionUserComponent(pubkey: naddr.pubkey)));
 
             return null;
           }

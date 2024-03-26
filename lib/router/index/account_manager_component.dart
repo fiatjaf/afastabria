@@ -127,8 +127,8 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
     if (StringUtil.isNotBlank(privateKey)) {
       final result = await ConfirmDialog.show(context, "Add account and login");
       if (result == true) {
-        if (Nip19.isPrivateKey(privateKey!)) {
-          privateKey = Nip19.decode(privateKey);
+        if (NIP19.isPrivateKey(privateKey!)) {
+          privateKey = NIP19.decode(privateKey);
         }
         // logout current and login new
         final oldIndex = settingProvider.privateKeyIndex;
@@ -147,8 +147,8 @@ class AccountManagerComponentState extends State<AccountManagerComponent> {
 
   bool addAccountCheck(final BuildContext p1, String privateKey) {
     if (StringUtil.isNotBlank(privateKey)) {
-      if (Nip19.isPrivateKey(privateKey)) {
-        privateKey = Nip19.decode(privateKey);
+      if (NIP19.isPrivateKey(privateKey)) {
+        privateKey = NIP19.decode(privateKey);
       }
 
       // try to gen publicKey check the formate
@@ -252,7 +252,7 @@ class AccountManagerItemComponent extends StatelessWidget {
           const Color currentColor = Colors.green;
           List<Widget> list = [];
 
-          final nip19PubKey = Nip19.encodePubKey(metadata.pubkey);
+          final nip19PubKey = NIP19.encodePubKey(metadata.pubkey);
 
           Widget? imageWidget;
           if (metadata.picture != null && metadata.picture != "") {

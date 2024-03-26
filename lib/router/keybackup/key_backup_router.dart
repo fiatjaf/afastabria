@@ -194,7 +194,7 @@ class _KeyBackupRouter extends State<KeyBackupRouter> {
     }
 
     final pk = nostr.privateKey;
-    final nip19Key = Nip19.encodePrivateKey(pk);
+    final nip19Key = NIP19.encodePrivateKey(pk);
     doCopy(nip19Key);
   }
 

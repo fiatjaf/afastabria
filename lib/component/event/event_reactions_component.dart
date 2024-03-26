@@ -4,12 +4,12 @@ import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_quill/flutter_quill.dart" as quill;
+import "package:loure/client/input.dart";
 import "package:provider/provider.dart";
 import "package:screenshot/screenshot.dart";
 import "package:share_plus/share_plus.dart";
 import "package:url_launcher/url_launcher.dart";
 
-import "package:loure/client/nip19/nip19_tlv.dart";
 import "package:loure/client/nip51/bookmarks.dart";
 import "package:loure/component/enum_selector_component.dart";
 import "package:loure/component/zap_gen_dialog.dart";
@@ -336,10 +336,10 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
       final text = jsonEncode(widget.event.toJson());
       _doCopy(text);
     } else if (value == "copyPubkey") {
-      final text = Nip19.encodePubKey(widget.event.pubkey);
+      final text = NIP19.encodePubKey(widget.event.pubkey);
       _doCopy(text);
     } else if (value == "copyId") {
-      final text = Nip19.encodeNoteId(widget.event.id);
+      final text = NIP19.encodeNoteId(widget.event.id);
       _doCopy(text);
     } else if (value == "detail") {
       RouterUtil.router(context, RouterPath.EVENT_DETAIL, widget.event);
@@ -462,9 +462,11 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
 
   void onShareTap() {
     if (PlatformUtil.isPC()) {
-      final nevent = NIP19Tlv.encodeNevent(Nevent(
-        id: widget.event.id,
-        author: widget.event.pubkey,
+      final nevent = NIP19.encodeNevent(EventPointer(
+        widget.event.id,
+        [],
+        widget.event.pubkey,
+        widget.event.kind,
       ));
       launchUrl(Uri.parse("https://njump.me/$nevent"));
     }

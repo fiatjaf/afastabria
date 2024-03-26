@@ -33,7 +33,7 @@ class NameComponent extends StatelessWidget {
     Color hintColor = themeData.hintColor;
 
     final metadata = this.metadata;
-    final String nip19Name = Nip19.encodeSimplePubKey(this.pubkey);
+    final String nip19Name = NIP19.encodeSimplePubKey(this.pubkey);
     String displayName = "";
     String name = "";
 
