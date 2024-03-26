@@ -1,4 +1,7 @@
+import "package:easy_debounce/easy_debounce.dart";
 import "package:flutter/material.dart";
+import "package:hex/hex.dart";
+import "package:loure/client/nip19/nip19_tlv.dart";
 import "package:loure/component/user/metadata_top_component.dart";
 import "package:loure/data/event_find_util.dart";
 import "package:loure/data/metadata.dart";
@@ -9,8 +12,7 @@ import "package:provider/provider.dart";
 
 import "package:loure/client/event.dart";
 import "package:loure/client/nip19/nip19.dart";
-import "package:loure/component/cust_state.dart";
-import "package:loure/client/event_kind.dart" as kind;
+import "package:loure/client/event_kind.dart";
 import "package:loure/client/filter.dart";
 import "package:loure/component/event/event_list_component.dart";
 import "package:loure/component/event_delete_callback.dart";
@@ -26,160 +28,188 @@ import "package:loure/util/router_util.dart";
 import "package:loure/util/string_util.dart";
 
 class SearchRouter extends StatefulWidget {
-  const SearchRouter({super.key});
+  const SearchRouter({this.query = "", super.key});
+
+  final String query;
 
   @override
   State<StatefulWidget> createState() {
-    return _SearchRouter();
+    return SearchRouterState();
   }
 }
 
-class _SearchRouter extends CustState<SearchRouter>
+class SearchRouterState extends State<SearchRouter>
     with PendingEventsLaterFunction, LoadMoreEvent, WhenStopFunction {
-  TextEditingController controller = TextEditingController();
-
+  TextEditingController textEditingController = TextEditingController();
   ScrollController loadableScrollController = ScrollController();
-
   ScrollController scrollController = ScrollController();
 
+  List<Widget> results = [];
+  static const debounceDuration = Duration(milliseconds: 500);
+
   @override
-  Future<void> onReady(final BuildContext context) async {
-    bindLoadMoreScroll(loadableScrollController);
+  void didUpdateWidget(SearchRouter oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
-    controller.addListener(() {
-      final hasText = StringUtil.isNotBlank(controller.text);
-      if (!showSuffix && hasText) {
-        setState(() {
-          showSuffix = true;
-        });
-        return;
-      } else if (showSuffix && !hasText) {
-        setState(() {
-          showSuffix = false;
-        });
-      }
-
-      whenStop(checkInput);
-    });
+    if (widget.query != oldWidget.query && widget.query != "") {
+      this.setState(() {
+        this.textEditingController.text = widget.query;
+      });
+    }
   }
 
-  bool showSuffix = false;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    bindLoadMoreScroll(loadableScrollController);
+    textEditingController.addListener(this.onInput);
+  }
 
   @override
-  Widget doBuild(final BuildContext context) {
-    final settingProvider = Provider.of<SettingProvider>(context);
+  dispose() {
+    super.dispose();
+    textEditingController.removeListener(this.onInput);
+  }
+
+  void onInput() {
+    EasyDebounce.debounce("search", debounceDuration, performSearch);
+  }
+
+  void performSearch() async {
+    final text = this.textEditingController.text;
+    if (text.startsWith("npub1")) {
+      final pubkey = Nip19.decode(text);
+      final metadata = await metadataLoader.load(pubkey);
+      setState(() {
+        this.results = [
+          GestureDetector(
+            onTap: () {
+              RouterUtil.router(context, RouterPath.USER, pubkey);
+            },
+            child: MetadataTopComponent(
+              pubkey: pubkey,
+              metadata: metadata,
+            ),
+          ),
+        ];
+      });
+    } else if (text.startsWith("nprofile1")) {
+      final nprofile = NIP19Tlv.decodeNprofile(text);
+      if (nprofile == null) return;
+      final pubkey = nprofile.pubkey;
+      final metadata = await metadataLoader.load(pubkey);
+      setState(() {
+        this.results = [
+          GestureDetector(
+            onTap: () {
+              RouterUtil.router(context, RouterPath.USER, pubkey);
+            },
+            child: MetadataTopComponent(
+              pubkey: pubkey,
+              metadata: metadata,
+            ),
+          ),
+        ];
+      });
+    } else if (text.startsWith("note1")) {
+      final id = Nip19.decode(text);
+      final event = await nostr.getByID(id);
+      if (event == null) return;
+      setState(() {
+        this.results = [
+          EventListComponent(
+            event: event,
+            showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
+          ),
+        ];
+      });
+    } else if (text.startsWith("nevent1")) {
+      nevent = NIP19Tlv.decodeNevent(text);
+    } else if (text.startsWith("naddr1")) {
+      naddr = NIP19Tlv.decodeNaddr(text);
+    } else if (text.startsWith("#") && !text.contains(" ")) {
+      tag = text.substring(1);
+    } else {
+      search = text;
+    }
+  }
+
+  @override
+  Widget build(final BuildContext context) {
     preBuild();
 
-    Widget? suffixWidget;
-    if (showSuffix) {
-      suffixWidget = GestureDetector(
-        onTap: () {
-          controller.text = "";
-        },
-        child: const Icon(Icons.close),
-      );
-    }
+    // bool? loadable;
+    // Widget? body;
+    //   if (searchAction == SearchActions.searchMetadataFromCache) {
+    //     loadable = false;
+    //     body = ListView.builder(
+    //       controller: scrollController,
+    //       itemBuilder: (final BuildContext context, final int index) {
+    //         final metadata = metadatas[index];
 
-    bool? loadable;
-    Widget? body;
-    if (searchAction == null && searchAbles.isNotEmpty) {
-      // no searchAction, show searchAbles
-      List<Widget> list = [];
-      for (final action in searchAbles) {
-        if (action == SearchActions.openPubkey) {
-          list.add(SearchActionItemComponent(
-              title: "Open User page", onTap: openPubkey));
-        } else if (action == SearchActions.openNoteId) {
-          list.add(SearchActionItemComponent(
-              title: "Open Note detail", onTap: openNoteId));
-        } else if (action == SearchActions.searchMetadataFromCache) {
-          list.add(SearchActionItemComponent(
-              title: "Search User from cache", onTap: searchMetadataFromCache));
-        } else if (action == SearchActions.searchEventFromCache) {
-          list.add(SearchActionItemComponent(
-              title: "Open Event from cache", onTap: searchEventFromCache));
-        } else if (action == SearchActions.searchPubkeyEvent) {
-          list.add(SearchActionItemComponent(
-              title: "Search pubkey event", onTap: onEditingComplete));
-        } else if (action == SearchActions.searchNoteContent) {
-          list.add(SearchActionItemComponent(
-              title: "Search note content NIP-50", onTap: searchNoteContent));
-        }
-      }
-      body = Column(
-        mainAxisSize: MainAxisSize.min,
-        children: list,
-      );
-    } else {
-      if (searchAction == SearchActions.searchMetadataFromCache) {
-        loadable = false;
-        body = ListView.builder(
-          controller: scrollController,
-          itemBuilder: (final BuildContext context, final int index) {
-            final metadata = metadatas[index];
+    //         return GestureDetector(
+    //           onTap: () {
+    //             RouterUtil.router(context, RouterPath.USER, metadata.pubkey);
+    //           },
+    //           child: MetadataTopComponent(
+    //             pubkey: metadata.pubkey,
+    //             metadata: metadata,
+    //           ),
+    //         );
+    //       },
+    //       itemCount: metadatas.length,
+    //     );
+    //   } else if (searchAction == SearchActions.searchEventFromCache) {
+    //     loadable = false;
+    //     body = ListView.builder(
+    //       controller: scrollController,
+    //       itemBuilder: (final BuildContext context, final int index) {
+    //         final event = events[index];
 
-            return GestureDetector(
-              onTap: () {
-                RouterUtil.router(context, RouterPath.USER, metadata.pubkey);
-              },
-              child: MetadataTopComponent(
-                pubkey: metadata.pubkey,
-                metadata: metadata,
-              ),
-            );
-          },
-          itemCount: metadatas.length,
-        );
-      } else if (searchAction == SearchActions.searchEventFromCache) {
-        loadable = false;
-        body = ListView.builder(
-          controller: scrollController,
-          itemBuilder: (final BuildContext context, final int index) {
-            final event = events[index];
+    //         return EventListComponent(
+    //           event: event,
+    //           showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
+    //         );
+    //       },
+    //       itemCount: events.length,
+    //     );
+    //   } else if (searchAction == SearchActions.searchPubkeyEvent) {
+    //     loadable = true;
+    //     final events = eventMemBox.all();
+    //     body = ListView.builder(
+    //       controller: loadableScrollController,
+    //       itemBuilder: (final BuildContext context, final int index) {
+    //         final event = events[index];
 
-            return EventListComponent(
-              event: event,
-              showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
-            );
-          },
-          itemCount: events.length,
-        );
-      } else if (searchAction == SearchActions.searchPubkeyEvent) {
-        loadable = true;
-        final events = eventMemBox.all();
-        body = ListView.builder(
-          controller: loadableScrollController,
-          itemBuilder: (final BuildContext context, final int index) {
-            final event = events[index];
-
-            return EventListComponent(
-              event: event,
-              showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
-            );
-          },
-          itemCount: itemLength,
-        );
-      }
-    }
-    if (body != null) {
-      if (loadable != null && PlatformUtil.isTableMode()) {
-        body = GestureDetector(
-          onVerticalDragUpdate: (final detail) {
-            if (loadable == true) {
-              loadableScrollController
-                  .jumpTo(loadableScrollController.offset - detail.delta.dy);
-            } else {
-              scrollController
-                  .jumpTo(scrollController.offset - detail.delta.dy);
-            }
-          },
-          behavior: HitTestBehavior.translucent,
-          child: body,
-        );
-      }
-    } else {
-      body = Container();
-    }
+    //         return EventListComponent(
+    //           event: event,
+    //           showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
+    //         );
+    //       },
+    //       itemCount: itemLength,
+    //     );
+    //   }
+    // }
+    // if (body != null) {
+    //   if (loadable != null && PlatformUtil.isTableMode()) {
+    //     body = GestureDetector(
+    //       onVerticalDragUpdate: (final detail) {
+    //         if (loadable == true) {
+    //           loadableScrollController
+    //               .jumpTo(loadableScrollController.offset - detail.delta.dy);
+    //         } else {
+    //           scrollController
+    //               .jumpTo(scrollController.offset - detail.delta.dy);
+    //         }
+    //       },
+    //       behavior: HitTestBehavior.translucent,
+    //       child: body,
+    //     );
+    //   }
+    // } else {
+    //   body = Container();
+    // }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -187,23 +217,31 @@ class _SearchRouter extends CustState<SearchRouter>
         onDeleteCallback: onDeletedCallback,
         child: Column(children: [
           TextField(
-            controller: controller,
+            controller: textEditingController,
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.search),
-              hintText: "Please input search content",
-              suffixIcon: suffixWidget,
+              hintText: "What are you searching for?",
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  textEditingController.text = "";
+                },
+                child: const Icon(Icons.close),
+              ),
             ),
             onEditingComplete: onEditingComplete,
           ),
           Expanded(
-            child: body,
+            child: ListView(
+              controller: scrollController,
+              children: this.results,
+            ),
           ),
         ]),
       ),
     );
   }
 
-  List<int> searchEventKinds = kind.EventKind.SUPPORTED_EVENTS;
+  List<int> searchEventKinds = EventKind.SUPPORTED_EVENTS;
   EventMemBox eventMemBox = EventMemBox();
 
   Filter? filter;
@@ -294,7 +332,7 @@ class _SearchRouter extends CustState<SearchRouter>
 
   openPubkey() {
     hideKeyBoard();
-    final text = controller.text;
+    final text = textEditingController.text;
     if (StringUtil.isNotBlank(text)) {
       String pubkey = text;
       if (Nip19.isPubkey(text)) {
@@ -335,12 +373,9 @@ class _SearchRouter extends CustState<SearchRouter>
     }
   }
 
-  List<Event> events = [];
-
   searchEventFromCache() {
     hideKeyBoard();
     events.clear();
-    searchAction = SearchActions.searchEventFromCache;
 
     final text = controller.text;
     if (StringUtil.isNotBlank(text)) {
@@ -351,12 +386,6 @@ class _SearchRouter extends CustState<SearchRouter>
     }
   }
 
-  String? searchAction;
-
-  List<String> searchAbles = [];
-
-  String lastText = "";
-
   checkInput() {
     searchAction = null;
     searchAbles.clear();
@@ -364,19 +393,6 @@ class _SearchRouter extends CustState<SearchRouter>
     final text = controller.text;
     if (text == lastText) {
       return;
-    }
-
-    if (StringUtil.isNotBlank(text)) {
-      if (Nip19.isPubkey(text)) {
-        searchAbles.add(SearchActions.openPubkey);
-      }
-      if (Nip19.isNoteId(text)) {
-        searchAbles.add(SearchActions.openNoteId);
-      }
-      searchAbles.add(SearchActions.searchMetadataFromCache);
-      searchAbles.add(SearchActions.searchEventFromCache);
-      searchAbles.add(SearchActions.searchPubkeyEvent);
-      searchAbles.add(SearchActions.searchNoteContent);
     }
 
     lastText = text;
@@ -400,13 +416,4 @@ class _SearchRouter extends CustState<SearchRouter>
     pendingEvents.clear;
     doQuery();
   }
-}
-
-class SearchActions {
-  static const String openPubkey = "openPubkey";
-  static const String openNoteId = "openNoteId";
-  static const String searchMetadataFromCache = "searchMetadataFromCache";
-  static const String searchEventFromCache = "searchEventFromCache";
-  static const String searchPubkeyEvent = "searchPubkeyEvent";
-  static const String searchNoteContent = "searchNoteContent";
 }

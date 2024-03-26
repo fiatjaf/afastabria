@@ -17,7 +17,7 @@ import "package:loure/component/content/content_link_component.dart";
 import "package:loure/component/content/content_link_pre_component.dart";
 import "package:loure/component/content/content_lnbc_component.dart";
 import "package:loure/component/content/content_mention_user_component.dart";
-import "package:loure/component/content/content_relay_component.dart";
+// import "package:loure/component/content/content_relay_component.dart";
 import "package:loure/component/content/content_tag_component.dart";
 import "package:loure/component/content/content_video_component.dart";
 
@@ -108,8 +108,8 @@ class ContentDecoder {
 
     final ContentDecoderInfo info = ContentDecoderInfo();
     for (final str in strs) {
-      List<dynamic> inlines = [];
-      const String handledStr = "";
+      // List<dynamic> inlines = [];
+      // const String handledStr = "";
 
       final subStrs = str.split(" ");
       info.strs.add(subStrs);
@@ -306,15 +306,15 @@ class ContentDecoder {
             } else {
               handledStr = _addToHandledStr(handledStr, subStr);
             }
-          } else if (NIP19Tlv.isNrelay(key)) {
-            final nrelay = NIP19Tlv.decodeNrelay(key);
-            if (nrelay != null) {
-              // inline
-              handledStr = _closeHandledStr(handledStr, inlines);
-              inlines.add(ContentRelayComponent(nrelay.addr));
-            } else {
-              handledStr = _addToHandledStr(handledStr, subStr);
-            }
+            // } else if (NIP19Tlv.isNrelay(key)) {
+            //   final nrelay = NIP19Tlv.decodeNrelay(key);
+            //   if (nrelay != null) {
+            //     // inline
+            //     handledStr = _closeHandledStr(handledStr, inlines);
+            //     inlines.add(ContentRelayComponent(nrelay.addr));
+            //   } else {
+            //     handledStr = _addToHandledStr(handledStr, subStr);
+            //   }
           } else if (NIP19Tlv.isNevent(key)) {
             final nevent = NIP19Tlv.decodeNevent(key);
             if (nevent != null) {

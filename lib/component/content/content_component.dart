@@ -25,7 +25,7 @@ import "package:loure/component/content/content_image_component.dart";
 import "package:loure/component/content/content_link_pre_component.dart";
 import "package:loure/component/content/content_lnbc_component.dart";
 import "package:loure/component/content/content_mention_user_component.dart";
-import "package:loure/component/content/content_relay_component.dart";
+// import "package:loure/component/content/content_relay_component.dart";
 import "package:loure/component/content/content_tag_component.dart";
 import "package:loure/component/content/content_video_component.dart";
 
@@ -546,17 +546,17 @@ class _ContentComponent extends State<ContentComponent> {
         } else {
           return str;
         }
-      } else if (NIP19Tlv.isNrelay(key)) {
-        final nrelay = NIP19Tlv.decodeNrelay(key);
-        if (nrelay != null) {
-          // inline
-          bufferToList(buffer, allList);
-          allList.add(WidgetSpan(child: ContentRelayComponent(nrelay.addr)));
+        // } else if (NIP19Tlv.isNrelay(key)) {
+        //   final nrelay = NIP19Tlv.decodeNrelay(key);
+        //   if (nrelay != null) {
+        //     // inline
+        //     bufferToList(buffer, allList);
+        //     allList.add(WidgetSpan(child: ContentRelayComponent(nrelay.addr)));
 
-          return null;
-        } else {
-          return str;
-        }
+        //     return null;
+        //   } else {
+        //     return str;
+        //   }
       } else if (NIP19Tlv.isNevent(key)) {
         final nevent = NIP19Tlv.decodeNevent(key);
         if (nevent != null) {

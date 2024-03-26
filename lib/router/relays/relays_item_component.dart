@@ -3,7 +3,6 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 
 import "package:loure/client/relay/relay.dart";
-import "package:loure/client/nip19/nip19_tlv.dart";
 import "package:loure/router/routes.dart";
 import "package:loure/main.dart";
 import "package:loure/util/router_util.dart";
@@ -91,9 +90,9 @@ class RelaysItemComponent extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  final text = NIP19Tlv.encodeNrelay(Nrelay(addr));
+                  final text = addr;
                   Clipboard.setData(ClipboardData(text: text)).then((final _) {
-                    BotToast.showText(text: "Copy_success");
+                    BotToast.showText(text: "Copy success");
                   });
                 },
                 child: Container(

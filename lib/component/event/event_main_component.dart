@@ -24,7 +24,7 @@ import "package:loure/main.dart";
 import "package:loure/provider/setting_provider.dart";
 import "package:loure/util/router_util.dart";
 import "package:loure/util/string_util.dart";
-import "package:loure/component/confirm_dialog.dart";
+// import "package:loure/component/confirm_dialog.dart";
 import "package:loure/component/content/content_component.dart";
 import "package:loure/component/content/content_decoder.dart";
 import "package:loure/component/content/content_image_component.dart";
@@ -371,7 +371,7 @@ class EventMainComponentState extends State<EventMainComponent> {
             eventRelation.aId!.kind == EventKind.LONG_FORM &&
             widget.showLinkedLongForm) {
           list.add(EventQuoteComponent(
-            aId: eventRelation.aId!,
+            aId: eventRelation.aId,
           ));
         }
 
@@ -532,7 +532,6 @@ class EventMainComponentState extends State<EventMainComponent> {
             MarkdownMentionUserElementBuilder(),
         MarkdownMentionEventElementBuilder.TAG:
             MarkdownMentionEventElementBuilder(),
-        MarkdownNrelayElementBuilder.TAG: MarkdownNrelayElementBuilder(),
       },
       blockSyntaxes: const [],
       inlineSyntaxes: [
@@ -540,7 +539,6 @@ class EventMainComponentState extends State<EventMainComponent> {
         MarkdownMentionUserInlineSyntax(),
         MarkdownNeventInlineSyntax(),
         MarkdownNprofileInlineSyntax(),
-        MarkdownNrelayInlineSyntax(),
       ],
       imageBuilder: (final Uri uri, final String? title, final String? alt) {
         if (settingProvider.imagePreview == OpenStatus.CLOSE) {
@@ -589,17 +587,18 @@ class EventMainComponentState extends State<EventMainComponent> {
             } else if (NIP19Tlv.isNaddr(link)) {
               final naddr = NIP19Tlv.decodeNaddr(link);
               if (naddr != null) {
-                RouterUtil.router(context, RouterPath.EVENT_DETAIL, naddr.id);
+                RouterUtil.router(
+                    context, RouterPath.EVENT_DETAIL, naddr.identifier);
               }
-            } else if (NIP19Tlv.isNrelay(link)) {
-              final nrelay = NIP19Tlv.decodeNrelay(link);
-              if (nrelay != null) {
-                final result = await ConfirmDialog.show(
-                    context, "Add this relay to local");
-                if (result == true) {
-                  nostr.relayList.add(nrelay.addr, true, true);
-                }
-              }
+              // } else if (NIP19Tlv.isNrelay(link)) {
+              //   final nrelay = NIP19Tlv.decodeNrelay(link);
+              //   if (nrelay != null) {
+              //     final result = await ConfirmDialog.show(
+              //         context, "Add this relay to local");
+              //     if (result == true) {
+              //       nostr.relayList.add(nrelay.addr, true, true);
+              //     }
+              //   }
             }
           }
         }

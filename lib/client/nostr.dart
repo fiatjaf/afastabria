@@ -7,6 +7,7 @@ import "package:loure/consts/base_consts.dart";
 import "package:loure/data/contactlist_db.dart";
 import "package:loure/data/metadata.dart";
 import "package:loure/data/metadata_db.dart";
+import "package:loure/data/note_db.dart";
 import "package:loure/data/relaylist_db.dart";
 import "package:loure/main.dart";
 import "package:loure/client/client_utils/keys.dart";
@@ -100,16 +101,21 @@ class Nostr {
   final List<String> BLASTR = ["wss://nostr.mutinywallet.com"];
 
   Future<Event?> getByID(final String id) async {
-    final evt = nostr.idIndex[id];
+    Event? evt = nostr.idIndex[id];
     if (evt != null) {
       return evt;
-    } else {
-      return await pool.querySingle(
-        nostr.ID_RELAYS,
-        Filter(ids: [id]),
-        id: "specific-i",
-      );
     }
+
+    evt = await NoteDB.get(id);
+    if (evt != null) {
+      return evt;
+    }
+
+    return await pool.querySingle(
+      nostr.ID_RELAYS,
+      Filter(ids: [id]),
+      id: "specific-i",
+    );
   }
 
   Future<Event?> getByAddress(final AId aid,
@@ -118,15 +124,15 @@ class Nostr {
     final evt = nostr.addressIndex[tag];
     if (evt != null) {
       return evt;
-    } else {
-      return pool.querySingle(
-        relays == null
-            ? nostr.RANDOM_RELAYS
-            : [...relays, ...nostr.RANDOM_RELAYS],
-        aid.toFilter(),
-        id: "specific-a",
-      );
     }
+
+    return pool.querySingle(
+      relays == null
+          ? nostr.RANDOM_RELAYS
+          : [...relays, ...nostr.RANDOM_RELAYS],
+      aid.toFilter(),
+      id: "specific-a",
+    );
   }
 
   void updateIndexesAndSource(final Event event, final String relayURL) {

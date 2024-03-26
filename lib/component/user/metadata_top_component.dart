@@ -21,7 +21,7 @@ import "package:loure/client/zap/zap_action.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/data/metadata.dart";
 import "package:loure/util/string_util.dart";
-import "package:loure/component/confirm_dialog.dart";
+// import "package:loure/component/confirm_dialog.dart";
 import "package:loure/component/image_component.dart";
 import "package:loure/component/image_preview_dialog.dart";
 
@@ -442,20 +442,20 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
         if (nevent != null) {
           RouterUtil.router(context, RouterPath.EVENT_DETAIL, nevent.id);
         }
-      } else if (NIP19Tlv.isNrelay(result)) {
-        final nrelay = NIP19Tlv.decodeNrelay(result);
-        if (nrelay != null) {
-          final result =
-              await ConfirmDialog.show(context, "Add this relay to local");
-          if (result == true) {
-            nostr.relayList.add(nrelay.addr, true, true);
-          }
-        }
+        // } else if (NIP19Tlv.isNrelay(result)) {
+        //   final nrelay = NIP19Tlv.decodeNrelay(result);
+        //   if (nrelay != null) {
+        //     final result =
+        //         await ConfirmDialog.show(context, "Add this relay to local");
+        //     if (result == true) {
+        //       nostr.relayList.add(nrelay.addr, true, true);
+        //     }
+        //   }
       } else if (result.indexOf("http") == 0) {
         WebViewRouter.open(context, result);
       } else {
         Clipboard.setData(ClipboardData(text: result)).then((final _) {
-          BotToast.showText(text: "Copy_success");
+          BotToast.showText(text: "Copy success");
         });
       }
     }

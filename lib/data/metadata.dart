@@ -1,8 +1,7 @@
 import "dart:convert";
 
-import "package:http/http.dart" as http;
-
 import "package:loure/client/event.dart";
+import "package:loure/client/nip05/nip05.dart";
 
 class Metadata {
   Metadata(
@@ -86,22 +85,12 @@ class Metadata {
     if (this.nip05valid != null) return this.nip05valid!;
     if (this.nip05 == null) return false;
 
-    var name = "_";
-    var host = this.nip05!;
-    final spl = host.split("@");
-    if (spl.length > 1) {
-      name = spl[0];
-      host = spl[1];
+    final pp = await NIP05.search(this.nip05!);
+    if (pp == null) {
+        this.nip05valid = false;
+        return false;
     }
 
-    final url = "https://$host/.well-known/nostr.json?name=$name";
-
-    try {
-      final response = await http.get(Uri.parse(url));
-      final res = jsonDecode(response.body) as Map;
-      return res["names"][name] == this.pubkey;
-    } catch (e) {
-      return false;
-    }
-  }
+    this.nip05valid = pp.pubkey == this.nip05!;
+    return this.nip05valid!;
 }

@@ -1,10 +1,7 @@
 mixin WhenStopFunction {
   bool _WhenStopRunning = true;
-
   int whenStopMS = 200;
-
   int stopTime = 0;
-
   bool waitingStop = false;
 
   void whenStop(final Function func) {
