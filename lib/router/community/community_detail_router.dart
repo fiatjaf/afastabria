@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:loure/client/aid.dart";
+import "package:loure/client/input.dart";
 import "package:loure/client/relay/relay_pool.dart";
 import "package:loure/component/community_info_component.dart";
 import "package:loure/consts/base.dart";
@@ -36,7 +36,7 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
   final ScrollController _controller = ScrollController();
   bool showTitle = false;
   double infoHeight = 80;
-  AId? aId;
+  AddressPointer? aId;
   ManySubscriptionHandle? subHandle;
 
   @override
@@ -60,7 +60,7 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
     if (aId == null) {
       final arg = RouterUtil.routerArgs(context);
       if (arg != null) {
-        aId = arg as AId;
+        aId = arg as AddressPointer;
       }
     }
     if (aId == null) {

@@ -465,8 +465,8 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
       final nevent = NIP19.encodeNevent(EventPointer(
         widget.event.id,
         [],
-        widget.event.pubkey,
-        widget.event.kind,
+        author: widget.event.pubkey,
+        kind: widget.event.kind,
       ));
       launchUrl(Uri.parse("https://njump.me/$nevent"));
     }

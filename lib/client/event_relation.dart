@@ -1,4 +1,3 @@
-import "package:loure/client/aid.dart";
 import "package:loure/client/input.dart";
 import "package:loure/client/nip19/nip19.dart";
 
@@ -54,7 +53,7 @@ class EventRelation {
         } else if (tagKey == "content-warning") {
           warning = true;
         } else if (tagKey == "a") {
-          aId = AId.fromString(value);
+          aId = AddressPointer.fromTag(tag);
         } else if (tagKey == "zapraiser") {
           zapraiser = value;
         } else if (tagKey == "d") {
@@ -112,7 +111,7 @@ class EventRelation {
 
   bool warning = false;
 
-  AId? aId;
+  AddressPointer? aId;
 
   String? zapraiser;
 

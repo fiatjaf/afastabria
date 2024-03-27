@@ -541,7 +541,7 @@ mixin EditorMixin {
               relays = mentionEvent.sources.take(3).toList();
             }
             result +=
-                "${NIP19.encodeNevent(EventPointer(value, relays, author, null))} ";
+                "${NIP19.encodeNevent(EventPointer(value, relays, author: author))} ";
             continue;
           }
 

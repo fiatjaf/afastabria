@@ -1,8 +1,8 @@
 import "dart:convert";
 
-import "package:loure/client/aid.dart";
 import "package:loure/client/event_kind.dart";
 import "package:loure/client/filter.dart";
+import "package:loure/client/input.dart";
 import "package:loure/consts/base_consts.dart";
 import "package:loure/data/contactlist_db.dart";
 import "package:loure/data/metadata.dart";
@@ -92,6 +92,10 @@ class Nostr {
     "wss://nostr.wine",
     "wss://search.nos.today"
   ];
+  final List<String> TAG_SEARCH_RELAYS = [
+    "wss://nostr.wine",
+    "wss://relay.nostr.band",
+  ];
   final List<String> RANDOM_RELAYS = [
     "wss://relay.primal.net",
     "wss://relay.damus.io",
@@ -100,7 +104,8 @@ class Nostr {
   ];
   final List<String> BLASTR = ["wss://nostr.mutinywallet.com"];
 
-  Future<Event?> getByID(final String id) async {
+  Future<Event?> getByID(final String id,
+      {final Iterable<String>? relays}) async {
     Event? evt = nostr.idIndex[id];
     if (evt != null) {
       return evt;
@@ -112,25 +117,24 @@ class Nostr {
     }
 
     return await pool.querySingle(
-      nostr.ID_RELAYS,
+      relays == null ? nostr.ID_RELAYS : [...relays, ...nostr.ID_RELAYS],
       Filter(ids: [id]),
       id: "specific-i",
     );
   }
 
-  Future<Event?> getByAddress(final AId aid,
-      {final Iterable<String>? relays}) async {
-    final tag = aid.toTag();
+  Future<Event?> getByAddress(final AddressPointer naddr) async {
+    final tag = naddr.toTag();
     final evt = nostr.addressIndex[tag];
     if (evt != null) {
       return evt;
     }
 
     return pool.querySingle(
-      relays == null
+      naddr.relays.length > 0
           ? nostr.RANDOM_RELAYS
-          : [...relays, ...nostr.RANDOM_RELAYS],
-      aid.toFilter(),
+          : [...naddr.relays, ...nostr.RANDOM_RELAYS],
+      naddr.toFilter(),
       id: "specific-a",
     );
   }
@@ -145,14 +149,15 @@ class Nostr {
     });
 
     if (event.kind >= 30000 && event.kind < 40000) {
-      final aid = AId(
-        kind: event.kind,
-        pubkey: event.pubkey,
+      final naddr = AddressPointer(
         identifier: event.tags.firstWhere(
             (final tag) => tag.firstOrNull == "d" && tag.length >= 2,
             orElse: () => ["", ""])[1],
+        pubkey: event.pubkey,
+        kind: event.kind,
+        relays: [],
       );
-      this.addressIndex[aid.toTag()] = event;
+      this.addressIndex[naddr.toTag()] = event;
     }
   }
 

@@ -5,6 +5,10 @@ import "package:http/http.dart" as http;
 import "package:loure/client/input.dart";
 
 class NIP05 {
+  static final REGEX = RegExp(r"^(?:([\w.+-]+)@)?([\w_-]+(\.[\w_-]+)+)$");
+
+  static bool isNIP05(String text) => REGEX.hasMatch(text);
+
   static Future<ProfilePointer?> search(String nip05) async {
     var name = "_";
     var host = nip05;

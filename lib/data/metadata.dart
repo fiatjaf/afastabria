@@ -87,10 +87,11 @@ class Metadata {
 
     final pp = await NIP05.search(this.nip05!);
     if (pp == null) {
-        this.nip05valid = false;
-        return false;
+      this.nip05valid = false;
+      return false;
     }
 
     this.nip05valid = pp.pubkey == this.nip05!;
     return this.nip05valid!;
+  }
 }

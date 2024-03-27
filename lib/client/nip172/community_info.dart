@@ -1,8 +1,7 @@
-import "package:loure/client/aid.dart";
 import "package:loure/client/event.dart";
+import "package:loure/client/input.dart";
+import "package:loure/client/event_kind.dart";
 import "package:loure/util/string_util.dart";
-
-import "package:loure/client/event_kind.dart" as kind;
 
 class CommunityInfo {
   CommunityInfo({
@@ -12,18 +11,15 @@ class CommunityInfo {
     this.image,
     this.event,
   });
+
   int createdAt;
-
-  AId aId;
-
+  AddressPointer aId;
   String? description;
-
   String? image;
-
   Event? event;
 
   static CommunityInfo? fromEvent(final Event event) {
-    if (event.kind == kind.EventKind.COMMUNITY_DEFINITION) {
+    if (event.kind == EventKind.COMMUNITY_DEFINITION) {
       String title = "";
       String description = "";
       String image = "";
@@ -43,10 +39,12 @@ class CommunityInfo {
       }
 
       if (StringUtil.isNotBlank(title)) {
-        final id = AId(
-            kind: kind.EventKind.COMMUNITY_DEFINITION,
-            pubkey: event.pubkey,
-            identifier: title);
+        final id = AddressPointer(
+          kind: EventKind.COMMUNITY_DEFINITION,
+          pubkey: event.pubkey,
+          identifier: title,
+          relays: [],
+        );
         return CommunityInfo(
           createdAt: event.createdAt,
           aId: id,

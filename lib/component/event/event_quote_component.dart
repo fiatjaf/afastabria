@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
+import "package:loure/client/input.dart";
 import "package:screenshot/screenshot.dart";
 
-import "package:loure/client/aid.dart";
 import "package:loure/main.dart";
 import "package:loure/client/event.dart";
 import "package:loure/consts/base.dart";
@@ -9,27 +9,26 @@ import "package:loure/router/routes.dart";
 import "package:loure/util/router_util.dart";
 import "package:loure/component/event/event_main_component.dart";
 
-// ignore: must_be_immutable
 class EventQuoteComponent extends StatefulWidget {
-  EventQuoteComponent({
+  const EventQuoteComponent({
     super.key,
     this.event,
     this.id,
     this.aId,
     this.showVideo = false,
   });
-  Event? event;
-  String? id;
-  AId? aId;
-  bool showVideo;
+  final Event? event;
+  final String? id;
+  final AddressPointer? aId;
+  final bool showVideo;
 
   @override
   State<StatefulWidget> createState() {
-    return _EventQuoteComponent();
+    return EventQuoteComponentState();
   }
 }
 
-class _EventQuoteComponent extends State<EventQuoteComponent> {
+class EventQuoteComponentState extends State<EventQuoteComponent> {
   ScreenshotController screenshotController = ScreenshotController();
   Future<Event?>? eventFuture;
 
@@ -53,7 +52,7 @@ class _EventQuoteComponent extends State<EventQuoteComponent> {
       boxShadow: [
         BoxShadow(
           color: Colors.black.withOpacity(0.2),
-          offset: const Offset(0, 0),
+          offset: Offset.zero,
           blurRadius: 10,
           spreadRadius: 0,
         ),

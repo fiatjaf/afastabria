@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
-import "package:loure/client/relay/relay_pool.dart";
 import "package:widget_size/widget_size.dart";
 
-import "package:loure/client/aid.dart";
 import "package:loure/client/event.dart";
 import "package:loure/client/event_relation.dart";
 import "package:loure/client/filter.dart";
+import "package:loure/client/input.dart";
+import "package:loure/client/relay/relay_pool.dart";
 import "package:loure/component/event/event_list_component.dart";
 import "package:loure/component/event/event_load_list_component.dart";
 import "package:loure/component/event_reply_callback.dart";
@@ -72,7 +72,7 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
   final ScrollController _controller = ScrollController();
   double rootEventHeight = 120;
   Future<Event?>? rootEventFuture;
-  AId? aId;
+  AddressPointer? aId;
   String? rootId;
   List<ThreadDetailEvent>? rootSubList = [];
   ManySubscriptionHandle? repliesSubHandle;

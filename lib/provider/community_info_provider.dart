@@ -1,19 +1,16 @@
 import "package:flutter/material.dart";
-import "package:loure/client/aid.dart";
-import "package:loure/client/event.dart";
-import "package:loure/client/nip172/community_info.dart";
 
+import "package:loure/client/event.dart";
+import "package:loure/client/input.dart";
+import "package:loure/client/nip172/community_info.dart";
 import "package:loure/client/filter.dart";
-import "package:loure/main.dart";
 import "package:loure/util/later_function.dart";
+import "package:loure/main.dart";
 
 class CommunityInfoProvider extends ChangeNotifier with LaterFunction {
   final Map<String, CommunityInfo> _cache = {};
-
   final Map<String, int> _handingIds = {};
-
   final List<String> _needPullIds = [];
-
   final List<Event> _pendingEvents = [];
 
   CommunityInfo? getCommunity(final String aid) {
@@ -44,7 +41,7 @@ class CommunityInfoProvider extends ChangeNotifier with LaterFunction {
   void _laterSearch() {
     List<Filter> filters = [];
     for (final idStr in _needPullIds) {
-      final aId = AId.fromString(idStr);
+      final aId = AddressPointer.fromTag(["", idStr]);
       if (aId == null) {
         continue;
       }

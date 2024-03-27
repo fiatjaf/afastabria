@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:loure/client/aid.dart";
+import "package:loure/client/input.dart";
 import "package:loure/router/routes.dart";
 import "package:loure/provider/contact_list_provider.dart";
 import "package:provider/provider.dart";
@@ -14,11 +14,11 @@ class FollowedCommunitiesRouter extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _FollowedCommunitiesRouter();
+    return FollowedCommunitiesRouterState();
   }
 }
 
-class _FollowedCommunitiesRouter extends State<FollowedCommunitiesRouter> {
+class FollowedCommunitiesRouterState extends State<FollowedCommunitiesRouter> {
   ContactList? contactList;
 
   @override
@@ -42,7 +42,7 @@ class _FollowedCommunitiesRouter extends State<FollowedCommunitiesRouter> {
 
     final main = ListView.builder(
       itemBuilder: (final context, final index) {
-        final id = AId.fromString(communitiesList[index]);
+        final id = AddressPointer.fromTag(["", communitiesList[index]]);
         if (id == null) {
           return Container();
         }

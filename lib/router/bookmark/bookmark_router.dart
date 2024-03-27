@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:loure/client/aid.dart";
+import "package:loure/client/input.dart";
 import "package:loure/client/nip51/bookmarks.dart";
 import "package:loure/provider/list_provider.dart";
 import "package:provider/provider.dart";
@@ -101,7 +101,9 @@ class _BookmarkRouter extends CustState<BookmarkRouter> {
         } else {
           return EventQuoteComponent(
             id: item.key == "e" ? item.value : null,
-            aId: item.key == "a" ? AId.fromString(item.value) : null,
+            aId: item.key == "a"
+                ? AddressPointer.fromTag(["", item.value])
+                : null,
           );
         }
       },

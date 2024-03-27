@@ -2,7 +2,7 @@ import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
 import "package:flutter_quill/flutter_quill.dart" as quill;
 import "package:intl/intl.dart";
-import "package:loure/client/aid.dart";
+import "package:loure/client/input.dart";
 import "package:loure/component/editor/lnbc_embed_builder.dart";
 import "package:loure/component/editor/mention_event_embed_builder.dart";
 import "package:loure/component/editor/mention_user_embed_builder.dart";
@@ -16,7 +16,6 @@ import "package:loure/router/index/index_app_bar.dart";
 import "package:loure/util/router_util.dart";
 import "package:pointycastle/ecc/api.dart";
 
-import "package:loure/client/event.dart";
 import "package:loure/client/event_kind.dart" as kind;
 import "package:loure/component/cust_state.dart";
 import "package:loure/component/editor/custom_emoji_embed_builder.dart";
@@ -115,11 +114,10 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
       for (final tag in widget.tags) {
         if (tag.length > 1) {
           final tagName = tag[0];
-          final tagValue = tag[1];
 
           if (tagName == "a") {
             // this note is add to community
-            final aid = AId.fromString(tagValue);
+            final aid = AddressPointer.fromTag(tag);
             if (aid != null &&
                 aid.kind == kind.EventKind.COMMUNITY_DEFINITION) {
               list.add(Container(

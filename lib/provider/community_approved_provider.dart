@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
-import "package:loure/client/aid.dart";
 import "package:loure/client/event.dart";
 import "package:loure/client/filter.dart";
+import "package:loure/client/input.dart";
 import "package:loure/main.dart";
 import "package:loure/util/later_function.dart";
 import "package:loure/client/event_kind.dart";
@@ -13,7 +13,8 @@ class CommunityApprovedProvider extends ChangeNotifier with LaterFunction {
 
   List<Event> pendingEvents = [];
 
-  bool check(final String pubkey, final String eid, {final AId? aId}) {
+  bool check(final String pubkey, final String eid,
+      {final AddressPointer? aId}) {
     if (_approvedMap[eid] != null || aId == null) {
       return true;
     }

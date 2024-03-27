@@ -129,7 +129,7 @@ class NIP19 {
     }
 
     if (id != null) {
-      return EventPointer(id, relays, author, kind);
+      return EventPointer(id, relays, author: author, kind: kind);
     }
 
     return null;
@@ -165,7 +165,8 @@ class NIP19 {
     }
 
     if (id != null && author != null && kind != null) {
-      return AddressPointer(id, author, kind, relays);
+      return AddressPointer(
+          identifier: id, pubkey: author, kind: kind, relays: relays);
     }
 
     return null;

@@ -42,7 +42,7 @@ abstract class Relay {
       throw ArgumentError("No filters given", "filters");
     }
 
-    id = id ?? "sub${this.serial++}";
+    id = id != null ? "$id-${this.serial++}" : "sub${this.serial++}";
 
     final Subscription sub = Subscription(
       this,
