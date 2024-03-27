@@ -1,7 +1,9 @@
+import "package:easy_debounce/easy_throttle.dart";
 import "package:flutter/material.dart";
 
 import "package:loure/client/filter.dart";
 import "package:loure/client/input.dart";
+import "package:loure/client/relay/relay_pool.dart";
 import "package:loure/component/placeholder/event_list_placeholder.dart";
 import "package:loure/component/user/metadata_top_component.dart";
 import "package:loure/component/event/event_list_component.dart";
@@ -27,6 +29,7 @@ class SearchRouterState extends State<SearchRouter> {
   TextEditingController textEditingController = TextEditingController();
   List<Widget> results = [];
   String? isSearching;
+  ManySubscriptionHandle? subHandle;
 
   @override
   void didUpdateWidget(SearchRouter oldWidget) {
@@ -43,10 +46,15 @@ class SearchRouterState extends State<SearchRouter> {
     hideKeyBoard();
 
     final text = this.textEditingController.text;
-    if (this.isSearching == text) {
-      return;
-    }
-    this.isSearching = text;
+    if (this.isSearching == text) return;
+
+    // we will start a new search
+    if (this.subHandle != null) this.subHandle!.close();
+
+    this.setState(() {
+      this.isSearching = text;
+      this.results = [];
+    });
 
     final dr = await inputToPointer(text);
     if (dr.pp != null) {
@@ -99,40 +107,42 @@ class SearchRouterState extends State<SearchRouter> {
       return;
     }
 
-    if (text.startsWith("#") && !text.contains(" ")) {
-      final tag = text.substring(1);
-      final events =
-          await pool.querySync(nostr.TAG_SEARCH_RELAYS, Filter(t: [tag]));
+    // will do a search on relays
+    final filter = Filter(kinds: [1], limit: 15);
+    List<String> relays = nostr.TAG_SEARCH_RELAYS;
 
-      setState(() {
-        this.results = events
-            .map(
-              (event) => EventListComponent(
-                event: event,
-                showVideo:
-                    settingProvider.videoPreviewInList == OpenStatus.OPEN,
-              ),
-            )
-            .toList();
-        this.isSearching = null;
-      });
-      return;
+    for (final part in text.split(" ")) {
+      if (part.startsWith("#")) {
+        // tag search
+        filter.t = filter.t ?? [];
+        filter.t!.add(part.substring(1));
+      } else {
+        // full text search
+        relays = nostr.SEARCH_RELAYS;
+        filter.search = "${filter.search ?? ""}$part ";
+      }
     }
 
-    final events = await pool.querySync(nostr.SEARCH_RELAYS, Filter(t: [text]));
-    setState(() {
-      this.results = events
-          .map(
-            (event) => EventListComponent(
+    this.subHandle = pool.subscribeManyEose(
+      relays,
+      [filter],
+      onEvent: (final event) {
+        this.results.add(EventListComponent(
               event: event,
               showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
-            ),
-          )
-          .toList();
-      this.isSearching = null;
-    });
-
-    this.isSearching = null;
+            ));
+        EasyThrottle.throttle(
+          "search-result",
+          debounceDuration,
+          () => this.setState(() {
+            this.isSearching = null;
+          }),
+        );
+      },
+      onClose: () {
+        this.subHandle = null;
+      },
+    );
     return;
   }
 
@@ -149,6 +159,13 @@ class SearchRouterState extends State<SearchRouter> {
             suffixIcon: GestureDetector(
               onTap: () {
                 textEditingController.text = "";
+                if (this.subHandle != null) {
+                  this.subHandle!.close();
+                }
+                this.setState(() {
+                  this.results = [];
+                  this.isSearching = null;
+                });
               },
               child: const Icon(Icons.close),
             ),
