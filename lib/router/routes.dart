@@ -4,7 +4,6 @@ import "package:flutter/material.dart";
 
 import "package:loure/router/bookmark/bookmark_router.dart";
 import "package:loure/router/index/index_router.dart";
-import "package:loure/router/search/search_router.dart";
 import "package:loure/router/user/followed_communities_router.dart";
 import "package:loure/router/user/followed_router.dart";
 import "package:loure/router/community/community_detail_router.dart";
@@ -24,7 +23,6 @@ import "package:loure/router/user/user_contact_list_router.dart";
 import "package:loure/router/user/user_history_contact_list_router.dart";
 import "package:loure/router/user/user_relays_router.dart";
 import "package:loure/router/user/user_router.dart";
-import "package:loure/router/user/user_zap_list_router.dart";
 import "package:loure/router/web_utils/web_utils_router.dart";
 
 class InternalRouter {
@@ -117,8 +115,6 @@ Widget renderWidget(RouteSettings rs) {
       return const UserContactListRouter();
     case RouterPath.USER_HISTORY_CONTACT_LIST:
       return const UserHistoryContactListRouter();
-    case RouterPath.USER_ZAP_LIST:
-      return const UserZapListRouter();
     case RouterPath.USER_RELAYS:
       return const UserRelayRouter();
     case RouterPath.DM_DETAIL:

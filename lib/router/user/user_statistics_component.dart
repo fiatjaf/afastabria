@@ -6,7 +6,6 @@ import "package:loure/client/event.dart";
 import "package:loure/client/event_kind.dart" as kind;
 import "package:loure/client/nip02/contact_list.dart";
 import "package:loure/client/filter.dart";
-import "package:loure/client/zap/zap_num_util.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/router/routes.dart";
 import "package:loure/data/event_mem_box.dart";
@@ -107,12 +106,6 @@ class UserStatisticsComponentState extends State<UserStatisticsComponent> {
             onTap: onFollowedTap,
             formatNum: true,
           ),
-          UserStatisticsItemComponent(
-            num: zapNum,
-            name: "Zap",
-            onTap: onZapTap,
-            formatNum: true,
-          ),
         ],
       ),
     );
@@ -171,31 +164,6 @@ class UserStatisticsComponentState extends State<UserStatisticsComponent> {
 
   onRelaysTap(RelayList rl) {
     RouterUtil.router(context, RouterPath.USER_RELAYS, rl);
-  }
-
-  onZapTap() {
-    if (zapEventBox == null) {
-      zapEventBox = EventMemBox(sortAfterAdd: false);
-      // pull zap event
-      final filter =
-          Filter(kinds: [kind.EventKind.ZAP], p: [widget.pubkey], limit: 1);
-      pool.querySingle(["wss://relay.nostr.band"], filter).then(
-          (final Event? event) {
-        if (event == null) return;
-        if (event.kind == kind.EventKind.ZAP && zapEventBox!.add(event)) {
-          setState(() {
-            this.zapNum = this.zapNum! + ZapNumUtil.getNumFromZapEvent(event);
-          });
-        }
-      });
-
-      this.zapNum = 0;
-    } else {
-      // Router to vist list
-      zapEventBox!.sort();
-      final list = zapEventBox!.all();
-      RouterUtil.router(context, RouterPath.USER_ZAP_LIST, list);
-    }
   }
 
   @override
