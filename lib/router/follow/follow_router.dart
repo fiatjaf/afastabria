@@ -55,20 +55,22 @@ class FollowRouterState extends State<FollowRouter>
     return Stack(alignment: Alignment.center, children: [
       ListenableBuilder(
         listenable: followingManager,
-        builder: (final context, final child) => ListView.builder(
-          controller: scrollController,
-          itemBuilder: (final context, final int index) {
-            if (followingManager.events.isEmpty) {
-              return EventListPlaceholder();
-            }
+        builder: (final context, final child) {
+          if (followingManager.events.isEmpty) {
+            return const EventListPlaceholder();
+          }
 
-            return EventListComponent(
-              event: followingManager.events[index],
-              showVideo: showVideo,
-            );
-          },
-          itemCount: followingManager.events.length,
-        ),
+          return ListView.builder(
+            controller: scrollController,
+            itemBuilder: (final context, final int index) {
+              return EventListComponent(
+                event: followingManager.events[index],
+                showVideo: showVideo,
+              );
+            },
+            itemCount: followingManager.events.length,
+          );
+        },
       ),
       Positioned(
         top: Base.BASE_PADDING,

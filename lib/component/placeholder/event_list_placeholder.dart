@@ -2,10 +2,9 @@ import "package:flutter/material.dart";
 
 import "package:loure/component/placeholder/event_placeholder.dart";
 
-// ignore: must_be_immutable
 class EventListPlaceholder extends StatelessWidget {
-  EventListPlaceholder({super.key, this.onRefresh});
-  Function? onRefresh;
+  const EventListPlaceholder({super.key, this.onRefresh});
+  final Function? onRefresh;
 
   @override
   Widget build(final BuildContext context) {

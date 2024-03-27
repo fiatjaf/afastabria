@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 
 import "package:loure/client/filter.dart";
 import "package:loure/client/input.dart";
+import "package:loure/component/placeholder/event_list_placeholder.dart";
 import "package:loure/component/user/metadata_top_component.dart";
 import "package:loure/component/event/event_list_component.dart";
 import "package:loure/consts/base_consts.dart";
@@ -21,9 +22,11 @@ class SearchRouter extends StatefulWidget {
 }
 
 class SearchRouterState extends State<SearchRouter> {
+  static const debounceDuration = Duration(milliseconds: 500);
+
   TextEditingController textEditingController = TextEditingController();
   List<Widget> results = [];
-  static const debounceDuration = Duration(milliseconds: 500);
+  String? isSearching;
 
   @override
   void didUpdateWidget(SearchRouter oldWidget) {
@@ -40,6 +43,10 @@ class SearchRouterState extends State<SearchRouter> {
     hideKeyBoard();
 
     final text = this.textEditingController.text;
+    if (this.isSearching == text) {
+      return;
+    }
+    this.isSearching = text;
 
     final dr = await inputToPointer(text);
     if (dr.pp != null) {
@@ -57,6 +64,7 @@ class SearchRouterState extends State<SearchRouter> {
             ),
           ),
         ];
+        this.isSearching = null;
       });
       return;
     }
@@ -71,6 +79,7 @@ class SearchRouterState extends State<SearchRouter> {
             showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
           ),
         ];
+        this.isSearching = null;
       });
       return;
     }
@@ -85,6 +94,7 @@ class SearchRouterState extends State<SearchRouter> {
             showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
           ),
         ];
+        this.isSearching = null;
       });
       return;
     }
@@ -104,6 +114,7 @@ class SearchRouterState extends State<SearchRouter> {
               ),
             )
             .toList();
+        this.isSearching = null;
       });
       return;
     }
@@ -118,7 +129,10 @@ class SearchRouterState extends State<SearchRouter> {
             ),
           )
           .toList();
+      this.isSearching = null;
     });
+
+    this.isSearching = null;
     return;
   }
 
@@ -142,9 +156,9 @@ class SearchRouterState extends State<SearchRouter> {
           onEditingComplete: performSearch,
         ),
         Expanded(
-          child: ListView(
-            children: this.results,
-          ),
+          child: this.isSearching != null
+              ? const EventListPlaceholder()
+              : ListView(children: this.results),
         ),
       ]),
     );
