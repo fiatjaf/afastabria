@@ -7,15 +7,16 @@ import "package:loure/client/relay/relay_pool.dart";
 import "package:loure/component/placeholder/event_list_placeholder.dart";
 import "package:loure/component/user/metadata_top_component.dart";
 import "package:loure/component/event/event_list_component.dart";
+import "package:loure/consts/base.dart";
 import "package:loure/consts/base_consts.dart";
 import "package:loure/router/routes.dart";
 import "package:loure/main.dart";
 import "package:loure/util/router_util.dart";
 
 class SearchRouter extends StatefulWidget {
-  const SearchRouter({this.query = "", super.key});
+  const SearchRouter({this.query, super.key});
 
-  final String query;
+  final String? query;
 
   @override
   State<StatefulWidget> createState() {
@@ -32,12 +33,26 @@ class SearchRouterState extends State<SearchRouter> {
   ManySubscriptionHandle? subHandle;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.query != null) {
+      this.textEditingController.text = widget.query!;
+      this.performSearch();
+    }
+  }
+
+  @override
   void didUpdateWidget(SearchRouter oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.query != oldWidget.query && widget.query != "") {
+    if (widget.query != oldWidget.query && widget.query != null) {
       this.setState(() {
-        this.textEditingController.text = widget.query;
+        this.textEditingController.text = widget.query!;
+        this.performSearch();
       });
     }
   }
@@ -151,27 +166,38 @@ class SearchRouterState extends State<SearchRouter> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(children: [
-        TextField(
-          controller: textEditingController,
-          decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.search),
-            hintText: "What are you searching for?",
-            suffixIcon: GestureDetector(
-              onTap: () {
-                textEditingController.text = "";
-                if (this.subHandle != null) {
-                  this.subHandle!.close();
-                }
-                this.setState(() {
-                  this.results = [];
-                  this.isSearching = null;
-                });
-              },
-              child: const Icon(Icons.close),
-            ),
-          ),
-          onEditingComplete: performSearch,
-        ),
+        widget.query != null
+            ? Padding(
+                padding: const EdgeInsets.all(Base.BASE_PADDING),
+                child: Text(
+                  widget.query!,
+                  style: TextStyle(
+                    fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              )
+            : TextField(
+                controller: textEditingController,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.search),
+                  hintText: "What are you searching for?",
+                  suffixIcon: GestureDetector(
+                    onTap: () {
+                      textEditingController.text = "";
+                      if (this.subHandle != null) {
+                        this.subHandle!.close();
+                      }
+                      this.setState(() {
+                        this.results = [];
+                        this.isSearching = null;
+                      });
+                    },
+                    child: const Icon(Icons.close),
+                  ),
+                ),
+                onEditingComplete: this.performSearch,
+              ),
         Expanded(
           child: this.isSearching != null
               ? const EventListPlaceholder()

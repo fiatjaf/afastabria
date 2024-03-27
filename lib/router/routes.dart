@@ -4,6 +4,7 @@ import "package:flutter/material.dart";
 
 import "package:loure/router/bookmark/bookmark_router.dart";
 import "package:loure/router/index/index_router.dart";
+import "package:loure/router/search/search_router.dart";
 import "package:loure/router/user/followed_communities_router.dart";
 import "package:loure/router/user/followed_router.dart";
 import "package:loure/router/community/community_detail_router.dart";
@@ -17,7 +18,6 @@ import "package:loure/router/qrscanner/qrscanner_router.dart";
 import "package:loure/router/relays/relay_info_router.dart";
 import "package:loure/router/relays/relays_router.dart";
 import "package:loure/router/setting/setting_router.dart";
-import "package:loure/router/tag/tag_detail_router.dart";
 import "package:loure/router/thread/thread_detail_router.dart";
 import "package:loure/router/user/followed_tags_list_router.dart";
 import "package:loure/router/user/user_contact_list_router.dart";
@@ -96,7 +96,6 @@ class RouterPath {
   static const String DM_DETAIL = "/dmDetail";
   static const String THREAD_DETAIL = "/threadDetail";
   static const String EVENT_DETAIL = "/eventDetail";
-  static const String TAG_DETAIL = "/tagDetail";
   static const String SETTING = "/setting";
   static const String QRSCANNER = "/qrScanner";
   static const String WEBUTILS = "/webUtils";
@@ -128,8 +127,6 @@ Widget renderWidget(RouteSettings rs) {
       return ThreadDetailRouter(rs.arguments);
     case RouterPath.EVENT_DETAIL:
       return const EventDetailRouter();
-    case RouterPath.TAG_DETAIL:
-      return const TagDetailRouter();
     case RouterPath.NOTICES:
       return const NoticeRouter();
     case RouterPath.KEY_BACKUP:

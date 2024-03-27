@@ -1,32 +1,24 @@
 import "package:flutter/material.dart";
-import "package:loure/router/routes.dart";
 import "package:loure/main.dart";
 import "package:loure/provider/contact_list_provider.dart";
+import "package:loure/router/search/search_router.dart";
 import "package:loure/util/router_util.dart";
 import "package:provider/provider.dart";
 
 import "package:loure/consts/base.dart";
 
-class TagInfoComponent extends StatefulWidget {
-  TagInfoComponent({
+class TagInfoComponent extends StatelessWidget {
+  const TagInfoComponent({
     required this.tag,
     super.key,
     this.height = 80,
     this.jumpable = false,
   });
+
   final String tag;
-
   final double height;
+  final bool jumpable;
 
-  bool jumpable;
-
-  @override
-  State<StatefulWidget> createState() {
-    return _TagInfoComponent();
-  }
-}
-
-class _TagInfoComponent extends State<TagInfoComponent> {
   @override
   Widget build(final BuildContext context) {
     final themeData = Theme.of(context);
@@ -34,7 +26,7 @@ class _TagInfoComponent extends State<TagInfoComponent> {
     final bodyLargeFontSize = themeData.textTheme.bodyLarge!.fontSize;
 
     final main = Container(
-      height: widget.height,
+      height: this.height,
       color: cardColor,
       alignment: Alignment.center,
       margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
@@ -42,7 +34,7 @@ class _TagInfoComponent extends State<TagInfoComponent> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "#${widget.tag}",
+            "#${this.tag}",
             style: TextStyle(
               fontSize: bodyLargeFontSize,
               fontWeight: FontWeight.bold,
@@ -59,9 +51,9 @@ class _TagInfoComponent extends State<TagInfoComponent> {
             return GestureDetector(
               onTap: () {
                 if (exist) {
-                  contactListProvider.removeTag(widget.tag);
+                  contactListProvider.removeTag(this.tag);
                 } else {
-                  contactListProvider.addTag(widget.tag);
+                  contactListProvider.addTag(this.tag);
                 }
               },
               child: Container(
@@ -73,16 +65,16 @@ class _TagInfoComponent extends State<TagInfoComponent> {
               ),
             );
           }, selector: (final context, final provider) {
-            return provider.containTag(widget.tag);
+            return provider.containTag(this.tag);
           }),
         ],
       ),
     );
 
-    if (widget.jumpable) {
+    if (this.jumpable) {
       return GestureDetector(
         onTap: () {
-          RouterUtil.router(context, RouterPath.TAG_DETAIL, widget.tag);
+          RouterUtil.push(context, SearchRouter(query: "#${this.tag}"));
         },
         behavior: HitTestBehavior.translucent,
         child: main,
