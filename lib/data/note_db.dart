@@ -23,7 +23,6 @@ class NoteDB {
         db.insert("note_content", {"rowid": rowid, "content": event.content});
       }
     } catch (err) {
-      print("error inserting note: $err");
       /***/
     }
   }
