@@ -1,4 +1,3 @@
-import "package:easy_debounce/easy_throttle.dart";
 import "package:flutter/material.dart";
 
 import "package:loure/client/filter.dart";
@@ -11,6 +10,7 @@ import "package:loure/consts/base.dart";
 import "package:loure/consts/base_consts.dart";
 import "package:loure/router/routes.dart";
 import "package:loure/main.dart";
+import "package:loure/util/debounce.dart";
 import "package:loure/util/router_util.dart";
 
 class SearchRouter extends StatefulWidget {
@@ -24,13 +24,13 @@ class SearchRouter extends StatefulWidget {
   }
 }
 
-class SearchRouterState extends State<SearchRouter> {
-  static const debounceDuration = Duration(milliseconds: 500);
-
+class SearchRouterState extends State<SearchRouter>
+    with AutomaticKeepAliveClientMixin {
   TextEditingController textEditingController = TextEditingController();
   List<Widget> results = [];
   String? isSearching;
   ManySubscriptionHandle? subHandle;
+  late final Debounce updateResults;
 
   @override
   bool get wantKeepAlive => true;
@@ -43,6 +43,12 @@ class SearchRouterState extends State<SearchRouter> {
       this.textEditingController.text = widget.query!;
       this.performSearch();
     }
+
+    this.updateResults = Debounce(const Duration(milliseconds: 500), () {
+      this.setState(() {
+        this.isSearching = null;
+      });
+    });
   }
 
   @override
@@ -146,13 +152,7 @@ class SearchRouterState extends State<SearchRouter> {
               event: event,
               showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
             ));
-        EasyThrottle.throttle(
-          "search-result",
-          debounceDuration,
-          () => this.setState(() {
-            this.isSearching = null;
-          }),
-        );
+        updateResults.call();
       },
       onClose: () {
         this.subHandle = null;
@@ -163,6 +163,8 @@ class SearchRouterState extends State<SearchRouter> {
 
   @override
   Widget build(final BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(children: [
