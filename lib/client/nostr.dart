@@ -135,6 +135,28 @@ class Nostr {
     );
   }
 
+  void processDownloadedEvent(Event event, {bool? followed}) async {
+    final isFollow =
+        followed ?? followingManager.follows.contains(event.pubkey);
+
+    NoteDB.insert(event, isFollow: isFollow);
+
+    // insert repost if content is inside
+    if (event.kind == EventKind.REPOST && event.content.contains('"pubkey"')) {
+      try {
+        final repost = Event.fromJson(jsonDecode(event.content));
+        final ref = event.getTag("e");
+        if (ref != null &&
+            ref[1] == repost.id &&
+            repost.isValid &&
+            repost.kind == 1) {
+          final isFollowed = followingManager.follows.contains(repost.pubkey);
+          NoteDB.insert(repost, isFollow: isFollowed);
+        }
+      } catch (err) {/***/}
+    }
+  }
+
   void updateIndexesAndSource(final Event event, final String relayURL) {
     this.idIndex.update(event.id, (final Event curr) {
       curr.sources.add(relayURL);

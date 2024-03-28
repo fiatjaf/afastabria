@@ -14,7 +14,7 @@ import "package:loure/main.dart";
 class FollowingManager extends ChangeNotifier {
   FollowingManager();
 
-  List<Contact> contacts = [];
+  Set<String> follows = {};
   List<List<String>> relaysFor = [];
 
   ManySubscriptionHandle? subHandle;
@@ -25,11 +25,11 @@ class FollowingManager extends ChangeNotifier {
 
   void init() async {
     final cl = await contactListLoader.load(nostr.publicKey);
-    this.contacts = cl.contacts; // add some randomness
-    this.relaysFor = List.filled(contacts.length, [], growable: false);
+    this.follows = cl.contacts.map((final follow) => follow.pubkey).toSet();
+    this.relaysFor = List.filled(this.follows.length, [], growable: false);
 
-    await Future.wait(this.contacts.mapIndexed((final i, final contact) async {
-      final rl = await relaylistLoader.load(contact.pubkey);
+    await Future.wait(this.follows.mapIndexed((final i, final follow) async {
+      final rl = await relaylistLoader.load(follow);
       rl.write.shuffle(); // add some randomness
       this.relaysFor[i] = rl.write;
     }));
@@ -39,9 +39,9 @@ class FollowingManager extends ChangeNotifier {
     this.notifyListeners();
 
     final Map<String, List<String>> chosen = {}; // { relay: [pubkeys, ...] }
-    for (var i = 0; i < this.contacts.length; i++) {
-      final contact = this.contacts[i];
-
+    var i = -1;
+    for (final follow in this.follows) {
+      i++;
       // pick relays
       final relays = relaysFor[i];
       int picked = 0;
@@ -50,9 +50,9 @@ class FollowingManager extends ChangeNotifier {
       for (final url in relays) {
         if (chosen.keys.contains(url)) {
           chosen.update(url, (contacts) {
-            contacts.add(contact.pubkey);
+            contacts.add(follow);
             return contacts;
-          }, ifAbsent: () => [contact.pubkey]);
+          }, ifAbsent: () => [follow]);
           picked++;
           if (picked >= 3) break;
         }
@@ -62,9 +62,9 @@ class FollowingManager extends ChangeNotifier {
         // try again but now just pick anything
         for (final url in relays) {
           chosen.update(url, (contacts) {
-            contacts.add(contact.pubkey);
+            contacts.add(follow);
             return contacts;
-          }, ifAbsent: () => [contact.pubkey]);
+          }, ifAbsent: () => [follow]);
           picked++;
           if (picked >= 3) break;
         }
@@ -76,7 +76,10 @@ class FollowingManager extends ChangeNotifier {
     print("subscribing $mostRecent $chosen");
     this.subHandle = pool.subscribeMany(
       chosen.keys,
-      [Filter(kinds: EventKind.SUPPORTED_EVENTS, since: mostRecent)],
+      [
+        Filter(
+            kinds: [EventKind.TEXT_NOTE, EventKind.REPOST], since: mostRecent)
+      ],
       onEvent: (final event) {
         final idx = whereToInsert(this.events, event);
         if (idx == -1) {
@@ -104,7 +107,8 @@ class FollowingManager extends ChangeNotifier {
         continue;
       }
       this.events.insert(idx, event);
-      NoteDB.insert(event, isFollow: true);
+
+      nostr.processDownloadedEvent(event);
     }
     this.notifyListeners();
 

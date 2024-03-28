@@ -1,17 +1,14 @@
-import "dart:convert";
-
 import "package:flutter/material.dart";
+import "package:loure/router/thread/thread_detail_router.dart";
 import "package:provider/provider.dart";
 import "package:screenshot/screenshot.dart";
 
 import "package:loure/main.dart";
 import "package:loure/provider/community_approved_provider.dart";
-import "package:loure/util/string_util.dart";
 import "package:loure/client/event_kind.dart";
 import "package:loure/client/event.dart";
 import "package:loure/client/event_relation.dart";
 import "package:loure/consts/base.dart";
-import "package:loure/router/routes.dart";
 import "package:loure/util/router_util.dart";
 import "package:loure/component/event/event_bitcion_icon_component.dart";
 import "package:loure/component/event/event_main_component.dart";
@@ -109,28 +106,12 @@ class EventListComponentState extends State<EventListComponent> {
   }
 
   void jumpToThread() {
-    if (widget.event.kind == EventKind.REPOST) {
-      // try to find target event
-      if (widget.event.content.contains("\"pubkey\"")) {
-        try {
-          final jsonMap = jsonDecode(widget.event.content);
-          final repostEvent = Event.fromJson(jsonMap);
-          RouterUtil.router(context, RouterPath.THREAD_DETAIL, repostEvent);
-          return;
-        } catch (e) {
-          print(e);
-        }
-      }
-
-      final eventRelation = EventRelation.fromEvent(widget.event);
-      if (StringUtil.isNotBlank(eventRelation.rootId)) {
-        final event = nostr.idIndex[eventRelation.rootId!];
-        if (event != null) {
-          RouterUtil.router(context, RouterPath.THREAD_DETAIL, event);
-          return;
-        }
-      }
+    switch (widget.event.kind) {
+      case EventKind.TEXT_NOTE:
+        RouterUtil.push(context, ThreadDetailRouter(widget.event));
+      case EventKind.REPOST:
+        final target = nostr.getByID(widget.event.getTag("e")![1]);
+        RouterUtil.push(context, ThreadDetailRouter(target));
     }
-    RouterUtil.router(context, RouterPath.THREAD_DETAIL, widget.event);
   }
 }

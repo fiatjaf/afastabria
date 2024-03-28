@@ -17,7 +17,6 @@ import "package:loure/util/pendingevents_later_function.dart";
 import "package:loure/util/platform_util.dart";
 import "package:loure/util/router_util.dart";
 import "package:loure/client/event_kind.dart";
-import "package:loure/util/string_util.dart";
 import "package:loure/util/when_stop_function.dart";
 import "package:loure/router/thread/thread_detail_event.dart";
 import "package:loure/router/thread/thread_detail_event_main_component.dart";
@@ -330,8 +329,7 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
     if (this.repliesSubHandle != null) this.repliesSubHandle!.close();
     if (this.rootId == null && this.aId == null) return;
 
-    List<int> replyKinds = [...EventKind.SUPPORTED_EVENTS];
-    replyKinds.remove(EventKind.REPOST);
+    List<int> replyKinds = [EventKind.TEXT_NOTE];
 
     // query sub events
     final filter = this.aId == null
@@ -349,9 +347,7 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
   }
 
   void onEvent(final Event event) {
-    if (event.kind == EventKind.ZAP && StringUtil.isBlank(event.content)) {
-      return;
-    }
+    nostr.processDownloadedEvent(event);
 
     later(event, (final list) {
       box.addList(list);

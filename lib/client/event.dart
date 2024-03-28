@@ -72,6 +72,13 @@ class Event {
     return Event(fin.id, fin.pubkey, createdAt, kind, tags, content, fin.sig);
   }
 
+  Tag? getTag(final String name) {
+    for (final tag in this.tags) {
+      if (tag.length >= 2 && tag[0] == name) return tag;
+    }
+    return null;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       "id": id,
