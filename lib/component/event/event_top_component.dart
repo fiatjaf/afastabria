@@ -8,7 +8,7 @@ import "package:loure/util/router_util.dart";
 import "package:loure/util/string_util.dart";
 import "package:loure/client/event.dart";
 import "package:loure/consts/base.dart";
-import "package:loure/data/metadata.dart";
+import "package:loure/client/metadata.dart";
 import "package:loure/component/image_component.dart";
 
 class EventTopComponent extends StatelessWidget {

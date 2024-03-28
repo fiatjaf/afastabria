@@ -10,7 +10,7 @@ import "package:loure/router/user/user_statistics_component.dart";
 import "package:loure/util/platform_util.dart";
 import "package:loure/util/router_util.dart";
 import "package:loure/util/string_util.dart";
-import "package:loure/data/metadata.dart";
+import "package:loure/client/metadata.dart";
 import "package:loure/main.dart";
 import "package:loure/router/edit/editor_router.dart";
 import "package:loure/router/index/account_manager_component.dart";

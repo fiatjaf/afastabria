@@ -18,7 +18,7 @@ import "package:loure/util/router_util.dart";
 import "package:loure/client/nip19/nip19.dart";
 import "package:loure/client/zap/zap_action.dart";
 import "package:loure/consts/base.dart";
-import "package:loure/data/metadata.dart";
+import "package:loure/client/metadata.dart";
 import "package:loure/util/string_util.dart";
 // import "package:loure/component/confirm_dialog.dart";
 import "package:loure/component/image_component.dart";

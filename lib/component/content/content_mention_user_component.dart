@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 import "package:loure/component/simple_name_component.dart";
 import "package:loure/main.dart";
 import "package:loure/router/routes.dart";
-import "package:loure/data/metadata.dart";
+import "package:loure/client/metadata.dart";
 import "package:loure/util/router_util.dart";
 import "package:loure/component/content/content_str_link_component.dart";
 

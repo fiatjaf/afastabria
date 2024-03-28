@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:loure/component/content/content_component.dart";
 
 import "package:loure/consts/base.dart";
-import "package:loure/data/metadata.dart";
+import "package:loure/client/metadata.dart";
 import "package:loure/util/string_util.dart";
 import "package:loure/component/user/metadata_top_component.dart";
 import "package:loure/component/user/user_badges_component.dart";

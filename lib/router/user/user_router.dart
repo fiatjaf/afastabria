@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:loure/client/client_utils/keys.dart";
-import "package:loure/data/metadata.dart";
+import "package:loure/client/metadata.dart";
 
 import "package:loure/client/relay/relay_pool.dart";
 import "package:loure/component/simple_name_component.dart";

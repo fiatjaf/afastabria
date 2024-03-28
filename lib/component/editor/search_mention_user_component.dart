@@ -1,9 +1,12 @@
+import "dart:convert";
+
 import "package:flutter/material.dart";
+import "package:loure/client/event.dart";
 
 import "package:loure/client/nip19/nip19.dart";
 import "package:loure/consts/base.dart";
-import "package:loure/data/metadata.dart";
-import "package:loure/data/metadata_db.dart";
+import "package:loure/client/metadata.dart";
+import "package:loure/data/db.dart";
 import "package:loure/main.dart";
 import "package:loure/util/router_util.dart";
 import "package:loure/util/string_util.dart";
@@ -68,9 +71,13 @@ class _SearchMentionUserComponent extends State<SearchMentionUserComponent>
     metadatas.clear();
 
     if (text.length >= 2) {
-      final list = await MetadataDB.search(text);
+      final list = await DB.getDB(null).query("metadata",
+          where: "event like '%' || ? || '%' LIMIT 7", whereArgs: [text]);
       setState(() {
-        metadatas = list.toList();
+        metadatas = list
+            .map((final row) => Metadata.fromEvent(
+                Event.fromJson(jsonDecode(row["event"] as String))))
+            .toList();
       });
     }
   }

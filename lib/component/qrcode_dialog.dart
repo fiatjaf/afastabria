@@ -7,7 +7,7 @@ import "package:share_plus/share_plus.dart";
 import "package:loure/client/nip19/nip19.dart";
 import "package:loure/component/name_component.dart";
 import "package:loure/component/user/metadata_top_component.dart";
-import "package:loure/data/metadata.dart";
+import "package:loure/client/metadata.dart";
 import "package:loure/main.dart";
 import "package:screenshot/screenshot.dart";
 import "package:loure/consts/base.dart";

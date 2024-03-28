@@ -4,6 +4,10 @@ import "package:flutter/services.dart";
 import "package:flutter_native_splash/flutter_native_splash.dart";
 import "package:flutter_socks_proxy/socks_proxy.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:loure/client/metadata.dart";
+import "package:loure/client/nip02/contact_list.dart";
+import "package:loure/client/nip65/relay_list.dart";
+import "package:loure/client/replaceable_loader.dart";
 import "package:loure/router/routes.dart";
 import "package:provider/provider.dart";
 import "package:shared_preferences/shared_preferences.dart";
@@ -11,12 +15,9 @@ import "package:sqflite_common_ffi/sqflite_ffi.dart";
 import "package:sqflite_common_ffi_web/sqflite_ffi_web.dart";
 import "package:window_manager/window_manager.dart";
 
-import "package:loure/client/metadata_loader.dart";
-import "package:loure/client/contactlist_loader.dart";
 import "package:loure/client/following.dart";
 import "package:loure/client/nostr.dart";
 import "package:loure/client/relay/relay_pool.dart";
-import "package:loure/client/relaylist_loader.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/consts/colors.dart";
 import "package:loure/consts/theme_style.dart";
@@ -44,9 +45,44 @@ import "package:loure/util/media_data_cache.dart";
 import "package:loure/util/platform_util.dart";
 
 final RelayPool pool = RelayPool();
-final metadataLoader = MetadataLoader();
-final relaylistLoader = RelayListLoader();
-final contactListLoader = ContactListLoader();
+final metadataLoader = ReplaceableLoader(
+  dbname: "metadata",
+  read: Metadata.fromEvent,
+  blank: Metadata.blank,
+  thresholdDelta: const Duration(days: 3),
+  baseRelays: nostr.METADATA_RELAYS,
+  kind: 0,
+  queryId: "load-metadata",
+);
+final relaylistLoader = ReplaceableLoader(
+  dbname: "relaylist",
+  read: RelayList.fromEvent,
+  blank: RelayList.blank,
+  deflt: (final String key) => RelayList(key, [
+    "wss://relay.damus.io",
+    "wss://nostr.wine",
+    "wss://nos.lol"
+  ], [
+    "wss://relay.damus.io",
+    "wss://nos.lol",
+    "wss://nostr.einundzwanzig.space",
+    "wss://yabu.me",
+    "wss://relay.siamstr.com"
+  ]),
+  thresholdDelta: const Duration(days: 7),
+  baseRelays: nostr.RELAYLIST_RELAYS,
+  kind: 10002,
+  queryId: "load-relaylist",
+);
+final contactListLoader = ReplaceableLoader(
+  dbname: "contactlist",
+  read: ContactList.fromEvent,
+  blank: ContactList.blank,
+  thresholdDelta: const Duration(days: 14),
+  baseRelays: nostr.CONTACT_RELAYS,
+  kind: 3,
+  queryId: "load-cl",
+);
 
 Nostr nostr = Nostr.empty();
 late SharedPreferences sharedPreferences;

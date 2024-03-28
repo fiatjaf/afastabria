@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 
-import "package:loure/data/metadata.dart";
+import "package:loure/client/metadata.dart";
 
 // ignore: must_be_immutable
 class Nip05ValidComponent extends StatefulWidget {

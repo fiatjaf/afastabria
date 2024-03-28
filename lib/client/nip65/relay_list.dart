@@ -1,7 +1,8 @@
 import "package:loure/client/event.dart";
 import "package:loure/client/relay/util.dart";
+import "package:loure/client/replaceable_loader.dart";
 
-class RelayList {
+class RelayList extends Replaceable {
   RelayList(this.pubkey, this.read, this.write, {this.event});
 
   RelayList.blank(this.pubkey)
@@ -41,8 +42,15 @@ class RelayList {
 
   final List<String> read;
   final List<String> write;
+
+  @override
   final String pubkey;
+
+  @override
   Event? event;
+
+  @override
+  int? storedAt;
 
   Future<Event> toEvent(final SignerFunction signer) async {
     List<List<String>> tags = [];

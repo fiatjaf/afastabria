@@ -4,7 +4,7 @@ import "package:loure/main.dart";
 import "package:loure/component/user/metadata_component.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/router/routes.dart";
-import "package:loure/data/metadata.dart";
+import "package:loure/client/metadata.dart";
 import "package:loure/util/platform_util.dart";
 import "package:loure/util/router_util.dart";
 

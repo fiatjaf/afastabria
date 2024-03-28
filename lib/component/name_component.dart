@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:loure/component/nip05_valid_component.dart";
-import "package:loure/data/metadata.dart";
+import "package:loure/client/metadata.dart";
 
 import "package:loure/client/nip19/nip19.dart";
 import "package:loure/util/string_util.dart";

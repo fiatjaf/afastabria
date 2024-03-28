@@ -5,7 +5,7 @@ import "package:provider/provider.dart";
 import "package:loure/component/editor/text_input_dialog.dart";
 import "package:loure/component/name_component.dart";
 import "package:loure/component/point_component.dart";
-import "package:loure/data/metadata.dart";
+import "package:loure/client/metadata.dart";
 import "package:loure/provider/setting_provider.dart";
 import "package:loure/util/router_util.dart";
 import "package:loure/client/nostr.dart";

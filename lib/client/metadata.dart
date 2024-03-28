@@ -2,8 +2,9 @@ import "dart:convert";
 
 import "package:loure/client/event.dart";
 import "package:loure/client/nip05/nip05.dart";
+import "package:loure/client/replaceable_loader.dart";
 
-class Metadata {
+class Metadata extends Replaceable {
   Metadata(
     this.event, {
     final String? pubkey,
@@ -46,8 +47,15 @@ class Metadata {
       /***/
     }
   }
+
+  @override
   Event? event;
+
+  @override
   late String pubkey;
+
+  @override
+  int? storedAt;
 
   String? name;
   String? displayName;

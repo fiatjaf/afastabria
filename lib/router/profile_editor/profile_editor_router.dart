@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:loure/client/upload/uploader.dart";
-import "package:loure/data/metadata.dart";
+import "package:loure/client/metadata.dart";
 import "package:loure/util/platform_util.dart";
 import "package:loure/util/router_util.dart";
 

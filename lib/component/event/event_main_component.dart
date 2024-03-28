@@ -18,7 +18,7 @@ import "package:loure/client/nip19/nip19.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/consts/base_consts.dart";
 import "package:loure/router/routes.dart";
-import "package:loure/data/metadata.dart";
+import "package:loure/client/metadata.dart";
 import "package:loure/main.dart";
 import "package:loure/provider/setting_provider.dart";
 import "package:loure/util/router_util.dart";

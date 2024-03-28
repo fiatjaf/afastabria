@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:loure/main.dart";
 
 import "package:loure/client/nip19/nip19.dart";
-import "package:loure/data/metadata.dart";
+import "package:loure/client/metadata.dart";
 import "package:loure/util/string_util.dart";
 
 class SimpleNameComponent extends StatelessWidget {

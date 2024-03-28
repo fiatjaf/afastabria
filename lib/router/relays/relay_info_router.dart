@@ -7,7 +7,7 @@ import "package:http/http.dart" as http;
 import "package:loure/component/name_component.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/router/routes.dart";
-import "package:loure/data/metadata.dart";
+import "package:loure/client/metadata.dart";
 import "package:loure/component/image_component.dart";
 import "package:loure/component/webview_router.dart";
 import "package:loure/util/router_util.dart";

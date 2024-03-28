@@ -1,7 +1,8 @@
 import "package:collection/collection.dart";
 import "package:loure/client/event.dart";
+import "package:loure/client/replaceable_loader.dart";
 
-class ContactList {
+class ContactList extends Replaceable {
   ContactList(this.pubkey, this.contacts, {this.event});
 
   ContactList.blank(this.pubkey)
@@ -30,9 +31,16 @@ class ContactList {
     return ContactList(event.pubkey, contacts, event: event);
   }
 
-  final String pubkey;
   final List<Contact> contacts;
+
+  @override
+  final String pubkey;
+
+  @override
   Event? event;
+
+  @override
+  int? storedAt;
 
   Future<Event> toEvent(final SignerFunction signer) async {
     Tags tags = [];

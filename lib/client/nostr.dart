@@ -4,11 +4,8 @@ import "package:loure/client/event_kind.dart";
 import "package:loure/client/filter.dart";
 import "package:loure/client/input.dart";
 import "package:loure/consts/base_consts.dart";
-import "package:loure/data/contactlist_db.dart";
-import "package:loure/data/metadata.dart";
-import "package:loure/data/metadata_db.dart";
+import "package:loure/client/metadata.dart";
 import "package:loure/data/note_db.dart";
-import "package:loure/data/relaylist_db.dart";
 import "package:loure/main.dart";
 import "package:loure/client/client_utils/keys.dart";
 import "package:loure/client/event.dart";
@@ -34,7 +31,7 @@ class Nostr {
     "wss://nostr.wine",
     "wss://nostr21.com",
     "wss://nostr.mom",
-    "wss://relay.snort.social",
+    "wss://offchain.pub",
   ], [
     "wss://nos.lol",
     "wss://offchain.pub",
@@ -66,7 +63,6 @@ class Nostr {
 
   final List<String> METADATA_RELAYS = [
     "wss://purplepag.es",
-    "wss://relay.snort.social",
     "wss://relay.nos.social"
   ];
   final List<String> ID_RELAYS = [
@@ -81,10 +77,10 @@ class Nostr {
     "wss://relay.nos.social"
   ];
   final List<String> RELAYLIST_RELAYS = [
-    "wss://relay.primal.net",
+    "wss://relay.nos.social",
     "wss://purplepag.es",
-    "wss://relay.snort.social",
-    "wss://nos.lol"
+    "wss://relay.primal.net",
+    "wss://nos.lol",
   ];
   final List<String> SEARCH_RELAYS = [
     "wss://relay.noswhere.com",
@@ -248,16 +244,14 @@ class Nostr {
   sendMetadata(final Metadata metadata) async {
     final event = await metadata.toEvent(Event.getSigner(nostr.privateKey));
     pool.publish([...this.relayList.write, ...METADATA_RELAYS], event);
-    MetadataDB.upsert(metadata);
-    metadataLoader.invalidate(metadata.pubkey);
+    metadataLoader.save(metadata);
     return event;
   }
 
   sendContactList(final ContactList cl) async {
     final event = await cl.toEvent(Event.getSigner(nostr.privateKey));
     pool.publish([...this.relayList.write, ...CONTACT_RELAYS], event);
-    ContactListDB.upsert(cl);
-    contactListLoader.invalidate(cl.pubkey);
+    contactListLoader.save(cl);
     return event;
   }
 
@@ -265,8 +259,7 @@ class Nostr {
     final event =
         await this.relayList.toEvent(Event.getSigner(nostr.privateKey));
     pool.publish([...this.relayList.write, ...RELAYLIST_RELAYS], event);
-    RelayListDB.upsert(this.relayList);
-    relaylistLoader.invalidate(this.relayList.pubkey);
+    relaylistLoader.save(this.relayList);
     return event;
   }
 
