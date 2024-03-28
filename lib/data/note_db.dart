@@ -14,7 +14,7 @@ class NoteDB {
       "id": event.id.substring(0, 16),
       "created_at": event.createdAt,
       "pubkey": event.pubkey.substring(0, 16),
-      "follow": isFollow,
+      "follow": isFollow ? 1 : 0,
       "event": jsonEncode(event.toJson())
     });
   }
@@ -29,13 +29,14 @@ class NoteDB {
     return null;
   }
 
-  static Future<List<Event>> loadFromFollowing({DatabaseExecutor? db}) async {
+  static Future<List<Event>> loadFromFollowing(
+      {DatabaseExecutor? db, int limit = 200}) async {
     db = DB.getDB(db);
     final list = await db.query("note",
         columns: ["event"],
         where: "follow = true",
         orderBy: "created_at DESC",
-        limit: 200);
+        limit: limit);
     return list
         .map((row) => Event.fromJson(jsonDecode(row["event"] as String)))
         .toList();

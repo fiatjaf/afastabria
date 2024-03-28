@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
+import "package:loure/util/debounce.dart";
 import "package:provider/provider.dart";
-import "package:easy_debounce/easy_debounce.dart";
 
 import "package:loure/main.dart";
 import "package:loure/component/event/event_list_component.dart";
@@ -19,9 +19,8 @@ class FollowRouter extends StatefulWidget {
 
 class FollowRouterState extends State<FollowRouter>
     with AutomaticKeepAliveClientMixin<FollowRouter> {
-  static const debounceDuration = Duration(seconds: 3);
-
   final ScrollController scrollController = ScrollController();
+  late final Debounce onNewEvent;
 
   @override
   bool get wantKeepAlive => true;
@@ -29,17 +28,19 @@ class FollowRouterState extends State<FollowRouter>
   @override
   void initState() {
     super.initState();
+    this.onNewEvent = Debounce(const Duration(seconds: 2), this.handleNewEvent);
+  }
 
-    scrollController.addListener(handleScroll);
-    followingManager.newEvents.addListener(newEventArrived);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    followingManager.newEvents.addListener(this.onNewEvent.call);
   }
 
   @override
   void dispose() {
     super.dispose();
-
-    scrollController.removeListener(handleScroll);
-    followingManager.newEvents.removeListener(newEventArrived);
+    followingManager.newEvents.removeListener(this.onNewEvent.call);
   }
 
   @override
@@ -89,17 +90,9 @@ class FollowRouterState extends State<FollowRouter>
     ]);
   }
 
-  void handleScroll() {
-    print("scrolled: ${scrollController.position.pixels}");
-  }
-
-  void newEventArrived() {
-    EasyDebounce.debounce(
-        "neweventarrived", debounceDuration, this.handleNewEvent);
-  }
-
   void handleNewEvent() {
-    if (this.scrollController.position.pixels < 0.1) {
+    if (followingManager.events.length == 0 ||
+        this.scrollController.position.pixels < 0.1) {
       followingManager.mergeNewNotes();
     }
   }

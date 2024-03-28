@@ -36,6 +36,7 @@ class FollowingManager extends ChangeNotifier {
 
     // load notes from db
     this.events = await NoteDB.loadFromFollowing();
+    this.notifyListeners();
 
     final Map<String, List<String>> chosen = {}; // { relay: [pubkeys, ...] }
     for (var i = 0; i < this.contacts.length; i++) {
@@ -77,6 +78,12 @@ class FollowingManager extends ChangeNotifier {
       chosen.keys,
       [Filter(kinds: EventKind.SUPPORTED_EVENTS, since: mostRecent)],
       onEvent: (final event) {
+        final idx = whereToInsert(this.events, event);
+        if (idx == -1) {
+          // event is already here
+          return;
+        }
+
         this.unmerged.add(event);
         this.newEvents.value++;
         this.newEvents;
@@ -97,6 +104,7 @@ class FollowingManager extends ChangeNotifier {
         continue;
       }
       this.events.insert(idx, event);
+      NoteDB.insert(event, isFollow: true);
     }
     this.notifyListeners();
 
