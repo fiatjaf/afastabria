@@ -6,17 +6,26 @@ import "package:loure/client/event.dart";
 import "package:loure/data/db.dart";
 
 class NoteDB {
-  static Future<int> insert(final Event event,
+  static Future<void> insert(final Event event,
       {required bool isFollow, DatabaseExecutor? db}) async {
     db = DB.getDB(db);
 
-    return await db.insert("note", {
-      "id": event.id.substring(0, 16),
-      "created_at": event.createdAt,
-      "pubkey": event.pubkey.substring(0, 16),
-      "follow": isFollow ? 1 : 0,
-      "event": jsonEncode(event.toJson())
-    });
+    try {
+      final rowid = await db.insert("note", {
+        "id": event.id.substring(0, 16),
+        "created_at": event.createdAt,
+        "pubkey": event.pubkey.substring(0, 16),
+        "follow": isFollow ? 1 : 0,
+        "event": jsonEncode(event.toJson())
+      });
+      if (rowid != 0 && event.content.length > 50) {
+        // we should replace pubkeys with names here, maybe in the future
+        db.insert("note_content", {"rowid": rowid, "content": event.content});
+      }
+    } catch (err) {
+      print("error inserting note: $err");
+      /***/
+    }
   }
 
   static Future<Event?> get(final String id, {DatabaseExecutor? db}) async {
@@ -27,6 +36,17 @@ class NoteDB {
       return Event.fromJson(jsonDecode(list[0]["event"] as String));
     }
     return null;
+  }
+
+  static Future<List<Event>> search(final String term,
+      {DatabaseExecutor? db}) async {
+    db = DB.getDB(db);
+    final list = await db.rawQuery(
+        "select event from note where rowid in (select rowid from note_content where content match ?)",
+        [term]);
+    return list
+        .map((row) => Event.fromJson(jsonDecode(row["event"] as String)))
+        .toList();
   }
 
   static Future<List<Event>> loadFromFollowing(

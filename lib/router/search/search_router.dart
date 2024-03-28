@@ -8,6 +8,7 @@ import "package:loure/component/user/metadata_top_component.dart";
 import "package:loure/component/event/event_list_component.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/consts/base_consts.dart";
+import "package:loure/data/note_db.dart";
 import "package:loure/router/routes.dart";
 import "package:loure/main.dart";
 import "package:loure/util/debounce.dart";
@@ -144,14 +145,37 @@ class SearchRouterState extends State<SearchRouter>
       }
     }
 
+    final Set<String> foundLocally = {};
+    if (filter.search != null) {
+      // search database first
+      this.results = (await NoteDB.search(filter.search!)).map((final event) {
+        foundLocally.add(event.id.substring(0, 16));
+
+        return EventListComponent(
+          event: event,
+          showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
+        );
+      }).toList();
+      this.setState(() {
+        this.isSearching = null;
+      });
+    }
+
     this.subHandle = pool.subscribeManyEose(
       relays,
       [filter],
       onEvent: (final event) {
-        this.results.add(EventListComponent(
-              event: event,
-              showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
-            ));
+        if (foundLocally.contains(event.id.substring(0, 16))) {
+          return;
+        }
+
+        this.results.add(
+              EventListComponent(
+                event: event,
+                showVideo:
+                    settingProvider.videoPreviewInList == OpenStatus.OPEN,
+              ),
+            );
         updateResults.call();
       },
       onClose: () {

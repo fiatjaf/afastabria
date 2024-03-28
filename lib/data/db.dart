@@ -19,6 +19,8 @@ class DB {
     _database = await openDatabase(path, version: _VERSION,
         onCreate: (final Database db, final int version) async {
       // init db
+
+      // replaceable tables
       db.execute(
           "create table metadata(pubkey TEXT not null primary key, event text not null, stored_at int not null);");
       db.execute(
@@ -26,14 +28,19 @@ class DB {
       db.execute(
           "create table contactlist(pubkey TEXT not null primary key, event text not null, stored_at int not null);");
 
+      // notes
       db.execute(
           "create table note(id TEXT not null primary key, pubkey not null, created_at integer not null, follow bool not null, event text not null);");
       db.execute(
           "create index note_follow_created_at on note (follow, created_at);");
       db.execute(
           "create index note_pubkey_created_at on note (pubkey, created_at);");
-      //
 
+      // fulltext search
+      db.execute(
+          "create virtual table note_content using fts4(rowid int, content text, tokenize=porter);");
+
+      // legacy: delete
       db.execute(
           "create table event(key_index INTEGER, id text, pubkey text, created_at integer, kind integer, tags text, content text);");
       db.execute(
