@@ -230,10 +230,6 @@ class EventMainComponentState extends State<EventMainComponent> {
         ));
       } else if (widget.event.kind == EventKind.REPOST ||
           widget.event.kind == EventKind.GENERIC_REPOST) {
-        list.add(Container(
-          alignment: Alignment.centerLeft,
-          child: const Text("Boost:"),
-        ));
         if (repostEvent != null) {
           list.add(EventQuoteComponent(
             event: repostEvent,
