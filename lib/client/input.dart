@@ -59,6 +59,10 @@ class AddressPointer {
 }
 
 Future<DecodeResult?> inputToPointer(String input) async {
+  if (input.startsWith("nostr:")) {
+    input = input.substring(6);
+  }
+
   if (NIP05.isNIP05(input)) {
     final res = await NIP05.search(input);
     return DecodeResult(res, null, null);

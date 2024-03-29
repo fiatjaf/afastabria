@@ -20,7 +20,6 @@ class EventListComponent extends StatefulWidget {
     this.jumpable = true,
     this.showVideo = false,
     this.imageListMode = true,
-    this.showDetailBtn = true,
     this.showLongContent = false,
     this.showCommunity = true,
   });
@@ -28,7 +27,6 @@ class EventListComponent extends StatefulWidget {
   final bool jumpable;
   final bool showVideo;
   final bool imageListMode;
-  final bool showDetailBtn;
   final bool showLongContent;
   final bool showCommunity;
 
@@ -62,7 +60,6 @@ class EventListComponentState extends State<EventListComponent> {
           textOnTap: widget.jumpable ? jumpToThread : null,
           showVideo: widget.showVideo,
           imageListMode: widget.imageListMode,
-          showDetailBtn: widget.showDetailBtn,
           showLongContent: widget.showLongContent,
           showCommunity: widget.showCommunity,
           eventRelation: eventRelation,
@@ -105,13 +102,15 @@ class EventListComponentState extends State<EventListComponent> {
     }
   }
 
-  void jumpToThread() {
+  void jumpToThread() async {
     switch (widget.event.kind) {
       case EventKind.TEXT_NOTE:
         RouterUtil.push(context, ThreadDetailRouter(widget.event));
       case EventKind.REPOST:
-        final target = nostr.getByID(widget.event.getTag("e")![1]);
-        RouterUtil.push(context, ThreadDetailRouter(target));
+        final target = await nostr.getByID(widget.event.getTag("e")![1]);
+        if (target != null) {
+          RouterUtil.push(context, ThreadDetailRouter(target));
+        }
     }
   }
 }

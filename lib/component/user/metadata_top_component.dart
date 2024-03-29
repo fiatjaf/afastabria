@@ -3,6 +3,7 @@ import "package:cached_network_image/cached_network_image.dart";
 import "package:easy_image_viewer/easy_image_viewer.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:loure/router/search/search_router.dart";
 import "package:provider/provider.dart";
 
 import "package:loure/client/nip02/contact_list.dart";
@@ -20,7 +21,6 @@ import "package:loure/client/zap/zap_action.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/client/metadata.dart";
 import "package:loure/util/string_util.dart";
-// import "package:loure/component/confirm_dialog.dart";
 import "package:loure/component/image_component.dart";
 import "package:loure/component/image_preview_dialog.dart";
 
@@ -424,40 +424,8 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
   Future<void> handleScanner() async {
     final result =
         (await RouterUtil.router(context, RouterPath.QRSCANNER)) as String;
-    if (StringUtil.isNotBlank(result)) {
-      if (NIP19.isPubkey(result)) {
-        final pubkey = NIP19.decode(result);
-        RouterUtil.router(context, RouterPath.USER, pubkey);
-      } else if (NIP19.isNprofile(result)) {
-        final nprofile = NIP19.decodeNprofile(result);
-        if (nprofile != null) {
-          RouterUtil.router(context, RouterPath.USER, nprofile.pubkey);
-        }
-      } else if (NIP19.isNoteId(result)) {
-        final noteId = NIP19.decode(result);
-        RouterUtil.router(context, RouterPath.EVENT_DETAIL, noteId);
-      } else if (NIP19.isNevent(result)) {
-        final nevent = NIP19.decodeNevent(result);
-        if (nevent != null) {
-          RouterUtil.router(context, RouterPath.EVENT_DETAIL, nevent.id);
-        }
-        // } else if (NIP19.isNrelay(result)) {
-        //   final nrelay = NIP19.decodeNrelay(result);
-        //   if (nrelay != null) {
-        //     final result =
-        //         await ConfirmDialog.show(context, "Add this relay to local");
-        //     if (result == true) {
-        //       nostr.relayList.add(nrelay.addr, true, true);
-        //     }
-        //   }
-      } else if (result.indexOf("http") == 0) {
-        WebViewRouter.open(context, result);
-      } else {
-        Clipboard.setData(ClipboardData(text: result)).then((final _) {
-          BotToast.showText(text: "Copy success");
-        });
-      }
-    }
+
+    RouterUtil.push(context, SearchRouter(query: result));
   }
 
   void userPicturePreview() {

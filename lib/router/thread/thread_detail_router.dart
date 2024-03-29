@@ -7,7 +7,6 @@ import "package:loure/client/filter.dart";
 import "package:loure/client/input.dart";
 import "package:loure/client/relay/relay_pool.dart";
 import "package:loure/component/event/event_list_component.dart";
-import "package:loure/component/event/event_load_list_component.dart";
 import "package:loure/component/event_reply_callback.dart";
 import "package:loure/component/simple_name_component.dart";
 import "package:loure/consts/base.dart";
@@ -23,10 +22,9 @@ import "package:loure/router/thread/thread_detail_event_main_component.dart";
 import "package:loure/router/thread/thread_detail_item_component.dart";
 
 class ThreadDetailRouter extends StatefulWidget {
-  const ThreadDetailRouter(dynamic arg, {super.key})
-      : this.sourceEvent = arg != null && arg is Event ? arg : null;
+  const ThreadDetailRouter(this.sourceEvent, {super.key});
 
-  final Event? sourceEvent;
+  final Event sourceEvent;
 
   @override
   State<StatefulWidget> createState() {
@@ -228,7 +226,12 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
       builder: (final context, final snapshot) {
         final rootEvent = snapshot.data;
         if (rootEvent == null) {
-          return const EventLoadListComponent();
+          return Container(
+            margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
+            color: themeData.cardColor,
+            height: 60,
+            child: const Center(child: Text("Note loading...")),
+          );
         }
 
         return EventListComponent(

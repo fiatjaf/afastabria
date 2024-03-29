@@ -2,6 +2,7 @@ import "dart:convert";
 
 import "package:flutter/material.dart";
 import "package:flutter_markdown/flutter_markdown.dart";
+import "package:loure/router/search/search_router.dart";
 import "package:provider/provider.dart";
 import "package:screenshot/screenshot.dart";
 
@@ -23,7 +24,6 @@ import "package:loure/main.dart";
 import "package:loure/provider/setting_provider.dart";
 import "package:loure/util/router_util.dart";
 import "package:loure/util/string_util.dart";
-// import "package:loure/component/confirm_dialog.dart";
 import "package:loure/component/content/content_component.dart";
 import "package:loure/component/content/content_decoder.dart";
 import "package:loure/component/content/content_image_component.dart";
@@ -49,7 +49,6 @@ class EventMainComponent extends StatefulWidget {
     this.textOnTap,
     this.showVideo = false,
     this.imageListMode = false,
-    this.showDetailBtn = true,
     this.showLongContent = false,
     this.showSubject = true,
     this.showCommunity = true,
@@ -62,7 +61,6 @@ class EventMainComponent extends StatefulWidget {
   final Function? textOnTap;
   final bool showVideo;
   final bool imageListMode;
-  final bool showDetailBtn;
   final bool showLongContent;
   final bool showSubject;
   final bool showCommunity;
@@ -226,7 +224,6 @@ class EventMainComponentState extends State<EventMainComponent> {
           screenshotController: widget.screenshotController,
           event: widget.event,
           eventRelation: eventRelation,
-          showDetailBtn: widget.showDetailBtn,
         ));
       } else if (widget.event.kind == EventKind.REPOST ||
           widget.event.kind == EventKind.GENERIC_REPOST) {
@@ -373,7 +370,6 @@ class EventMainComponentState extends State<EventMainComponent> {
             screenshotController: widget.screenshotController,
             event: widget.event,
             eventRelation: eventRelation,
-            showDetailBtn: widget.showDetailBtn,
           ));
         } else {
           list.add(Container(
@@ -550,51 +546,7 @@ class EventMainComponentState extends State<EventMainComponent> {
       ),
       onTapLink:
           (final String text, final String? href, final String title) async {
-        // print("text $text href $href title $title");
-        if (StringUtil.isNotBlank(href)) {
-          if (href!.indexOf("http") == 0) {
-            WebViewRouter.open(context, href);
-          } else if (href.indexOf("nostr:") == 0) {
-            final link = href.replaceFirst("nostr:", "");
-            if (NIP19.isPubkey(link)) {
-              // jump user page
-              final pubkey = NIP19.decode(link);
-              if (StringUtil.isNotBlank(pubkey)) {
-                RouterUtil.router(context, RouterPath.USER, pubkey);
-              }
-            } else if (NIP19.isNprofile(link)) {
-              final nprofile = NIP19.decodeNprofile(link);
-              if (nprofile != null) {
-                RouterUtil.router(context, RouterPath.USER, nprofile.pubkey);
-              }
-            } else if (NIP19.isNoteId(link)) {
-              final noteId = NIP19.decode(link);
-              if (StringUtil.isNotBlank(noteId)) {
-                RouterUtil.router(context, RouterPath.EVENT_DETAIL, noteId);
-              }
-            } else if (NIP19.isNevent(link)) {
-              final nevent = NIP19.decodeNevent(link);
-              if (nevent != null) {
-                RouterUtil.router(context, RouterPath.EVENT_DETAIL, nevent.id);
-              }
-            } else if (NIP19.isNaddr(link)) {
-              final naddr = NIP19.decodeNaddr(link);
-              if (naddr != null) {
-                RouterUtil.router(
-                    context, RouterPath.EVENT_DETAIL, naddr.identifier);
-              }
-              // } else if (NIP19.isNrelay(link)) {
-              //   final nrelay = NIP19.decodeNrelay(link);
-              //   if (nrelay != null) {
-              //     final result = await ConfirmDialog.show(
-              //         context, "Add this relay to local");
-              //     if (result == true) {
-              //       nostr.relayList.add(nrelay.addr, true, true);
-              //     }
-              //   }
-            }
-          }
-        }
+        RouterUtil.push(context, SearchRouter(query: href));
       },
     );
   }

@@ -1,6 +1,7 @@
 import "dart:async";
 
 import "package:flutter/material.dart";
+import "package:loure/client/event.dart";
 
 import "package:loure/router/bookmark/bookmark_router.dart";
 import "package:loure/router/index/index_router.dart";
@@ -8,7 +9,6 @@ import "package:loure/router/user/followed_communities_router.dart";
 import "package:loure/router/user/followed_router.dart";
 import "package:loure/router/community/community_detail_router.dart";
 import "package:loure/router/dm/dm_detail_router.dart";
-import "package:loure/router/event_detail/event_detail_router.dart";
 import "package:loure/router/filter/filter_router.dart";
 import "package:loure/router/keybackup/key_backup_router.dart";
 import "package:loure/router/notice/notice_router.dart";
@@ -93,7 +93,6 @@ class RouterPath {
   static const String USER_RELAYS = "/userRelays";
   static const String DM_DETAIL = "/dmDetail";
   static const String THREAD_DETAIL = "/threadDetail";
-  static const String EVENT_DETAIL = "/eventDetail";
   static const String SETTING = "/setting";
   static const String QRSCANNER = "/qrScanner";
   static const String WEBUTILS = "/webUtils";
@@ -120,9 +119,7 @@ Widget renderWidget(RouteSettings rs) {
     case RouterPath.DM_DETAIL:
       return const DMDetailRouter();
     case RouterPath.THREAD_DETAIL:
-      return ThreadDetailRouter(rs.arguments);
-    case RouterPath.EVENT_DETAIL:
-      return const EventDetailRouter();
+      return ThreadDetailRouter(rs.arguments as Event);
     case RouterPath.NOTICES:
       return const NoticeRouter();
     case RouterPath.KEY_BACKUP:

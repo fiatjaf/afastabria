@@ -19,13 +19,11 @@ import "package:loure/client/event_relation.dart";
 import "package:loure/client/nip19/nip19.dart";
 import "package:loure/client/zap/zap_action.dart";
 import "package:loure/consts/base_consts.dart";
-import "package:loure/router/routes.dart";
 import "package:loure/data/event_reactions.dart";
 import "package:loure/main.dart";
 import "package:loure/provider/event_reactions_provider.dart";
 import "package:loure/router/edit/editor_router.dart";
 import "package:loure/util/number_format_util.dart";
-import "package:loure/util/router_util.dart";
 import "package:loure/util/store_util.dart";
 import "package:loure/util/string_util.dart";
 import "package:loure/component/editor/cust_embed_types.dart";
@@ -36,13 +34,11 @@ class EventReactionsComponent extends StatefulWidget {
     required this.event,
     required this.eventRelation,
     super.key,
-    this.showDetailBtn = true,
   });
 
   final ScreenshotController screenshotController;
   final Event event;
   final EventRelation eventRelation;
-  final bool showDetailBtn;
 
   @override
   State<StatefulWidget> createState() {
@@ -233,25 +229,18 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                     List<PopupMenuEntry<String>> list = [
                       PopupMenuItem(
                         value: "copyEvent",
-                        child: Text("Copy Note Json", style: popFontStyle),
+                        child: Text("Copy raw JSON", style: popFontStyle),
                       ),
                       PopupMenuItem(
                         value: "copyPubkey",
-                        child: Text("Copy Note Pubkey", style: popFontStyle),
+                        child: Text("Copy author npub", style: popFontStyle),
                       ),
                       PopupMenuItem(
                         value: "copyId",
-                        child: Text("Copy Note Id", style: popFontStyle),
+                        child: Text("Copy event id", style: popFontStyle),
                       ),
                       const PopupMenuDivider(),
                     ];
-
-                    if (widget.showDetailBtn) {
-                      list.add(PopupMenuItem(
-                        value: "detail",
-                        child: Text("Detail", style: popFontStyle),
-                      ));
-                    }
 
                     list.add(PopupMenuItem(
                       value: "share",
@@ -339,10 +328,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
       final text = NIP19.encodePubKey(widget.event.pubkey);
       _doCopy(text);
     } else if (value == "copyId") {
-      final text = NIP19.encodeNoteId(widget.event.id);
-      _doCopy(text);
-    } else if (value == "detail") {
-      RouterUtil.router(context, RouterPath.EVENT_DETAIL, widget.event);
+      _doCopy(widget.event.id);
     } else if (value == "share") {
       onShareTap();
     } else if (value == "addToPrivateBookmark") {

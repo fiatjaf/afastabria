@@ -4,7 +4,7 @@ class RelayUtil {
     if (url.startsWith("http")) {
       url = "ws${url.substring(4)}";
     }
-    final qs = url.indexOf("?", 8);
+    final qs = url.indexOf("?");
     if (qs != -1) {
       url = url.substring(0, qs);
     }
