@@ -30,7 +30,7 @@ class ContactListProvider extends ChangeNotifier {
   }
 
   Contact? getContact(final String pubkey) {
-    return this.contactList!.get(pubkey);
+    return this.contactList?.get(pubkey);
   }
 
   void clear() {

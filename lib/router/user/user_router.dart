@@ -14,6 +14,7 @@ import "package:loure/data/db.dart";
 import "package:loure/main.dart";
 import "package:loure/util/debounce.dart";
 import "package:loure/router/user/user_statistics_component.dart";
+import "package:loure/util/eventlist.dart";
 
 class UserRouter extends StatefulWidget {
   const UserRouter(this.pubkey, {super.key});
@@ -199,9 +200,9 @@ class UserRouterState extends State<UserRouter> {
     });
 
     final filter = Filter(
-      kinds: EventKind.SUPPORTED_EVENTS,
+      kinds: [EventKind.TEXT_NOTE, EventKind.REPOST],
       authors: [widget.pubkey],
-      // until: this.until,
+      since: this.events.firstOrNull?.createdAt ?? 0,
       limit: 100,
     );
 
@@ -220,8 +221,22 @@ class UserRouterState extends State<UserRouter> {
         filterModifier: filterModifier, onEvent: onEvent);
   }
 
-  loadOlderEvents() {
-    // TODO
+  loadOlderEvents() async {
+    final relays = await nostr.getUserOutboxRelays(widget.pubkey);
+    final events = await pool.querySync(
+        relays,
+        Filter(
+          kinds: [EventKind.TEXT_NOTE, EventKind.REPOST],
+          authors: [widget.pubkey],
+          until: (this.events.lastOrNull?.createdAt ??
+                  DateTime.now().millisecondsSinceEpoch ~/ 1000) -
+              1,
+          limit: 50,
+        ));
+
+    this.setState(() {
+      this.events.addAll(events);
+    });
   }
 
   onEvent(final Event event) {
@@ -230,17 +245,25 @@ class UserRouterState extends State<UserRouter> {
   }
 
   processEvents() async {
+    final toBeProcessed = this.pending;
+    this.pending = [];
+
     this.setState(() {
-      this.events.addAll(this.pending);
-      this.events.sort((final a, final b) => b.createdAt - a.createdAt);
+      for (final event in toBeProcessed) {
+        final idx = whereToInsert(this.events, event);
+        if (idx == -1) {
+          // event is already here
+          continue;
+        }
+        this.events.insert(idx, event);
+      }
     });
     await DB.transaction((final txn) async {
-      for (final event in this.pending) {
+      for (final event in toBeProcessed) {
         await nostr.processDownloadedEvent(event,
             followed: this.isFollowed, db: txn);
       }
     });
-    this.pending = [];
   }
 
   @override

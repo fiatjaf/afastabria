@@ -138,12 +138,20 @@ class Nostr {
 
   Future<List<String>> getUserOutboxRelays(final String pubkey) async {
     final rl = await relaylistLoader.load(pubkey);
+    if (rl.write.length < 2) {
+      rl.write.add("wss://relay.damus.io");
+      rl.write.add("wss://nos.lol");
+    }
     rl.write.shuffle();
     return rl.write;
   }
 
   Future<List<String>> getUserReadRelays(final String pubkey) async {
     final rl = await relaylistLoader.load(pubkey);
+    if (rl.read.length < 2) {
+      rl.write.add("wss://relay.damus.io");
+      rl.write.add("wss://nos.lol");
+    }
     return rl.read;
   }
 
