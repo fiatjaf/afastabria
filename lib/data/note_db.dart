@@ -34,7 +34,7 @@ class NoteDB {
 
     DB.getDB(db).execute(
         "update note set follow = ? where pubkey in (${(",?" * pubkeys.length).substring(1)})",
-        [isFollow ? 1 : 0, ...pubkeys]);
+        [isFollow ? 1 : 0, ...pubkeys.map((final pk) => pk.substring(0, 16))]);
   }
 
   static Future<Event?> get(final String id, {DatabaseExecutor? db}) async {
