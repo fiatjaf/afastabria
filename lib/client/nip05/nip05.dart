@@ -23,10 +23,15 @@ class NIP05 {
     try {
       final response = await http.get(Uri.parse(url));
       final res = jsonDecode(response.body) as Map;
-      final String pubkey = res["names"][name];
-      final Map<String, List<String>> relays = res["relays"] ?? {};
-      return ProfilePointer(pubkey, relays[pubkey] ?? []);
-    } catch (e) {
+      final pubkey = res["names"][name] as String;
+      List<String> relays = [];
+      try {
+        final allRelays = res["relays"] as Map;
+        relays =
+            (allRelays[pubkey] as List).map((final r) => r as String).toList();
+      } catch (err) {/***/}
+      return ProfilePointer(pubkey, relays);
+    } catch (err) {
       return null;
     }
   }

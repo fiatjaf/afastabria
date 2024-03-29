@@ -58,7 +58,7 @@ class AddressPointer {
   }
 }
 
-Future<DecodeResult> inputToPointer(String input) async {
+Future<DecodeResult?> inputToPointer(String input) async {
   if (NIP05.isNIP05(input)) {
     final res = await NIP05.search(input);
     return DecodeResult(res, null, null);
@@ -84,7 +84,7 @@ Future<DecodeResult> inputToPointer(String input) async {
     return DecodeResult(null, null, NIP19.decodeNaddr(input));
   }
 
-  return const DecodeResult(null, null, null);
+  return null;
 }
 
 class DecodeResult {

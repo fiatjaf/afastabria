@@ -79,53 +79,58 @@ class SearchRouterState extends State<SearchRouter>
     });
 
     final dr = await inputToPointer(text);
-    if (dr.pp != null) {
-      final pubkey = dr.pp!.pubkey;
-      final metadata = await metadataLoader.load(pubkey);
-      setState(() {
-        this.results = [
-          GestureDetector(
-            onTap: () {
-              RouterUtil.router(context, RouterPath.USER, pubkey);
-            },
-            child: MetadataTopComponent(
-              pubkey: pubkey,
-              metadata: metadata,
+    if (dr != null) {
+      if (dr.pp != null) {
+        final pubkey = dr.pp!.pubkey;
+        final metadata = await metadataLoader.load(pubkey);
+        setState(() {
+          this.results = [
+            GestureDetector(
+              onTap: () {
+                RouterUtil.router(context, RouterPath.USER, pubkey);
+              },
+              child: MetadataTopComponent(
+                pubkey: pubkey,
+                metadata: metadata,
+              ),
             ),
-          ),
-        ];
-        this.isSearching = null;
-      });
-      return;
-    }
+          ];
+          this.isSearching = null;
+        });
+        return;
+      }
 
-    if (dr.ep != null) {
-      final event = await nostr.getByID(dr.ep!.id, relays: dr.ep!.relays);
-      if (event == null) return;
-      setState(() {
-        this.results = [
-          EventListComponent(
-            event: event,
-            showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
-          ),
-        ];
-        this.isSearching = null;
-      });
-      return;
-    }
+      if (dr.ep != null) {
+        final event = await nostr.getByID(dr.ep!.id, relays: dr.ep!.relays);
+        if (event == null) return;
+        setState(() {
+          this.results = [
+            EventListComponent(
+              event: event,
+              showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
+            ),
+          ];
+          this.isSearching = null;
+        });
+        return;
+      }
 
-    if (dr.ap != null) {
-      final event = await nostr.getByAddress(dr.ap!);
-      if (event == null) return;
-      setState(() {
-        this.results = [
-          EventListComponent(
-            event: event,
-            showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
-          ),
-        ];
-        this.isSearching = null;
-      });
+      if (dr.ap != null) {
+        final event = await nostr.getByAddress(dr.ap!);
+        if (event == null) return;
+        setState(() {
+          this.results = [
+            EventListComponent(
+              event: event,
+              showVideo: settingProvider.videoPreviewInList == OpenStatus.OPEN,
+            ),
+          ];
+          this.isSearching = null;
+        });
+        return;
+      }
+
+      // a specific identifier was passed, but nothing was found
       return;
     }
 
