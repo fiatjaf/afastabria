@@ -27,6 +27,16 @@ class NoteDB {
     }
   }
 
+  static Future<void> updateFollow(
+      final Iterable<String> pubkeys, bool isFollow,
+      {DatabaseExecutor? db}) async {
+    if (pubkeys.length == 0) return;
+
+    DB.getDB(db).execute(
+        "update note set follow = ? where pubkey in (${(",?" * pubkeys.length).substring(1)})",
+        [isFollow ? 1 : 0, ...pubkeys]);
+  }
+
   static Future<Event?> get(final String id, {DatabaseExecutor? db}) async {
     db = DB.getDB(db);
     final list = await db.query("note",

@@ -4,8 +4,8 @@ import "package:loure/consts/base.dart";
 // ignore: must_be_immutable
 class NewNotesUpdatedComponent extends StatelessWidget {
   NewNotesUpdatedComponent({required this.num, super.key, this.onTap});
-  int num;
 
+  int num;
   Function? onTap;
 
   @override
@@ -14,7 +14,7 @@ class NewNotesUpdatedComponent extends StatelessWidget {
     final mainColor = themeData.primaryColor;
     Color? textColor = Colors.white;
 
-    if (num == 0) {
+    if (num <= 0) {
       return Container();
     }
 

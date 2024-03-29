@@ -110,7 +110,8 @@ abstract class Relay {
           }
 
           final event = Event.fromJson(message[2]);
-          if (this.assumeValid || (event.isValid)) {
+          if (sub.filters.any(event.matches) &&
+              (this.assumeValid || (event.isValid))) {
             // add some statistics
             this.relayStatus.noteReceived++;
 

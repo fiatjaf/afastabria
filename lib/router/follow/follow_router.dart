@@ -79,7 +79,7 @@ class FollowRouterState extends State<FollowRouter>
           valueListenable: followingManager.newEvents,
           builder: (final context, final num_, final child) =>
               NewNotesUpdatedComponent(
-            num: num_,
+            num: num_ - 1,
             onTap: () {
               followingManager.mergeNewNotes();
               scrollController.jumpTo(0);

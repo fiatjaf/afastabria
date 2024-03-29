@@ -11,6 +11,7 @@ import "package:loure/client/client_utils/keys.dart";
 import "package:loure/client/event.dart";
 import "package:loure/client/nip02/contact_list.dart";
 import "package:loure/client/nip65/relay_list.dart";
+import "package:sqflite/sqflite.dart";
 
 const ONE = "0000000000000000000000000000000000000000000000000000000000000001";
 
@@ -135,11 +136,12 @@ class Nostr {
     );
   }
 
-  void processDownloadedEvent(Event event, {bool? followed}) async {
+  Future processDownloadedEvent(Event event,
+      {bool? followed, DatabaseExecutor? db}) async {
     final isFollow =
         followed ?? followingManager.follows.contains(event.pubkey);
 
-    NoteDB.insert(event, isFollow: isFollow);
+    await NoteDB.insert(event, isFollow: isFollow, db: db);
 
     // insert repost if content is inside
     if (event.kind == EventKind.REPOST && event.content.contains('"pubkey"')) {
@@ -151,7 +153,7 @@ class Nostr {
             repost.isValid &&
             repost.kind == 1) {
           final isFollowed = followingManager.follows.contains(repost.pubkey);
-          NoteDB.insert(repost, isFollow: isFollowed);
+          await NoteDB.insert(repost, isFollow: isFollowed, db: db);
         }
       } catch (err) {/***/}
     }

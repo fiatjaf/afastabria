@@ -1,6 +1,7 @@
-import "package:loure/util/platform_util.dart";
 import "package:sqflite/sqflite.dart";
 import "package:path/path.dart";
+
+import "package:loure/util/platform_util.dart";
 
 class DB {
   static const _VERSION = 1;
@@ -61,6 +62,11 @@ class DB {
       return db;
     }
     return _database!;
+  }
+
+  static Future transaction(Future Function(Transaction) action,
+      {bool? exclusive}) async {
+    await _database!.transaction(action, exclusive: exclusive);
   }
 
   static void close() {

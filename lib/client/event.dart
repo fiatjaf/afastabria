@@ -4,6 +4,7 @@ import "package:clock/clock.dart";
 import "package:bip340/bip340.dart" as schnorr;
 
 import "package:loure/client/client_utils/keys.dart";
+import "package:loure/client/filter.dart";
 
 class Finalized {
   Finalized(this.id, this.pubkey, this.sig);
@@ -17,7 +18,6 @@ typedef SignerFunction = Future<Finalized> Function(
 typedef Tag = List<String>;
 typedef Tags = List<Tag>;
 
-/// A Nostr event
 class Event {
   Event(this.id, this.pubkey, this.createdAt, this.kind, this.tags,
       this.content, this.sig);
@@ -79,6 +79,16 @@ class Event {
     return null;
   }
 
+  List<String> getTagValues(final String name) {
+    final List<String> result = [];
+    for (final tag in this.tags) {
+      if (tag.length >= 2 && tag[0] == name) {
+        result.add(tag[1]);
+      }
+    }
+    return result;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       "id": id,
@@ -106,12 +116,49 @@ class Event {
   // Individual events with the same "id" are equivalent
   @override
   bool operator ==(final other) => other is Event && id == other.id;
+
   @override
   int get hashCode => id.hashCode;
 
   @override
   String toString() {
     return jsonEncode(this.toJson());
+  }
+
+  bool matches(final Filter filter) {
+    if (filter.authors != null &&
+        !filter.authors!.any((final o) => this.pubkey == o)) {
+      return false;
+    }
+    if (filter.ids != null && !filter.ids!.any((final o) => this.id == o)) {
+      return false;
+    }
+    if (filter.kinds != null &&
+        !filter.kinds!.any((final o) => this.kind == o)) {
+      return false;
+    }
+    if (filter.e != null &&
+        !filter.e!.any((final o) => this.getTagValues("e").contains(o))) {
+      return false;
+    }
+    if (filter.a != null &&
+        !filter.a!.any((final o) => this.getTagValues("a").contains(o))) {
+      return false;
+    }
+    if (filter.p != null &&
+        !filter.p!.any((final o) => this.getTagValues("p").contains(o))) {
+      return false;
+    }
+    if (filter.t != null &&
+        !filter.t!.any((final o) => this.getTagValues("t").contains(o))) {
+      return false;
+    }
+    if (filter.d != null &&
+        !filter.d!.any((final o) => this.getTagValues("d").contains(o))) {
+      return false;
+    }
+
+    return true;
   }
 
   static String getId(

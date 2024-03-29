@@ -232,12 +232,29 @@ class RelayPool extends RelayProvider {
 
 class ManySubscriptionHandle {
   ManySubscriptionHandle(this._subfutures);
-  final Iterable<Future<Subscription>> _subfutures;
+  final List<Future<Subscription>> _subfutures;
 
-  void close() {
+  void merge(ManySubscriptionHandle other) {
+    this._subfutures.addAll(other._subfutures);
+  }
+
+  void close({String msg = "close initiated by client"}) {
     for (final subf in this._subfutures) {
       subf.then((sub) {
-        sub.close("close initiated by client");
+        sub.close(msg);
+      });
+    }
+  }
+
+  void editSubsAndMaybeClose(
+      bool Function(Subscription) editAndDetermineIfItShouldBeClosed,
+      {String msg = "selective close initiated by client"}) {
+    for (var i = 0; i < this._subfutures.length; i++) {
+      this._subfutures[i].then((sub) {
+        if (editAndDetermineIfItShouldBeClosed(sub)) {
+          sub.close(msg);
+          this._subfutures.removeAt(i);
+        }
       });
     }
   }

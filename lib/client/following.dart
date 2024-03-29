@@ -6,8 +6,8 @@ import "package:flutter/material.dart";
 import "package:loure/client/event.dart";
 import "package:loure/client/event_kind.dart";
 import "package:loure/client/filter.dart";
-import "package:loure/client/nip02/contact_list.dart";
 import "package:loure/client/relay/relay_pool.dart";
+import "package:loure/data/db.dart";
 import "package:loure/data/note_db.dart";
 import "package:loure/main.dart";
 
@@ -38,9 +38,19 @@ class FollowingManager extends ChangeNotifier {
     this.events = await NoteDB.loadFromFollowing();
     this.notifyListeners();
 
+    // start subscriptions
+    this.subHandle = this.pickRelaysAndStartSubscriptions(
+        this.follows, this.events.length == 0 ? 0 : this.events[0].createdAt);
+
+    // update our local stuff when our contact list changes
+    contactListProvider.addListener(this.contactsUpdated);
+  }
+
+  ManySubscriptionHandle pickRelaysAndStartSubscriptions(
+      final Set<String> follows, int since) {
     final Map<String, List<String>> chosen = {}; // { relay: [pubkeys, ...] }
     var i = -1;
-    for (final follow in this.follows) {
+    for (final follow in follows) {
       i++;
       // pick relays
       final relays = relaysFor[i];
@@ -72,26 +82,14 @@ class FollowingManager extends ChangeNotifier {
     }
 
     // start an ongoing subscription
-    final mostRecent = this.events.length == 0 ? 0 : this.events[0].createdAt;
-    print("subscribing $mostRecent $chosen");
-    this.subHandle = pool.subscribeMany(
+    print("subscribing since $since to $chosen");
+    return pool.subscribeMany(
       chosen.keys,
       [
-        Filter(
-            kinds: [EventKind.TEXT_NOTE, EventKind.REPOST], since: mostRecent)
+        Filter(kinds: [EventKind.TEXT_NOTE, EventKind.REPOST], since: since)
       ],
-      onEvent: (final event) {
-        final idx = whereToInsert(this.events, event);
-        if (idx == -1) {
-          // event is already here
-          return;
-        }
-
-        this.unmerged.add(event);
-        this.newEvents.value++;
-        this.newEvents;
-      },
-      id: "following-initial",
+      onEvent: this.handleEvent,
+      id: "following",
       filterModifier: (relay, filters) {
         filters[0].authors = chosen[relay];
         return filters;
@@ -99,17 +97,25 @@ class FollowingManager extends ChangeNotifier {
     );
   }
 
-  mergeNewNotes() {
-    for (final event in this.unmerged) {
-      final idx = whereToInsert(this.events, event);
-      if (idx == -1) {
-        // event is already here
-        continue;
-      }
-      this.events.insert(idx, event);
+  void handleEvent(final event) {
+    this.unmerged.add(event);
+    this.newEvents.value++;
+    this.newEvents;
+  }
 
-      nostr.processDownloadedEvent(event);
-    }
+  mergeNewNotes() {
+    DB.transaction((final txn) async {
+      for (final event in this.unmerged) {
+        final idx = whereToInsert(this.events, event);
+        if (idx == -1) {
+          // event is already here
+          continue;
+        }
+        this.events.insert(idx, event);
+
+        await nostr.processDownloadedEvent(event, db: txn);
+      }
+    });
     this.notifyListeners();
 
     this.unmerged.clear();
@@ -144,10 +150,39 @@ class FollowingManager extends ChangeNotifier {
     return midIdx;
   }
 
-  void contactsUpdated(final ContactList contactList) {
+  void contactsUpdated() {
     // diff against the previous version
+    final next = contactListProvider.contactList!.contacts;
+    final Set<String> added = {};
+    final Set<String> notRemoved = {};
+    for (final follow in next) {
+      if (this.follows.contains(follow.pubkey)) {
+        notRemoved.add(follow.pubkey);
+      } else {
+        added.add(follow.pubkey);
+      }
+    }
+    final removed = this.follows.difference(notRemoved);
+
     // update the database so people we have unfollowed are not marked as follows anymore
-    // also do this when a new contact list is received from contactListLoader
+    NoteDB.updateFollow(added, true);
+    NoteDB.updateFollow(removed, false);
+
+    if (this.subHandle != null) {
+      // remove deleted people from filters on existing subscriptions
+      this.subHandle!.editSubsAndMaybeClose((final sub) {
+        sub.filters[0].authors!.removeWhere(removed.contains);
+        return sub.filters[0].authors!.length == 0;
+      });
+
+      // start following the new guys
+      this.subHandle?.merge(this.pickRelaysAndStartSubscriptions(added, 0));
+    }
+
+    // update locally
+    this.follows = added.union(notRemoved);
+
+    // TODO: also do this when a new contact list is received from contactListLoader
   }
 
   Iterable<Event> eventsByPubkey(String pubkey) {
