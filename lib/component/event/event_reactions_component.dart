@@ -469,6 +469,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
         kind: widget.event.kind,
       ));
       launchUrl(Uri.parse("https://njump.me/$nevent"));
+      return;
     }
 
     widget.screenshotController.capture().then(
