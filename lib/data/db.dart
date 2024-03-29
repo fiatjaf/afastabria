@@ -23,15 +23,15 @@ class DB {
 
       // replaceable tables
       db.execute(
-          "create table metadata(pubkey TEXT not null primary key, event text not null, stored_at int not null);");
+          "create table metadata(pubkey text not null primary key, event text not null, stored_at int not null);");
       db.execute(
-          "create table relaylist(pubkey TEXT not null primary key, event text not null, stored_at int not null);");
+          "create table relaylist(pubkey text not null primary key, event text not null, stored_at int not null);");
       db.execute(
-          "create table contactlist(pubkey TEXT not null primary key, event text not null, stored_at int not null);");
+          "create table contactlist(pubkey text not null primary key, event text not null, stored_at int not null);");
 
       // notes
       db.execute(
-          "create table note(id TEXT not null primary key, pubkey not null, created_at integer not null, follow bool not null, event text not null);");
+          "create table note(id text not null primary key, pubkey not null, created_at integer not null, follow bool not null, event text not null);");
       db.execute(
           "create index note_follow_created_at on note (follow, created_at);");
       db.execute(

@@ -346,8 +346,8 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
         pool.subscribeMany(nostr.relayList.read, [filter], onEvent: onEvent);
   }
 
-  void onEvent(final Event event) {
-    nostr.processDownloadedEvent(event);
+  void onEvent(final Event event) async {
+    await nostr.processDownloadedEvent(event);
 
     later(event, (final list) {
       box.addList(list);

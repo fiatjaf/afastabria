@@ -28,10 +28,9 @@ class FollowingManager extends ChangeNotifier {
     this.follows = cl.contacts.map((final follow) => follow.pubkey).toSet();
     this.relaysFor = List.filled(this.follows.length, [], growable: false);
 
-    await Future.wait(this.follows.mapIndexed((final i, final follow) async {
-      final rl = await relaylistLoader.load(follow);
-      rl.write.shuffle(); // add some randomness
-      this.relaysFor[i] = rl.write;
+    await Future.wait(
+        this.follows.mapIndexed((final i, final String follow) async {
+      this.relaysFor[i] = await nostr.getUserOutboxRelays(follow);
     }));
 
     // load notes from db

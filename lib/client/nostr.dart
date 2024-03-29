@@ -136,6 +136,17 @@ class Nostr {
     );
   }
 
+  Future<List<String>> getUserOutboxRelays(final String pubkey) async {
+    final rl = await relaylistLoader.load(pubkey);
+    rl.write.shuffle();
+    return rl.write;
+  }
+
+  Future<List<String>> getUserReadRelays(final String pubkey) async {
+    final rl = await relaylistLoader.load(pubkey);
+    return rl.read;
+  }
+
   Future processDownloadedEvent(Event event,
       {bool? followed, DatabaseExecutor? db}) async {
     final isFollow =

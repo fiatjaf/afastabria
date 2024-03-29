@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:loure/client/client_utils/keys.dart";
+import "package:loure/client/event.dart";
 import "package:loure/client/metadata.dart";
 
 import "package:loure/client/relay/relay_pool.dart";
@@ -7,15 +7,12 @@ import "package:loure/component/simple_name_component.dart";
 import "package:loure/client/event_kind.dart";
 import "package:loure/client/filter.dart";
 import "package:loure/component/appbar4stack.dart";
-import "package:loure/component/cust_state.dart";
 import "package:loure/component/event/event_list_component.dart";
 import "package:loure/component/user/metadata_component.dart";
 import "package:loure/consts/base_consts.dart";
-import "package:loure/data/event_mem_box.dart";
+import "package:loure/data/db.dart";
 import "package:loure/main.dart";
-import "package:loure/util/load_more_event.dart";
-import "package:loure/util/pendingevents_later_function.dart";
-import "package:loure/util/router_util.dart";
+import "package:loure/util/debounce.dart";
 import "package:loure/router/user/user_statistics_component.dart";
 
 class UserRouter extends StatefulWidget {
@@ -29,14 +26,19 @@ class UserRouter extends StatefulWidget {
   }
 }
 
-class UserRouterState extends CustState<UserRouter>
-    with PendingEventsLaterFunction, LoadMoreEvent {
+class UserRouterState extends State<UserRouter> {
   final GlobalKey<NestedScrollViewState> globalKey = GlobalKey();
-  final ScrollController _controller = ScrollController();
+  final ScrollController scrollController = ScrollController();
+
+  bool isFollowed = false;
+  List<Event> events = [];
+  ManySubscriptionHandle? subHandle;
+
+  List<Event> pending = [];
+  late final Debounce processPending;
 
   bool showTitle = false;
   bool showAppbarBG = false;
-  EventMemBox box = EventMemBox();
 
   /// the offset to show title, bannerHeight + 50;
   double showTitleHeight = 50;
@@ -48,26 +50,27 @@ class UserRouterState extends CustState<UserRouter>
   void initState() {
     super.initState();
 
-    queryLimit = 200;
+    this.processPending =
+        Debounce(const Duration(milliseconds: 500), this.processEvents);
+
     this.initFromArgs();
 
-    this._controller.addListener(() {
-      var showTitle = false;
-      var showAppbarBG = false;
-
-      final offset = this._controller.offset;
-      if (offset > showTitleHeight) {
-        showTitle = true;
-      }
-      if (offset > showAppbarBGHeight) {
-        showAppbarBG = true;
-      }
+    this.scrollController.addListener(() {
+      final offset = this.scrollController.offset;
 
       if (showTitle != showTitle || showAppbarBG != showAppbarBG) {
         setState(() {
-          this.showTitle = showTitle;
-          this.showAppbarBG = showAppbarBG;
+          if (offset > showTitleHeight) {
+            this.showTitle = true;
+          }
+          if (offset > showAppbarBGHeight) {
+            this.showAppbarBG = true;
+          }
         });
+      }
+
+      if (this.scrollController.position.maxScrollExtent - offset < 1000) {
+        this.loadOlderEvents();
       }
     });
   }
@@ -76,33 +79,17 @@ class UserRouterState extends CustState<UserRouter>
   void didUpdateWidget(UserRouter oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (!keyIsValid(widget.pubkey)) {
-      RouterUtil.back(context);
-      return;
-    }
-
     if (oldWidget.pubkey == widget.pubkey) {
       // same stuff, do nothing
       return;
     } else {
       // arg change! reset.
-      box.clear();
-      until = null;
       this.initFromArgs();
     }
   }
 
-  void initFromArgs() {
-    final events = followingManager.eventsByPubkey(widget.pubkey);
-    if (events.isNotEmpty) {
-      box.addList(events.toList());
-    }
-    doQuery();
-    preBuild();
-  }
-
   @override
-  Widget doBuild(final BuildContext context) {
+  Widget build(final BuildContext context) {
     final paddingTop = mediaDataCache.padding.top;
     final maxWidth = mediaDataCache.size.width;
 
@@ -147,7 +134,6 @@ class UserRouterState extends CustState<UserRouter>
 
         final Widget main = NestedScrollView(
           key: globalKey,
-          controller: _controller,
           headerSliverBuilder:
               (final BuildContext context, final bool innerBoxIsScrolled) {
             return <Widget>[
@@ -172,19 +158,19 @@ class UserRouterState extends CustState<UserRouter>
           body: MediaQuery.removePadding(
             removeTop: true,
             context: context,
-            child: ListView.builder(
-              itemBuilder: (final BuildContext context, final int index) {
-                final event = box.get(index);
-                if (event == null) {
-                  return null;
-                }
-                return EventListComponent(
-                  event: event,
-                  showVideo:
-                      settingProvider.videoPreviewInList == OpenStatus.OPEN,
-                );
-              },
-              itemCount: box.length(),
+            child: Scrollbar(
+              controller: this.scrollController,
+              child: ListView.builder(
+                controller: this.scrollController,
+                itemBuilder: (final BuildContext context, final int index) {
+                  return EventListComponent(
+                    event: this.events[index],
+                    showVideo:
+                        settingProvider.videoPreviewInList == OpenStatus.OPEN,
+                  );
+                },
+                itemCount: this.events.length,
+              ),
             ),
           ),
         );
@@ -206,65 +192,61 @@ class UserRouterState extends CustState<UserRouter>
     );
   }
 
-  ManySubscriptionHandle? subHandle;
+  void initFromArgs() async {
+    setState(() {
+      this.events = followingManager.eventsByPubkey(widget.pubkey).toList();
+      this.isFollowed = contactListProvider.getContact(widget.pubkey) != null;
+    });
 
-  @override
-  Future<void> onReady(final BuildContext context) async {
-    doQuery();
+    final filter = Filter(
+      kinds: EventKind.SUPPORTED_EVENTS,
+      authors: [widget.pubkey],
+      // until: this.until,
+      limit: 100,
+    );
 
-    if (globalKey.currentState != null) {
-      final controller = globalKey.currentState!.innerController;
-      controller.addListener(() {
-        loadMoreScrollCallback(controller);
-      });
-    }
+    final relays = await nostr.getUserOutboxRelays(widget.pubkey);
+    List<Filter> Function(String, List<Filter>)? filterModifier;
+
+    // if (!this.box.isEmpty()) {
+    //   final oldestCreatedAts = this.box.oldestCreatedAtByRelay(relays);
+    //   filterModifier = (final url, final filters) {
+    //     filters[0].until = oldestCreatedAts.createdAtMap[url] ?? until;
+    //     return filters;
+    //   };
+    // }
+
+    this.subHandle = pool.subscribeMany(relays, [filter],
+        filterModifier: filterModifier, onEvent: onEvent);
   }
 
-  void onEvent(final event) {
-    later(event, (final list) {
-      box.addList(list);
-      setState(() {});
-    }, null);
+  loadOlderEvents() {
+    // TODO
+  }
+
+  onEvent(final Event event) {
+    this.pending.add(event);
+    this.processPending.call();
+  }
+
+  processEvents() async {
+    this.setState(() {
+      this.events.addAll(this.pending);
+      this.events.sort((final a, final b) => b.createdAt - a.createdAt);
+    });
+    await DB.transaction((final txn) async {
+      for (final event in this.pending) {
+        await nostr.processDownloadedEvent(event,
+            followed: this.isFollowed, db: txn);
+      }
+    });
+    this.pending = [];
   }
 
   @override
   void dispose() {
     super.dispose();
-    disposeLater();
 
-    if (this.subHandle != null) {
-      this.subHandle!.close();
-    }
-  }
-
-  @override
-  void doQuery() {
-    preQuery();
-
-    // load event from relay
-    final filter = Filter(
-      kinds: EventKind.SUPPORTED_EVENTS,
-      until: this.until,
-      authors: [widget.pubkey],
-      limit: this.queryLimit,
-    );
-
-    final relays = ["wss://relay.nostr.band"];
-    List<Filter> Function(String, List<Filter>)? filterModifier;
-
-    if (!this.box.isEmpty()) {
-      final oldestCreatedAts = this.box.oldestCreatedAtByRelay(relays);
-      filterModifier = (final url, final filters) {
-        filters[0].until = oldestCreatedAts.createdAtMap[url] ?? until;
-        return filters;
-      };
-    }
-
-    pool.querySync(relays, filter, filterModifier: filterModifier);
-  }
-
-  @override
-  EventMemBox getEventBox() {
-    return box;
+    if (this.subHandle != null) this.subHandle!.close();
   }
 }
