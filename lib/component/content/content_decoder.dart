@@ -249,14 +249,6 @@ class ContentDecoder {
               // block
               handledStr = _closeHandledStr(handledStr, inlines);
               _closeInlines(inlines, list, textOnTap: textOnTap);
-              // if (!PlatformUtil.isPC() &&
-              //     (subStr.contains("youtube.com") ||
-              //         subStr.contains("youtu.be"))) {
-              //   var w = ContnetYoutubeComponent(
-              //     link: subStr,
-              //   );
-              //   list.add(w);
-              // } else {
               final w = ContentLinkPreComponent(
                 link: subStr,
               );
