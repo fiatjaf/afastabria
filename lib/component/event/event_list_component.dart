@@ -10,7 +10,6 @@ import "package:loure/client/event.dart";
 import "package:loure/client/event_relation.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/util/router_util.dart";
-import "package:loure/component/event/event_bitcion_icon_component.dart";
 import "package:loure/component/event/event_main_component.dart";
 
 class EventListComponent extends StatefulWidget {
@@ -66,19 +65,6 @@ class EventListComponentState extends State<EventListComponent> {
         ),
       ),
     );
-
-    if (widget.event.kind == EventKind.ZAP) {
-      main = Stack(
-        children: [
-          main,
-          const Positioned(
-            top: -35,
-            right: -10,
-            child: EventBitcionIconComponent(),
-          ),
-        ],
-      );
-    }
 
     final Widget approvedWrap = Selector<CommunityApprovedProvider, bool>(
         builder: (final context, final approved, final child) {

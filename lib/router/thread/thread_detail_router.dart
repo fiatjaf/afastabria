@@ -101,10 +101,7 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
   void didUpdateWidget(ThreadDetailRouter oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.sourceEvent == null) {
-      RouterUtil.back(context);
-      return;
-    } else if (oldWidget.sourceEvent == widget.sourceEvent) {
+    if (oldWidget.sourceEvent == widget.sourceEvent) {
       // same stuff, do nothing
       return;
     } else {
@@ -119,7 +116,7 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
   }
 
   void initFromArgs() {
-    final eventRelation = EventRelation.fromEvent(widget.sourceEvent!);
+    final eventRelation = EventRelation.fromEvent(widget.sourceEvent);
     this.rootId = eventRelation.rootId;
 
     if (eventRelation.aId != null &&
@@ -138,8 +135,8 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
         } else {
           // source event is root event
           // TODO: check if source is a replaceable event and check tags here instead of just id
-          this.rootId = widget.sourceEvent!.id;
-          this.rootEventFuture = Future.value(widget.sourceEvent!);
+          this.rootId = widget.sourceEvent.id;
+          this.rootEventFuture = Future.value(widget.sourceEvent);
         }
       } else {
         // aid linked root event
@@ -158,12 +155,12 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
       // load replies from cache and avoid blank page
       {
         final eventReactions =
-            eventReactionsProvider.get(widget.sourceEvent!.id, avoidPull: true);
+            eventReactionsProvider.get(widget.sourceEvent.id, avoidPull: true);
         if (eventReactions != null && eventReactions.replies.isNotEmpty) {
           box.addList(eventReactions.replies);
         }
       }
-      if (this.rootId != null && this.rootId != widget.sourceEvent!.id) {
+      if (this.rootId != null && this.rootId != widget.sourceEvent.id) {
         final eventReactions =
             eventReactionsProvider.get(this.rootId!, avoidPull: true);
         if (eventReactions != null && eventReactions.replies.isNotEmpty) {
@@ -171,7 +168,7 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
         }
       }
       if (rootEvent == null) {
-        box.add(widget.sourceEvent!);
+        box.add(widget.sourceEvent);
       }
       listToTree(refresh: false);
 
@@ -254,11 +251,6 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
     ));
 
     for (final item in this.rootSubList!) {
-      // if (item.event.kind == kind.EventKind.ZAP &&
-      //     StringUtil.isBlank(item.event.content)) {
-      //   continue;
-      // }
-
       final totalLevelNum = item.totalLevelNum;
       final needWidth = (totalLevelNum - 1) *
               (Base.BASE_PADDING +
@@ -272,7 +264,7 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
             child: ThreadDetailItemComponent(
               item: item,
               totalMaxWidth: needWidth,
-              sourceEventId: widget.sourceEvent!.id,
+              sourceEventId: widget.sourceEvent.id,
               sourceEventKey: sourceEventKey,
             ),
           ),
@@ -281,7 +273,7 @@ class ThreadDetailRouterState extends State<ThreadDetailRouter>
         mainList.add(ThreadDetailItemComponent(
           item: item,
           totalMaxWidth: needWidth,
-          sourceEventId: widget.sourceEvent!.id,
+          sourceEventId: widget.sourceEvent.id,
           sourceEventKey: sourceEventKey,
         ));
       }

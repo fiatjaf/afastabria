@@ -41,7 +41,6 @@ class MentionMeProvider extends ChangeNotifier with PendingEventsLaterFunction {
         EventKind.REPOST,
         EventKind.BADGE_AWARD,
         EventKind.GENERIC_REPOST,
-        EventKind.ZAP,
         EventKind.LONG_FORM,
       ],
       until: until ?? _initTime,

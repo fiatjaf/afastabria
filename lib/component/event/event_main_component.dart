@@ -8,7 +8,6 @@ import "package:screenshot/screenshot.dart";
 
 import "package:loure/component/content/content_video_component.dart";
 import "package:loure/component/content/markdown/markdown_mention_event_element_builder.dart";
-import "package:loure/component/event/event_zap_goals_component.dart";
 import "package:loure/component/simple_name_component.dart";
 import "package:loure/util/platform_util.dart";
 import "package:loure/client/event.dart";
@@ -34,8 +33,6 @@ import "package:loure/component/content/markdown/markdown_mention_user_element_b
 import "package:loure/component/content/markdown/markdown_mention_user_inline_syntax.dart";
 import "package:loure/component/content/markdown/markdown_nevent_inline_syntax.dart";
 import "package:loure/component/content/markdown/markdown_nprofile_inline_syntax.dart";
-import "package:loure/component/event/event_poll_component.dart";
-import "package:loure/component/webview_router.dart";
 import "package:loure/component/event/event_quote_component.dart";
 import "package:loure/component/event/event_reactions_component.dart";
 import "package:loure/component/event/event_top_component.dart";
@@ -299,17 +296,6 @@ class EventMainComponentState extends State<EventMainComponent> {
         list.add(
           buildContentWidget(settingProvider, imagePreview, videoPreview),
         );
-
-        if (widget.event.kind == EventKind.POLL) {
-          list.add(EventPollComponent(
-            event: widget.event,
-          ));
-        } else if (widget.event.kind == EventKind.ZAP_GOALS ||
-            StringUtil.isNotBlank(eventRelation.zapraiser)) {
-          list.add(EventZapGoalsComponent(
-            event: widget.event,
-          ));
-        }
 
         if (widget.event.kind == EventKind.FILE_HEADER) {
           String? m;

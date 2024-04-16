@@ -23,20 +23,6 @@ class EventTopComponent extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    // if this is a zap event, change the pubkey from the zap tag info
-    // if (this.event.kind == EventKind.ZAP) {
-    //   for (final tag in this.event.tags) {
-    //     if (tag[0] == "description" && this.event.tags.length > 1) {
-    //       final description = tag[1];
-    //       final jsonMap = jsonDecode(description);
-    //       final sourceEvent = Event.fromJson(jsonMap);
-    //       if (StringUtil.isNotBlank(sourceEvent.pubkey)) {
-    //         pubkey = sourceEvent.pubkey;
-    //       }
-    //     }
-    //   }
-    // }
-
     final themeData = Theme.of(context);
     final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
 

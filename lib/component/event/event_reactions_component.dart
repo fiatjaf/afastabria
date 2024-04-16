@@ -12,12 +12,10 @@ import "package:url_launcher/url_launcher.dart";
 
 import "package:loure/client/nip51/bookmarks.dart";
 import "package:loure/component/enum_selector_component.dart";
-import "package:loure/component/zap_gen_dialog.dart";
 import "package:loure/util/platform_util.dart";
 import "package:loure/client/event.dart";
 import "package:loure/client/event_relation.dart";
 import "package:loure/client/nip19/nip19.dart";
-import "package:loure/client/zap/zap_action.dart";
 import "package:loure/consts/base_consts.dart";
 import "package:loure/data/event_reactions.dart";
 import "package:loure/main.dart";
@@ -64,14 +62,12 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
         int replyNum = 0;
         int repostNum = 0;
         int likeNum = 0;
-        int zapNum = 0;
         Color likeColor = hintColor;
 
         if (eventReactions != null) {
           replyNum = eventReactions.replies.length;
           repostNum = eventReactions.repostNum;
           likeNum = eventReactions.likeNum;
-          zapNum = eventReactions.zapNum;
 
           myLikeEvents = eventReactions.myLikeEvents;
         }
@@ -127,94 +123,6 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                     iconData: Icons.favorite,
                     onTap: onLikeTap,
                     color: likeColor,
-                    fontSize: fontSize,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: PopupMenuButton<int>(
-                  tooltip: "Zap",
-                  itemBuilder: (final context) {
-                    return [
-                      PopupMenuItem(
-                        value: 10,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.bolt, color: Colors.orange),
-                            Text(" Zap 10", style: popFontStyle)
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 50,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.bolt, color: Colors.orange),
-                            Text(" Zap 50", style: popFontStyle)
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 100,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.bolt, color: Colors.orange),
-                            Text(" Zap 100", style: popFontStyle)
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 500,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.bolt, color: Colors.orange),
-                            Text(" Zap 500", style: popFontStyle)
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 1000,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.bolt, color: Colors.orange),
-                            Text(" Zap 1000", style: popFontStyle)
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: 5000,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.bolt, color: Colors.orange),
-                            Text(" Zap 5000", style: popFontStyle)
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: -1,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.bolt, color: Colors.orange),
-                            Text(" ${"Custom"}", style: popFontStyle)
-                          ],
-                        ),
-                      ),
-                    ];
-                  },
-                  onSelected: onZapSelect,
-                  child: EventReactionNumComponent(
-                    num: zapNum,
-                    iconData: Icons.bolt,
-                    onTap: null,
-                    onLongPress: genZap,
-                    color: hintColor,
                     fontSize: fontSize,
                   ),
                 ),
@@ -310,8 +218,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
                 next != null &&
                 (previous.replies.length != next.replies.length ||
                     previous.repostNum != next.repostNum ||
-                    previous.likeNum != next.likeNum ||
-                    previous.zapNum != next.zapNum))) {
+                    previous.likeNum != next.likeNum))) {
           return true;
         }
 
@@ -437,15 +344,6 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
     }
   }
 
-  Future<void> onZapSelect(final int sats) async {
-    if (sats < 0) {
-      genZap();
-    } else {
-      await ZapAction.handleZap(context, sats, widget.event.pubkey,
-          eventId: widget.event.id);
-    }
-  }
-
   void onShareTap() {
     if (PlatformUtil.isPC()) {
       final nevent = NIP19.encodeNevent(EventPointer(
@@ -471,10 +369,6 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
     ).catchError((final err) {
       print("share error: $err");
     });
-  }
-
-  void genZap() {
-    ZapGenDialog.show(context, widget.event.pubkey, eventId: widget.event.id);
   }
 }
 

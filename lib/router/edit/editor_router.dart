@@ -3,13 +3,11 @@ import "package:flutter/material.dart";
 import "package:flutter_quill/flutter_quill.dart" as quill;
 import "package:intl/intl.dart";
 import "package:loure/client/input.dart";
-import "package:loure/component/editor/lnbc_embed_builder.dart";
 import "package:loure/component/editor/mention_event_embed_builder.dart";
 import "package:loure/component/editor/mention_user_embed_builder.dart";
 import "package:loure/component/editor/pic_embed_builder.dart";
 import "package:loure/component/editor/tag_embed_builder.dart";
 import "package:loure/component/editor/video_embed_builder.dart";
-import "package:loure/component/editor/zap_goal_input_component.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/main.dart";
 import "package:loure/router/index/index_app_bar.dart";
@@ -20,13 +18,11 @@ import "package:loure/client/event_kind.dart" as kind;
 import "package:loure/component/cust_state.dart";
 import "package:loure/component/editor/custom_emoji_embed_builder.dart";
 import "package:loure/component/editor/editor_mixin.dart";
-import "package:loure/component/editor/poll_input_component.dart";
 import "package:loure/util/string_util.dart";
 import "package:loure/router/edit/editor_notify_item_component.dart";
 
-// ignore: must_be_immutable
 class EditorRouter extends StatefulWidget {
-  EditorRouter({
+  const EditorRouter({
     required this.tags,
     required this.tagsAddedWhenSend,
     required this.tagPs,
@@ -38,14 +34,14 @@ class EditorRouter extends StatefulWidget {
   static double appbarHeight = 56;
 
   // dm arg
-  ECDHBasicAgreement? agreement;
+  final ECDHBasicAgreement? agreement;
 
   // dm arg
-  String? pubkey;
-  List<List<String>> tags = [];
-  List<List<String>> tagsAddedWhenSend = [];
-  List<List<String>> tagPs = [];
-  List<quill.BlockEmbed>? initEmbeds;
+  final String? pubkey;
+  final List<List<String>> tags;
+  final List<List<String>> tagsAddedWhenSend;
+  final List<List<String>> tagPs;
+  final List<quill.BlockEmbed>? initEmbeds;
 
   static void open(
     final BuildContext context, {
@@ -217,7 +213,6 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
           MentionEventEmbedBuilder(),
           PicEmbedBuilder(),
           VideoEmbedBuilder(),
-          LnbcEmbedBuilder(),
           TagEmbedBuilder(),
           CustomEmojiEmbedBuilder(),
         ],
@@ -234,22 +229,6 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
       scrollController: ScrollController(),
       focusNode: focusNode,
     );
-    List<Widget> editorList = [];
-    final editorInputWidget = Container(
-      margin: const EdgeInsets.only(bottom: Base.BASE_PADDING),
-      child: quillWidget,
-    );
-    editorList.add(editorInputWidget);
-    if (inputPoll) {
-      editorList.add(PollInputComponent(
-        pollInputController: pollInputController,
-      ));
-    }
-    if (inputZapGoal) {
-      editorList.add(ZapGoalInputComponent(
-        zapGoalInputController: zapGoalInputController,
-      ));
-    }
 
     list.add(Expanded(
       child: GestureDetector(
@@ -267,7 +246,12 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: editorList,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: Base.BASE_PADDING),
+                  child: quillWidget,
+                )
+              ],
             ),
           ),
         ),

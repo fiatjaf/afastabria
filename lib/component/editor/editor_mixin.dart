@@ -12,7 +12,6 @@ import "package:image_picker/image_picker.dart";
 import "package:provider/provider.dart";
 
 import "package:loure/component/datetime_picker_component.dart";
-import "package:loure/component/editor/zap_goal_input_component.dart";
 import "package:loure/component/webview_router.dart";
 import "package:loure/provider/list_provider.dart";
 import "package:loure/sendbox/sendbox.dart";
@@ -31,8 +30,6 @@ import "package:loure/component/content/content_decoder.dart";
 import "package:loure/component/image_component.dart";
 import "package:loure/component/editor/cust_embed_types.dart";
 import "package:loure/component/editor/custom_emoji_add_dialog.dart";
-import "package:loure/component/editor/gen_lnbc_component.dart";
-import "package:loure/component/editor/poll_input_component.dart";
 import "package:loure/component/editor/search_mention_event_component.dart";
 import "package:loure/component/editor/search_mention_user_component.dart";
 import "package:loure/component/editor/text_input_and_search_dialog.dart";
@@ -41,15 +38,8 @@ import "package:loure/component/editor/text_input_dialog.dart";
 mixin EditorMixin {
   quill.QuillController editorController = quill.QuillController.basic();
 
-  PollInputController pollInputController = PollInputController();
-
-  ZapGoalInputController zapGoalInputController = ZapGoalInputController();
-
   var focusNode = FocusNode();
-
   bool inputPoll = false;
-
-  bool inputZapGoal = false;
 
   // dm arg
   ECDHBasicAgreement? getAgreement();
@@ -105,12 +95,6 @@ mixin EditorMixin {
     }
     inputBtnList.addAll([
       quill.QuillToolbarIconButton(
-        onPressed: _inputLnbc,
-        icon: const Icon(Icons.bolt),
-        isSelected: false,
-        iconTheme: null,
-      ),
-      quill.QuillToolbarIconButton(
         onPressed: customEmojiSelect,
         icon: const Icon(Icons.add_reaction_outlined),
         isSelected: false,
@@ -165,26 +149,6 @@ mixin EditorMixin {
           iconTheme: null,
         )
       ]);
-    }
-    if (getAgreement() == null &&
-        getTags().isEmpty &&
-        getTagsAddedWhenSend().isEmpty) {
-      // isn't dm and reply
-
-      inputBtnList.add(quill.QuillToolbarIconButton(
-        onPressed: _inputPoll,
-        icon: Icon(Icons.poll, color: inputPoll ? mainColor : null),
-        isSelected: false,
-        iconTheme: null,
-        // fillColor: inputPoll ? mainColor.withOpacity(0.5) : null,
-      ));
-      inputBtnList.add(quill.QuillToolbarIconButton(
-        onPressed: _inputGoal,
-        icon: Icon(Icons.trending_up, color: inputZapGoal ? mainColor : null),
-        isSelected: false,
-        iconTheme: null,
-        // fillColor: inputZapGoal ? mainColor.withOpacity(0.5) : null,
-      ));
     }
 
     inputBtnList.add(
@@ -386,32 +350,6 @@ mixin EditorMixin {
     }
   }
 
-  Future<void> _inputLnbc() async {
-    final context = getContext();
-    final value = await TextInputAndSearchDialog.show(
-      context,
-      "Input Sats num",
-      "Please input lnbc text",
-      const GenLnbcComponent(),
-      hintText: "lnbc...",
-    );
-    if (StringUtil.isNotBlank(value)) {
-      _lnbcSubmitted(value);
-    }
-  }
-
-  void _lnbcSubmitted(final String? value) {
-    if (value != null && value.isNotEmpty) {
-      final index = editorController.selection.baseOffset;
-      final length = editorController.selection.extentOffset - index;
-
-      editorController.replaceText(index, length,
-          quill.CustomBlockEmbed(CustEmbedTypes.lnbc, value), null);
-
-      editorController.moveCursorToPosition(index + 1);
-    }
-  }
-
   Future<void> _inputTag() async {
     final context = getContext();
     final value = await TextInputDialog.show(context, "Please_input_Topic_text",
@@ -446,7 +384,6 @@ mixin EditorMixin {
   }
 
   Future<Event?> doDocumentSave() async {
-    final context = getContext();
     // dm agreement
     final agreement = getAgreement();
     // dm pubkey
@@ -456,19 +393,6 @@ mixin EditorMixin {
     Map<String, int> customEmojiMap = {};
     final tags = [...getTags()];
     final tagsAddedWhenSend = [...getTagsAddedWhenSend()];
-
-    if (inputPoll) {
-      final checkResult = pollInputController.checkInput(context);
-      if (!checkResult) {
-        return null;
-      }
-    }
-    if (inputZapGoal) {
-      final checkResult = zapGoalInputController.checkInput(context);
-      if (!checkResult) {
-        return null;
-      }
-    }
 
     final delta = editorController.document.toDelta();
     final operations = delta.toList();
@@ -495,12 +419,6 @@ mixin EditorMixin {
                 return null;
               }
             }
-            result = handleBlockValue(result, value);
-            continue;
-          }
-
-          value = m["lnbc"];
-          if (StringUtil.isNotBlank(value)) {
             result = handleBlockValue(result, value);
             continue;
           }
@@ -585,20 +503,6 @@ mixin EditorMixin {
       event = Event.finalize(
           nostr.privateKey, EventKind.DIRECT_MESSAGE, allTags, result,
           publishAt: publishAt);
-    } else if (inputPoll) {
-      // poll event
-      // get poll tag from PollInputComponentn
-      final pollTags = pollInputController.getTags();
-      allTags.addAll(pollTags);
-      event = Event.finalize(nostr.privateKey, EventKind.POLL, allTags, result,
-          publishAt: publishAt);
-    } else if (inputZapGoal) {
-      // zap goal event
-      final extralTags = zapGoalInputController.getTags();
-      allTags.addAll(extralTags);
-      event = Event.finalize(
-          nostr.privateKey, EventKind.ZAP_GOALS, allTags, result,
-          publishAt: publishAt);
     } else {
       // text note
       event = Event.finalize(
@@ -654,28 +558,6 @@ mixin EditorMixin {
       return true;
     }
     return false;
-  }
-
-  void _inputPoll() {
-    final targetValue = !inputPoll;
-    _resetOthersInput();
-    inputPoll = targetValue;
-    updateUI();
-  }
-
-  void _inputGoal() {
-    final targetValue = !inputZapGoal;
-    _resetOthersInput();
-    inputZapGoal = targetValue;
-    updateUI();
-  }
-
-  void _resetOthersInput() {
-    pollInputController.clear();
-    zapGoalInputController.clear();
-
-    inputPoll = false;
-    inputZapGoal = false;
   }
 
   bool customEmojiShow = false;

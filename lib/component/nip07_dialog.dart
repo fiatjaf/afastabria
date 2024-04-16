@@ -9,16 +9,15 @@ import "package:loure/util/string_util.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/util/router_util.dart";
 
-// ignore: must_be_immutable
 class NIP07Dialog extends StatefulWidget {
-  NIP07Dialog({
+  const NIP07Dialog({
     required this.method,
     super.key,
     this.content,
   });
-  String method;
 
-  String? content;
+  final String method;
+  final String? content;
 
   static Future<bool?> show(final BuildContext context, final String method,
       {final String? content}) async {
@@ -87,9 +86,7 @@ class _NIP07Dialog extends State<NIP07Dialog> {
           final kindDesc = KindDescriptions.getDes(eventKind);
           methodDesc += ": $kindDesc";
         }
-      } catch (e) {}
-    } else if (widget.method == NIP07Methods.lightning) {
-      methodDesc = "Lightning payment";
+      } catch (e) {/***/}
     }
     list.add(Container(
       margin: const EdgeInsets.only(bottom: Base.BASE_PADDING_HALF),
@@ -101,9 +98,9 @@ class _NIP07Dialog extends State<NIP07Dialog> {
     ));
 
     if (StringUtil.isNotBlank(widget.content)) {
-      list.add(Container(
-        child: const Text("${"Content"}:"),
-      ));
+      list.add(
+        const Text("${"Content"}:"),
+      );
       list.add(Container(
         width: double.maxFinite,
         padding: const EdgeInsets.all(Base.BASE_PADDING_HALF),

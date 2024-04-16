@@ -26,12 +26,10 @@ class UserStatisticsComponent extends StatefulWidget {
 class UserStatisticsComponentState extends State<UserStatisticsComponent> {
   Event? contactListEvent;
   Event? relaysEvent;
-  EventMemBox? zapEventBox;
   Map<String, Event>? followedMap;
 
   int length = 0;
   int relaysNum = 0;
-  int? zapNum;
   int? followedNum;
 
   String? pubkey;
@@ -51,12 +49,10 @@ class UserStatisticsComponentState extends State<UserStatisticsComponent> {
         // arg changed! reset
         this.contactListEvent = null;
         this.relaysEvent = null;
-        this.zapEventBox = null;
         this.followedMap = null;
 
         this.length = 0;
         this.relaysNum = 0;
-        this.zapNum = null;
         this.followedNum = null;
       });
     }

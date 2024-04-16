@@ -31,16 +31,6 @@ class _WebUtilsRouter extends CustState<WebUtilsRouter> {
       //       "Nostr.Band is a collection of services for this new emerging network. It has a full-text search, a NIP-05 names provider, and more stuff coming soon.",
       // ),
       // WebUtilItemComponent(
-      //   link: "https://wavman.app/",
-      //   des:
-      //       "An open-source music player built for Nostr, brought to you by the good folks at Wavlake.",
-      // ),
-      // WebUtilItemComponent(
-      //   link: "https://zapstr.live/",
-      //   des:
-      //       "Zapstr is a design-only concept (for now) of a music platform that allows artists to own their audience (thanks to nostr) and monetize their music with zaps and streams. It also acts as a discovery platform for everyone else.",
-      // ),
-      // WebUtilItemComponent(
       //   link: "https://kind3.xyz/",
       //   des:
       //       "This is a tool to change your Nostr follow list.It's an experiment to help you peak out of your echo chamber.",

@@ -5,13 +5,11 @@ import "package:loure/main.dart";
 import "package:loure/provider/mention_me_new_provider.dart";
 import "package:loure/provider/mention_me_provider.dart";
 import "package:loure/util/load_more_event.dart";
-import "package:loure/util/string_util.dart";
 import "package:provider/provider.dart";
 
 import "package:loure/client/event_kind.dart" as kind;
 import "package:loure/component/badge_award_component.dart";
 import "package:loure/component/event/event_list_component.dart";
-import "package:loure/component/event/zap_event_list_component.dart";
 import "package:loure/component/new_notes_updated_component.dart";
 import "package:loure/component/placeholder/event_list_placeholder.dart";
 import "package:loure/consts/base.dart";
@@ -58,10 +56,7 @@ class _MentionMeRouter extends KeepAliveCustState<MentionMeRouter>
       controller: _controller,
       itemBuilder: (final BuildContext context, final int index) {
         final event = events[index];
-        if (event.kind == kind.EventKind.ZAP &&
-            StringUtil.isBlank(event.content)) {
-          return ZapEventListComponent(event: event);
-        } else if (event.kind == kind.EventKind.BADGE_AWARD) {
+        if (event.kind == kind.EventKind.BADGE_AWARD) {
           return BadgeAwardComponent(event: event);
         } else {
           return EventListComponent(

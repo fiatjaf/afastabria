@@ -3,21 +3,19 @@ import "package:cached_network_image/cached_network_image.dart";
 import "package:easy_image_viewer/easy_image_viewer.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:loure/router/search/search_router.dart";
 import "package:provider/provider.dart";
 
 import "package:loure/client/nip02/contact_list.dart";
 import "package:loure/component/nip05_valid_component.dart";
 import "package:loure/component/qrcode_dialog.dart";
 import "package:loure/component/webview_router.dart";
-import "package:loure/component/zap_gen_dialog.dart";
 import "package:loure/router/routes.dart";
 import "package:loure/main.dart";
 import "package:loure/provider/contact_list_provider.dart";
+import "package:loure/router/search/search_router.dart";
 import "package:loure/util/platform_util.dart";
 import "package:loure/util/router_util.dart";
 import "package:loure/client/nip19/nip19.dart";
-import "package:loure/client/zap/zap_action.dart";
 import "package:loure/consts/base.dart";
 import "package:loure/client/metadata.dart";
 import "package:loure/util/string_util.dart";
@@ -144,84 +142,6 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
     )));
 
     if (!widget.isLocal) {
-      if (widget.metadata != null &&
-          (StringUtil.isNotBlank(widget.metadata!.lud06) ||
-              StringUtil.isNotBlank(widget.metadata!.lud16))) {
-        topBtnList.add(wrapBtn(PopupMenuButton<int>(
-          itemBuilder: (final context) {
-            return [
-              const PopupMenuItem(
-                value: 10,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.bolt, color: Colors.orange),
-                    Text(" Zap 10")
-                  ],
-                ),
-              ),
-              const PopupMenuItem(
-                value: 50,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.bolt, color: Colors.orange),
-                    Text(" Zap 50")
-                  ],
-                ),
-              ),
-              const PopupMenuItem(
-                value: 100,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.bolt, color: Colors.orange),
-                    Text(" Zap 100")
-                  ],
-                ),
-              ),
-              const PopupMenuItem(
-                value: 500,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.bolt, color: Colors.orange),
-                    Text(" Zap 500")
-                  ],
-                ),
-              ),
-              const PopupMenuItem(
-                value: 1000,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.bolt, color: Colors.orange),
-                    Text(" Zap 1000")
-                  ],
-                ),
-              ),
-              const PopupMenuItem(
-                value: 5000,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.bolt, color: Colors.orange),
-                    Text(" Zap 5000")
-                  ],
-                ),
-              ),
-            ];
-          },
-          onSelected: onZapSelect,
-          child: MetadataIconBtn(
-            onLongPress: () {
-              ZapGenDialog.show(context, widget.pubkey);
-            },
-            iconData: Icons.currency_bitcoin,
-          ),
-        )));
-      }
-
       topBtnList.add(wrapBtn(MetadataIconBtn(
         iconData: Icons.mail,
         onTap: openDMSession,
@@ -415,10 +335,6 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
   void openDMSession() {
     final detail = dmProvider.findOrNewADetail(widget.pubkey);
     RouterUtil.router(context, RouterPath.DM_DETAIL, detail);
-  }
-
-  void onZapSelect(final int sats) {
-    ZapAction.handleZap(context, sats, widget.pubkey);
   }
 
   Future<void> handleScanner() async {

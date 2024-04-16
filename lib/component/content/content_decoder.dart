@@ -14,31 +14,17 @@ import "package:loure/component/content/content_custom_emoji_component.dart";
 import "package:loure/component/content/content_image_component.dart";
 import "package:loure/component/content/content_link_component.dart";
 import "package:loure/component/content/content_link_pre_component.dart";
-import "package:loure/component/content/content_lnbc_component.dart";
 import "package:loure/component/content/content_mention_user_component.dart";
 // import "package:loure/component/content/content_relay_component.dart";
 import "package:loure/component/content/content_tag_component.dart";
 import "package:loure/component/content/content_video_component.dart";
 
 class ContentDecoder {
-  static const OTHER_LIGHTNING = "lightning=";
-
-  static const LIGHTNING = "lightning:";
-
-  static const LNBC = "lnbc";
-
   static const NOTE_REFERENCES = "nostr:";
-
   static const NOTE_REFERENCES_AT = "@nostr:";
-
   static const MENTION_USER = "@npub";
-
   static const MENTION_NOTE = "@note";
-
-  static const LNBC_NUM_END = "1p";
-
   static const int NPUB_LENGTH = 63;
-
   static const int NOTEID_LENGTH = 63;
 
   static String _addToHandledStr(final String handledStr, final String subStr) {
@@ -369,24 +355,6 @@ class ContentDecoder {
             showVideo: showVideo,
           );
           list.add(widget);
-        } else if (subStr.indexOf(LNBC) == 0) {
-          // block
-          handledStr = _closeHandledStr(handledStr, inlines);
-          _closeInlines(inlines, list, textOnTap: textOnTap);
-          final w = ContentLnbcComponent(lnbc: subStr);
-          list.add(w);
-        } else if (subStr.indexOf(LIGHTNING) == 0) {
-          // block
-          handledStr = _closeHandledStr(handledStr, inlines);
-          _closeInlines(inlines, list, textOnTap: textOnTap);
-          final w = ContentLnbcComponent(lnbc: subStr);
-          list.add(w);
-        } else if (subStr.contains(OTHER_LIGHTNING)) {
-          // block
-          handledStr = _closeHandledStr(handledStr, inlines);
-          _closeInlines(inlines, list, textOnTap: textOnTap);
-          final w = ContentLnbcComponent(lnbc: subStr);
-          list.add(w);
         } else if (subStr.indexOf("#[") == 0 &&
             subStr.length > 3 &&
             event != null) {

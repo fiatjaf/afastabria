@@ -54,8 +54,6 @@ class EventRelation {
           warning = true;
         } else if (tagKey == "a") {
           aId = AddressPointer.fromTag(tag);
-        } else if (tagKey == "zapraiser") {
-          zapraiser = value;
         } else if (tagKey == "d") {
           dTag = value;
         }
@@ -110,10 +108,6 @@ class EventRelation {
   String? subject;
 
   bool warning = false;
-
   AddressPointer? aId;
-
-  String? zapraiser;
-
   String? dTag;
 }

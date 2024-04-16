@@ -1,8 +1,5 @@
-import "package:loure/util/string_util.dart";
-
 import "package:loure/client/event_kind.dart" as kind;
 import "package:loure/client/event.dart";
-import "package:loure/client/zap/zap_num_util.dart";
 import "package:loure/main.dart";
 import "package:loure/util/find_event_interface.dart";
 
@@ -11,27 +8,16 @@ class EventReactions implements FindEventInterface {
   String id;
 
   int replyNum = 0;
-
   List<Event> replies = [];
-
   int repostNum = 0;
-
   List<Event> reposts = [];
-
   int likeNum = 0;
-
   List<Event> likes = [];
-
   List<Event>? myLikeEvents;
-
   int zapNum = 0;
-
   List<Event> zaps = [];
-
   Map<String, int> eventIdMap = {};
-
   DateTime accessTime = DateTime.now();
-
   DateTime dataTime = DateTime.now();
 
   EventReactions clone() {
@@ -93,14 +79,6 @@ class EventReactions implements FindEventInterface {
             myLikeEvents ??= [];
             myLikeEvents!.add(event);
           }
-        }
-      } else if (event.kind == kind.EventKind.ZAP) {
-        zapNum += ZapNumUtil.getNumFromZapEvent(event);
-        zaps.add(event);
-
-        if (StringUtil.isNotBlank(event.content)) {
-          replyNum++;
-          replies.add(event);
         }
       }
 

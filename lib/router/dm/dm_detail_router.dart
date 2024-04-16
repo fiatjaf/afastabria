@@ -10,7 +10,6 @@ import "package:flutter_quill/flutter_quill.dart" as quill;
 
 import "package:loure/client/nip04/nip04.dart";
 import "package:loure/component/editor/custom_emoji_embed_builder.dart";
-import "package:loure/component/editor/lnbc_embed_builder.dart";
 import "package:loure/component/editor/mention_event_embed_builder.dart";
 import "package:loure/component/editor/mention_user_embed_builder.dart";
 import "package:loure/component/editor/pic_embed_builder.dart";
@@ -138,7 +137,6 @@ class _DMDetailRouter extends CustState<DMDetailRouter> with EditorMixin {
                   MentionEventEmbedBuilder(),
                   PicEmbedBuilder(),
                   VideoEmbedBuilder(),
-                  LnbcEmbedBuilder(),
                   TagEmbedBuilder(),
                   CustomEmojiEmbedBuilder(),
                 ],

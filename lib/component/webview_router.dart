@@ -12,7 +12,6 @@ import "package:loure/consts/base.dart";
 import "package:loure/consts/base_consts.dart";
 import "package:loure/provider/setting_provider.dart";
 import "package:loure/provider/webview_provider.dart";
-import "package:loure/util/lightning_util.dart";
 import "package:loure/util/platform_util.dart";
 import "package:loure/util/string_util.dart";
 import "package:permission_handler/permission_handler.dart";
@@ -24,10 +23,10 @@ import "package:loure/client/nip04/nip04.dart";
 import "package:loure/client/nip07/nip07_methods.dart";
 import "package:loure/main.dart";
 
-// ignore: must_be_immutable
 class WebViewRouter extends StatefulWidget {
-  WebViewRouter({required this.url, super.key});
-  String url;
+  const WebViewRouter({required this.url, super.key});
+
+  final String url;
 
   static void open(final BuildContext context, final String link) {
     if (PlatformUtil.isTableMode()) {
@@ -156,16 +155,7 @@ class _InAppWebViewRouter extends CustState<WebViewRouter> {
           },
           shouldOverrideUrlLoading:
               (final controller, final navigationAction) async {
-            final uri = navigationAction.request.url!;
-            if (uri.scheme == "lightning" && StringUtil.isNotBlank(uri.path)) {
-              final result =
-                  await NIP07Dialog.show(context, NIP07Methods.lightning);
-              if (result == true) {
-                await LightningUtil.goToPay(context, uri.path);
-              }
-              return NavigationActionPolicy.CANCEL;
-            }
-
+            // final uri = navigationAction.request.url!;
             // if (![
             //   "http",
             //   "https",

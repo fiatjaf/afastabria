@@ -2,7 +2,6 @@ import "package:flutter/gestures.dart";
 import "package:flutter/material.dart";
 import "package:google_mlkit_language_id/google_mlkit_language_id.dart";
 import "package:google_mlkit_translation/google_mlkit_translation.dart";
-import "package:loure/client/cashu/cashu_tokens.dart";
 import "package:loure/component/content/content_decoder.dart";
 import "package:loure/consts/base_consts.dart";
 import "package:loure/provider/setting_provider.dart";
@@ -17,12 +16,10 @@ import "package:loure/main.dart";
 import "package:loure/util/platform_util.dart";
 import "package:loure/component/event/event_quote_component.dart";
 import "package:loure/component/webview_router.dart";
-import "package:loure/component/content/content_cashu_component.dart";
 import "package:loure/component/content/content_custom_emoji_component.dart";
 import "package:loure/component/content/content_event_tag_infos.dart";
 import "package:loure/component/content/content_image_component.dart";
 import "package:loure/component/content/content_link_pre_component.dart";
-import "package:loure/component/content/content_lnbc_component.dart";
 import "package:loure/component/content/content_mention_user_component.dart";
 // import "package:loure/component/content/content_relay_component.dart";
 import "package:loure/component/content/content_tag_component.dart";
@@ -36,7 +33,6 @@ import "package:loure/component/content/content_video_component.dart";
 /// 5. Support Tag decode.
 /// 6. Language check and auto translate.
 /// 7. All inlineSpan must in the same SelectableText (Select all content one time).
-/// 8. LNBC info decode (Lightning).
 /// 9. Support Emoji (NIP-30)
 /// 10.Show more, hide extral when the content is too long.
 /// 11.Simple Markdown support. (LineStr with pre # - FontWeight blod and bigger fontSize, with pre ## - FontWeight blod and normal fontSize).
@@ -90,43 +86,20 @@ class _ContentComponent extends State<ContentComponent> {
 
   // https pre
   static const String HTTPS_PRE = "https://";
-
   static const String PRE_NOSTR_BASE = "nostr:";
-
   static const String PRE_NOSTR_AT = "@nostr:";
-
   static const String PRE_AT_USER = "@npub";
-
   static const String PRE_AT_NOTE = "@note";
-
   static const String PRE_USER = "npub1";
-
   static const String PRE_NOTE = "note1";
-
   static const int NPUB_LENGTH = 63;
-
   static const int NOTEID_LENGTH = 63;
-
-  static const OTHER_LIGHTNING = "lightning=";
-
-  static const LIGHTNING = "lightning:";
-
-  static const LNBC = "lnbc";
-
-  static const PRE_CASHU_LINK = "cashu:";
-
-  static const PRE_CASHU = "cashu";
-
   static const MAX_SHOW_LINE_NUM = 19;
-
   static const MAX_SHOW_LINE_NUM_REACH = 23;
 
   TextStyle? mdh1Style;
-
   TextStyle? mdh2Style;
-
   TextStyle? mdh3Style;
-
   TextStyle? highlightStyle;
 
   late StringBuffer counter;
@@ -135,9 +108,7 @@ class _ContentComponent extends State<ContentComponent> {
   List<String> textList = [];
 
   double smallTextSize = 13;
-
   double iconWidgetWidth = 14;
-
   Color? hintColor;
 
   TextSpan? translateTips;
@@ -260,7 +231,6 @@ class _ContentComponent extends State<ContentComponent> {
   ///     `http://` styles: image, link, video
   ///     NIP-19 `nostr:, @nostr:, @npub, @note...` style
   ///     `#xxx` Tag style
-  ///     LNBC `lnbc` `lightning:` `lightning=`
   ///     '#[number]' old style relate
   ///   c. flush buffer to string, handle emoji text, add to allSpans
   ///   d. allSpan set into simple SelectableText.rich
@@ -436,16 +406,13 @@ class _ContentComponent extends State<ContentComponent> {
               (contentDecoderInfo != null &&
                   contentDecoderInfo!.imageNum > 1)) {
             // this content decode in list, use list mode
-            final imagePlaceholder = Container(
-              // margin: const EdgeInsets.only(left: 4),
-              child: const Icon(
-                Icons.image,
-                size: 15,
-              ),
+            const imagePlaceholder = Icon(
+              Icons.image,
+              size: 15,
             );
 
             bufferToList(buffer, allList, removeLastSpan: true);
-            allList.add(WidgetSpan(child: imagePlaceholder));
+            allList.add(const WidgetSpan(child: imagePlaceholder));
           } else {
             // show image in content
             final imageWidget = ContentImageComponent(
@@ -627,29 +594,6 @@ class _ContentComponent extends State<ContentComponent> {
       }
 
       return null;
-    } else if (str.indexOf(LNBC) == 0 ||
-        str.indexOf(LIGHTNING) == 0 ||
-        str.indexOf(OTHER_LIGHTNING) == 0) {
-      bufferToList(buffer, allList, removeLastSpan: true);
-      final w = ContentLnbcComponent(lnbc: str);
-      allList.add(WidgetSpan(child: w));
-      counterAddLines(fake_zap_counter);
-
-      return null;
-    } else if (str.length > 20 && str.indexOf(PRE_CASHU) == 0) {
-      final cashuStr = str.replaceFirst(PRE_CASHU_LINK, str);
-      final cashuTokens = Tokens.load(cashuStr);
-      if (cashuTokens != null) {
-        // decode success
-        bufferToList(buffer, allList, removeLastSpan: true);
-        final w = ContentCashuComponent(
-          tokens: cashuTokens,
-          cashuStr: cashuStr,
-        );
-        allList.add(WidgetSpan(child: w));
-        counterAddLines(fake_zap_counter);
-        return null;
-      }
     } else if (widget.event != null &&
         str.length > 3 &&
         str.indexOf("#[") == 0) {
@@ -827,14 +771,9 @@ class _ContentComponent extends State<ContentComponent> {
   }
 
   int fake_event_counter = 10;
-
   int fake_image_counter = 11;
-
   int fake_video_counter = 11;
-
   int fake_link_pre_counter = 7;
-
-  int fake_zap_counter = 6;
 
   void counterAddLines(final int lineNum) {
     for (var i = 0; i < lineNum; i++) {

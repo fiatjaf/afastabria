@@ -29,7 +29,6 @@ class MentionMeNewProvider extends ChangeNotifier
         EventKind.REPOST,
         EventKind.BADGE_AWARD,
         EventKind.GENERIC_REPOST,
-        EventKind.ZAP,
         EventKind.LONG_FORM,
       ],
       p: [nostr.publicKey],
