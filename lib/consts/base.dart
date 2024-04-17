@@ -1,6 +1,5 @@
 class Base {
   static const APP_NAME = "loure";
-  static String VERSION_NAME = "1.0.0";
   static int VERSION_NUM = 1;
   static const String PRIVACY_LINK =
       "https://nostrmo.com/pages/PolicyAndTerms.html";
@@ -12,7 +11,7 @@ class Base {
   static String IMAGE_PROXY_SERVICE = "https://imagebridge.nostrmo.com/";
   static String IMAGE_PROXY_SERVICE_KEY = "please_do_not_abuse_thanks";
   static String userAgent() {
-    return "$APP_NAME $VERSION_NAME";
+    return "$APP_NAME 0.1.0";
   }
 
   static double BASE_FONT_SIZE = 14;

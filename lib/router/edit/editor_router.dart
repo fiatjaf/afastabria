@@ -27,16 +27,11 @@ class EditorRouter extends StatefulWidget {
     required this.tagsAddedWhenSend,
     required this.tagPs,
     super.key,
-    this.agreement,
     this.pubkey,
     this.initEmbeds,
   });
   static double appbarHeight = 56;
 
-  // dm arg
-  final ECDHBasicAgreement? agreement;
-
-  // dm arg
   final String? pubkey;
   final List<List<String>> tags;
   final List<List<String>> tagsAddedWhenSend;
@@ -60,7 +55,6 @@ class EditorRouter extends StatefulWidget {
       tags: tags,
       tagsAddedWhenSend: tagsAddedWhenSend,
       tagPs: tagPs,
-      agreement: agreement,
       pubkey: pubkey,
       initEmbeds: initEmbeds,
     );
@@ -390,11 +384,6 @@ class _EditorRouter extends CustState<EditorRouter> with EditorMixin {
   @override
   void updateUI() {
     setState(() {});
-  }
-
-  @override
-  ECDHBasicAgreement? getAgreement() {
-    return widget.agreement;
   }
 
   @override

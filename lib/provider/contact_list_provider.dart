@@ -34,8 +34,10 @@ class ContactListProvider extends ChangeNotifier {
   }
 
   void clear() {
-    this.contactList!.clear();
-    this.notifyListeners();
+    if (this.contactList != null) {
+      this.contactList!.clear();
+      this.notifyListeners();
+    }
   }
 
   bool containTag(final String tag) {

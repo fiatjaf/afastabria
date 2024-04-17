@@ -248,14 +248,13 @@ class ManySubscriptionHandle {
 
   void editSubsAndMaybeClose(
       bool Function(Subscription) editAndDetermineIfItShouldBeClosed,
-      {String msg = "selective close initiated by client"}) {
+      {String msg = "selective close initiated by client"}) async {
     for (var i = 0; i < this._subfutures.length; i++) {
-      this._subfutures[i].then((sub) {
-        if (editAndDetermineIfItShouldBeClosed(sub)) {
-          sub.close(msg);
-          this._subfutures.removeAt(i);
-        }
-      });
+      final sub = await this._subfutures[i];
+      if (editAndDetermineIfItShouldBeClosed(sub)) {
+        sub.close(msg);
+        this._subfutures.removeAt(i);
+      }
     }
   }
 }

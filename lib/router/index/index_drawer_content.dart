@@ -1,3 +1,4 @@
+import "package:loure/component/logout_component.dart";
 import "package:provider/provider.dart";
 
 import "package:flutter/material.dart";
@@ -13,7 +14,6 @@ import "package:loure/util/string_util.dart";
 import "package:loure/client/metadata.dart";
 import "package:loure/main.dart";
 import "package:loure/router/edit/editor_router.dart";
-import "package:loure/router/index/account_manager_component.dart";
 
 class IndexDrawerContnetComponnent extends StatefulWidget {
   const IndexDrawerContnetComponnent({super.key});
@@ -38,7 +38,6 @@ class _IndexDrawerContnetComponnent
     final themeData = Theme.of(context);
     final mainColor = themeData.primaryColor;
     final cardColor = themeData.cardColor;
-    final hintColor = themeData.hintColor;
     List<Widget> list = [];
 
     list.add(
@@ -67,7 +66,9 @@ class _IndexDrawerContnetComponnent
             ),
             child: IconButton(
               icon: const Icon(Icons.edit_square),
-              onPressed: jumpToProfileEdit,
+              onPressed: () {
+                RouterUtil.router(context, RouterPath.PROFILE_EDITOR);
+              },
             ),
           ),
         ),
@@ -117,14 +118,6 @@ class _IndexDrawerContnetComponnent
         color: indexProvider.currentTap == 2 ? mainColor : null,
         onTap: () {
           indexProvider.setCurrentTap(2);
-        },
-      ));
-      centerList.add(IndexDrawerItem(
-        iconData: Icons.mail,
-        name: "DMs",
-        color: indexProvider.currentTap == 3 ? mainColor : null,
-        onTap: () {
-          indexProvider.setCurrentTap(3);
         },
       ));
     }
@@ -194,6 +187,20 @@ class _IndexDrawerContnetComponnent
       },
     ));
 
+    centerList.add(IndexDrawerItem(
+      iconData: Icons.account_box,
+      name: "Logout",
+      onTap: () {
+        showModalBottomSheet(
+          isScrollControlled: false, // true 为 全屏
+          context: context,
+          builder: (final BuildContext context) {
+            return const LogoutComponent();
+          },
+        );
+      },
+    ));
+
     list.add(Expanded(
       child: SingleChildScrollView(
         child: Column(
@@ -213,52 +220,8 @@ class _IndexDrawerContnetComponnent
       ));
     }
 
-    list.add(IndexDrawerItem(
-      iconData: Icons.account_box,
-      name: "Account Manager",
-      onTap: () {
-        _showBasicModalBottomSheet(context);
-      },
-    ));
-    // list.add(IndexDrawerItem(
-    //   iconData: Icons.logout,
-    //   name: "Sign out",
-    //   onTap: signOut,
-    // ));
-
-    list.add(Container(
-      margin: const EdgeInsets.only(top: Base.BASE_PADDING_HALF),
-      padding: const EdgeInsets.only(
-        left: Base.BASE_PADDING * 2,
-        bottom: Base.BASE_PADDING,
-        top: Base.BASE_PADDING,
-      ),
-      decoration: BoxDecoration(
-          border: Border(
-              top: BorderSide(
-        width: 1,
-        color: hintColor,
-      ))),
-      alignment: Alignment.centerLeft,
-      child: Text("V ${Base.VERSION_NAME}"),
-    ));
-
     return Column(
       children: list,
-    );
-  }
-
-  void jumpToProfileEdit() async {
-    RouterUtil.router(context, RouterPath.PROFILE_EDITOR);
-  }
-
-  void _showBasicModalBottomSheet(final context) async {
-    showModalBottomSheet(
-      isScrollControlled: false, // true 为 全屏
-      context: context,
-      builder: (final BuildContext context) {
-        return const AccountManagerComponent();
-      },
     );
   }
 }

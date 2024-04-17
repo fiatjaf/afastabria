@@ -28,7 +28,6 @@ import "package:loure/provider/badge_provider.dart";
 import "package:loure/provider/community_approved_provider.dart";
 import "package:loure/provider/community_info_provider.dart";
 import "package:loure/provider/contact_list_provider.dart";
-import "package:loure/provider/dm_provider.dart";
 import "package:loure/provider/event_reactions_provider.dart";
 import "package:loure/provider/filter_provider.dart";
 import "package:loure/provider/index_provider.dart";
@@ -94,7 +93,6 @@ final settingProvider = SettingProvider();
 final contactListProvider = ContactListProvider();
 final mentionMeProvider = MentionMeProvider();
 final mentionMeNewProvider = MentionMeNewProvider();
-final dmProvider = DMProvider();
 final indexProvider = IndexProvider();
 final eventReactionsProvider = EventReactionsProvider();
 final noticeProvider = NoticeProvider();
@@ -153,18 +151,16 @@ Future<void> main() async {
 
   await settingProvider.init();
 
-  final sk = await settingProvider.privateKey();
+  final sk = settingProvider.privateKey;
   if (sk != null) {
     nostr = Nostr(sk);
   }
 
   followingManager.init();
+  internalRouter.init();
 
   contactListProvider.init();
   mentionMeProvider.doQuery();
-  dmProvider.initDMSessions().then((final _) {
-    dmProvider.query();
-  });
   bookmarkProvider.init();
   badgeProvider.reload();
   emojiProvider.init();
@@ -233,9 +229,6 @@ class _MyApp extends State<MyApp> {
         ListenableProvider<MentionMeNewProvider>.value(
           value: mentionMeNewProvider,
         ),
-        ListenableProvider<DMProvider>.value(
-          value: dmProvider,
-        ),
         ListenableProvider<EventReactionsProvider>.value(
           value: eventReactionsProvider,
         ),
@@ -282,7 +275,6 @@ class _MyApp extends State<MyApp> {
           title: Base.APP_NAME,
           theme: defaultTheme,
           darkTheme: defaultDarkTheme,
-          initialRoute: RouterPath.INDEX,
           onGenerateRoute: (RouteSettings rs) {
             return MaterialPageRoute(
               settings: rs,

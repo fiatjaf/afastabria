@@ -142,10 +142,6 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
     )));
 
     if (!widget.isLocal) {
-      topBtnList.add(wrapBtn(MetadataIconBtn(
-        iconData: Icons.mail,
-        onTap: openDMSession,
-      )));
       topBtnList.add(Selector<ContactListProvider, Contact?>(
         builder: (final context, final contact, final child) {
           if (contact == null) {
@@ -330,11 +326,6 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
 
   void jumpToUserRouter() {
     RouterUtil.router(context, RouterPath.USER, widget.pubkey);
-  }
-
-  void openDMSession() {
-    final detail = dmProvider.findOrNewADetail(widget.pubkey);
-    RouterUtil.router(context, RouterPath.DM_DETAIL, detail);
   }
 
   Future<void> handleScanner() async {

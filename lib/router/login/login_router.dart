@@ -196,7 +196,7 @@ class LoginRouterState extends State<LoginRouter>
       BotToast.showText(text: "Private key is not valid");
       return;
     }
-    settingProvider.addAndChangePrivateKey(sk, updateUI: false);
+    settingProvider.setPrivateKey(sk, updateUI: false);
     nostr = Nostr(sk);
 
     firstLogin = true;

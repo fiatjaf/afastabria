@@ -1,11 +1,8 @@
 import "dart:async";
-import "dart:io";
 
 import "package:loure/router/routes.dart";
 import "package:provider/provider.dart";
-import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
-import "package:flutter_inapp_purchase/flutter_inapp_purchase.dart";
 
 import "package:loure/component/cust_state.dart";
 import "package:loure/consts/base_consts.dart";
@@ -13,7 +10,6 @@ import "package:loure/util/platform_util.dart";
 import "package:loure/main.dart";
 import "package:loure/provider/index_provider.dart";
 import "package:loure/util/auth_util.dart";
-import "package:loure/router/dm/dm_router.dart";
 import "package:loure/router/edit/editor_router.dart";
 import "package:loure/router/follow/follow_index_router.dart";
 import "package:loure/router/globals/globals_index_router.dart";
@@ -39,7 +35,6 @@ class IndexRouterState extends CustState<IndexRouter>
 
   late TabController followTabController;
   late TabController globalsTabController;
-  late TabController dmTabController;
 
   @override
   void initState() {
@@ -61,15 +56,6 @@ class IndexRouterState extends CustState<IndexRouter>
         TabController(initialIndex: followInitTab, length: 2, vsync: this);
     globalsTabController =
         TabController(initialIndex: globalsInitTab, length: 2, vsync: this);
-    dmTabController = TabController(length: 2, vsync: this);
-
-    if (!PlatformUtil.isPC() && !PlatformUtil.isWeb()) {
-      try {
-        asyncInitState();
-      } catch (e) {
-        print(e);
-      }
-    }
   }
 
   @override
@@ -176,32 +162,6 @@ class IndexRouterState extends CustState<IndexRouter>
           style: titleTextStyle,
         ),
       );
-    } else if (indexProvider.currentTap == 3) {
-      appBarCenter = TabBar(
-        indicatorColor: indicatorColor,
-        indicatorWeight: 3,
-        indicatorSize: TabBarIndicatorSize.tab,
-        dividerHeight: 0,
-        tabs: [
-          Container(
-            height: IndexAppBar.height,
-            alignment: Alignment.center,
-            child: Text(
-              "DMs",
-              style: themeData.appBarTheme.titleTextStyle,
-            ),
-          ),
-          Container(
-            height: IndexAppBar.height,
-            alignment: Alignment.center,
-            child: Text(
-              "Request",
-              style: themeData.appBarTheme.titleTextStyle,
-            ),
-          ),
-        ],
-        controller: dmTabController,
-      );
     }
 
     final addBtn = FloatingActionButton(
@@ -230,10 +190,6 @@ class IndexRouterState extends CustState<IndexRouter>
             tabController: globalsTabController,
           ),
           const SearchRouter(),
-          DMRouter(
-            tabController: dmTabController,
-          ),
-          // NoticeRouter(),
         ],
       )),
     );
@@ -312,41 +268,9 @@ class IndexRouterState extends CustState<IndexRouter>
     });
   }
 
-  StreamSubscription? _purchaseUpdatedSubscription;
-
-  void asyncInitState() async {
-    await FlutterInappPurchase.instance.initialize();
-    _purchaseUpdatedSubscription =
-        FlutterInappPurchase.purchaseUpdated.listen((final productItem) async {
-      if (productItem == null) {
-        return;
-      }
-
-      try {
-        if (Platform.isAndroid) {
-          await FlutterInappPurchase.instance.finishTransaction(productItem);
-        } else if (Platform.isIOS) {
-          await FlutterInappPurchase.instance
-              .finishTransactionIOS(productItem.transactionId!);
-        }
-      } catch (e) {
-        print(e);
-      }
-      print("purchase-updated: $productItem");
-      BotToast.showText(text: "Thanks yours coffee!");
-    });
-  }
-
   @override
   void dispose() async {
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
-    if (!PlatformUtil.isPC() && !PlatformUtil.isWeb()) {
-      if (_purchaseUpdatedSubscription != null) {
-        _purchaseUpdatedSubscription!.cancel();
-        _purchaseUpdatedSubscription = null;
-      }
-      await FlutterInappPurchase.instance.finalize();
-    }
   }
 }

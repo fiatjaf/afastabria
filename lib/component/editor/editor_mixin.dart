@@ -1,7 +1,6 @@
 import "dart:convert";
 
 import "package:loure/client/input.dart";
-import "package:pointycastle/ecc/api.dart";
 import "package:auto_size_text_field/auto_size_text_field.dart";
 import "package:bot_toast/bot_toast.dart";
 import "package:emoji_picker_flutter/emoji_picker_flutter.dart";
@@ -17,7 +16,6 @@ import "package:loure/provider/list_provider.dart";
 import "package:loure/sendbox/sendbox.dart";
 import "package:loure/client/event.dart";
 import "package:loure/client/event_kind.dart";
-import "package:loure/client/nip04/nip04.dart";
 import "package:loure/client/nip19/nip19.dart";
 import "package:loure/client/upload/uploader.dart";
 import "package:loure/consts/base.dart";
@@ -41,10 +39,6 @@ mixin EditorMixin {
   var focusNode = FocusNode();
   bool inputPoll = false;
 
-  // dm arg
-  ECDHBasicAgreement? getAgreement();
-
-  // dm arg
   String? getPubkey();
   BuildContext getContext();
   void updateUI();
@@ -124,32 +118,26 @@ mixin EditorMixin {
         isSelected: false,
         iconTheme: null,
       ),
-      // Expanded(child: Container())
+      quill.QuillToolbarIconButton(
+        onPressed: _addWarning,
+        icon: Icon(Icons.warning, color: showWarning ? Colors.red : null),
+        isSelected: false,
+        iconTheme: null,
+      ),
+      quill.QuillToolbarIconButton(
+        onPressed: _addTitle,
+        icon: Icon(Icons.title, color: showTitle ? mainColor : null),
+        isSelected: false,
+        iconTheme: null,
+      ),
+      quill.QuillToolbarIconButton(
+        onPressed: selectedTime,
+        icon: Icon(Icons.timer_outlined,
+            color: publishAt != null ? mainColor : null),
+        isSelected: false,
+        iconTheme: null,
+      )
     ]);
-
-    if (getAgreement() == null) {
-      inputBtnList.addAll([
-        quill.QuillToolbarIconButton(
-          onPressed: _addWarning,
-          icon: Icon(Icons.warning, color: showWarning ? Colors.red : null),
-          isSelected: false,
-          iconTheme: null,
-        ),
-        quill.QuillToolbarIconButton(
-          onPressed: _addTitle,
-          icon: Icon(Icons.title, color: showTitle ? mainColor : null),
-          isSelected: false,
-          iconTheme: null,
-        ),
-        quill.QuillToolbarIconButton(
-          onPressed: selectedTime,
-          icon: Icon(Icons.timer_outlined,
-              color: publishAt != null ? mainColor : null),
-          isSelected: false,
-          iconTheme: null,
-        )
-      ]);
-    }
 
     inputBtnList.add(
       Container(
@@ -384,11 +372,6 @@ mixin EditorMixin {
   }
 
   Future<Event?> doDocumentSave() async {
-    // dm agreement
-    final agreement = getAgreement();
-    // dm pubkey
-    final pubkey = getPubkey();
-
     // customEmoji map
     Map<String, int> customEmojiMap = {};
     final tags = [...getTags()];
@@ -496,19 +479,10 @@ mixin EditorMixin {
       allTags.add(["content-warning", ""]);
     }
 
-    Event? event;
-    if (agreement != null && StringUtil.isNotBlank(pubkey)) {
-      // dm message
-      result = NIP04.encrypt(result, agreement, pubkey!);
-      event = Event.finalize(
-          nostr.privateKey, EventKind.DIRECT_MESSAGE, allTags, result,
-          publishAt: publishAt);
-    } else {
-      // text note
-      event = Event.finalize(
-          nostr.privateKey, EventKind.TEXT_NOTE, allTags, result,
-          publishAt: publishAt);
-    }
+    // text note
+    final event = Event.finalize(
+        nostr.privateKey, EventKind.TEXT_NOTE, allTags, result,
+        publishAt: publishAt);
 
     if (publishAt != null) {
       await SendBox.submit(event, nostr.relayList.write);

@@ -40,21 +40,17 @@ class DB {
       // fulltext search
       db.execute(
           "create virtual table note_content using fts4(rowid int, content text, tokenize=porter);");
-
-      // legacy: delete
-      db.execute(
-          "create table event(key_index INTEGER, id text, pubkey text, created_at integer, kind integer, tags text, content text);");
-      db.execute(
-          "create unique index event_key_index_id_uindex on event (key_index, id);");
-      db.execute(
-          "create index event_date_index on event (key_index, kind, created_at);");
-      db.execute(
-          "create index event_pubkey_index on event (key_index, kind, pubkey, created_at);");
-      db.execute(
-          "create table dm_session_info(key_index INTEGER, pubkey text not null, readed_time integer not null, value1 text, value2 text, value3 text);");
-      db.execute(
-          "create unique index dm_session_info_uindex on dm_session_info (key_index, pubkey);");
     });
+  }
+
+  static deleteAll() {
+    _database!.execute("""
+delete from metadata;
+delete from relaylist;
+delete from contactlist;
+delete from note;
+delete from note_content;
+    """);
   }
 
   static DatabaseExecutor getDB(final DatabaseExecutor? db) {

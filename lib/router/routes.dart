@@ -8,7 +8,6 @@ import "package:loure/router/index/index_router.dart";
 import "package:loure/router/user/followed_communities_router.dart";
 import "package:loure/router/user/followed_router.dart";
 import "package:loure/router/community/community_detail_router.dart";
-import "package:loure/router/dm/dm_detail_router.dart";
 import "package:loure/router/filter/filter_router.dart";
 import "package:loure/router/keybackup/key_backup_router.dart";
 import "package:loure/router/notice/notice_router.dart";
@@ -26,7 +25,7 @@ import "package:loure/router/user/user_router.dart";
 import "package:loure/router/web_utils/web_utils_router.dart";
 
 class InternalRouter {
-  final StreamController<Widget> _streamController = StreamController<Widget>();
+  late StreamController<Widget> _streamController;
 
   List<Widget> _stack = [];
   List<dynamic> _arguments = [];
@@ -36,6 +35,10 @@ class InternalRouter {
 
   static const Widget base =
       Center(child: Text("There should be a universe here."));
+
+  void init() {
+    this._streamController = StreamController<Widget>();
+  }
 
   Future<dynamic> push(Widget widget, {bool clear = false, dynamic arg}) {
     if (clear) {
@@ -76,10 +79,14 @@ class InternalRouter {
   dynamic lastArgument() {
     return this._arguments[this._arguments.length - 1];
   }
+
+  void reload() {
+    this._streamController.close();
+    this.init();
+  }
 }
 
 class RouterPath {
-  static const String INDEX = "/";
   static const String EDITOR = "/editor";
   static const String NOTICES = "/notices";
   static const String KEY_BACKUP = "/keyBackup";
@@ -90,7 +97,6 @@ class RouterPath {
   static const String USER_CONTACT_LIST = "/userContactList";
   static const String USER_HISTORY_CONTACT_LIST = "/userHistoryContactList";
   static const String USER_RELAYS = "/userRelays";
-  static const String DM_DETAIL = "/dmDetail";
   static const String THREAD_DETAIL = "/threadDetail";
   static const String SETTING = "/setting";
   static const String QRSCANNER = "/qrScanner";
@@ -105,8 +111,6 @@ class RouterPath {
 
 Widget renderWidget(RouteSettings rs) {
   switch (rs.name) {
-    case RouterPath.INDEX:
-      return const IndexRouter();
     case RouterPath.USER:
       return UserRouter(rs.arguments as String);
     case RouterPath.USER_CONTACT_LIST:
@@ -115,8 +119,6 @@ Widget renderWidget(RouteSettings rs) {
       return const UserHistoryContactListRouter();
     case RouterPath.USER_RELAYS:
       return const UserRelayRouter();
-    case RouterPath.DM_DETAIL:
-      return const DMDetailRouter();
     case RouterPath.THREAD_DETAIL:
       return ThreadDetailRouter(rs.arguments as Event);
     case RouterPath.NOTICES:

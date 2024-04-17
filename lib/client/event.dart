@@ -1,7 +1,7 @@
 import "dart:convert";
 import "package:crypto/crypto.dart";
 import "package:clock/clock.dart";
-import "package:bip340/bip340.dart" as schnorr;
+import "package:bip340/bip340.dart" as bip340;
 
 import "package:loure/client/client_utils/keys.dart";
 import "package:loure/client/filter.dart";
@@ -107,7 +107,7 @@ class Event {
             this.pubkey, this.createdAt, this.kind, this.tags, this.content)) {
       return false;
     }
-    if (!schnorr.verify(this.pubkey, this.id, this.sig)) {
+    if (!bip340.verify(this.pubkey, this.id, this.sig)) {
       return false;
     }
     return true;
@@ -172,10 +172,10 @@ class Event {
 
   static Finalized sign(
       String privateKey, int createdAt, int kind, Tags tags, String content) {
-    final pubkey = getPublicKey(privateKey);
+    final pubkey = bip340.getPublicKey(privateKey);
     final id = getId(pubkey, createdAt, kind, tags, content);
     final aux = getRandomHexString();
-    final sig = schnorr.sign(privateKey, id, aux);
+    final sig = bip340.sign(privateKey, id, aux);
     return Finalized(id, pubkey, sig);
   }
 

@@ -2,6 +2,7 @@ import "dart:convert";
 
 import "package:flutter/foundation.dart";
 import "package:flutter_secure_storage/flutter_secure_storage.dart";
+import "package:bip340/bip340.dart" as bip340;
 import "package:loure/client/client_utils/keys.dart";
 
 import "package:loure/main.dart";
@@ -13,8 +14,11 @@ import "package:loure/util/string_util.dart";
 import "package:loure/provider/data_util.dart";
 
 class SettingProvider extends ChangeNotifier {
-  late final SettingData _settingData;
-  late final CustomSecureStorage _secureStorage;
+  late SettingData _settingData;
+  late CustomSecureStorage _secureStorage;
+
+  String? privateKey;
+  String? publicKey;
 
   Future<void> init() async {
     try {
@@ -25,6 +29,13 @@ class SettingProvider extends ChangeNotifier {
     }
 
     _secureStorage = CustomSecureStorage();
+
+    this.privateKey = await this._secureStorage.read("secretkey");
+    if (this.privateKey == null || !keyIsValid(this.privateKey!)) {
+      this.privateKey = null;
+    }
+    this.publicKey =
+        this.privateKey != null ? bip340.getPublicKey(this.privateKey!) : null;
   }
 
   Future<void> reload() async {
@@ -33,59 +44,23 @@ class SettingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<String>> publicKeyList() async {
-    final keylist = await _loadKeyList();
-    return keylist.map(getPublicKey).toList();
-  }
-
-  Future<String?> privateKey() async {
-    final keylist = await _loadKeyList();
-
-    if (keylist.length == 0) return null;
-    if (this._settingData.privateKeyIndex >= keylist.length) {
-      this.privateKeyIndex = keylist.length - 1;
-    }
-
-    return keylist[this._settingData.privateKeyIndex];
-  }
-
-  Future<int> addAndChangePrivateKey(final String sk,
+  Future<void> setPrivateKey(final String sk,
       {final bool updateUI = false}) async {
-    final keylist = await _loadKeyList();
+    this._secureStorage.write("secretkey", sk);
+    this.privateKey = sk;
+    this.publicKey = bip340.getPublicKey(sk);
 
-    var idx = keylist.indexOf(sk);
-    if (idx == -1) {
-      idx = keylist.length;
-      keylist.add(sk);
-      this._secureStorage.write("secretkeys", json.encode(keylist));
-    }
-
-    this._settingData.privateKeyIndex = idx;
     saveAndNotifyListeners(updateUI: updateUI);
-    return idx;
   }
 
-  Future<void> removeKey(final int idx) async {
-    final keylist = await _loadKeyList();
-    if (keylist.length > idx) {
-      keylist.removeAt(idx);
-      _secureStorage.write("secretkeys", json.encode(keylist));
-      if (this._settingData.privateKeyIndex > keylist.length) {
-        this._settingData.privateKeyIndex--;
-      }
-      this.saveAndNotifyListeners();
-    }
-  }
-
-  Future<List<String>> _loadKeyList() async {
-    final data = (await _secureStorage.read("secretkeys")) ?? "[]";
-    final keylist = jsonDecode(data) as List<dynamic>;
-    return keylist.cast();
+  Future<void> removePrivateKey() async {
+    _secureStorage.write("secretkey", "");
+    this.privateKey = null;
+    this.publicKey = null;
+    this.saveAndNotifyListeners();
   }
 
   SettingData get settingData => _settingData;
-
-  int get privateKeyIndex => _settingData.privateKeyIndex;
 
   /// open lock
   int get lockOpen => _settingData.lockOpen;
@@ -174,11 +149,6 @@ class SettingProvider extends ChangeNotifier {
 
   set settingData(final SettingData o) {
     this._settingData = o;
-    this.saveAndNotifyListeners();
-  }
-
-  set privateKeyIndex(final int o) {
-    this._settingData.privateKeyIndex = o;
     this.saveAndNotifyListeners();
   }
 
@@ -322,7 +292,6 @@ class SettingProvider extends ChangeNotifier {
 
 class SettingData {
   SettingData({
-    this.privateKeyMap,
     this.lockOpen = OpenStatus.CLOSE,
     this.defaultIndex,
     this.defaultTab,
@@ -351,8 +320,6 @@ class SettingData {
   });
 
   SettingData.fromJson(final Map<String, dynamic> json) {
-    this.privateKeyIndex = json["privateKeyIndex"];
-    this.privateKeyMap = json["privateKeyMap"];
     if (json["lockOpen"] != null) {
       this.lockOpen = json["lockOpen"];
     } else {
@@ -400,11 +367,6 @@ class SettingData {
     return jsonEncode(this.toJson());
   }
 
-  int privateKeyIndex = 0;
-
-  // this is stored differently, on secure storage
-  String? privateKeyMap;
-
   /// open lock
   late int lockOpen;
 
@@ -450,8 +412,6 @@ class SettingData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data["privateKeyIndex"] = this.privateKeyIndex;
-    data["privateKeyMap"] = this.privateKeyMap;
     data["lockOpen"] = this.lockOpen;
     data["defaultIndex"] = this.defaultIndex;
     data["defaultTab"] = this.defaultTab;

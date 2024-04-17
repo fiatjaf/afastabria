@@ -82,7 +82,7 @@ class FollowingManager extends ChangeNotifier {
     }
 
     // start an ongoing subscription
-    print("subscribing since $since to $chosen");
+    // print("subscribing since $since to $chosen");
     return pool.subscribeMany(
       chosen.keys,
       [

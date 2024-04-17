@@ -8,8 +8,8 @@ class IndexProvider extends ChangeNotifier {
       _currentTap = indexTap;
     }
   }
-  int _currentTap = IndexTaps.FOLLOW;
 
+  int _currentTap = IndexTaps.FOLLOW;
   int get currentTap => _currentTap;
 
   void setCurrentTap(final int v) {

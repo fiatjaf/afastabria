@@ -1,5 +1,8 @@
 import "dart:convert";
 
+import "package:bip340/bip340.dart" as bip340;
+import "package:sqflite/sqflite.dart";
+
 import "package:loure/client/event_kind.dart";
 import "package:loure/client/filter.dart";
 import "package:loure/client/input.dart";
@@ -7,16 +10,14 @@ import "package:loure/consts/base_consts.dart";
 import "package:loure/client/metadata.dart";
 import "package:loure/data/note_db.dart";
 import "package:loure/main.dart";
-import "package:loure/client/client_utils/keys.dart";
 import "package:loure/client/event.dart";
 import "package:loure/client/nip02/contact_list.dart";
 import "package:loure/client/nip65/relay_list.dart";
-import "package:sqflite/sqflite.dart";
 
 const ONE = "0000000000000000000000000000000000000000000000000000000000000001";
 
 class Nostr {
-  Nostr(this.privateKey) : this.publicKey = getPublicKey(privateKey);
+  Nostr(this.privateKey) : this.publicKey = bip340.getPublicKey(privateKey);
   factory Nostr.empty() {
     return Nostr(ONE);
   }
