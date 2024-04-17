@@ -494,18 +494,20 @@ class CustomSecureStorage {
   }
 
   Future<String?> read(String key) async {
-    try {
-      return await this.fss.read(key: key);
-    } catch (err) {
+    if (!PlatformUtil.isWindowsOrLinux()) {
+      return await this.fss.read(key: key, aOptions: _getAndroidOptions());
+    } else {
       final value = sharedPreferences.get("secret:$key");
       return value == null ? null : value as String;
     }
   }
 
   Future<void> write(String key, String value) async {
-    try {
-      await this.fss.write(key: key, value: value);
-    } catch (err) {
+    if (!PlatformUtil.isWindowsOrLinux()) {
+      await this
+          .fss
+          .write(key: key, value: value, aOptions: _getAndroidOptions());
+    } else {
       sharedPreferences.setString("secret:$key", value);
       return;
     }
