@@ -37,11 +37,10 @@ class IndexProvider extends ChangeNotifier {
     _followScrollController = followScrollController;
   }
 
-  ScrollController? _mentionedScrollController;
+  ScrollController? _inboxScrollController;
 
-  void setInboxScrollController(
-      final ScrollController? mentionedScrollController) {
-    _mentionedScrollController = mentionedScrollController;
+  void setInboxScrollController(final ScrollController? inboxScrollController) {
+    _inboxScrollController = inboxScrollController;
   }
 
   void followScrollToTop() {
@@ -53,8 +52,8 @@ class IndexProvider extends ChangeNotifier {
           _followScrollController != null) {
         _followScrollController!.jumpTo(0);
       } else if (_followTabController!.index == 2 &&
-          _mentionedScrollController != null) {
-        _mentionedScrollController!.jumpTo(0);
+          _inboxScrollController != null) {
+        _inboxScrollController!.jumpTo(0);
       }
     }
   }

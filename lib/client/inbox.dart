@@ -28,13 +28,17 @@ class InboxManager extends ChangeNotifier {
     this.subHandle = pool.subscribeMany(
       nostr.relayList.read,
       [
-        Filter(kinds: [
-          EventKind.TEXT_NOTE,
-          EventKind.REPOST,
-          EventKind.BADGE_AWARD,
-          EventKind.GENERIC_REPOST,
-          EventKind.LONG_FORM,
-        ], since: this.events.length == 0 ? 0 : this.events[0].createdAt)
+        Filter(
+          p: [nostr.publicKey],
+          kinds: [
+            EventKind.TEXT_NOTE,
+            EventKind.REPOST,
+            EventKind.BADGE_AWARD,
+            EventKind.GENERIC_REPOST,
+            EventKind.LONG_FORM,
+          ],
+          since: this.events.length == 0 ? 0 : this.events[0].createdAt,
+        )
       ],
       onEvent: this.handleEvent,
       id: "inbox",
@@ -54,8 +58,10 @@ class InboxManager extends ChangeNotifier {
     this.newEvents.value++;
   }
 
-  mergeNewNotes() {
-    DB.transaction((final txn) async {
+  mergeNewNotes() async {
+    if (this.unmerged.length == 0) return;
+
+    await DB.transaction((final txn) async {
       for (final event in this.unmerged) {
         final idx = whereToInsert(this.events, event);
         if (idx == -1) {
@@ -64,7 +70,7 @@ class InboxManager extends ChangeNotifier {
         }
         this.events.insert(idx, event);
 
-        await nostr.processDownloadedEvent(event, db: txn);
+        await nostr.processDownloadedEvent(event, db: txn, mention: true);
       }
     });
     this.notifyListeners();

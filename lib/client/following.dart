@@ -112,8 +112,10 @@ class FollowingManager extends ChangeNotifier {
     this.newEvents.value++;
   }
 
-  mergeNewNotes() {
-    DB.transaction((final txn) async {
+  mergeNewNotes() async {
+    if (this.unmerged.length == 0) return;
+
+    await DB.transaction((final txn) async {
       for (final event in this.unmerged) {
         final idx = whereToInsert(this.events, event);
         if (idx == -1) {
@@ -122,7 +124,7 @@ class FollowingManager extends ChangeNotifier {
         }
         this.events.insert(idx, event);
 
-        await nostr.processDownloadedEvent(event, db: txn);
+        await nostr.processDownloadedEvent(event, db: txn, followed: true);
       }
     });
     this.notifyListeners();

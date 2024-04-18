@@ -166,12 +166,13 @@ class Nostr {
   }
 
   Future processDownloadedEvent(Event event,
-      {bool? followed, DatabaseExecutor? db}) async {
+      {bool? followed, bool? mention, DatabaseExecutor? db}) async {
     final isFollow =
         followed ?? followingManager.follows.contains(event.pubkey);
+    final isMention = mention ?? InboxManager.isMention(event);
 
     await NoteDB.insert(event,
-        isFollow: isFollow, isMention: InboxManager.isMention(event), db: db);
+        isFollow: isFollow, isMention: isMention, db: db);
 
     // insert repost if content is inside
     if (event.kind == EventKind.REPOST && event.content.contains('"pubkey"')) {

@@ -57,7 +57,7 @@ class FollowRouterState extends State<FollowRouter>
       ListenableBuilder(
         listenable: followingManager,
         builder: (final context, final child) {
-          if (followingManager.events.isEmpty) {
+          if (followingManager.events.length == 0) {
             return const EventListPlaceholder();
           }
 
@@ -82,7 +82,9 @@ class FollowRouterState extends State<FollowRouter>
             num: num_ - 1,
             onTap: () {
               followingManager.mergeNewNotes();
-              scrollController.jumpTo(0);
+              if (this.scrollController.hasClients) {
+                this.scrollController.jumpTo(0);
+              }
             },
           ),
         ),
@@ -92,7 +94,8 @@ class FollowRouterState extends State<FollowRouter>
 
   void handleNewEvent() {
     if (followingManager.events.length == 0 ||
-        this.scrollController.position.pixels < 0.1) {
+        (this.scrollController.hasClients &&
+            this.scrollController.position.pixels < 0.1)) {
       followingManager.mergeNewNotes();
     }
   }

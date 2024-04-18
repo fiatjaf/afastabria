@@ -57,7 +57,7 @@ class InboxRouterState extends State<InboxRouter>
       ListenableBuilder(
         listenable: inboxManager,
         builder: (final context, final child) {
-          if (inboxManager.events.isEmpty) {
+          if (inboxManager.events.length == 0) {
             return const EventListPlaceholder();
           }
 
@@ -82,7 +82,9 @@ class InboxRouterState extends State<InboxRouter>
             num: num_ - 1,
             onTap: () {
               inboxManager.mergeNewNotes();
-              scrollController.jumpTo(0);
+              if (this.scrollController.hasClients) {
+                this.scrollController.jumpTo(0);
+              }
             },
           ),
         ),
@@ -92,7 +94,8 @@ class InboxRouterState extends State<InboxRouter>
 
   void handleNewEvent() {
     if (inboxManager.events.length == 0 ||
-        this.scrollController.position.pixels < 0.1) {
+        (this.scrollController.hasClients &&
+            this.scrollController.position.pixels < 0.1)) {
       inboxManager.mergeNewNotes();
     }
   }

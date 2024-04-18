@@ -249,7 +249,7 @@ class ManySubscriptionHandle {
   void editSubsAndMaybeClose(
       bool Function(Subscription) editAndDetermineIfItShouldBeClosed,
       {String msg = "selective close initiated by client"}) async {
-    for (var i = 0; i < this._subfutures.length; i++) {
+    for (var i = this._subfutures.length - 1; i >= 0; i--) {
       final sub = await this._subfutures[i];
       if (editAndDetermineIfItShouldBeClosed(sub)) {
         sub.close(msg);
