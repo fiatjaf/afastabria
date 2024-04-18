@@ -1,0 +1,19 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter build windows
+      - run: ls build/windows/x64/**
+      - uses: actions/upload-artifact@v4
+        with:
+          name: exe
+          path: build/windows/runner/x64/*.exe
