@@ -6,9 +6,13 @@ import "package:loure/main.dart";
 class ContactListProvider extends ChangeNotifier {
   ContactList? contactList;
 
-  void init() async {
+  Future<void> init() async {
     this.contactList = await contactListLoader.load(nostr.publicKey);
     this.notifyListeners();
+  }
+
+  Future<void> reload() async {
+    await this.init();
   }
 
   void addContact(final Contact contact) {
@@ -31,13 +35,6 @@ class ContactListProvider extends ChangeNotifier {
 
   Contact? getContact(final String pubkey) {
     return this.contactList?.get(pubkey);
-  }
-
-  void clear() {
-    if (this.contactList != null) {
-      this.contactList!.clear();
-      this.notifyListeners();
-    }
   }
 
   bool containTag(final String tag) {

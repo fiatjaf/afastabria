@@ -10,7 +10,6 @@ import "package:loure/router/user/followed_router.dart";
 import "package:loure/router/community/community_detail_router.dart";
 import "package:loure/router/filter/filter_router.dart";
 import "package:loure/router/keybackup/key_backup_router.dart";
-import "package:loure/router/notice/notice_router.dart";
 import "package:loure/router/profile_editor/profile_editor_router.dart";
 import "package:loure/router/qrscanner/qrscanner_router.dart";
 import "package:loure/router/relays/relay_info_router.dart";
@@ -88,7 +87,6 @@ class InternalRouter {
 
 class RouterPath {
   static const String EDITOR = "/editor";
-  static const String NOTICES = "/notices";
   static const String KEY_BACKUP = "/keyBackup";
   static const String RELAYS = "/relays";
   static const String FILTER = "/filter";
@@ -121,8 +119,6 @@ Widget renderWidget(RouteSettings rs) {
       return const UserRelayRouter();
     case RouterPath.THREAD_DETAIL:
       return ThreadDetailRouter(rs.arguments as Event);
-    case RouterPath.NOTICES:
-      return const NoticeRouter();
     case RouterPath.KEY_BACKUP:
       return const KeyBackupRouter();
     case RouterPath.RELAYS:

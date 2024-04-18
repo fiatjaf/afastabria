@@ -16,6 +16,7 @@ import "package:sqflite_common_ffi_web/sqflite_ffi_web.dart";
 import "package:window_manager/window_manager.dart";
 
 import "package:loure/client/following.dart";
+import "package:loure/client/inbox.dart";
 import "package:loure/client/nostr.dart";
 import "package:loure/client/relay/relay_pool.dart";
 import "package:loure/consts/base.dart";
@@ -33,9 +34,6 @@ import "package:loure/provider/filter_provider.dart";
 import "package:loure/provider/index_provider.dart";
 import "package:loure/provider/link_preview_data_provider.dart";
 import "package:loure/provider/list_provider.dart";
-import "package:loure/provider/mention_me_new_provider.dart";
-import "package:loure/provider/mention_me_provider.dart";
-import "package:loure/provider/notice_provider.dart";
 import "package:loure/provider/setting_provider.dart";
 import "package:loure/provider/webview_provider.dart";
 import "package:loure/system_timer.dart";
@@ -87,15 +85,13 @@ Nostr nostr = Nostr.empty();
 late SharedPreferences sharedPreferences;
 
 final followingManager = FollowingManager();
+final inboxManager = InboxManager();
 final internalRouter = InternalRouter();
 
 final settingProvider = SettingProvider();
 final contactListProvider = ContactListProvider();
-final mentionMeProvider = MentionMeProvider();
-final mentionMeNewProvider = MentionMeNewProvider();
 final indexProvider = IndexProvider();
 final eventReactionsProvider = EventReactionsProvider();
-final noticeProvider = NoticeProvider();
 final filterProvider = FilterProvider();
 final linkPreviewDataProvider = LinkPreviewDataProvider();
 final badgeDefinitionProvider = BadgeDefinitionProvider();
@@ -155,15 +151,9 @@ Future<void> main() async {
   if (sk != null) {
     nostr = Nostr(sk);
   }
+  nostr.init();
 
-  followingManager.init();
   internalRouter.init();
-
-  contactListProvider.init();
-  mentionMeProvider.doQuery();
-  bookmarkProvider.init();
-  badgeProvider.reload();
-  emojiProvider.init();
 
   if (settingProvider.network != null && settingProvider.network != "") {
     var network = settingProvider.network;
@@ -223,17 +213,8 @@ class _MyApp extends State<MyApp> {
         ListenableProvider<ContactListProvider>.value(
           value: contactListProvider,
         ),
-        ListenableProvider<MentionMeProvider>.value(
-          value: mentionMeProvider,
-        ),
-        ListenableProvider<MentionMeNewProvider>.value(
-          value: mentionMeNewProvider,
-        ),
         ListenableProvider<EventReactionsProvider>.value(
           value: eventReactionsProvider,
-        ),
-        ListenableProvider<NoticeProvider>.value(
-          value: noticeProvider,
         ),
         ListenableProvider<FilterProvider>.value(
           value: filterProvider,

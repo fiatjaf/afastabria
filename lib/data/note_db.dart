@@ -7,7 +7,9 @@ import "package:loure/data/db.dart";
 
 class NoteDB {
   static Future<void> insert(final Event event,
-      {required bool isFollow, DatabaseExecutor? db}) async {
+      {required bool isFollow,
+      required bool isMention,
+      DatabaseExecutor? db}) async {
     db = DB.getDB(db);
 
     try {
@@ -16,6 +18,7 @@ class NoteDB {
         "created_at": event.createdAt,
         "pubkey": event.pubkey.substring(0, 16),
         "follow": isFollow ? 1 : 0,
+        "mention": isMention ? 1 : 0,
         "event": jsonEncode(event.toJson())
       });
       if (rowid != 0 && event.content.length > 50) {
@@ -64,6 +67,19 @@ class NoteDB {
     final list = await db.query("note",
         columns: ["event"],
         where: "follow = true",
+        orderBy: "created_at DESC",
+        limit: limit);
+    return list
+        .map((row) => Event.fromJson(jsonDecode(row["event"] as String)))
+        .toList();
+  }
+
+  static Future<List<Event>> loadMentions(
+      {DatabaseExecutor? db, int limit = 200}) async {
+    db = DB.getDB(db);
+    final list = await db.query("note",
+        columns: ["event"],
+        where: "mention = true",
         orderBy: "created_at DESC",
         limit: limit);
     return list

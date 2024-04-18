@@ -39,7 +39,7 @@ class IndexProvider extends ChangeNotifier {
 
   ScrollController? _mentionedScrollController;
 
-  void setMentionedScrollController(
+  void setInboxScrollController(
       final ScrollController? mentionedScrollController) {
     _mentionedScrollController = mentionedScrollController;
   }

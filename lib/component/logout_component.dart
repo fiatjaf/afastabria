@@ -79,15 +79,14 @@ class _LogoutComponentState extends State<LogoutComponent> {
   }
 
   void handleLogoutTap() {
-    mentionMeProvider.clear();
-    mentionMeNewProvider.clear();
-    noticeProvider.clear();
-    contactListProvider.clear();
+    followingManager.reload();
+    inboxManager.reload();
 
+    contactListProvider.reload();
     eventReactionsProvider.clear();
     linkPreviewDataProvider.clear();
-    bookmarkProvider.clear();
-    emojiProvider.clear();
+    bookmarkProvider.reload();
+    emojiProvider.reload();
 
     settingProvider.removePrivateKey();
     DB.deleteAll(); // remove everything we have stored

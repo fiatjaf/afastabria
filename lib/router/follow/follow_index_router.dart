@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 
-import "package:loure/router/follow/mention_me_router.dart";
 import "package:loure/router/follow/follow_router.dart";
+import "package:loure/router/inbox_router.dart";
 
 class FollowIndexRouter extends StatelessWidget {
   const FollowIndexRouter({required this.tabController, super.key});
@@ -16,7 +16,7 @@ class FollowIndexRouter extends StatelessWidget {
         controller: this.tabController,
         children: const [
           FollowRouter(),
-          MentionMeRouter(),
+          InboxRouter(),
         ],
       ),
     );

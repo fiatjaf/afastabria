@@ -4,6 +4,7 @@ import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
 import "package:loure/client/event.dart";
 import "package:loure/client/filter.dart";
+import "package:loure/client/relay/relay_pool.dart";
 import "package:loure/main.dart";
 import "package:loure/util/string_util.dart";
 
@@ -12,16 +13,15 @@ import "package:loure/client/nip04/nip04.dart";
 import "package:loure/client/nip51/bookmarks.dart";
 import "package:loure/data/custom_emoji.dart";
 
-/// Standard list provider.
-/// These list usually publish by user himself and the provider will hold the newest one.
 abstract class ListProvider extends ChangeNotifier {
   ListProvider(this.kind);
   final int kind;
 
   Event? latest;
+  ManySubscriptionHandle? handle;
 
   void init() {
-    pool.subscribeMany(nostr.relayList.write, [
+    this.handle = pool.subscribeMany(nostr.relayList.write, [
       Filter(
         kinds: [this.kind],
         authors: [nostr.publicKey],
@@ -37,8 +37,12 @@ abstract class ListProvider extends ChangeNotifier {
 
   void processEvent();
 
-  void clear() {
+  void reload() {
     latest = null;
+    if (this.handle == null) {
+      this.handle!.close();
+    }
+    init();
   }
 }
 
@@ -86,6 +90,7 @@ class BookmarkProvider extends ListProvider {
         publicItems.add(BookmarkItem(key: key, value: value));
       }
     }
+
     bookmarks.publicItems = publicItems;
     this.bookmarks = bookmarks;
   }

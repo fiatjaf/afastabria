@@ -31,7 +31,7 @@ class DB {
 
       // notes
       db.execute(
-          "create table note(id text not null primary key, pubkey not null, created_at integer not null, follow bool not null, event text not null);");
+          "create table note(id text not null primary key, pubkey not null, created_at integer not null, follow bool not null, mention bool not null, event text not null);");
       db.execute(
           "create index note_follow_created_at on note (follow, created_at);");
       db.execute(

@@ -33,7 +33,6 @@ class LoginRouterState extends State<LoginRouter>
 
     animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 2));
-    // animation = ;
   }
 
   @override
@@ -56,19 +55,21 @@ class LoginRouterState extends State<LoginRouter>
 
     List<Widget> mainList = [];
     mainList.add(logoWiget);
-    mainList.add(Container(
-      margin: const EdgeInsets.only(
-        top: Base.BASE_PADDING,
-        bottom: 40,
-      ),
-      child: const Text(
-        Base.APP_NAME,
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
+    mainList.add(
+      Container(
+        margin: const EdgeInsets.only(
+          top: Base.BASE_PADDING,
+          bottom: 40,
+        ),
+        child: const Text(
+          Base.APP_NAME,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
-    ));
+    );
 
     final suffixIcon = GestureDetector(
       onTap: () {
@@ -78,6 +79,7 @@ class LoginRouterState extends State<LoginRouter>
       },
       child: Icon(obscureText ? Icons.visibility : Icons.visibility_off),
     );
+
     mainList.add(TextField(
       controller: controller,
       decoration: InputDecoration(
@@ -88,39 +90,43 @@ class LoginRouterState extends State<LoginRouter>
       obscureText: obscureText,
     ));
 
-    mainList.add(Container(
-      margin: const EdgeInsets.all(Base.BASE_PADDING * 2),
-      child: InkWell(
-        onTap: doLogin,
-        child: Container(
-          height: 36,
-          color: mainColor,
-          alignment: Alignment.center,
-          child: const Text(
-            "Login",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+    mainList.add(
+      Container(
+        margin: const EdgeInsets.all(Base.BASE_PADDING * 2),
+        child: InkWell(
+          onTap: doLogin,
+          child: Container(
+            height: 36,
+            color: mainColor,
+            alignment: Alignment.center,
+            child: const Text(
+              "Login",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
       ),
-    ));
+    );
 
-    mainList.add(Container(
-      margin: const EdgeInsets.only(bottom: 100),
-      child: GestureDetector(
-        onTap: generatePK,
-        child: Text(
-          "Generate a new private key",
-          style: TextStyle(
-            color: mainColor,
-            decoration: TextDecoration.underline,
+    mainList.add(
+      Container(
+        margin: const EdgeInsets.only(bottom: 100),
+        child: GestureDetector(
+          onTap: generatePK,
+          child: Text(
+            "Generate a new private key",
+            style: TextStyle(
+              color: mainColor,
+              decoration: TextDecoration.underline,
+            ),
           ),
         ),
       ),
-    ));
+    );
 
     final termsWiget = Row(
       mainAxisSize: MainAxisSize.min,
@@ -159,7 +165,6 @@ class LoginRouterState extends State<LoginRouter>
           children: [
             SizedBox(
               width: mainWidth,
-              // color: Colors.red,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: mainList,
@@ -197,7 +202,9 @@ class LoginRouterState extends State<LoginRouter>
       return;
     }
     settingProvider.setPrivateKey(sk, updateUI: false);
+
     nostr = Nostr(sk);
+    nostr.reload();
 
     firstLogin = true;
     indexProvider.setCurrentTap(1);

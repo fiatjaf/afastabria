@@ -137,7 +137,7 @@ abstract class Relay {
           }
           break;
         case "NOTICE":
-          noticeProvider.onNotice(this.url, message[1] as String);
+          // noticeProvider.onNotice(this.url, message[1] as String);
           break;
         case "CLOSED":
           final subId = message[1] as String;

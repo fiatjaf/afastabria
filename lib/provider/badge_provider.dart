@@ -3,10 +3,29 @@ import "package:loure/client/event.dart";
 
 import "package:loure/client/event_kind.dart";
 import "package:loure/client/filter.dart";
+import "package:loure/client/relay/relay_pool.dart";
 import "package:loure/main.dart";
 
 class BadgeProvider extends ChangeNotifier {
   Event? badgeEvent;
+
+  ManySubscriptionHandle? subHandle;
+
+  void init() {
+    this.subHandle = pool.subscribeMany(
+        nostr.relayList.write,
+        [
+          Filter(authors: [nostr.publicKey], kinds: [EventKind.BADGE_ACCEPT])
+        ],
+        onEvent: onEvent);
+  }
+
+  void reload() {
+    if (this.subHandle != null) {
+      this.subHandle!.close();
+    }
+    this.init();
+  }
 
   void wear(final String badgeId, final String eventId,
       {final String? relayAddr}) {
@@ -33,13 +52,6 @@ class BadgeProvider extends ChangeNotifier {
 
     this._parseProfileBadge();
     this.notifyListeners();
-  }
-
-  void reload() {
-    final filter =
-        Filter(authors: [nostr.publicKey], kinds: [EventKind.BADGE_ACCEPT]);
-
-    pool.subscribeMany(nostr.relayList.write, [filter], onEvent: onEvent);
   }
 
   void onEvent(final Event event) {

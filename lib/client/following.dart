@@ -46,6 +46,16 @@ class FollowingManager extends ChangeNotifier {
     contactListProvider.addListener(this.contactsUpdated);
   }
 
+  void reload() async {
+    if (this.subHandle != null) {
+      this.subHandle!.close();
+    }
+    this.events = [];
+    this.follows = {};
+    this.relaysFor = [];
+    this.init();
+  }
+
   ManySubscriptionHandle pickRelaysAndStartSubscriptions(
       final Set<String> follows, int since) {
     final Map<String, List<String>> chosen = {}; // { relay: [pubkeys, ...] }
@@ -100,7 +110,6 @@ class FollowingManager extends ChangeNotifier {
   void handleEvent(final event) {
     this.unmerged.add(event);
     this.newEvents.value++;
-    this.newEvents;
   }
 
   mergeNewNotes() {

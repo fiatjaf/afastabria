@@ -1,6 +1,7 @@
 import "dart:convert";
 
 import "package:bip340/bip340.dart" as bip340;
+import "package:loure/client/inbox.dart";
 import "package:sqflite/sqflite.dart";
 
 import "package:loure/client/event_kind.dart";
@@ -18,6 +19,7 @@ const ONE = "0000000000000000000000000000000000000000000000000000000000000001";
 
 class Nostr {
   Nostr(this.privateKey) : this.publicKey = bip340.getPublicKey(privateKey);
+
   factory Nostr.empty() {
     return Nostr(ONE);
   }
@@ -44,23 +46,30 @@ class Nostr {
   final idIndex = <String, Event>{};
   final addressIndex = <String, Event>{};
 
-  void init() {
-    pool
-        .querySync(RELAYLIST_RELAYS,
-            Filter(kinds: [10002], authors: [nostr.publicKey]))
-        .then((final Iterable<Event> evts) {
-      if (evts.length == 0) return;
+  Future<void> init() async {
+    if (!this.isEmpty()) {
+      this.relayList = await relaylistLoader.load(publicKey);
+    }
 
-      final Event latest = evts.reduce((final Event a, final Event b) {
-        if (a.createdAt > b.createdAt) {
-          return a;
-        } else {
-          return b;
-        }
-      });
+    followingManager.init();
+    inboxManager.init();
+    contactListProvider.init();
+    bookmarkProvider.init();
+    badgeProvider.init();
+    emojiProvider.init();
+  }
 
-      relayList = RelayList.fromEvent(latest);
-    });
+  Future<void> reload() async {
+    if (!this.isEmpty()) {
+      this.relayList = await relaylistLoader.load(publicKey);
+    }
+
+    followingManager.reload();
+    inboxManager.reload();
+    contactListProvider.reload();
+    bookmarkProvider.reload();
+    badgeProvider.reload();
+    emojiProvider.reload();
   }
 
   final List<String> METADATA_RELAYS = [
@@ -161,7 +170,8 @@ class Nostr {
     final isFollow =
         followed ?? followingManager.follows.contains(event.pubkey);
 
-    await NoteDB.insert(event, isFollow: isFollow, db: db);
+    await NoteDB.insert(event,
+        isFollow: isFollow, isMention: InboxManager.isMention(event), db: db);
 
     // insert repost if content is inside
     if (event.kind == EventKind.REPOST && event.content.contains('"pubkey"')) {
@@ -173,7 +183,10 @@ class Nostr {
             repost.isValid &&
             repost.kind == 1) {
           final isFollowed = followingManager.follows.contains(repost.pubkey);
-          await NoteDB.insert(repost, isFollow: isFollowed, db: db);
+          await NoteDB.insert(repost,
+              isFollow: isFollowed,
+              isMention: InboxManager.isMention(repost),
+              db: db);
         }
       } catch (err) {/***/}
     }
