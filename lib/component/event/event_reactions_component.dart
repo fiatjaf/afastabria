@@ -3,7 +3,6 @@ import "dart:convert";
 import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:flutter_quill/flutter_quill.dart" as quill;
 import "package:loure/client/event_kind.dart";
 import "package:loure/client/input.dart";
 import "package:loure/component/editor.dart";
@@ -22,10 +21,8 @@ import "package:loure/consts/base_consts.dart";
 import "package:loure/data/event_reactions.dart";
 import "package:loure/main.dart";
 import "package:loure/provider/event_reactions_provider.dart";
-import "package:loure/router/edit/editor_router.dart";
 import "package:loure/util/number_format_util.dart";
 import "package:loure/util/store_util.dart";
-import "package:loure/component/editor/cust_embed_types.dart";
 
 class EventReactionsComponent extends StatefulWidget {
   const EventReactionsComponent({
@@ -380,16 +377,6 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
     this.setState(() {
       this.commenting = true;
     });
-
-    // /*final event = await*/ EditorRouter.open(context,
-    //     tags: tags, tagsAddedWhenSend: tagsAddedWhenSend, tagPs: tagPs);
-    // /*if (event != null) {
-    //   eventReactionsProvider.addEventAndHandle(event);
-    //   final callback = EventReplyCallback.of(context);
-    //   if (callback != null) {
-    //     callback.onReply(event);
-    //   }
-    // }*/
   }
 
   Future<void> onRepostTap(final String value) async {
@@ -397,10 +384,7 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
       nostr.sendRepost(widget.event.id);
       eventReactionsProvider.addRepost(widget.event.id);
     } else if (value == "quote") {
-      /* final event = await */ EditorRouter.open(context, initEmbeds: [
-        quill.CustomBlockEmbed(CustEmbedTypes.mention_event, widget.event.id)
-      ]);
-      // print(event);
+      // TODO: start new note with this nevent pre-filled
     }
   }
 

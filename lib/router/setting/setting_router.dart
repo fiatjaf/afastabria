@@ -10,7 +10,6 @@ import "package:loure/util/when_stop_function.dart";
 import "package:provider/provider.dart";
 
 import "package:loure/component/colors_selector_component.dart";
-import "package:loure/component/editor/text_input_dialog.dart";
 import "package:loure/component/enum_multi_selector_component.dart";
 import "package:loure/component/enum_selector_component.dart";
 import "package:loure/component/translate/translate_model_manager.dart";
@@ -562,14 +561,14 @@ class SettingRouterState extends State<SettingRouter> with WhenStopFunction {
   }
 
   inputNetwork() async {
-    final text = await TextInputDialog.show(
-      context,
-      "${"Please input"} ${"Network"}\nSOCKS5/SOCKS4/PROXY username:password@host:port",
-      value: settingProvider.network,
-    );
-    settingProvider.network = text;
-    BotToast.showText(
-        text: "The network will take effect the next time the app is launched");
+    // final text = await TextInputDialog.show(
+    //   context,
+    //   "${"Please input"} ${"Network"}\nSOCKS5/SOCKS4/PROXY username:password@host:port",
+    //   value: settingProvider.network,
+    // );
+    // settingProvider.network = text;
+    // BotToast.showText(
+    //     text: "The network will take effect the next time the app is launched");
   }
 
   List<EnumObj>? imageServcieList;

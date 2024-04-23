@@ -10,7 +10,6 @@ import "package:loure/util/platform_util.dart";
 import "package:loure/main.dart";
 import "package:loure/provider/index_provider.dart";
 import "package:loure/util/auth_util.dart";
-import "package:loure/router/edit/editor_router.dart";
 import "package:loure/router/follow/follow_index_router.dart";
 import "package:loure/router/globals/globals_index_router.dart";
 import "package:loure/router/login/login_router.dart";
@@ -166,7 +165,7 @@ class IndexRouterState extends CustState<IndexRouter>
 
     final addBtn = FloatingActionButton(
       onPressed: () {
-        EditorRouter.open(context);
+        // EditorRouter.open(context);
       },
       backgroundColor: mainColor,
       shape: const CircleBorder(),

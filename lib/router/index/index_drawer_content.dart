@@ -13,7 +13,6 @@ import "package:loure/util/router_util.dart";
 import "package:loure/util/string_util.dart";
 import "package:loure/client/metadata.dart";
 import "package:loure/main.dart";
-import "package:loure/router/edit/editor_router.dart";
 
 class IndexDrawerContnetComponnent extends StatefulWidget {
   const IndexDrawerContnetComponnent({super.key});
@@ -215,7 +214,7 @@ class _IndexDrawerContnetComponnent
         iconData: Icons.add,
         name: "Add a Note",
         onTap: () {
-          EditorRouter.open(context);
+          // EditorRouter.open(context);
         },
       ));
     }

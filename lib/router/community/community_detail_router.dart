@@ -18,7 +18,6 @@ import "package:loure/main.dart";
 import "package:loure/provider/setting_provider.dart";
 import "package:loure/util/pendingevents_later_function.dart";
 import "package:loure/util/router_util.dart";
-import "package:loure/router/edit/editor_router.dart";
 
 class CommunityDetailRouter extends StatefulWidget {
   const CommunityDetailRouter({super.key});
@@ -209,12 +208,9 @@ class _CommunityDetailRouter extends CustState<CommunityDetailRouter>
 
   Future<void> addToCommunity() async {
     if (aId != null) {
-      /*final event = await*/ EditorRouter.open(context, tags: [
-        ["a", aId!.toTag()]
-      ]);
-      /*if (event != null) {
-        queryEvents();
-      }*/
+      // EditorRouter.open(context, tags: [
+      //   ["a", aId!.toTag()]
+      // ]);
     }
   }
 }

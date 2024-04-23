@@ -199,7 +199,7 @@ class _QrcodeDialog extends State<QrcodeDialog> {
 
   void _doCopy(final String text) {
     Clipboard.setData(ClipboardData(text: text)).then((final _) {
-      BotToast.showText(text: "key_has_been_copy");
+      BotToast.showText(text: "Key copied to clipboard;");
     });
   }
 
