@@ -2,14 +2,11 @@ import "package:flutter/material.dart";
 import "package:loure/component/nip05_valid_component.dart";
 import "package:loure/client/metadata.dart";
 
-import "package:loure/client/nip19/nip19.dart";
-import "package:loure/util/string_util.dart";
-
 class NameComponent extends StatelessWidget {
   const NameComponent({
     required this.pubkey,
+    required this.metadata,
     super.key,
-    this.metadata,
     this.showNip05 = true,
     this.fontSize,
     this.fontColor,
@@ -17,7 +14,7 @@ class NameComponent extends StatelessWidget {
     this.maxLines = 3,
   });
   final String pubkey;
-  final Metadata? metadata;
+  final Metadata metadata;
   final bool showNip05;
   final double? fontSize;
   final Color? fontColor;
@@ -27,39 +24,13 @@ class NameComponent extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final themeData = Theme.of(context);
-    // var mainColor = themeData.primaryColor;
     final textSize = themeData.textTheme.bodyMedium!.fontSize;
-    final smallTextSize = themeData.textTheme.bodySmall!.fontSize;
-    Color hintColor = themeData.hintColor;
 
     final metadata = this.metadata;
-    final String nip19Name = NIP19.encodeSimplePubKey(this.pubkey);
-    String displayName = "";
-    String name = "";
-
-    if (this.fontColor != null) {
-      hintColor = this.fontColor!;
-    }
-
-    if (metadata != null) {
-      if (metadata.displayName != null && metadata.displayName != "") {
-        displayName = metadata.displayName!;
-        if (metadata.name != null && metadata.name != "") {
-          name = metadata.name!;
-        }
-      } else if (metadata.name != null && metadata.name != "") {
-        displayName = metadata.name!;
-      }
-    }
-
     List<InlineSpan> nameList = [];
 
-    if (displayName == "") {
-      displayName = nip19Name;
-    }
-
     nameList.add(TextSpan(
-      text: StringUtil.breakWord(displayName),
+      text: metadata.shortName(),
       style: TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: this.fontSize ?? textSize,
@@ -67,31 +38,14 @@ class NameComponent extends StatelessWidget {
       ),
     ));
 
-    if (name != "") {
-      nameList.add(WidgetSpan(
+    nameList.add(
+      WidgetSpan(
         child: Container(
-          margin: const EdgeInsets.only(left: 2),
-          child: Text(
-            StringUtil.breakWord("@$name"),
-            style: TextStyle(
-              fontSize: smallTextSize,
-              color: hintColor,
-            ),
-          ),
+          margin: const EdgeInsets.only(left: 3),
+          child: Nip05ValidComponent(metadata: metadata),
         ),
-      ));
-    }
-
-    if (metadata != null) {
-      nameList.add(
-        WidgetSpan(
-          child: Container(
-            margin: const EdgeInsets.only(left: 3),
-            child: Nip05ValidComponent(metadata: metadata),
-          ),
-        ),
-      );
-    }
+      ),
+    );
 
     return Text.rich(
       TextSpan(children: nameList),

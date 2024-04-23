@@ -56,10 +56,10 @@ class _QrcodeDialog extends State<QrcodeDialog> {
       future: metadataLoader.load(widget.pubkey),
       initialData: Metadata.blank(widget.pubkey),
       builder: (final context, final snapshot) {
-        final metadata = snapshot.data;
+        final metadata = snapshot.data!;
 
         Widget? imageWidget;
-        if (metadata != null && StringUtil.isNotBlank(metadata.picture)) {
+        if (StringUtil.isNotBlank(metadata.picture)) {
           imageWidget = ImageComponent(
             imageUrl: metadata.picture!,
             width: IMAGE_WIDTH,

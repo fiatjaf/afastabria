@@ -8,23 +8,20 @@ import "package:loure/component/user/metadata_top_component.dart";
 import "package:loure/component/user/user_badges_component.dart";
 
 class MetadataComponent extends StatefulWidget {
-  MetadataComponent({
+  const MetadataComponent({
     required this.pubkey,
+    required this.metadata,
     super.key,
-    this.metadata,
     this.jumpable = false,
     this.showBadges = false,
     this.userPicturePreview = false,
   });
-  String pubkey;
 
-  Metadata? metadata;
-
-  bool jumpable;
-
-  bool showBadges;
-
-  bool userPicturePreview;
+  final String pubkey;
+  final Metadata metadata;
+  final bool jumpable;
+  final bool showBadges;
+  final bool userPicturePreview;
 
   @override
   State<StatefulWidget> createState() {
@@ -51,8 +48,7 @@ class _MetadataComponent extends State<MetadataComponent> {
       ));
     }
 
-    if (widget.metadata != null &&
-        StringUtil.isNotBlank(widget.metadata!.about)) {
+    if (StringUtil.isNotBlank(widget.metadata.about)) {
       mainList.add(
         Container(
           width: double.maxFinite,
@@ -66,7 +62,7 @@ class _MetadataComponent extends State<MetadataComponent> {
           child: SizedBox(
             width: double.maxFinite,
             child: ContentComponent(
-              content: widget.metadata!.about,
+              content: widget.metadata.about,
               // TODO this should add source event
               showLinkPreview: false,
             ),

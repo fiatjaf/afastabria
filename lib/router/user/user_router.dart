@@ -104,7 +104,7 @@ class UserRouterState extends State<UserRouter> {
       future: metadataLoader.load(widget.pubkey),
       initialData: Metadata.blank(widget.pubkey),
       builder: (final context, final snapshot) {
-        final metadata = snapshot.data;
+        final metadata = snapshot.data!;
 
         Color? appbarBackgroundColor = Colors.transparent;
         if (showAppbarBG) {

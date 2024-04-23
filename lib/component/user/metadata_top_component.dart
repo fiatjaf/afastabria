@@ -25,8 +25,8 @@ import "package:loure/component/image_preview_dialog.dart";
 class MetadataTopComponent extends StatefulWidget {
   const MetadataTopComponent({
     required this.pubkey,
+    required this.metadata,
     super.key,
-    this.metadata,
     this.isLocal = false,
     this.jumpable = false,
     this.userPicturePreview = false,
@@ -42,7 +42,7 @@ class MetadataTopComponent extends StatefulWidget {
   }
 
   final String pubkey;
-  final Metadata? metadata;
+  final Metadata metadata;
 
   // is local user
   final bool isLocal;
@@ -72,36 +72,19 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
   Widget build(final BuildContext context) {
     final themeData = Theme.of(context);
     final mainColor = themeData.primaryColor;
-    final hintColor = themeData.hintColor;
     final scaffoldBackgroundColor = themeData.scaffoldBackgroundColor;
     final maxWidth = mediaDataCache.size.width;
     final largeFontSize = themeData.textTheme.bodyLarge!.fontSize;
-    final fontSize = themeData.textTheme.bodyMedium!.fontSize;
     var bannerHeight = maxWidth / 3;
     if (PlatformUtil.isTableMode()) {
       bannerHeight =
           MetadataTopComponent.getPcBannerHeight(mediaDataCache.size.height);
     }
 
-    final String nip19Name = NIP19.encodeSimplePubKey(widget.pubkey);
-    String displayName = "";
-    String? name;
-    if (widget.metadata != null) {
-      if (StringUtil.isNotBlank(widget.metadata!.displayName)) {
-        displayName = widget.metadata!.displayName!;
-        if (StringUtil.isNotBlank(widget.metadata!.name)) {
-          name = widget.metadata!.name;
-        }
-      } else if (StringUtil.isNotBlank(widget.metadata!.name)) {
-        displayName = widget.metadata!.name!;
-      }
-    }
-
     Widget? imageWidget;
-    if (widget.metadata != null &&
-        StringUtil.isNotBlank(widget.metadata!.picture)) {
+    if (StringUtil.isNotBlank(widget.metadata.picture)) {
       imageWidget = ImageComponent(
-        imageUrl: widget.metadata!.picture!,
+        imageUrl: widget.metadata.picture!,
         width: IMAGE_WIDTH,
         height: IMAGE_WIDTH,
         fit: BoxFit.cover,
@@ -110,10 +93,9 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
       );
     }
     Widget? bannerImage;
-    if (widget.metadata != null &&
-        StringUtil.isNotBlank(widget.metadata!.banner)) {
+    if (StringUtil.isNotBlank(widget.metadata.banner)) {
       bannerImage = ImageComponent(
-        imageUrl: widget.metadata!.banner!,
+        imageUrl: widget.metadata.banner!,
         width: maxWidth,
         height: bannerHeight,
         fit: BoxFit.cover,
@@ -167,27 +149,6 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
       ));
     }
 
-    if (StringUtil.isBlank(displayName)) {
-      displayName = nip19Name;
-    }
-    List<TextSpan> nameSpans = [];
-    nameSpans.add(TextSpan(
-      text: displayName,
-      style: TextStyle(
-        fontSize: largeFontSize,
-        fontWeight: FontWeight.bold,
-      ),
-    ));
-    if (StringUtil.isNotBlank(name)) {
-      nameSpans.add(TextSpan(
-        text: name != null ? "@$name" : "",
-        style: TextStyle(
-          fontSize: fontSize,
-          color: hintColor,
-        ),
-      ));
-    }
-
     Widget userNameComponent = Container(
       // height: 40,
       width: double.maxFinite,
@@ -200,7 +161,15 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
       // color: Colors.green,
       child: Text.rich(
         TextSpan(
-          children: nameSpans,
+          children: [
+            TextSpan(
+              text: widget.metadata.shortName(),
+              style: TextStyle(
+                fontSize: largeFontSize,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -228,37 +197,33 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
       ),
     ));
     topList.add(userNameComponent);
-    if (widget.metadata != null) {
+    topList.add(MetadataIconDataComp(
+      iconData: Icons.key,
+      text: nip19PubKey,
+      textBG: true,
+      onTap: copyPubKey,
+    ));
+    if (StringUtil.isNotBlank(widget.metadata.nip05)) {
       topList.add(MetadataIconDataComp(
-        iconData: Icons.key,
-        text: nip19PubKey,
-        textBG: true,
-        onTap: copyPubKey,
+        text: widget.metadata.nip05!,
+        leftWidget: Nip05ValidComponent(metadata: widget.metadata),
       ));
-      if (StringUtil.isNotBlank(widget.metadata!.nip05)) {
-        topList.add(MetadataIconDataComp(
-          text: widget.metadata!.nip05!,
-          leftWidget: Nip05ValidComponent(metadata: widget.metadata!),
-        ));
-      }
-      if (widget.metadata != null) {
-        if (StringUtil.isNotBlank(widget.metadata!.website)) {
-          topList.add(MetadataIconDataComp(
-            iconData: Icons.link,
-            text: widget.metadata!.website!,
-            onTap: () {
-              WebViewRouter.open(context, widget.metadata!.website!);
-            },
-          ));
-        }
-        if (StringUtil.isNotBlank(widget.metadata!.lud16)) {
-          topList.add(MetadataIconDataComp(
-            iconData: Icons.bolt,
-            iconColor: Colors.orange,
-            text: widget.metadata!.lud16!,
-          ));
-        }
-      }
+    }
+    if (StringUtil.isNotBlank(widget.metadata.website)) {
+      topList.add(MetadataIconDataComp(
+        iconData: Icons.link,
+        text: widget.metadata.website!,
+        onTap: () {
+          WebViewRouter.open(context, widget.metadata.website!);
+        },
+      ));
+    }
+    if (StringUtil.isNotBlank(widget.metadata.lud16)) {
+      topList.add(MetadataIconDataComp(
+        iconData: Icons.bolt,
+        iconColor: Colors.orange,
+        text: widget.metadata.lud16!,
+      ));
     }
 
     Widget userImageWidget = Container(
@@ -336,10 +301,9 @@ class MetadataTopComponentState extends State<MetadataTopComponent> {
   }
 
   void userPicturePreview() {
-    if (widget.metadata != null &&
-        StringUtil.isNotBlank(widget.metadata!.picture)) {
+    if (StringUtil.isNotBlank(widget.metadata.picture)) {
       List<ImageProvider> imageProviders = [];
-      imageProviders.add(CachedNetworkImageProvider(widget.metadata!.picture!));
+      imageProviders.add(CachedNetworkImageProvider(widget.metadata.picture!));
 
       final MultiImageProvider multiImageProvider =
           MultiImageProvider(imageProviders, initialIndex: 0);

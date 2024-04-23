@@ -46,7 +46,7 @@ class FollowedRouterState extends State<FollowedRouter> {
                 behavior: HitTestBehavior.translucent,
                 child: MetadataComponent(
                   pubkey: pubkey,
-                  metadata: snapshot.data,
+                  metadata: snapshot.data!,
                   jumpable: true,
                 ),
               );

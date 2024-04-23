@@ -30,21 +30,19 @@ class EventTopComponent extends StatelessWidget {
       future: metadataLoader.load(this.event.pubkey),
       initialData: Metadata.blank(this.event.pubkey),
       builder: (final context, final snapshot) {
-        final metadata = snapshot.data;
+        final metadata = snapshot.data!;
         final themeData = Theme.of(context);
 
         Widget? imageWidget;
-        if (metadata != null) {
-          if (StringUtil.isNotBlank(metadata.picture)) {
-            imageWidget = ImageComponent(
-              imageUrl: metadata.picture!,
-              width: IMAGE_WIDTH,
-              height: IMAGE_WIDTH,
-              fit: BoxFit.cover,
-              placeholder: (final context, final url) =>
-                  const CircularProgressIndicator(),
-            );
-          }
+        if (StringUtil.isNotBlank(metadata.picture)) {
+          imageWidget = ImageComponent(
+            imageUrl: metadata.picture!,
+            width: IMAGE_WIDTH,
+            height: IMAGE_WIDTH,
+            fit: BoxFit.cover,
+            placeholder: (final context, final url) =>
+                const CircularProgressIndicator(),
+          );
         }
 
         return Container(

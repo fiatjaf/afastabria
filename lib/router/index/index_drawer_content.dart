@@ -48,7 +48,7 @@ class _IndexDrawerContnetComponnent
           builder: (final context, final snapshot) {
             return MetadataTopComponent(
               pubkey: pubkey,
-              metadata: snapshot.data,
+              metadata: snapshot.data!,
               isLocal: true,
               jumpable: true,
             );

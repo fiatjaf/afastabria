@@ -60,7 +60,7 @@ class GlobalsUsersRouterState extends KeepAliveCustState<GlobalsUsersRouter> {
               builder: (final context, final snapshot) {
                 return MetadataComponent(
                   pubkey: pubkey,
-                  metadata: snapshot.data,
+                  metadata: snapshot.data!,
                   jumpable: true,
                 );
               },
