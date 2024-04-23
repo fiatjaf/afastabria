@@ -52,12 +52,19 @@ class EditorComponentState extends State<EditorComponent> {
         },
       );
       if (inp != null) {
+        print(this._editorController.selection.toString());
+
         this
             ._editorController
-            .compose(Delta()..delete(1), forceUpdateSelection: true);
-        this
-            ._editorController
-            .compose(Delta()..insert(inp), forceUpdateSelection: true);
+            .document
+            .replace(this._editorController.selection.baseOffset - 1, 1, inp);
+
+        this._editorController.updateSelection(TextSelection(
+            baseOffset:
+                this._editorController.selection.baseOffset + inp.length - 1,
+            extentOffset: this._editorController.selection.extentOffset +
+                inp.length -
+                1));
       }
     }
   }
@@ -152,7 +159,7 @@ class MentionSearcherState extends State<MentionSearcher> {
     results.clear();
 
     final text = this._controller.text;
-    if (text.length >= 2) {
+    if (text.length >= 1) {
       final list = await DB.getDB(null).query("metadata",
           where: "event like '%' || ? || '%' LIMIT 7", whereArgs: [text]);
       setState(() {
