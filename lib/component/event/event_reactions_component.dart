@@ -290,12 +290,22 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
               final event = Event.finalize(
                   nostr.privateKey, EventKind.TEXT_NOTE, tags, text.trim());
 
-              print("publishing $event to $targetRelays");
+              BotToast.showText(
+                text: "Publishing event to ${targetRelays.length} relays.",
+                duration: const Duration(seconds: 5),
+              );
+              this.setState(() {
+                this.commenting = false;
+              });
+
               final pub = await pool.publish(targetRelays, event);
               if (pub.failure) {
                 BotToast.showText(
                     text:
                         "Couldn't publish to any relays, attempted: $targetRelays");
+                this.setState(() {
+                  this.commenting = true;
+                });
                 return false;
               }
 
