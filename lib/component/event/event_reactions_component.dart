@@ -4,7 +4,9 @@ import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_quill/flutter_quill.dart" as quill;
+import "package:loure/client/event_kind.dart";
 import "package:loure/client/input.dart";
+import "package:loure/component/editor.dart";
 import "package:provider/provider.dart";
 import "package:screenshot/screenshot.dart";
 import "package:share_plus/share_plus.dart";
@@ -23,7 +25,6 @@ import "package:loure/provider/event_reactions_provider.dart";
 import "package:loure/router/edit/editor_router.dart";
 import "package:loure/util/number_format_util.dart";
 import "package:loure/util/store_util.dart";
-import "package:loure/util/string_util.dart";
 import "package:loure/component/editor/cust_embed_types.dart";
 
 class EventReactionsComponent extends StatefulWidget {
@@ -46,6 +47,7 @@ class EventReactionsComponent extends StatefulWidget {
 
 class _EventReactionsComponent extends State<EventReactionsComponent> {
   List<Event>? myLikeEvents;
+  bool commenting = false;
 
   @override
   Widget build(final BuildContext context) {
@@ -57,173 +59,254 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
       fontSize: mediumFontSize,
     );
 
-    return Selector<EventReactionsProvider, EventReactions?>(
-      builder: (final context, final eventReactions, final child) {
-        int replyNum = 0;
-        int repostNum = 0;
-        int likeNum = 0;
-        Color likeColor = hintColor;
+    return Column(
+      children: [
+        Selector<EventReactionsProvider, EventReactions?>(
+          builder: (final context, final eventReactions, final child) {
+            int replyNum = 0;
+            int repostNum = 0;
+            int likeNum = 0;
+            Color likeColor = hintColor;
 
-        if (eventReactions != null) {
-          replyNum = eventReactions.replies.length;
-          repostNum = eventReactions.repostNum;
-          likeNum = eventReactions.likeNum;
+            if (eventReactions != null) {
+              replyNum = eventReactions.replies.length;
+              repostNum = eventReactions.repostNum;
+              likeNum = eventReactions.likeNum;
 
-          myLikeEvents = eventReactions.myLikeEvents;
-        }
-        if (myLikeEvents != null && myLikeEvents!.isNotEmpty) {
-          likeColor = Colors.red;
-        }
+              myLikeEvents = eventReactions.myLikeEvents;
+            }
+            if (myLikeEvents != null && myLikeEvents!.isNotEmpty) {
+              likeColor = Colors.red;
+            }
 
-        return SizedBox(
-          height: 34,
-          child: Row(
-            children: [
-              Expanded(
-                child: Tooltip(
-                  message: "Reply",
-                  child: EventReactionNumComponent(
-                    num: replyNum,
-                    iconData: Icons.comment,
-                    onTap: onCommmentTap,
-                    color: hintColor,
-                    fontSize: fontSize,
+            return SizedBox(
+              height: 34,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Tooltip(
+                      message: "Reply",
+                      child: EventReactionNumComponent(
+                        num: replyNum,
+                        iconData: Icons.comment,
+                        onTap: onCommmentTap,
+                        color: hintColor,
+                        fontSize: fontSize,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: PopupMenuButton<String>(
-                  tooltip: "Boost",
-                  itemBuilder: (final context) {
-                    return [
-                      const PopupMenuItem(
-                        value: "boost",
-                        child: Text("Boost"),
+                  Expanded(
+                    child: PopupMenuButton<String>(
+                      tooltip: "Boost",
+                      itemBuilder: (final context) {
+                        return [
+                          const PopupMenuItem(
+                            value: "boost",
+                            child: Text("Boost"),
+                          ),
+                          const PopupMenuItem(
+                            value: "quote",
+                            child: Text("Quote"),
+                          ),
+                        ];
+                      },
+                      onSelected: onRepostTap,
+                      child: EventReactionNumComponent(
+                        num: repostNum,
+                        iconData: Icons.repeat,
+                        color: hintColor,
+                        fontSize: fontSize,
                       ),
-                      const PopupMenuItem(
-                        value: "quote",
-                        child: Text("Quote"),
-                      ),
-                    ];
-                  },
-                  onSelected: onRepostTap,
-                  child: EventReactionNumComponent(
-                    num: repostNum,
-                    iconData: Icons.repeat,
-                    color: hintColor,
-                    fontSize: fontSize,
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: Tooltip(
-                  message: "Like",
-                  child: EventReactionNumComponent(
-                    num: likeNum,
-                    iconData: Icons.favorite,
-                    onTap: onLikeTap,
-                    color: likeColor,
-                    fontSize: fontSize,
+                  Expanded(
+                    child: Tooltip(
+                      message: "Like",
+                      child: EventReactionNumComponent(
+                        num: likeNum,
+                        iconData: Icons.favorite,
+                        onTap: onLikeTap,
+                        color: likeColor,
+                        fontSize: fontSize,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: PopupMenuButton<String>(
-                  tooltip: "More",
-                  itemBuilder: (final context) {
-                    final bookmarkItem = BookmarkItem.getFromEventReactions(
-                        widget.eventRelation);
+                  Expanded(
+                    child: PopupMenuButton<String>(
+                      tooltip: "More",
+                      itemBuilder: (final context) {
+                        final bookmarkItem = BookmarkItem.getFromEventReactions(
+                            widget.eventRelation);
 
-                    List<PopupMenuEntry<String>> list = [
-                      PopupMenuItem(
-                        value: "copyEvent",
-                        child: Text("Copy raw JSON", style: popFontStyle),
-                      ),
-                      PopupMenuItem(
-                        value: "copyPubkey",
-                        child: Text("Copy author npub", style: popFontStyle),
-                      ),
-                      PopupMenuItem(
-                        value: "copyId",
-                        child: Text("Copy event id", style: popFontStyle),
-                      ),
-                      const PopupMenuDivider(),
-                    ];
+                        List<PopupMenuEntry<String>> list = [
+                          PopupMenuItem(
+                            value: "copyEvent",
+                            child: Text("Copy raw JSON", style: popFontStyle),
+                          ),
+                          PopupMenuItem(
+                            value: "copyPubkey",
+                            child:
+                                Text("Copy author npub", style: popFontStyle),
+                          ),
+                          PopupMenuItem(
+                            value: "copyId",
+                            child: Text("Copy event id", style: popFontStyle),
+                          ),
+                          const PopupMenuDivider(),
+                        ];
 
-                    list.add(PopupMenuItem(
-                      value: "share",
-                      child: Text("Share", style: popFontStyle),
-                    ));
-                    list.add(const PopupMenuDivider());
-                    if (bookmarkProvider.checkPrivateBookmark(bookmarkItem)) {
-                      list.add(PopupMenuItem(
-                        value: "removeFromPrivateBookmark",
-                        child: Text("Remove from private bookmark",
-                            style: popFontStyle),
-                      ));
-                    } else {
-                      list.add(PopupMenuItem(
-                        value: "addToPrivateBookmark",
-                        child: Text("Add to private bookmark",
-                            style: popFontStyle),
-                      ));
-                    }
-                    if (bookmarkProvider.checkPublicBookmark(bookmarkItem)) {
-                      list.add(PopupMenuItem(
-                        value: "removeFromPublicBookmark",
-                        child: Text("Remove from public bookmark",
-                            style: popFontStyle),
-                      ));
-                    } else {
-                      list.add(PopupMenuItem(
-                        value: "addToPublicBookmark",
-                        child:
-                            Text("Add to public bookmark", style: popFontStyle),
-                      ));
-                    }
-                    list.add(const PopupMenuDivider());
-                    list.add(PopupMenuItem(
-                      value: "source",
-                      child: Text("Source", style: popFontStyle),
-                    ));
-                    list.add(PopupMenuItem(
-                      value: "broadcase",
-                      child: Text("Broadcast", style: popFontStyle),
-                    ));
-                    list.add(PopupMenuItem(
-                      value: "block",
-                      child: Text("Block", style: popFontStyle),
-                    ));
+                        list.add(PopupMenuItem(
+                          value: "share",
+                          child: Text("Share", style: popFontStyle),
+                        ));
+                        list.add(const PopupMenuDivider());
+                        if (bookmarkProvider
+                            .checkPrivateBookmark(bookmarkItem)) {
+                          list.add(PopupMenuItem(
+                            value: "removeFromPrivateBookmark",
+                            child: Text("Remove from private bookmark",
+                                style: popFontStyle),
+                          ));
+                        } else {
+                          list.add(PopupMenuItem(
+                            value: "addToPrivateBookmark",
+                            child: Text("Add to private bookmark",
+                                style: popFontStyle),
+                          ));
+                        }
+                        if (bookmarkProvider
+                            .checkPublicBookmark(bookmarkItem)) {
+                          list.add(PopupMenuItem(
+                            value: "removeFromPublicBookmark",
+                            child: Text("Remove from public bookmark",
+                                style: popFontStyle),
+                          ));
+                        } else {
+                          list.add(PopupMenuItem(
+                            value: "addToPublicBookmark",
+                            child: Text("Add to public bookmark",
+                                style: popFontStyle),
+                          ));
+                        }
+                        list.add(const PopupMenuDivider());
+                        list.add(PopupMenuItem(
+                          value: "source",
+                          child: Text("Source", style: popFontStyle),
+                        ));
+                        list.add(PopupMenuItem(
+                          value: "broadcase",
+                          child: Text("Broadcast", style: popFontStyle),
+                        ));
+                        list.add(PopupMenuItem(
+                          value: "block",
+                          child: Text("Block", style: popFontStyle),
+                        ));
 
-                    return list;
-                  },
-                  onSelected: onPopupSelected,
-                  child: Icon(
-                    Icons.more_vert,
-                    size: 16,
-                    color: hintColor,
+                        return list;
+                      },
+                      onSelected: onPopupSelected,
+                      child: Icon(
+                        Icons.more_vert,
+                        size: 16,
+                        color: hintColor,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-        );
-      },
-      selector: (final context, final provider) {
-        return provider.get(widget.event.id);
-      },
-      shouldRebuild: (final previous, final next) {
-        if ((previous == null && next != null) ||
-            (previous != null &&
-                next != null &&
-                (previous.replies.length != next.replies.length ||
-                    previous.repostNum != next.repostNum ||
-                    previous.likeNum != next.likeNum))) {
-          return true;
-        }
+            );
+          },
+          selector: (final context, final provider) {
+            return provider.get(widget.event.id);
+          },
+          shouldRebuild: (final previous, final next) {
+            if ((previous == null && next != null) ||
+                (previous != null &&
+                    next != null &&
+                    (previous.replies.length != next.replies.length ||
+                        previous.repostNum != next.repostNum ||
+                        previous.likeNum != next.likeNum))) {
+              return true;
+            }
 
-        return false;
-      },
+            return false;
+          },
+        ),
+        EditorComponent(
+            onSubmit: (final String text) async {
+              // send reply
+              final targetRelays = <String>[];
+              targetRelays.addAll(nostr.relayList.write);
+
+              final tags = <Tag>[];
+              final er = widget.eventRelation;
+              final Set<String> pubkeysMentioned = {};
+
+              // add reply and root tags
+              String mark = "reply";
+              if (er.rootId == null || er.rootId == "") {
+                mark = "root";
+              } else {
+                tags.add(
+                    ["e", widget.event.id, er.rootRelayAddr ?? "", "root"]);
+              }
+              tags.add(
+                  ["e", widget.event.id, widget.event.sources.first, mark]);
+              pubkeysMentioned.add(er.pubkey);
+
+              // add p tags inherited from previous event
+              var count = 0;
+              for (var i = er.tagPList.length - 1; i >= 0; i--) {
+                pubkeysMentioned.add(er.pubkey);
+                count++;
+                if (count >= 5) break;
+              }
+
+              // p and q tags from our own inline mentions
+              for (final m in RegExp(
+                      "\\b(npub1\\w+|nprofile1\\w+|nevent1\\w+|naddr1\\w+|note1\\w+)\\b")
+                  .allMatches(text)) {
+                final match = m.group(1);
+                try {
+                  if (match!.startsWith("npub1")) {
+                    final pubkey = NIP19.decode(match);
+                    pubkeysMentioned.add(pubkey);
+                  } else if (match.startsWith("nprofile1")) {
+                    final pp = NIP19.decodeNprofile(match);
+                    pubkeysMentioned.add(pp!.pubkey);
+                  }
+                } catch (err) {/***/}
+              }
+
+              final ps = pubkeysMentioned.toList();
+              final rls = await relaylistLoader.batchLoad(ps);
+              var i = 0;
+              for (final p in ps) {
+                tags.add(["p", p]);
+                targetRelays.addAll(rls[i].read);
+                i++;
+              }
+
+              final event = Event.finalize(
+                  nostr.privateKey, EventKind.TEXT_NOTE, tags, text.trim());
+
+              print("publishing $event to $targetRelays");
+              final pub = await pool.publish(targetRelays, event);
+              if (pub.failure) {
+                BotToast.showText(
+                    text:
+                        "Couldn't publish to any relays, attempted: $targetRelays");
+                return false;
+              }
+
+              BotToast.showText(
+                  text: "Event published to ${pub.successCount} relays.");
+
+              // return true here so the editor resets itself
+              return true;
+            },
+            hidden: !commenting),
+      ],
     );
   }
 
@@ -277,43 +360,26 @@ class _EventReactionsComponent extends State<EventReactionsComponent> {
   }
 
   Future<void> onCommmentTap() async {
-    final er = widget.eventRelation;
-    List<List<String>> tags = [];
-    List<List<String>> tagsAddedWhenSend = [];
-    String relayAddr = "";
-    if (widget.event.sources.isNotEmpty) {
-      relayAddr = widget.event.sources.first;
-    }
-    String directMarked = "reply";
-    if (StringUtil.isBlank(er.rootId)) {
-      directMarked = "root";
-    }
-    tagsAddedWhenSend.add(["e", widget.event.id, relayAddr, directMarked]);
-
-    List<List<String>> tagPs = [];
-    tagPs.add(["p", widget.event.pubkey]);
-    if (er.tagPList.isNotEmpty) {
-      for (final p in er.tagPList) {
-        tagPs.add(["p", p]);
-      }
-    }
-    if (StringUtil.isNotBlank(er.rootId)) {
-      String relayAddr = "";
-      if (StringUtil.isNotBlank(er.rootRelayAddr)) {
-        relayAddr = er.rootRelayAddr!;
-      }
-      tags.add(["e", er.rootId ?? "", relayAddr, "root"]);
+    if (this.commenting) {
+      this.setState(() {
+        this.commenting = false;
+      });
+      return;
     }
 
-    /*final event = await*/ EditorRouter.open(context,
-        tags: tags, tagsAddedWhenSend: tagsAddedWhenSend, tagPs: tagPs);
-    /*if (event != null) {
-      eventReactionsProvider.addEventAndHandle(event);
-      final callback = EventReplyCallback.of(context);
-      if (callback != null) {
-        callback.onReply(event);
-      }
-    }*/
+    this.setState(() {
+      this.commenting = true;
+    });
+
+    // /*final event = await*/ EditorRouter.open(context,
+    //     tags: tags, tagsAddedWhenSend: tagsAddedWhenSend, tagPs: tagPs);
+    // /*if (event != null) {
+    //   eventReactionsProvider.addEventAndHandle(event);
+    //   final callback = EventReplyCallback.of(context);
+    //   if (callback != null) {
+    //     callback.onReply(event);
+    //   }
+    // }*/
   }
 
   Future<void> onRepostTap(final String value) async {

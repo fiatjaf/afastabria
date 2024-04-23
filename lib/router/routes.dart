@@ -86,7 +86,6 @@ class InternalRouter {
 }
 
 class RouterPath {
-  static const String EDITOR = "/editor";
   static const String KEY_BACKUP = "/keyBackup";
   static const String RELAYS = "/relays";
   static const String FILTER = "/filter";

@@ -2,6 +2,7 @@ import "dart:convert";
 
 import "package:loure/client/event.dart";
 import "package:loure/client/nip05/nip05.dart";
+import "package:loure/client/nip19/nip19.dart";
 import "package:loure/client/replaceable_loader.dart";
 
 class Metadata extends Replaceable {
@@ -101,5 +102,16 @@ class Metadata extends Replaceable {
 
     this.nip05valid = pp.pubkey == this.nip05!;
     return this.nip05valid!;
+  }
+
+  String shortName() {
+    if (this.name != null && this.name != "") {
+      return this.name!;
+    }
+    if (this.displayName != null && this.displayName != "") {
+      return this.displayName!;
+    }
+    final npub = NIP19.encodePubKey(this.pubkey);
+    return "${npub.substring(0, 7)}…${npub.substring(58)}";
   }
 }

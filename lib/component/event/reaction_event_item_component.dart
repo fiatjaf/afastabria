@@ -5,17 +5,16 @@ import "package:loure/consts/base.dart";
 import "package:loure/component/event/reaction_event_metadata_component.dart";
 
 class ReactionEventItemComponent extends StatefulWidget {
-  ReactionEventItemComponent({
+  const ReactionEventItemComponent({
     required this.pubkey,
     required this.text,
     required this.createdAt,
     super.key,
   });
-  String pubkey;
 
-  String text;
-
-  int createdAt;
+  final String pubkey;
+  final String text;
+  final int createdAt;
 
   @override
   State<StatefulWidget> createState() {
